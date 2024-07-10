@@ -1,0 +1,128 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="materialTableHeader">
+            <div class="left">
+              <ul class="header-buttons-left ms-0">
+                <li class="tbl-title me-2">
+                  <h2>Table Name</h2>
+                </li>
+                <li class="tbl-search-box">
+                  <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                  <input placeholder="Search" type="text" #filter (input)="filterUsers(filter.value)" class="browser-default search-field" aria-label="Search box">
+                </li>
+              </ul>
+            </div>
+            <div class="right">
+              <ul class="tbl-export-btn">
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="ADD">
+                    <button mat-mini-fab color="primary" (click)="addUser()">
+                      <mat-icon class="col-white">add</mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="REFRESH">
+                    <button mat-mini-fab color="primary" (click)="refreshPage()">
+                      <mat-icon class="col-white">refresh</mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="DELETE">
+                    <button mat-mini-fab color="warn">
+                      <mat-icon class="col-white">delete</mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li>
+                  <div class="export-button m-l-10" matTooltip="XLSX">
+                    <img src="assets/images/icons/xlsx.png" alt="" />
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row clearfix">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="header">
+            <h2>Hover Rows</h2>
+          </div>
+          <div class="body table-responsive">
+            <table class="table table-hover table-responsive">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Consultancy Name</th>
+                  <th>Phone 1</th>
+                  <th>Phone 2</th>
+                  <th>Email 1</th>
+                  <th>Email 2</th>
+                  <th>Country</th>
+                  <th>State</th>
+                  <th>City</th>
+                  <th>Address</th>
+                  <th>Street</th>
+                  <th>Pincode</th>
+                  <th>Registration No</th>
+                  <th>Website</th>
+                  <th>Facebook URL</th>
+                  <th>LinkedIn URL</th>
+                  <th>Year Established</th>
+                  <th>Password</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of filteredUsers">
+                  <th scope="row">{{ user.id }}</th>
+                  <td>{{ user.ConsultancyName }}</td>
+                  <td>{{ user.Phone1 }}</td>
+                  <td>{{ user.Phone2 }}</td>
+                  <td>{{ user.Email1 }}</td>
+                  <td>{{ user.Email2 }}</td>
+                  <td>{{ user.Country }}</td>
+                  <td>{{ user.State }}</td>
+                  <td>{{ user.City }}</td>
+                  <td>{{ user.Address }}</td>
+                  <td>{{ user.Street }}</td>
+                  <td>{{ user.Pincode }}</td>
+                  <td>{{ user.RegistrationNo }}</td>
+                  <td>{{ user.Website }}</td>
+                  <td>{{ user.FbUrl }}</td>
+                  <td>{{ user.LinkedInUrl }}</td>
+                  <td>{{ user.YearEstablished }}</td>
+                  <td>{{ user.Password }}</td>
+                  <td>
+                    <button mat-icon-button color="primary" (click)="editUser(user.id)">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

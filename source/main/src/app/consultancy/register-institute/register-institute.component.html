@@ -1,0 +1,97 @@
+<section class="content">
+    <div class="content-block">
+      <div class="block-header" *ngFor="let breadscrum of breadscrums">
+        <!-- breadcrumb -->
+        <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+        </app-breadcrumb>
+      </div>
+  
+      <div class="row clearfix">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="header">
+              <h2>Register Institute</h2>
+            </div>
+            <div class="body">
+              <form [formGroup]="registerConsultancy" (submit)="onSubmit()">
+                <!-- <h2 class="text-center pb-3">{{editMode ? 'Update Institute Details' : 'Institute Registration Form' }}</h2> -->
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Institue name</mat-label>
+                      <input matInput formControlName="InstituteName">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>school</mat-icon>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>About institute</mat-label>
+                      <textarea matInput formControlName="AboutInstitute"></textarea>
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>info</mat-icon>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Province</mat-label>
+                      <input matInput formControlName="Province">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Country</mat-label>
+                      <input matInput formControlName="Country">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>public</mat-icon>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Fb url</mat-label>
+                      <input matInput formControlName="FbUrl">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>facebook</mat-icon>
+                    </mat-form-field>
+                    <br>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Year established</mat-label>
+                      <input matInput formControlName="YearEstablished">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>calendar_today</mat-icon>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Email</mat-label>
+                      <input matInput formControlName="Email">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Phone</mat-label>
+                      <input matInput formControlName="PhoneNo">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Website</mat-label>
+                      <input matInput formControlName="Website">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>language</mat-icon>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>LinkedIn url</mat-label>
+                      <input matInput formControlName="LinkedInUrl">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>linkedin</mat-icon>
+                    </mat-form-field>
+                    <br>
+                  </div>
+                  <div class="row">
+                    <div class="col-auto">
+                      <button type="submit" class="btn-space" mat-raised-button color="primary">{{editMode ? 'Update' : 'Register'}}</button>
+                      <button type="button" mat-raised-button color="warn">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
