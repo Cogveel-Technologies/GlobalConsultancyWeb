@@ -1,0 +1,114 @@
+<section class="content">
+    <div class="content-block">
+      <div class="block-header" *ngFor="let breadscrum of breadscrums">
+        <!-- breadcrumb -->
+        <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+        </app-breadcrumb>
+      </div>
+     
+      <div class="row clearfix">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="header">
+              <h2>Student Details</h2>
+            </div>
+            <div class="body">
+              <form class="m-4" [formGroup]="thirdForm" (ngSubmit)="onThirdFormSubmit()">
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Student Name</mat-label>
+                      <input matInput formControlName="studentName" required appCustomValidator="studentName">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>face</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Date of Birth</mat-label>
+                      <input matInput formControlName="dob" required appCustomValidator="dob" type="date">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>event</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Citizenship</mat-label>
+                      <input matInput formControlName="citizenship" required appCustomValidator="citizenship">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>public</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Language</mat-label>
+                      <input matInput formControlName="language" required appCustomValidator="language">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>language</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Passport Expiry</mat-label>
+                      <input matInput formControlName="passportExpiry" required appCustomValidator="passportExpiry" type="date">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>date_range</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Email Address</mat-label>
+                      <input matInput formControlName="email" required appCustomValidator="email">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Contact Number</mat-label>
+                      <input matInput formControlName="contactNo" required appCustomValidator="contactNo">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Agent</mat-label>
+                      <input matInput formControlName="agent" required appCustomValidator="agent">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>person</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Residential Address</mat-label>
+                      <textarea matInput formControlName="residentialAddress" required appCustomValidator="residentialAddress"></textarea>
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>home</mat-icon>
+                    </mat-form-field>
+                  </div>
+                
+                
+                  <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Mailing Address</mat-label>
+                      <textarea matInput formControlName="mailingAddress" required appCustomValidator="mailingAddress"></textarea>
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>mail_outline</mat-icon>
+                    </mat-form-field>
+                  
+                </div>
+              </div>
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <button class="btn-space"  [routerLink]="['/agent/list-students']"  [disabled]="!thirdForm.valid" mat-raised-button color="primary">
+                      {{ isFormPrefilled() ? 'Update Student' : 'Submit' }}
+                    </button>
+                    <button type="button" mat-raised-button color="warn"  [routerLink]="['/agent/list-students']" >Cancel</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

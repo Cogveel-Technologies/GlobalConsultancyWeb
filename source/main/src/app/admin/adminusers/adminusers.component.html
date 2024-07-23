@@ -79,7 +79,7 @@
                   <button class="btn-space" [disabled]="!thirdForm.valid" mat-raised-button color="primary">
                     {{ isFormPrefilled() ? 'Update User' : 'Submit' }}
                   </button>
-                  <button type="button" mat-raised-button color="warn">Cancel</button>
+                  <button type="button" mat-raised-button color="warn"  [routerLink]="['/admin/listusers']" >Cancel</button>
                 </div>
               </div>
             </form>

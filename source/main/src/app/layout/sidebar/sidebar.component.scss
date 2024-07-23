@@ -1,1 +1,18 @@
 
+
+.profile-img-edit
+{
+  position: absolute;
+  right: 10px;
+  top: -40px;
+  color: #fff;
+  cursor: pointer;
+}
+.profile-img
+{
+  border-radius: 50% !important;
+  width: 110px !important;
+  height: 110px !important;
+  object-fit: cover !important;
+  background: #fff;
+}

@@ -6,6 +6,7 @@ import { AddAgentComponent } from './add-agent/add-agent.component';
 import { ListagentsComponent } from './listagents/listagents.component';
 import { RolesComponent } from './roles/roles.component';
 import { LoginComponent } from './login/login.component';
+import { UserResolver } from './listusers/user-resolver';
 
 const routes: Routes = [
  
@@ -13,9 +14,16 @@ const routes: Routes = [
     path: 'adminusers',
     component: AdminusersComponent
   },
+  // {
+  //   path: 'listusers',
+  //   component: ListusersComponent
+  // },
   {
     path: 'listusers',
-    component: ListusersComponent
+    component: ListusersComponent,
+    resolve: {
+      users: UserResolver
+    }
   },
   {
     path: 'addagents',

@@ -1,8 +1,8 @@
-// adminusers.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as CryptoJS from 'crypto-js';  // Import CryptoJS
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-adminusers',
@@ -20,8 +20,10 @@ export class AdminusersComponent implements OnInit {
     },
   ];
   user: any;
+  errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute) {
+  constructor(private fb: FormBuilder, private route: ActivatedRoute,
+    private adminService: AdminService) {
     this.initThirdForm();
   }
 
@@ -37,9 +39,9 @@ export class AdminusersComponent implements OnInit {
 
   initThirdForm() {
     this.thirdForm = this.fb.group({
-      firstName: [''],
+      firstName: ['', Validators.required],
       middleName: [''],
-      lastName: [''],
+      lastName: ['', Validators.required],
       password: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       address: [''],
@@ -70,8 +72,27 @@ export class AdminusersComponent implements OnInit {
 
   onThirdFormSubmit() {
     if (this.thirdForm.valid) {
-      console.log('Form Value', this.thirdForm.value);
+      if (this.isFormPrefilled()) {
+        this.adminService.updateUserData(this.user.id, this.thirdForm.value).subscribe(
+          response => {
+            console.log('Update Success', response);
+          },
+          error => {
+            console.log('Update Error', error);
+          }
+        );
+      } else {
+        this.adminService.submitUserData(this.thirdForm.value).subscribe(
+          response => {
+            console.log('Submit Success', response);
+          },
+          error => {
+            console.log('Submit Error', error);
+          }
+        );
+      }
     } else {
+      this.errorMessage = 'Please fill all required fields.';
       console.log('Form is not valid');
     }
   }

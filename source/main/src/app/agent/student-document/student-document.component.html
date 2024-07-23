@@ -1,0 +1,75 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Document Upload</h2>
+          </div>
+          <div class="body">
+            <form class="m-4" [formGroup]="documentForm" (ngSubmit)="onDocumentFormSubmit()">
+              <div class="row">
+                <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Student Name</mat-label>
+                    <input matInput formControlName="studentName" readonly>
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>person</mat-icon>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Student Phone Number</mat-label>
+                    <input matInput formControlName="contactNo"  readonly>
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Document Type</mat-label>
+                    <mat-select formControlName="documentType" required>
+                      <mat-option value="passport">Passport</mat-option>
+                      <mat-option value="idCard">ID Card</mat-option>
+                      <mat-option value="birthCertificate">Birth Certificate</mat-option>
+                      <!-- Add more options as needed -->
+                    </mat-select>
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>description</mat-icon>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+                  <label>Upload</label>
+                  <app-file-upload formControlName="file"></app-file-upload>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput formControlName="remarks" required></textarea>
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>note</mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button class="btn-space"  [routerLink]="['/agent/list-students']" [disabled]="!documentForm.valid" mat-raised-button color="primary">
+                    {{ isFormPrefilled() ? 'Update Document' : 'Submit' }}
+                  </button>
+                  <button type="button" mat-raised-button color="warn"  [routerLink]="['/agent/list-students']">Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

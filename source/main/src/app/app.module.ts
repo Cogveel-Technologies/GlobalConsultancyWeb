@@ -27,8 +27,11 @@ import { WINDOW_PROVIDERS } from './core/service/window.service';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { LoGinComponent } from './lo-gin/lo-gin.component';
+
+import { AgentModule } from './agent/agent.module';
 // import { CustomValidatorDirective } from './custom-validator.directive';
 // import { TestcomponentComponent } from './testcomponent/testcomponent.component';
+// import { MatFileUploadModule } from 'mat-file-upload';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -44,6 +47,7 @@ export function createTranslateLoader(http: HttpClient) {
     AuthLayoutComponent,
     MainLayoutComponent,
     LoGinComponent,
+    // MatFileUploadModule,
     // CustomValidatorDirective,
     // TestcomponentComponent,
   ],
@@ -53,6 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
     AppRoutingModule,
     HttpClientModule,
     AdminModule,
+     AgentModule,
     LoadingBarRouterModule,
     NgScrollbarModule,
     TranslateModule.forRoot({

@@ -30,6 +30,17 @@
          "LIST_LOGIN": "Login"
       }
     },
+    "AGENT": {
+      "TEXT": "Agent",
+      "LIST": {
+        "REGISTER_STUDENT": "Register Student",
+        "LIST_STUDENTS": "List Students",
+        "STUDENT_APPLICATION": "Student Application",
+        "STUDENT_APPLICATION_LIST": "Student Application List",
+        "STUDENT_DOCUMENT": "Student Document",
+        "STUDENT_DOCUMENT_LIST": "Student Document List"
+      }
+    },
     "CONSULTANCY": {
       "TEXT": "Consultancy",
       "LIST": {
@@ -38,8 +49,15 @@
         "REGISTER_INSTITUTE": "Register Institute",
         "INSTITUTION-LIST": "Institution List"
       }
-    },
-    },
+      },
+      "STUDENT": {
+        "TEXT": "Student",
+        "LIST": {
+          "STUDENT_PROFILE": "Student Profile"
+         
+        }
+      },
+    
     "ADVANCE-TABLE": {
       "TEXT": "Vorab-Tabelle"
     },

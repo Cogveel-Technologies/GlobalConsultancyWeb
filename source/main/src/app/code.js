@@ -1,111 +1,168 @@
-// import { Directive, Input, ElementRef, Renderer2, OnInit } from '@angular/core';
-// import { NG_VALIDATORS, Validator, AbstractControl, ValidationErrors } from '@angular/forms';
+// {/* <section class="content">
+//   <div class="content-block">
+//     <div class="block-header" *ngFor="let breadscrum of breadscrums">
+//       <!-- breadcrumb -->
+//       <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+//       </app-breadcrumb>
+//     </div>
 
-// @Directive({
-//   selector: '[appCustomValidator]',
-//   providers: [{ provide: NG_VALIDATORS, useExisting: CustomValidatorDirective, multi: true }]
+//     <div class="row clearfix">
+//       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+//         <div class="card">
+//           <div class="header">
+//             <h2>Document Upload</h2>
+//           </div>
+//           <div class="body">
+//             <form class="m-4" [formGroup]="documentForm" (ngSubmit)="onDocumentFormSubmit()" enctype="multipart/form-data">
+//               <div class="row">
+//                 <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+//                   <mat-form-field class="example-full-width">
+//                     <mat-label>Student Name</mat-label>
+//                     <mat-select formControlName="studentName" required>
+//                       <mat-option *ngFor="let student of students" [value]="student.id">{{ student.studentName}}</mat-option>
+//                     </mat-select>
+//                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>person</mat-icon>
+//                   </mat-form-field>
+//                 </div>
+
+//                 <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+//                   <mat-form-field class="example-full-width">
+//                     <mat-label>Student Phone Number</mat-label>
+//                     <mat-select formControlName="contactNo" required>
+//                       <mat-option *ngFor="let student of students" [value]="student.contactNo">{{ student.contactNo }}</mat-option>
+//                     </mat-select>
+//                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
+//                   </mat-form-field>
+//                 </div>
+
+//                 <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+//                   <mat-form-field class="example-full-width">
+//                     <mat-label>Document Type</mat-label>
+//                     <mat-select formControlName="documentType" required>
+//                       <mat-option value="passport">Passport</mat-option>
+//                       <mat-option value="idCard">ID Card</mat-option>
+//                       <mat-option value="birthCertificate">Birth Certificate</mat-option>
+//                       <!-- Add more options as needed -->
+//                     </mat-select>
+//                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>description</mat-icon>
+//                   </mat-form-field>
+//                 </div>
+//                 <!-- <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 mb-3">
+//                   <mat-form-field class="example-full-width">
+//                     <mat-label>Upload File</mat-label>
+//                     <input matInput formControlName="file" required>
+//                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>attach_file</mat-icon>
+//                   </mat-form-field>
+//                 </div> -->
+//                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+//                     <label>Upload</label>
+//                     <app-file-upload formControlName="file"></app-file-upload>
+//                   </div>
+//               </div>
+
+//               <div class="row">
+//                 <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+//                   <mat-form-field class="example-full-width">
+//                     <mat-label>Remarks</mat-label>
+//                     <textarea matInput formControlName="remarks" required></textarea>
+//                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>note</mat-icon>
+//                   </mat-form-field>
+//                 </div>
+//               </div>
+
+//               <div class="row">
+//                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+//                   <button class="btn-space" [disabled]="!documentForm.valid" mat-raised-button color="primary">
+//                   Submit
+//                   </button>
+//                   <button type="button" mat-raised-button color="warn">Cancel</button>
+//                 </div>
+//               </div>
+//             </form>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+// </section> */}
+
+
+
+
+
+// import { Component, OnInit } from '@angular/core';
+// import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+// import { AgentService } from '../agent.service';
+// // import { MatFormFieldDefaultOptions } from '@angular/material/form-field';
+
+// @Component({
+//   selector: 'app-student-document',
+//   templateUrl: './student-document.component.html',
+//   styleUrls: ['./student-document.component.scss']
 // })
-// export class CustomValidatorDirective implements Validator, OnInit {
-//   @Input('appCustomValidator') validationType: string;
+// export class StudentDocumentComponent implements OnInit {
+//   documentForm: FormGroup;
+//   breadscrums = [
+//     {
+//       title: 'Student Details',
+//       items: ['Forms'],
+//       active: 'Add Document',
+//     },
+//   ];
+//   students = [];
+//   errorMessage: string = '';
 
-//   constructor(private el: ElementRef, private renderer: Renderer2) {}
+//   constructor(
+//     private fb: FormBuilder,
+//     private agentService: AgentService
+    
+//   ) {
+//     this.initDocumentForm();
+//   }
 
 //   ngOnInit() {
-//     if (!this.validationType) {
-//       throw new Error('Validation type is required');
+//     this.fetchStudents();
+//   }
+
+//   initDocumentForm() {
+//     this.documentForm = this.fb.group({
+//       studentName: ['', Validators.required],
+//       contactNo: ['', Validators.required],
+//       documentType: ['', Validators.required],
+//       remarks: ['', Validators.required],
+//       file: ['', Validators.required],
+//     });
+//   }
+
+//   fetchStudents() {
+//     this.agentService.getStudentsList().subscribe(
+//       data => {
+//         this.students = data;
+//         console.log(this.students,"these are the students")
+//       },
+//       error => {
+//         console.error('Error fetching students', error);
+//       }
+//     );
+//   }
+
+//   onDocumentFormSubmit() {
+//     if (this.documentForm.valid) {
+//       this.agentService.submitStudentDocument(this.documentForm.value).subscribe(
+        
+//         response => {
+//           console.log('Submit Success', response);
+//           console.log(this.documentForm.value,"form values arsalaan")
+//         },
+//         error => {
+//           console.log('Submit Error', error);
+//         }
+//       );
+//     } else {
+//       this.errorMessage = 'Please fill all required fields.';
+//       console.log('Form is not valid');
 //     }
 //   }
 
-//   validate(control: AbstractControl): ValidationErrors | null { 
-//     if (!control.value) {
-//       this.removeError();
-//       // return { required: true }; // if the field is empty, mark it as required
-//       //  console.log("sdfsfdsdfsdfds");
-      
-//     }
-
-//     let error: ValidationErrors | null = null;
-
-//     switch (this.validationType) {
-//       case 'email':
-//         error = this.validateEmail(control.value) ? null : { 'invalidEmail': true };
-//         break;
-//       case 'firstName':
-//         case 'agentCompany':
-//         error = this.validateName(control.value) ? null : { 'invalidFirstName': true };
-//         break;
-//       case 'agentFirstName':
-//         error = this.validateName(control.value) ? null : { 'invalidagentFirstName': true };
-//         break;
-//       case 'agentLastName':
-//         error = this.validateName(control.value) ? null : { 'invalidagentLastName': true };
-//         break;
-//       case 'phoneNumber':
-//         error = this.validatePhoneNumber(control.value) ? null : { 'invalidPhoneNumber': true };
-//         break;
-//       default:
-//         error = null;
-//     }
-
-//     this.setError(error);
-//     return error;
-//   }
-
-//   validateEmail(value: string): boolean {
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//     return emailRegex.test(value);
-//   }
-
-//   validateName(value: string): boolean {
-//     const nameRegex = /^[a-zA-Z]+$/;
-//     return nameRegex.test(value);
-//   }
-
-//   validatePhoneNumber(value: string): boolean {
-//     const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-//     return phoneRegex.test(value);
-//   }
-
-//   setError(error: ValidationErrors | null) {
-//     this.removeError();
-//     if (error) {
-//       const errorMessage = this.getErrorMessage(error);
-//       const errorNode = this.renderer.createElement('div');
-//       const text = this.renderer.createText(errorMessage);
-//       console.log("----------------------->", text);
-//       this.renderer.appendChild(errorNode, text);
-//       this.renderer.setStyle(errorNode, 'color', 'red');
-//       this.renderer.setStyle(errorNode, 'font-size', '12px');
-//       this.renderer.setStyle(errorNode, 'margin-top', '5px');
-//       this.renderer.setAttribute(errorNode, 'class', 'validation-error');
-//       this.renderer.appendChild(this.el.nativeElement.parentElement, errorNode);
-//     }
-//   }
-
-//   removeError() {
-//     const parent = this.el.nativeElement.parentElement;
-//     const errorNode = parent.querySelector('.validation-error');
-//     if (errorNode) {
-//       this.renderer.removeChild(parent, errorNode);
-//     }
-//   }
-
-//   getErrorMessage(error: ValidationErrors): string {
-//     if (error['invalidEmail']) {
-//       return 'Invalid Email';
-//     }
-//     if (error['invalidFirstName']) {
-//       return 'Invalid Input Value';
-//     }
-//     if (error['invalidagentFirstName']) {
-//       return 'Invalid agent First Name';
-//     }
-//     if (error['invalidagentLastName']) {
-//       return 'Invalid Last Name';
-//     }
-//     if (error['invalidPhoneNumber']) {
-//       return 'Invalid Phone Number';
-//     }
-//     return 'Invalid Value';
-//   }
 // }
+

@@ -28,96 +28,106 @@ const routes: Routes = [
           import('./admin/admin.module').then((m) => m.AdminModule),
       },
       {
+        path: 'agent',
+        loadChildren: () =>
+          import('./agent/agent.module').then((m) => m.AgentModule),
+      },
+      {
         path: 'consultancy',
         loadChildren: () =>
           import('./consultancy/consultancy.module').then((m) => m.ConsultancyModule),
       },
       {
-        path: 'advance-table',
+        path: 'student',
         loadChildren: () =>
-          import('./advance-table/advance-table.module').then(
-            (m) => m.AdvanceTableModule
-          ),
+          import('./student/student.module').then((m) => m.StudentModule),
       },
-      {
-        path: 'calendar',
-        loadChildren: () =>
-          import('./calendar/calendar.module').then((m) => m.CalendarsModule),
-      },
-      {
-        path: 'task',
-        loadChildren: () =>
-          import('./task/task.module').then((m) => m.TaskModule),
-      },
+    //   {
+    //     path: 'advance-table',
+    //     loadChildren: () =>
+    //       import('./advance-table/advance-table.module').then(
+    //         (m) => m.AdvanceTableModule
+    //       ),
+    //   },
+    //   {
+    //     path: 'calendar',
+    //     loadChildren: () =>
+    //       import('./calendar/calendar.module').then((m) => m.CalendarsModule),
+    //   },
+    //   {
+    //     path: 'task',
+    //     loadChildren: () =>
+    //       import('./task/task.module').then((m) => m.TaskModule),
+    //   },
     
-      {
-        path: 'contacts',
-        loadChildren: () =>
-          import('./contacts/contacts.module').then((m) => m.ContactsModule),
-      },
-      {
-        path: 'email',
-        loadChildren: () =>
-          import('./email/email.module').then((m) => m.EmailModule),
-      },
-      {
-        path: 'apps',
-        loadChildren: () =>
-          import('./apps/apps.module').then((m) => m.AppsModule),
-      },
-      {
-        path: 'widget',
-        loadChildren: () =>
-          import('./widget/widget.module').then((m) => m.WidgetModule),
-      },
-      {
-        path: 'ui',
-        loadChildren: () => import('./ui/ui.module').then((m) => m.UiModule),
-      },
-      {
-        path: 'forms',
-        loadChildren: () =>
-          import('./forms/forms.module').then((m) => m.FormModule),
-      },
-      {
-        path: 'tables',
-        loadChildren: () =>
-          import('./tables/tables.module').then((m) => m.TablesModule),
-      },
-      {
-        path: 'charts',
-        loadChildren: () =>
-          import('./charts/charts.module').then((m) => m.ChartsModule),
-      },
-      {
-        path: 'timeline',
-        loadChildren: () =>
-          import('./timeline/timeline.module').then((m) => m.TimelineModule),
-      },
-      {
-        path: 'icons',
-        loadChildren: () =>
-          import('./icons/icons.module').then((m) => m.IconsModule),
-      },
-      {
-        path: 'extra-pages',
-        loadChildren: () =>
-          import('./extra-pages/extra-pages.module').then(
-            (m) => m.ExtraPagesModule
-          ),
-      },
-      {
-        path: 'maps',
-        loadChildren: () =>
-          import('./maps/maps.module').then((m) => m.MapsModule),
-      },
-      {
-        path: 'multilevel',
-        loadChildren: () =>
-          import('./multilevel/multilevel.module').then(
-            (m) => m.MultilevelModule
-          ),
-      },
+    //   {
+    //     path: 'contacts',
+    //     loadChildren: () =>
+    //       import('./contacts/contacts.module').then((m) => m.ContactsModule),
+    //   },
+    //   {
+    //     path: 'email',
+    //     loadChildren: () =>
+    //       import('./email/email.module').then((m) => m.EmailModule),
+    //   },
+    //   {
+    //     path: 'apps',
+    //     loadChildren: () =>
+    //       import('./apps/apps.module').then((m) => m.AppsModule),
+    //   },
+    //   {
+    //     path: 'widget',
+    //     loadChildren: () =>
+    //       import('./widget/widget.module').then((m) => m.WidgetModule),
+    //   },
+    //   {
+    //     path: 'ui',
+    //     loadChildren: () => import('./ui/ui.module').then((m) => m.UiModule),
+    //   },
+    //   {
+    //     path: 'forms',
+    //     loadChildren: () =>
+    //       import('./forms/forms.module').then((m) => m.FormModule),
+    //   },
+    //   {
+    //     path: 'tables',
+    //     loadChildren: () =>
+    //       import('./tables/tables.module').then((m) => m.TablesModule),
+    //   },
+    //   {
+    //     path: 'charts',
+    //     loadChildren: () =>
+    //       import('./charts/charts.module').then((m) => m.ChartsModule),
+    //   },
+    //   {
+    //     path: 'timeline',
+    //     loadChildren: () =>
+    //       import('./timeline/timeline.module').then((m) => m.TimelineModule),
+    //   },
+    //   {
+    //     path: 'icons',
+    //     loadChildren: () =>
+    //       import('./icons/icons.module').then((m) => m.IconsModule),
+    //   },
+    //   {
+    //     path: 'extra-pages',
+    //     loadChildren: () =>
+    //       import('./extra-pages/extra-pages.module').then(
+    //         (m) => m.ExtraPagesModule
+    //       ),
+    //   },
+    //   {
+    //     path: 'maps',
+    //     loadChildren: () =>
+    //       import('./maps/maps.module').then((m) => m.MapsModule),
+    //   },
+    //   {
+    //     path: 'multilevel',
+    //     loadChildren: () =>
+    //       import('./multilevel/multilevel.module').then(
+    //         (m) => m.MultilevelModule
+    //       ),
+    //   },
     ],
   },
   {
