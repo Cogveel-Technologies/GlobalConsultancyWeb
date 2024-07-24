@@ -1,10 +1,10 @@
 
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { InstituteService } from '../institute.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { InstituteData } from '../consultancy-models/data.institute';
+import { InstituteService } from '../consultancy-services/institute.service';
+
 
 
 @Component({
@@ -16,11 +16,11 @@ export class RegisterInstituteComponent {
   breadscrums = [
     {
       title: 'Add Institute',
-      items: ['Register Institute'],
+      items: ['Consultancy'],
       active: 'Add Institute',
     },
   ];
-  registerConsultancy: FormGroup;
+  registerInstitute: FormGroup;
   editMode: boolean;
   subscription: Subscription[] = [];
   details: any;
@@ -28,15 +28,15 @@ export class RegisterInstituteComponent {
   editData: any;
   edit: any
   instituteId: string
-  index:number
+  index: number
 
 
 
-  constructor(private intituteService: InstituteService, private router: Router, private route: ActivatedRoute,) {
+  constructor(private intituteService: InstituteService, private router: Router, private route: ActivatedRoute) {
 
   }
   ngOnInit() {
-    this.registerConsultancy = new FormGroup({
+    this.registerInstitute = new FormGroup({
       InstituteName: new FormControl(''),
       AboutInstitute: new FormControl(''),
       Province: new FormControl(''),
@@ -49,22 +49,12 @@ export class RegisterInstituteComponent {
       FbUrl: new FormControl('')
     })
 
-    this.route.url.subscribe(urlSegments => {
-      const currentUrl = this.router.url;
-      if (currentUrl.includes('/institute-list/edit-institute')) {
-        this.editMode = true
-
-        // Get the ID parameter from the route
-        this.route.params.subscribe(params => {
-          this.instituteId = params['id'];
-          const InstituteDetails = this.intituteService.ELEMENT_DATA.find(el => el.InstituteName === this.instituteId);
-          this.registerConsultancy.patchValue(InstituteDetails)
-          // call api and provide id
-        })
-      } else {
-        this.editMode = false
-      }
-    })
+    const editInstitute = this.route.snapshot.data['editResponse'];
+    if (editInstitute) {
+      console.log(editInstitute)
+      this.editMode = true;
+      this.registerInstitute.patchValue(editInstitute)
+    }
   }
 
   ngOnDestroy() {
@@ -76,11 +66,11 @@ export class RegisterInstituteComponent {
 
 
   onSubmit() {
-    const newDetails = this.registerConsultancy.value;
-    if(this.editMode){
-      this.intituteService.ELEMENT_DATA[this.index] = newDetails
-    }else{
-      this.intituteService.ELEMENT_DATA.push(newDetails)
+    const newDetails = this.registerInstitute.value;
+    if (this.editMode) {
+      this.intituteService.data[this.index] = newDetails
+    } else {
+      this.intituteService.data.push(newDetails)
     }
   }
 

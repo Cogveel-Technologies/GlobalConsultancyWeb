@@ -5,7 +5,8 @@ import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { InstituteData } from '../consultancy-models/data.institute';
-import { ConsultancyService } from '../consultancy.service';
+import { ConsultancyService } from '../consultancy-services/consultancy.service';
+
 
 
 @Component({
@@ -58,22 +59,11 @@ export class RegisterConsultancyComponent {
     })
 
     // for editMode
-    this.route.url.subscribe(UrlSegment=>{
-      const currentUrl = this.router.url;
-      if(currentUrl.includes('/consultancy-list/edit-consultancy/')){
-        this.editMode = true;
-        this.route.params.subscribe(params=>{
-          this.consultancyId = params['id'];
-          this.index = params['index']
-          const details = this.consultancyService.data.find(el => el.ConsultancyName === this.consultancyId);
-          this.registerConsultancy.patchValue(details)
-        })
-        
-      }else{
-        this.editMode = false
-      }
-    })
-  
+    const editConsultancy = this.route.snapshot.data['editResponse']
+    if(editConsultancy){
+      this.editMode = true;
+      this.registerConsultancy.patchValue(editConsultancy);
+    } 
   }
 
   ngOnDestroy() {
@@ -89,6 +79,7 @@ export class RegisterConsultancyComponent {
     if(this.editMode){
       this.consultancyService.data[this.index] = newDetails
     }else{
+      console.log(this.registerConsultancy.value)
       this.consultancyService.data.push(newDetails)
     }
     this.router.navigate(['consultancy/consultancy-list']);

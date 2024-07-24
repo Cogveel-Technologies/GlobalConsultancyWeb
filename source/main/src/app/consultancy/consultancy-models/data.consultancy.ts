@@ -1,4 +1,5 @@
 export interface ConsultancyData {
+    Id:number,
     ConsultancyName:string,
     Phone1:number,
     Phone2:number,

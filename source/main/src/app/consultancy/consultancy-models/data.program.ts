@@ -1,0 +1,16 @@
+export interface ProgramData {
+    Id:number,
+    ProgramName:string,
+    ProgramDescription:string,
+    Duration:string,
+    ApplicationFee:number,
+    TuitionFee:number,
+    LevelOfEducation:string,
+    Status:string,
+    SubjectRequirements:string,
+    AcademicRequirements:string,
+    ProgramCategoryId:number,
+    ProgramIntake:number,
+    IntakeId:number,
+    InstituteId:number,   
+}

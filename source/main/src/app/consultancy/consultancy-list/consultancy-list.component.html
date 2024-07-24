@@ -13,11 +13,12 @@
             <div class="left">
               <ul class="header-buttons-left ms-0">
                 <li class="tbl-title me-2">
-                  <h2>Table Name</h2>
+                  <h2>Consultancy List</h2>
                 </li>
                 <li class="tbl-search-box">
                   <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                  <input placeholder="Search" type="text" #filter (input)="filterUsers(filter.value)" class="browser-default search-field" aria-label="Search box">
+                  <input placeholder="Search" type="text"
+                    class="browser-default search-field" aria-label="Search box">
                 </li>
               </ul>
             </div>
@@ -25,28 +26,9 @@
               <ul class="tbl-export-btn">
                 <li class="tbl-header-btn">
                   <div class="m-l-10" matTooltip="ADD">
-                    <button mat-mini-fab color="primary" (click)="addUser()">
+                    <button mat-mini-fab color="primary" (click)="addInstitute()">
                       <mat-icon class="col-white">add</mat-icon>
                     </button>
-                  </div>
-                </li>
-                <li class="tbl-header-btn">
-                  <div class="m-l-10" matTooltip="REFRESH">
-                    <button mat-mini-fab color="primary" (click)="refreshPage()">
-                      <mat-icon class="col-white">refresh</mat-icon>
-                    </button>
-                  </div>
-                </li>
-                <li class="tbl-header-btn">
-                  <div class="m-l-10" matTooltip="DELETE">
-                    <button mat-mini-fab color="warn">
-                      <mat-icon class="col-white">delete</mat-icon>
-                    </button>
-                  </div>
-                </li>
-                <li>
-                  <div class="export-button m-l-10" matTooltip="XLSX">
-                    <img src="assets/images/icons/xlsx.png" alt="" />
                   </div>
                 </li>
               </ul>
@@ -63,55 +45,39 @@
             <h2>Hover Rows</h2>
           </div>
           <div class="body table-responsive">
-            <table class="table table-hover table-responsive">
+            <table class="table table-hover table-responsive" >
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Consultancy Name</th>
-                  <th>Phone 1</th>
-                  <th>Phone 2</th>
-                  <th>Email 1</th>
-                  <th>Email 2</th>
+                  <th >Consultancy Name</th>
+                  <th>Phone </th>
+                  <th>Email </th>
                   <th>Country</th>
                   <th>State</th>
-                  <th>City</th>
-                  <th>Address</th>
-                  <th>Street</th>
-                  <th>Pincode</th>
                   <th>Registration No</th>
                   <th>Website</th>
-                  <th>Facebook URL</th>
-                  <th>LinkedIn URL</th>
-                  <th>Year Established</th>
-                  <th>Password</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let user of filteredUsers">
-                  <th scope="row">{{ user.id }}</th>
-                  <td>{{ user.ConsultancyName }}</td>
-                  <td>{{ user.Phone1 }}</td>
-                  <td>{{ user.Phone2 }}</td>
-                  <td>{{ user.Email1 }}</td>
-                  <td>{{ user.Email2 }}</td>
-                  <td>{{ user.Country }}</td>
-                  <td>{{ user.State }}</td>
-                  <td>{{ user.City }}</td>
-                  <td>{{ user.Address }}</td>
-                  <td>{{ user.Street }}</td>
-                  <td>{{ user.Pincode }}</td>
-                  <td>{{ user.RegistrationNo }}</td>
-                  <td>{{ user.Website }}</td>
-                  <td>{{ user.FbUrl }}</td>
-                  <td>{{ user.LinkedInUrl }}</td>
-                  <td>{{ user.YearEstablished }}</td>
-                  <td>{{ user.Password }}</td>
-                  <td>
-                    <button mat-icon-button color="primary" (click)="editUser(user.id)">
+                <tr *ngFor="let consultancy of (consultancies|async)">
+
+                  <td data-label="Consultancy Name">{{ consultancy.ConsultancyName }}</td>
+                  <td data-label="Phone">{{ consultancy.Phone1 }}</td>
+                  <td data-label="Email">{{ consultancy.Email1 }}</td>
+                  <td data-label="Country">{{ consultancy.Country }}</td>
+                  <td data-label="State">{{ consultancy.State }}</td>
+                  <td data-label="Registration No">{{ consultancy.RegistrationNo }}</td>
+                  <td data-label="Website">{{ consultancy.Website }}</td>
+
+                  <td  data-label="Actions">
+                    <button mat-icon-button [routerLink]="['/consultancy/consultancy-details', consultancy.Id]" (click)="viewDetails()">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary"
+                      [routerLink]="['/consultancy/edit-consultancy', consultancy.Id]">
                       <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
+                    <button mat-icon-button color="warn" (click)="deleteUser(consultancy.Id)">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </td>

@@ -1,0 +1,99 @@
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+            </app-breadcrumb>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="materialTableHeader">
+                        <div class="left">
+                            <ul class="header-buttons-left ms-0">
+                                <li class="tbl-title me-2">
+                                    <h2>List of programs</h2>
+                                </li>
+                                <li class="tbl-search-box">
+                                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                                    <input placeholder="Search" type="text" #filter class="browser-default search-field"
+                                        aria-label="Search box">
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="right">
+                            <ul class="tbl-export-btn">
+                                <li class="tbl-header-btn">
+                                    <div class="m-l-10" matTooltip="ADD">
+                                        <button mat-mini-fab color="primary" (click)="addProgram()">
+                                            <mat-icon class="col-white">add</mat-icon>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Hover Rows</h2>
+                    </div>
+                    <div class="body table-responsive">
+                        <table class="table table-hover table-responsive" [formGroup]="programForm">
+                            <thead>
+                                <tr>
+                                    <th>Program Name</th>
+                                    <th>Duration</th>
+                                    <th>Application Fee</th>
+                                    <th>Tuition Fee</th>
+                                    <th>Level Of Education</th>
+                                    <th>Status</th>
+
+                                    <th>Program Category ID</th>
+                                    <th>Program Intake</th>
+
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let program of programs">
+                                    <td data-label="Program Name">{{ program.ProgramName }}</td>
+                                    <td data-label="Duration">{{ program.Duration }}</td>
+                                    <td data-label="Application Fee">{{ program.ApplicationFee }}</td>
+                                    <td data-label="Tuition Fee">{{ program.TuitionFee }}</td>
+                                    <td data-label="Level of Education">{{ program.LevelOfEducation }}</td>
+                                    <td data-label="Status">{{ program.Status }}</td>
+                                    <td data-label="Program Category ID">{{ program.ProgramCategoryId }}</td>
+                                    <td data-label="Program Intake">{{ program.ProgramIntake }}</td>
+
+                                    <td data-label="Actions">
+
+                                        <button mat-icon-button
+                                        [routerLink]="['/consultancy/program-details', program.Id]">
+                                            <mat-icon>visibility</mat-icon>
+                                        </button>
+                                        <button mat-icon-button color="primary"
+                                            [routerLink]="['/consultancy/edit-program', program.Id]">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                        <button mat-icon-button color="warn" (click)="deleteUser(program.Id)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,85 @@
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+            </app-breadcrumb>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="materialTableHeader">
+                        <div class="left">
+                            <ul class="header-buttons-left ms-0">
+                                <li class="tbl-title me-2">
+                                    <h2>List of Intakes</h2>
+                                </li>
+                                <li class="tbl-search-box">
+                                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                                    <input placeholder="Search" type="text" #filter class="browser-default search-field"
+                                        aria-label="Search box">
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="right">
+                            <ul class="tbl-export-btn">
+                                <li class="tbl-header-btn">
+                                    <div class="m-l-10" matTooltip="ADD">
+                                        <button mat-mini-fab color="primary" (click)="addProgram()">
+                                            <mat-icon class="col-white">add</mat-icon>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Hover Rows</h2>
+                    </div>
+                    <div class="body table-responsive">
+                        <table class="table table-hover table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Program Id</th>
+                                    <th>Institute Id</th>
+                                    <th>Session Id</th>
+                                    <th>No Of Intake</th>
+                                    <th>Year</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let intake of (intakes | async)">
+                                    <td data-label="Program ID">{{ intake.ProgramId }}</td>
+                                    <td data-label="Institute ID">{{ intake.InstituteId }}</td>
+                                    <td data-label="Session ID">{{ intake.SessionId }}</td>
+                                    <td data-label="Number of Intakes">{{ intake.NoOfIntake }}</td>
+                                    <td data-label="Year">{{ intake.Year }}</td>
+                                    <td data-label="Actions">
+                                        <button mat-icon-button color="primary"
+                                            [routerLink]="['/consultancy/edit-intake', intake.Id]">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                        <button mat-icon-button color="warn">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

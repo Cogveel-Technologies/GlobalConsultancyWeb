@@ -1,0 +1,153 @@
+<section class="content">
+    <div class="content-block">
+      <div class="block-header" *ngFor="let breadscrum of breadscrums">
+        <!-- breadcrumb -->
+        <app-breadcrumb [title]="editMode ? 'Edit Program' : breadscrum.title" [items]="breadscrum.items" [active_item]="editMode ? 'Edit Program' : breadscrum.active">
+        </app-breadcrumb>
+      </div>
+  
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="header">
+              <h2>{{editMode ? 'Edit Program' : 'Add Program' }}</h2>
+            </div>
+            <div class="body">
+              <form class="m-4" [formGroup]="registerProgram" (submit)="onSubmit()">
+                
+                <!-- Program Name -->
+                <div class="row mb-1">
+                  <div class="col-12 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Program Name</mat-label>
+                      <input matInput formControlName="ProgramName">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>school</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <!-- Program Description and Duration -->
+                <div class="row mb-1">
+                  <div class="col-md-12 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Program Description</mat-label>
+                      <textarea matInput formControlName="ProgramDescription"></textarea>
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>description</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Duration</mat-label>
+                      <input matInput formControlName="Duration">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>schedule</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Application Fee</mat-label>
+                      <input matInput formControlName="ApplicationFee" type="number">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>attach_money</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <!-- Fees and Level of Education -->
+                <div class="row mb-1">
+                  <div class="col-md-6 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Tuition Fee</mat-label>
+                      <input matInput formControlName="TuitionFee" type="number">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>money</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Level Of Education</mat-label>
+                      <input matInput formControlName="LevelOfEducation">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>school</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <!-- Subject Requirements -->
+                <div class="row mb-1">
+                  <div class="col-12 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Subject Requirements</mat-label>
+                      <textarea matInput formControlName="SubjectRequirements"></textarea>
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>book</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <!-- Academic Requirements and Program Category ID -->
+                <div class="row mb-1">
+                  <div class="col-md-12 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Academic Requirements</mat-label>
+                      <textarea matInput formControlName="AcademicRequirements"></textarea>
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>assignment</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Program Category Id</mat-label>
+                      <input matInput formControlName="ProgramCategoryId" type="number">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>category</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Program Intake</mat-label>
+                      <input matInput formControlName="ProgramIntake" type="number">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>group</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <!-- Program Intake, Intake ID, and Institute ID -->
+                <div class="row mb-1">
+                  
+                  <div class="col-md-6 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Intake Id</mat-label>
+                      <input matInput formControlName="IntakeId" type="number">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>event</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Institute Id</mat-label>
+                      <input matInput formControlName="InstituteId" type="number">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>business</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <!-- Status -->
+                <div class="row mb-1">
+                  <div class="col-12 mb-1">
+                    <mat-form-field appearance="fill" class="example-full-width">
+                      <mat-label>Status</mat-label>
+                      <input matInput formControlName="Status">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>info</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <!-- Submit/Update and Cancel Buttons -->
+                <div class="row mb-1">
+                  <div class="col-auto">
+                    <button type="submit" class="btn-space" mat-raised-button color="primary">{{editMode ? 'Update' : 'Submit'}}</button>
+                    <button type="button" mat-raised-button color="warn">Cancel</button>
+                  </div>
+                </div>
+  
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
