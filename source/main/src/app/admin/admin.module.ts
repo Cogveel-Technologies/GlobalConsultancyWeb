@@ -19,7 +19,7 @@ import { AddAgentComponent } from './add-agent/add-agent.component';
 import { ListagentsComponent } from './listagents/listagents.component';
 import { CustomValidatorDirective } from 'app/custom-validator.directive';
 import { RolesComponent } from './roles/roles.component';
-import { LoginComponent } from './login/login.component';
+
 // import { CustomValidatorDirective } from 'app/custom-validator.directive';
 
 @NgModule({
@@ -30,7 +30,6 @@ import { LoginComponent } from './login/login.component';
     ListagentsComponent,
     CustomValidatorDirective,
     RolesComponent,
-    LoginComponent
   ],
   imports: [
     CommonModule,

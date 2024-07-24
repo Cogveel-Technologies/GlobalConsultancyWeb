@@ -38,7 +38,7 @@ export class CustomValidatorDirective implements Validator, OnInit {
     let error: ValidationErrors | null = null;
 
     switch (this.validationType) {
-      case 'email':
+      case 'Email':
         error = this.validateEmail(control.value) ? null : { 'invalidEmail': true };
         break;
       case 'firstName':

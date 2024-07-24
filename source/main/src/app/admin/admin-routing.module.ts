@@ -5,7 +5,6 @@ import { ListusersComponent } from './listusers/listusers.component';
 import { AddAgentComponent } from './add-agent/add-agent.component';
 import { ListagentsComponent } from './listagents/listagents.component';
 import { RolesComponent } from './roles/roles.component';
-import { LoginComponent } from './login/login.component';
 import { UserResolver } from './listusers/user-resolver';
 
 const routes: Routes = [
@@ -36,11 +35,7 @@ const routes: Routes = [
   {
     path: 'listroles',
     component: RolesComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
+  }
 ];
 
 @NgModule({
