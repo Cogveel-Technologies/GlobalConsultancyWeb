@@ -45,7 +45,7 @@
             <h2>Hover Rows</h2>
           </div>
           <div class="body table-responsive">
-            <table class="table table-hover table-responsive" [formGroup]="instituteForm">
+            <table class="table table-hover table-responsive" >
               <thead>
                 <tr>
                   <th>Institute Name</th>
@@ -59,28 +59,28 @@
               </thead>
               <tbody>
                 <tr *ngFor="let institute of (institutes | async)">
-                  <td data-label="Institute Name">{{ institute.InstituteName }}</td>
-                  <td data-label="Province">{{ institute.Province }}</td>
-                  <td data-label="Country">{{ institute.Country }}</td>
-                  <td data-label="Year Established">{{ institute.YearEstablished }}</td>
-                  <td data-label="Email">{{ institute.Email }}</td>
-                  <td data-label="Phone No">{{ institute.PhoneNo }}</td>
+                  <td data-label="Institute Name">{{ institute.instituteName }}</td>
+                  <td data-label="Province">{{ institute.province }}</td>
+                  <td data-label="Country">{{ institute.country }}</td>
+                  <td data-label="Year Established">{{ institute.yearEstablished }}</td>
+                  <td data-label="Email">{{ institute.email }}</td>
+                  <td data-label="Phone No">{{ institute.phoneNo }}</td>
                   <td data-label="Actions">
-                    <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.Id]">
+                    <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.id]">
                       <mat-icon>visibility</mat-icon>
                     </button>
                     <button mat-icon-button color="primary"
-                      [routerLink]="['/consultancy/edit-institute', institute.Id]">
+                      [routerLink]="['/consultancy/edit-institute', institute.id]">
                       <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button color="warn" (click)="deleteUser(institute.Id)">
+                    <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"(page)="onPageChange($event)">
             </mat-paginator>
           </div>
         </div>

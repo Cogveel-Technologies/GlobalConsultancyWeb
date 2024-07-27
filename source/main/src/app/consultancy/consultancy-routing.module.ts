@@ -7,7 +7,7 @@ import { InstitutionListComponent } from './institution-list/institution-list.co
 import { RegisterProgramComponent } from './register-program/register-program.component';
 import { ProgramListComponent } from './program-list/program-list.component';
 
-import { ConsultancyResolver } from './consultancy-resolvers/edit-consultancy.resolver';
+// import { ConsultancyResolver } from './consultancy-resolvers/edit-consultancy.resolver';
 import { ConsultancyAllDetailsComponent } from './consultancy-all-details/consultancy-all-details.component';
 
 import { InstituteAllDetailsComponent } from './institute-all-details/institute-all-details.component';
@@ -25,6 +25,7 @@ import { InstituteResolver } from './consultancy-resolvers/edit-institute.resolv
 import { allConsultancyDetails } from './consultancy-resolvers/allDetails-consultancy.resolver';
 import { ProgramResolver } from './consultancy-resolvers/edit-program.resolver';
 import { allProgramDetails } from './consultancy-resolvers/allDetails-program.resolver';
+import { ConsultancyResolver } from './consultancy-resolvers/edit-consultancy.resolver';
 
 
 

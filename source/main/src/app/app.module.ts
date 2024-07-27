@@ -57,7 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
     AppRoutingModule,
     HttpClientModule,
     AdminModule,
-     AgentModule,
+    AgentModule,
     LoadingBarRouterModule,
     NgScrollbarModule,
     TranslateModule.forRoot({

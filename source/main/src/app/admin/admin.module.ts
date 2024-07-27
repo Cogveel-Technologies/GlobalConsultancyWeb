@@ -17,7 +17,6 @@ import { ComponentsModule } from '../shared/components/components.module';
 import { SharedModule } from '../shared/shared.module';
 import { AddAgentComponent } from './add-agent/add-agent.component';
 import { ListagentsComponent } from './listagents/listagents.component';
-import { CustomValidatorDirective } from 'app/custom-validator.directive';
 import { RolesComponent } from './roles/roles.component';
 
 // import { CustomValidatorDirective } from 'app/custom-validator.directive';
@@ -28,7 +27,6 @@ import { RolesComponent } from './roles/roles.component';
     ListusersComponent,
     AddAgentComponent,
     ListagentsComponent,
-    CustomValidatorDirective,
     RolesComponent,
   ],
   imports: [

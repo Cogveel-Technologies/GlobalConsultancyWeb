@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-
-import { ActivatedRoute, Router, UrlSegment } from '@angular/router'; 
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-
 import { InstituteData } from '../consultancy-models/data.institute';
-import { ConsultancyService } from '../consultancy-services/consultancy.service';
+import { ConsultancyApi } from '../consultancy-services/api.service';
+
+
 
 
 
@@ -15,6 +15,7 @@ import { ConsultancyService } from '../consultancy-services/consultancy.service'
   styleUrls: ['./register-consultancy.component.scss']
 })
 export class RegisterConsultancyComponent {
+
   breadscrums = [
     {
       title: 'Add Consultancy',
@@ -22,67 +23,63 @@ export class RegisterConsultancyComponent {
       active: 'Add Consultancy',
     },
   ];
-  registerConsultancy:FormGroup;
-  editMode:boolean;
-  subscription:Subscription[] = [];
-  details:any;
-  id:number;
-  institutes:InstituteData[];
-  consultancyId:any
-  index:number
+  registerConsultancy: FormGroup;
+  editMode: boolean;
+  institutes: InstituteData[];
+  editId: number;
+  subscriptions: Subscription = new Subscription();
 
+  constructor(private router: Router, private route: ActivatedRoute, private consultancyApiService: ConsultancyApi) { }
 
-
-
-  constructor(private consultancyService:ConsultancyService, private router:Router, private route:ActivatedRoute){
-    
-  }
-  ngOnInit(){
+  ngOnInit() {
     this.registerConsultancy = new FormGroup({
-      ConsultancyName: new FormControl(''),
-      Phone1: new FormControl(''),
-      Phone2: new FormControl(''),
-      Email1: new FormControl(''),
-      Email2: new FormControl(''),
-      Country: new FormControl(''),
-      State:new FormControl(''),
-      City: new FormControl(''),
-      Address: new FormControl(''),
-      Street: new FormControl(''),
-      Pincode: new FormControl(''),
-      RegistrationNo: new FormControl(''),
-      Website: new FormControl(''),
-      FbUrl: new FormControl(''),
-      LinkedInUrl: new FormControl(''),
-      YearEstablished: new FormControl(''),
-      Password: new FormControl(''),
+      consultancyName: new FormControl(''),
+      phone1: new FormControl(''),
+      phone2: new FormControl(''),
+      email1: new FormControl(''),
+      email2: new FormControl(''),
+      country: new FormControl(''),
+      state: new FormControl(''),
+      city: new FormControl(''),
+      address: new FormControl(''),
+      street: new FormControl(''),
+      pincode: new FormControl(''),
+      registrationNo: new FormControl(''),
+      website: new FormControl(''),
+      fbUrl: new FormControl(''),
+      linkedInUrl: new FormControl(''),
+      yearEstablished: new FormControl(''),
+      password: new FormControl(''),
     })
 
     // for editMode
-    const editConsultancy = this.route.snapshot.data['editResponse']
-    if(editConsultancy){
+    const editConsultancy = this.route.snapshot.data['editResponse'];
+    this.editId = +this.route.snapshot.paramMap.get('id');
+    if (editConsultancy) {
       this.editMode = true;
       this.registerConsultancy.patchValue(editConsultancy);
-    } 
+    }
+
+  }
+  
+  onSubmit() {
+    let newDetails = this.registerConsultancy.value;
+    newDetails.id = this.editId;
+    if (this.editMode) {
+      this.subscriptions.add(this.consultancyApiService.updateConsultancy(newDetails).subscribe(res => {
+        alert("Updated Sucessfully")
+        this.router.navigate(["consultancy", "consultancy-list"]);
+      }))
+    } else {
+      this.subscriptions.add(this.consultancyApiService.registerConsultancy(newDetails).subscribe(res => alert("Registered Successfully")))
+      this.router.navigate(["consultancy", "consultancy-list"]);
+    }
+   
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.forEach(sub => sub.unsubscribe());
-    }
+    this.subscriptions.unsubscribe();
   }
 
-  
-  
-  onSubmit(){
-    const newDetails = this.registerConsultancy.value;
-    if(this.editMode){
-      this.consultancyService.data[this.index] = newDetails
-    }else{
-      console.log(this.registerConsultancy.value)
-      this.consultancyService.data.push(newDetails)
-    }
-    this.router.navigate(['consultancy/consultancy-list']);
-  }
-  
+
 }

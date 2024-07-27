@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://localhost:4200'
+    apiUrl: 'https://www.affectionate-mcnulty.180-179-213-167.plesk.page/api'
   };
   

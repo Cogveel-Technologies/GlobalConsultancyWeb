@@ -13,14 +13,14 @@
             <h2>{{editMode ? 'Edit Institute':'Add Institute'}}</h2>
           </div>
           <div class="body">
-            <form [formGroup]="registerInstitute" (submit)="onSubmit()">
+            <form [formGroup]="registerInstitute" (ngSubmit)="onSubmit()">
 
               <!-- Institute Name -->
               <div class="row mb-1">
                 <div class="col-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Institute Name</mat-label>
-                    <input matInput formControlName="InstituteName">
+                    <input matInput formControlName="instituteName">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>school</mat-icon>
                   </mat-form-field>
                 </div>
@@ -31,62 +31,71 @@
                 <div class="col-md-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>About Institute</mat-label>
-                    <textarea matInput formControlName="AboutInstitute" class="col-12"></textarea>
+                    <textarea matInput formControlName="aboutInstitute" class="col-12"></textarea>
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>info</mat-icon>
                   </mat-form-field>
                 </div>
-                <div class="col-md-6 mb-1">
+                <div class="col-md-4 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Province</mat-label>
-                    <input matInput formControlName="Province">
+                    <input matInput formControlName="province">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
                   </mat-form-field>
                 </div>
-                <div class="col-md-6 mb-1">
+                <div class="col-md-4 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Country</mat-label>
-                    <input matInput formControlName="Country">
+                    <input matInput formControlName="country">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>public</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4 mb-1">
+                  <mat-form-field appearance="fill" class="example-full-width">
+                    <mat-label>Consultancy</mat-label>
+                    <mat-select formControlName="consultancyId">
+                      <mat-option *ngFor="let consultancy of Consultancies" [value]="consultancy">
+                        {{ consultancy }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
                   </mat-form-field>
                 </div>
               </div>
 
-              <!-- Country and Year Established -->
+              <!-- Year Established and Website -->
               <div class="row mb-1">
-                
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Year Established</mat-label>
-                    <input matInput formControlName="YearEstablished">
+                    <input matInput formControlName="yearEstablished" type="number">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>calendar_today</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Website</mat-label>
-                    <input matInput formControlName="Website">
+                    <input matInput formControlName="website">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>language</mat-icon>
                   </mat-form-field>
                 </div>
               </div>
 
-              <!-- Email, Phone, Website -->
+              <!-- Email and Phone -->
               <div class="row mb-1">
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Email</mat-label>
-                    <input matInput formControlName="Email" required appCustomValidator="email">
+                    <input matInput formControlName="email" required appCustomValidator="email">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Phone</mat-label>
-                    <input matInput formControlName="PhoneNo">
+                    <input matInput formControlName="phoneNo">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
                   </mat-form-field>
                 </div>
-               
               </div>
 
               <!-- Fb URL and LinkedIn URL -->
@@ -94,14 +103,14 @@
                 <div class="col-md-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Fb URL</mat-label>
-                    <input matInput formControlName="FbUrl">
+                    <input matInput formControlName="fbUrl">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>facebook</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>LinkedIn URL</mat-label>
-                    <input matInput formControlName="LinkedInUrl">
+                    <input matInput formControlName="linkedInUrl">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>linkedin</mat-icon>
                   </mat-form-field>
                 </div>

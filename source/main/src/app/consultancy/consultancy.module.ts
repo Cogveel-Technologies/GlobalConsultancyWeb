@@ -35,18 +35,13 @@ import { SessionListComponent } from './session-list/session-list.component';
     RegisterIntakesComponent,
     RegisterProgramComponent,
     RegisterSessionComponent,
-    SessionListComponent
+    SessionListComponent,
   ],
   imports: [
+    SharedModule,
     CommonModule,
     ConsultancyRoutingModule,
-
-
-
-
-  
-   ComponentsModule,
-   SharedModule,
+    ComponentsModule,
   ]
 })
 export class ConsultancyModule { }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { of } from 'rxjs';
 import { InstituteData } from '../consultancy-models/data.institute';
 
@@ -13,92 +12,33 @@ export class InstituteService {
 
   getInstituteData() {
     this.data = [
-      {
-        Id: 1,
-        InstituteName: 'Institute of Technology',
-        AboutInstitute: 'A leading institution in technology and innovation.',
-        Province: 'Ontario',
-        Country: 'Canada',
-        YearEstablished: '1985',
-        Email: 'info@techinstitute.ca',
-        PhoneNo: 12345678901,
-        Website: 'https://www.techinstitute.ca',
-        LinkedInUrl: 'https://www.linkedin.com/institute-of-technology',
-        FbUrl: 'https://www.facebook.com/instituteoftechnology'
-      },
-      {
-        Id: 2,
-        InstituteName: 'Global Business School',
-        AboutInstitute: 'A premier school for business studies with a global perspective.',
-        Province: 'California',
-        Country: 'USA',
-        YearEstablished: '1992',
-        Email: 'contact@gbusinessschool.com',
-        PhoneNo: 19876543210,
-        Website: 'https://www.gbusinessschool.com',
-        LinkedInUrl: 'https://www.linkedin.com/global-business-school',
-        FbUrl: 'https://www.facebook.com/globalbusinessschool'
-      },{
-        Id: 2,
-        InstituteName: 'Global Business School',
-        AboutInstitute: 'A premier school for business studies with a global perspective.',
-        Province: 'California',
-        Country: 'USA',
-        YearEstablished: '1992',
-        Email: 'contact@gbusinessschool.com',
-        PhoneNo: 19876543210,
-        Website: 'https://www.gbusinessschool.com',
-        LinkedInUrl: 'https://www.linkedin.com/global-business-school',
-        FbUrl: 'https://www.facebook.com/globalbusinessschool'
-      },{
-        Id: 2,
-        InstituteName: 'Global Business School',
-        AboutInstitute: 'A premier school for business studies with a global perspective.',
-        Province: 'California',
-        Country: 'USA',
-        YearEstablished: '1992',
-        Email: 'contact@gbusinessschool.com',
-        PhoneNo: 19876543210,
-        Website: 'https://www.gbusinessschool.com',
-        LinkedInUrl: 'https://www.linkedin.com/global-business-school',
-        FbUrl: 'https://www.facebook.com/globalbusinessschool'
-      },{
-        Id: 2,
-        InstituteName: 'Global Business School',
-        AboutInstitute: 'A premier school for business studies with a global perspective.',
-        Province: 'California',
-        Country: 'USA',
-        YearEstablished: '1992',
-        Email: 'contact@gbusinessschool.com',
-        PhoneNo: 19876543210,
-        Website: 'https://www.gbusinessschool.com',
-        LinkedInUrl: 'https://www.linkedin.com/global-business-school',
-        FbUrl: 'https://www.facebook.com/globalbusinessschool'
-      },{
-        Id: 2,
-        InstituteName: 'Global Business School',
-        AboutInstitute: 'A premier school for business studies with a global perspective.',
-        Province: 'California',
-        Country: 'USA',
-        YearEstablished: '1992',
-        Email: 'contact@gbusinessschool.com',
-        PhoneNo: 19876543210,
-        Website: 'https://www.gbusinessschool.com',
-        LinkedInUrl: 'https://www.linkedin.com/global-business-school',
-        FbUrl: 'https://www.facebook.com/globalbusinessschool'
-      },{
-        Id: 2,
-        InstituteName: 'kamrans school',
-        AboutInstitute: 'A premier school for business studies with a global perspective.',
-        Province: 'California',
-        Country: 'USA',
-        YearEstablished: '1992',
-        Email: 'contact@gbusinessschool.com',
-        PhoneNo: 19876543210,
-        Website: 'https://www.gbusinessschool.com',
-        LinkedInUrl: 'https://www.linkedin.com/global-business-school',
-        FbUrl: 'https://www.facebook.com/globalbusinessschool'
-      }
+      {id:3,
+        consultancyId: 1,
+        instituteName: 'Institute of Technology',
+        aboutInstitute: 'A leading institution in technology and innovation.',
+        province: 'Ontario',
+        country: 'Canada',
+        yearEstablished: 1985,
+        email: 'info@techinstitute.ca',
+        phoneNo: '12345678901',
+        website: 'https://www.techinstitute.ca',
+        linkedInUrl: 'https://www.linkedin.com/institute-of-technology',
+        fbUrl: 'https://www.facebook.com/instituteoftechnology'
+    },
+    {id:3,
+        consultancyId: 2,
+        instituteName: 'Global Business School',
+        aboutInstitute: 'A premier school for business studies with a global perspective.',
+        province: 'California',
+        country: 'USA',
+        yearEstablished: 1992,
+        email: 'contact@gbusinessschool.com',
+        phoneNo: '19876543210',
+        website: 'https://www.gbusinessschool.com',
+        linkedInUrl: 'https://www.linkedin.com/global-business-school',
+        fbUrl: 'https://www.facebook.com/globalbusinessschool'
+    },
+    
     ];
 
     return of(this.data)

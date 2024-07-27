@@ -1,13 +1,14 @@
 export interface InstituteData {
-    Id:number,
-    InstituteName: string,
-    AboutInstitute: string,
-    Province: string,
-    Country: string,
-    YearEstablished: string,
-    Email: string,
-    PhoneNo: number,
-    Website: string,
-    LinkedInUrl: string,
-    FbUrl: string
+    id:number,
+    consultancyId: number,
+    instituteName: string,
+    aboutInstitute: string,
+    province: string,
+    country: string,
+    yearEstablished: number,
+    email: string,
+    phoneNo: string,
+    website: string,
+    linkedInUrl: string,
+    fbUrl: string
 }

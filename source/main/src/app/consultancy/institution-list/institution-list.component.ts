@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, FormGroup } from '@angular/forms';
-import * as CryptoJS from 'crypto-js';  // Import CryptoJS
-import { InstituteData } from '../consultancy-models/data.institute';
 import { InstituteService } from '../consultancy-services/institute.service';
+import { ConsultancyApi } from '../consultancy-services/api.service';
+import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
+import { ConsultancyService } from '../consultancy-services/consultancy.service';
 
 
 @Component({
@@ -13,7 +13,7 @@ import { InstituteService } from '../consultancy-services/institute.service';
 })
 
 export class InstitutionListComponent {
-
+ 
   breadscrums = [
     {
       title: 'Institution List',
@@ -22,21 +22,38 @@ export class InstitutionListComponent {
     },
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private instituteService: InstituteService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private instituteService: InstituteService, private consultancyService:ConsultancyService,private consultancyApiService:ConsultancyApi) { }
   editMode: boolean
-  instituteForm: FormGroup;
   institutes: any;
+  pageSize = 5;
+  currentPage = 1;
+  defaultData:ConsultancyDetailsOptions
+
 
 
 
   ngOnInit() {
-    this.institutes = this.instituteService.data;
-    this.institutes = this.instituteService.getInstituteData();
+    this.defaultData = this.consultancyService.defaultRenderData()
+    this.institutes = this.consultancyApiService.getInstitutes(this.defaultData);
   }
 
   addInstitute() {
     this.router.navigate(['consultancy/register-consultancy'])
   }
+
+  deleteInstitute(id:number){
+    const con =  confirm("Are you sure?")
+    if(con){
+      this.consultancyApiService.deleteInstitute(id).subscribe(res=> {
+        this.institutes = this.consultancyApiService.getInstitutes(this.defaultData)
+        alert("Deleted Successfully")
+      });
+    }
+  }
+
+  
+
+ 
 
   refreshPage() {
     console.log("Refresh button clicked");
@@ -48,33 +65,17 @@ export class InstitutionListComponent {
     // Add your delete logic here
   }
 
-  encryptData(data: any): string {
-    const key = CryptoJS.enc.Utf8.parse('1234567890123456');  // Your secret key
-    const iv = CryptoJS.enc.Utf8.parse('1234567890123456');  // Initialization vector
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), key, { iv: iv });
-    return encrypted.toString();
-  }
 
   editConsultancy(userId: number) {
     this.router.navigate(['consultancy/register-consultancy'], { queryParams: { editMode: true } })
 
 
   }
+  onPageChange($event){
+    this.pageSize = $event.pageSize;
+    const paginatedData = {...this.defaultData};
+    paginatedData.limit = this.pageSize;
+    this.institutes = this.consultancyApiService.getInstitutes(paginatedData)
+  }
 
-  // filterUsers(searchTerm: string) {
-  //   if (!searchTerm) {
-  //     this.institutes = [...this.institutes];
-  //   } else {
-  //     const lowerCaseTerm = searchTerm.toLowerCase();
-  //     this.institutes = this.institutes.filter(user =>
-  //       user.ConsultancyName.toLowerCase().includes(lowerCaseTerm) ||
-  //       user.Email1.toLowerCase().includes(lowerCaseTerm) ||
-  //       user.Email2.toLowerCase().includes(lowerCaseTerm) ||
-  //       user.Country.toLowerCase().includes(lowerCaseTerm) ||
-  //       user.State.toLowerCase().includes(lowerCaseTerm) ||
-  //       user.City.toLowerCase().includes(lowerCaseTerm) ||
-  //       user.Address.toLowerCase().includes(lowerCaseTerm)
-  //     );
-  //   }
-  // }
 }

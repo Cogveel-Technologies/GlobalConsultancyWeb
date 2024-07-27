@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as CryptoJS from 'crypto-js';  // Import CryptoJS
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { ConsultancyData } from '../consultancy-models/data.consultancy';
 import { Observable } from 'rxjs';
-
+import { ConsultancyApi } from '../consultancy-services/api.service';
+import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 
 
 @Component({
@@ -22,14 +22,17 @@ export class ConsultancyListComponent implements OnInit {
     },
   ];
 
-  constructor(private router: Router, private route:ActivatedRoute, private consultancyService:ConsultancyService) { }
+  constructor(private router: Router, private route:ActivatedRoute, private consultancyService:ConsultancyService, private consultancyApiService:ConsultancyApi) { }
   editMode:boolean
   consultancies!:Observable<ConsultancyData[]>;
+  pageSize = 5;
+  currentPage = 1;
+  defaultData:ConsultancyDetailsOptions;
 
   ngOnInit() { 
     // RETREIVE CONSULTANCY DATA
-     this.consultancies = this.consultancyService.getConsultancyData()
-    
+    this.defaultData = this.consultancyService.defaultRenderData()
+     this.consultancies = this.consultancyApiService.getConsultancy(this.defaultData)
   }
 
   addInstitute() {
@@ -38,27 +41,30 @@ export class ConsultancyListComponent implements OnInit {
 
   refreshPage() {
     console.log("Refresh button clicked");
-    // Add your refresh logic here
   }
 
-  deleteUser(userId: number) {
-    console.log(`Delete user button clicked for user ${userId}`);
-    // Add your delete logic here
+  deleteConsultancy(id: number) {
+    const con =  confirm("Are you sure?")
+    if(con){
+      this.consultancyApiService.deleteConsultancy(id).subscribe(res=> {
+        this.consultancies = this.consultancyApiService.getConsultancy(this.defaultData)
+        alert("Deleted Successfully")
+      });
+    }
+  }
+
+  onPageChange($event){
+    this.pageSize = $event.pageSize;
+    const paginatedData = {...this.defaultData};
+    paginatedData.limit = this.pageSize;
+    this.consultancies = this.consultancyApiService.getConsultancy(paginatedData)
+  }
+
+  onSearch(){
+
   }
 
   viewDetails(){
    
-  }
-
-  encryptData(data: any): string {
-    const key = CryptoJS.enc.Utf8.parse('1234567890123456');  // Your secret key
-    const iv = CryptoJS.enc.Utf8.parse('1234567890123456');  // Initialization vector
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), key, { iv: iv });
-    return encrypted.toString();
-  }
-
-  editConsultancy(userId: number) {
-    this.router.navigate(['consultancy/register-consultancy'],{queryParams:{editMode:true}})
-  }
-    
+  }  
 }

@@ -1,18 +1,17 @@
-
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { InstituteService } from '../consultancy-services/institute.service';
-
-
+import { ConsultancyApi } from '../consultancy-services/api.service';
 
 @Component({
   selector: 'app-register-consultancy',
   templateUrl: './register-institute.component.html',
   styleUrls: ['./register-institute.component.scss']
 })
-export class RegisterInstituteComponent {
+export class RegisterInstituteComponent implements OnInit, OnDestroy {
+  subscriptions: Subscription = new Subscription();
   breadscrums = [
     {
       title: 'Add Institute',
@@ -21,57 +20,77 @@ export class RegisterInstituteComponent {
     },
   ];
   registerInstitute: FormGroup;
-  editMode: boolean;
-  subscription: Subscription[] = [];
+  editMode: boolean = false;
   details: any;
   id: number;
-  editData: any;
-  edit: any
-  instituteId: string
-  index: number
+  editId:number;
+  instituteId: string;
+  index: number;
 
+  // static data for consultancies
+  Consultancies: number[] = [1, 2, 3, 4];
 
-
-  constructor(private intituteService: InstituteService, private router: Router, private route: ActivatedRoute) {
-
-  }
-  ngOnInit() {
+  constructor(
+    private instituteService: InstituteService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private consultancyApiService: ConsultancyApi
+  ) {
     this.registerInstitute = new FormGroup({
-      InstituteName: new FormControl(''),
-      AboutInstitute: new FormControl(''),
-      Province: new FormControl(''),
-      Country: new FormControl(''),
-      YearEstablished: new FormControl(''),
-      Email: new FormControl(''),
-      PhoneNo: new FormControl(''),
-      Website: new FormControl(''),
-      LinkedInUrl: new FormControl(''),
-      FbUrl: new FormControl('')
-    })
+      instituteName: new FormControl(''),
+      aboutInstitute: new FormControl(''),
+      province: new FormControl(''),
+      country: new FormControl(''),
+      consultancyId: new FormControl(''),
+      yearEstablished: new FormControl(''),
+      email: new FormControl(''),
+      phoneNo: new FormControl(''),
+      website: new FormControl(''),
+      linkedInUrl: new FormControl(''),
+      fbUrl: new FormControl('')
+    });
+  }
 
+  ngOnInit() {
+    // for editMode
     const editInstitute = this.route.snapshot.data['editResponse'];
-    if (editInstitute) {
-      console.log(editInstitute)
-      this.editMode = true;
-      this.registerInstitute.patchValue(editInstitute)
-    }
+    console.log(editInstitute)
+
+     this.editId = +this.route.snapshot.paramMap.get('id');
+     if (editInstitute) {
+       this.editMode = true;
+       this.registerInstitute.patchValue(editInstitute);
+     }
   }
 
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.forEach(sub => sub.unsubscribe());
-    }
+  // display error or register message and navigate
+
+  displayMessageAndNavigate(message:string, path:string[]){
+    alert(message)
+    this.router.navigate(path)
   }
-
-
 
   onSubmit() {
     const newDetails = this.registerInstitute.value;
     if (this.editMode) {
-      this.intituteService.data[this.index] = newDetails
+      this.subscriptions.add(
+        this.consultancyApiService.updateInstitute(this.editId, newDetails).subscribe(res => {
+          this.displayMessageAndNavigate("Updated Successfully", ["consultancy","institution-list"])
+        })
+          
+      );
     } else {
-      this.intituteService.data.push(newDetails)
+      this.subscriptions.add(
+        this.consultancyApiService.registerInstitute(newDetails).subscribe(res => {
+          this.displayMessageAndNavigate("Registered Successfully", ["consultancy","institution-list"])
+          this.router.navigate(['consultancy','institution-list']);
+        })
+      );
     }
+    
   }
 
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
 }
