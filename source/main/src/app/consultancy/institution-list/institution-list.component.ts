@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InstituteService } from '../consultancy-services/institute.service';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
@@ -22,7 +21,7 @@ export class InstitutionListComponent {
     },
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private instituteService: InstituteService, private consultancyService:ConsultancyService,private consultancyApiService:ConsultancyApi) { }
+  constructor(private router: Router, private route: ActivatedRoute, private consultancyService:ConsultancyService,private consultancyApiService:ConsultancyApi) { }
   editMode: boolean
   institutes: any;
   pageSize = 5;

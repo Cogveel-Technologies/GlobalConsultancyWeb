@@ -28,11 +28,15 @@ export class ConsultancyListComponent implements OnInit {
   pageSize = 5;
   currentPage = 1;
   defaultData:ConsultancyDetailsOptions;
+  searchText:string;
 
   ngOnInit() { 
     // RETREIVE CONSULTANCY DATA
     this.defaultData = this.consultancyService.defaultRenderData()
-     this.consultancies = this.consultancyApiService.getConsultancy(this.defaultData)
+    //  if(this.defaultData.searchText === ''){
+    //   this.consultancies = this.consultancyApiService.getConsultancy(this.defaultData)
+    // }
+    this.consultancies = this.consultancyApiService.getConsultancy(this.defaultData)
   }
 
   addInstitute() {
@@ -60,8 +64,11 @@ export class ConsultancyListComponent implements OnInit {
     this.consultancies = this.consultancyApiService.getConsultancy(paginatedData)
   }
 
-  onSearch(){
-
+  onSearch($event){
+    this.searchText = $event.target.value;
+    const searchData = {...this.defaultData};
+    searchData.searchText = this.searchText;
+    this.consultancies = this.consultancyApiService.getConsultancy(searchData)
   }
 
   viewDetails(){

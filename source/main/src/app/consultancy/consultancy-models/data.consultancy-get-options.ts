@@ -4,5 +4,6 @@ export interface ConsultancyDetailsOptions{
     sortExpression:string,
     searchText?:string,
     CurrentPage:number,
-    isDeleted?:boolean
+    isDeleted?:boolean,
+    InstituteId?:number,
 }

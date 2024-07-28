@@ -45,7 +45,7 @@
                         <h2>Hover Rows</h2>
                     </div>
                     <div class="body table-responsive">
-                        <table class="table table-hover table-responsive" [formGroup]="programForm">
+                        <table class="table table-hover table-responsive" >
                             <thead>
                                 <tr>
                                     <th>Program Name</th>
@@ -54,35 +54,32 @@
                                     <th>Tuition Fee</th>
                                     <th>Level Of Education</th>
                                     <th>Status</th>
-
-                                    <th>Program Category ID</th>
+                                    <th>Program Category </th>
                                     <th>Program Intake</th>
-
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let program of programs">
-                                    <td data-label="Program Name">{{ program.ProgramName }}</td>
-                                    <td data-label="Duration">{{ program.Duration }}</td>
-                                    <td data-label="Application Fee">{{ program.ApplicationFee }}</td>
-                                    <td data-label="Tuition Fee">{{ program.TuitionFee }}</td>
-                                    <td data-label="Level of Education">{{ program.LevelOfEducation }}</td>
-                                    <td data-label="Status">{{ program.Status }}</td>
-                                    <td data-label="Program Category ID">{{ program.ProgramCategoryId }}</td>
-                                    <td data-label="Program Intake">{{ program.ProgramIntake }}</td>
-
+                                <tr *ngFor="let program of (programs | async)">
+                                    <td data-label="Program Name">{{ program.programName }}</td>
+                                    <td data-label="Duration">{{ program.duration }}</td>
+                                    <td data-label="Application Fee">{{ program.applicationFee }}</td>
+                                    <td data-label="Tuition Fee">{{ program.tuitionFee }}</td>
+                                    <td data-label="Level of Education">{{ program.levelOfEducation }}</td>
+                                    <td data-label="Status">{{ program.status }}</td>
+                                    <td data-label="Program Category ID">{{ program.programCategoryId }}</td>
+                                    <td data-label="Program Intake">{{ program.programIntake }}</td>
                                     <td data-label="Actions">
 
                                         <button mat-icon-button
-                                        [routerLink]="['/consultancy/program-details', program.Id]">
+                                            [routerLink]="['/consultancy/program-details', program.id]">
                                             <mat-icon>visibility</mat-icon>
                                         </button>
                                         <button mat-icon-button color="primary"
-                                            [routerLink]="['/consultancy/edit-program', program.Id]">
+                                            [routerLink]="['/consultancy/edit-program', program.id]">
                                             <mat-icon>edit</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="warn" (click)="deleteUser(program.Id)">
+                                        <button mat-icon-button color="warn" (click)="deleteProgram(program.id)">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </td>

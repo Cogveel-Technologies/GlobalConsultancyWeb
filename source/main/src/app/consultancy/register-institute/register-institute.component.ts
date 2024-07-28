@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { InstituteService } from '../consultancy-services/institute.service';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 
 @Component({
@@ -31,7 +30,6 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   Consultancies: number[] = [1, 2, 3, 4];
 
   constructor(
-    private instituteService: InstituteService,
     private router: Router,
     private route: ActivatedRoute,
     private consultancyApiService: ConsultancyApi

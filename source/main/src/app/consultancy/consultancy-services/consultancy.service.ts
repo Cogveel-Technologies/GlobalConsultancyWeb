@@ -24,6 +24,8 @@ export class ConsultancyService {
       OrderBy: 'id',
       sortExpression: 'asc',
       CurrentPage: 1,
+      searchText:'',
+      InstituteId:9
     }
     return defaultData
   }

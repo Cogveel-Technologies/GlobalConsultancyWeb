@@ -7,10 +7,10 @@
         </div>
         <div class="table body table-responsive">
             <table class="table table-hover table-responsive">
-                <tr *ngFor="let key of keys">
-                    <ng-container *ngIf="key !== 'Id'">
-                        <th>{{key}}:</th>
-                        <td>{{details[key]}}</td>
+                <tr *ngFor="let key of keys; let i = index">
+                    <ng-container *ngIf="key !== 'id' && key !=='createdBy' && key !=='updatedBy'">
+                            <th>{{key}}:</th>
+                            <td>{{details[key]}}</td>
                     </ng-container>
                 </tr>
             </table>
