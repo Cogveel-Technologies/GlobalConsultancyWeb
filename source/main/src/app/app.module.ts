@@ -29,6 +29,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { LoGinComponent } from './lo-gin/lo-gin.component';
 
 import { AgentModule } from './agent/agent.module';
+import { errorInterceptor } from './general-interceptors/error.interceptor';
 // import { CustomValidatorDirective } from './custom-validator.directive';
 // import { TestcomponentComponent } from './testcomponent/testcomponent.component';
 // import { MatFileUploadModule } from 'mat-file-upload';
@@ -47,9 +48,7 @@ export function createTranslateLoader(http: HttpClient) {
     AuthLayoutComponent,
     MainLayoutComponent,
     LoGinComponent,
-    // MatFileUploadModule,
-    // CustomValidatorDirective,
-    // TestcomponentComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -72,8 +71,10 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
+    {provide: HTTP_INTERCEPTORS,useClass: errorInterceptor,multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    
     fakeBackendProvider,
     WINDOW_PROVIDERS,
   ],

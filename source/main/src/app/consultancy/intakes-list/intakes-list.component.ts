@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IntakeService } from '../consultancy-services/intake.service';
+import { ConsultancyApi } from '../consultancy-services/api.service';
+import { ConsultancyService } from '../consultancy-services/consultancy.service';
+import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 
 @Component({
   selector: 'app-intakes-list',
@@ -14,16 +16,35 @@ export class IntakesListComponent {
       active: 'Intake List',
     },
   ];
-  constructor(private intakeService:IntakeService){}
+  constructor( private consultancyApiService:ConsultancyApi, private consultancyService:ConsultancyService){}
   intakes!:any
+  defaultData:ConsultancyDetailsOptions
+  pageSize = 5;
+
 
   // get all data
   ngOnInit(){
-    this.intakes = this.intakeService.getIntakeData()
+    this.defaultData = this.consultancyService.defaultRenderData();
+    this.intakes = this.consultancyApiService.getIntakes(this.defaultData);
   }
 
   addProgram(){}
 
-  deleteUser(){}
+  deleteIntake(id:number){
+    const con =  confirm("Are you sure?")
+    if(con){
+      this.consultancyApiService.deleteIntake(id).subscribe(res=> {
+        alert("Deleted Successfully")
+        this.intakes = this.consultancyApiService.getIntakes(this.defaultData)
+      });
+    }
+  }
+
+  onPageChange($event){
+    this.pageSize = $event.pageSize;
+    const paginatedData = {...this.defaultData};
+    paginatedData.limit = this.pageSize;
+    this.intakes = this.consultancyApiService.getIntakes(paginatedData)
+  }
 
 }

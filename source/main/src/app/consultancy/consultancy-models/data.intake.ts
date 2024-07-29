@@ -1,8 +1,8 @@
 export interface IntakeData{
-    Id:number,
-    ProgramId:number,
-    InstituteId:number,
-    SessionId:number,
-    NoOfIntake:number,
-    Year:number
+    id:number,
+    programId:number,
+    instituteId:number,
+    sessionId:number,
+    noOfIntake:number,
+    year:string
 }

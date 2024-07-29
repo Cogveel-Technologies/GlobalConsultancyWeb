@@ -19,9 +19,9 @@ export class RegisterProgramComponent {
   ];
   registerProgram:FormGroup;
   editMode:boolean;
-  programCategoryOptions = [101, 102, 103]; 
+  programCategoryOptions = [101, 102, 103,1]; 
   programIntakeOptions = [200, 201, 202];
-  intakeOptions = [1001, 1002, 1003]; 
+  intakeOptions = [1001, 1002, 1003,12]; 
   instituteOptions = [5001, 5002, 5003,9]; 
   statusOptions = ["Active","Inactive"]
   subscriptions: Subscription = new Subscription();

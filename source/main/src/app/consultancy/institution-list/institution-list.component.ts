@@ -59,10 +59,6 @@ export class InstitutionListComponent {
     // Add your refresh logic here
   }
 
-  deleteUser(userId: number) {
-    console.log(`Delete user button clicked for user ${userId}`);
-    // Add your delete logic here
-  }
 
 
   editConsultancy(userId: number) {

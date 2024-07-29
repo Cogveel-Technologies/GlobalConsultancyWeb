@@ -6,6 +6,7 @@ import { map, Observable } from "rxjs";
 import { ConsultancyDetailsOptions } from "../consultancy-models/data.consultancy-get-options";
 import { InstituteData } from "../consultancy-models/data.institute";
 import { ProgramData } from "../consultancy-models/data.program";
+import { IntakeData } from "../consultancy-models/data.intake";
 
 @Injectable({
     providedIn: 'root'
@@ -50,7 +51,7 @@ export class ConsultancyApi {
     }
     // ------------- display-institutes -------------
     getInstitutes(data: ConsultancyDetailsOptions): Observable<InstituteData[]> {
-        return this.http.get<InstituteData[]>(`${this.baseUrl}/Institute?limit=${data.limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&CurrentPage=${data.CurrentPage}`).pipe(map(response => response['data']))
+        return this.http.get<InstituteData[]>(`${this.baseUrl}/Institute?limit=${data.limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.CurrentPage}`).pipe(map(response => response['data']))
     }
     // ------------- delete-institute -----------------
     deleteInstitute(id: number) {
@@ -72,7 +73,7 @@ export class ConsultancyApi {
     }
     // ------------- display-programs -------------
     getPrograms(data: ConsultancyDetailsOptions): Observable<ProgramData[]> {
-        return this.http.get<ProgramData[]>(`${this.baseUrl}/Program?InstituteId=${data.InstituteId}&limit=${data.limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&CurrentPage=${data.CurrentPage}`).pipe(map(response => response['data']))
+        return this.http.get<ProgramData[]>(`${this.baseUrl}/Program?InstituteId=${data.InstituteId}&limit=${data.limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.CurrentPage}`).pipe(map(response => response['data']))
     }
     // ------------- delete-Program -----------------
     deleteProgram(id: number) {
@@ -86,5 +87,26 @@ export class ConsultancyApi {
     // --------- single-Program-details ------------------
     getProgramDetails(id: number): Observable<ProgramData> {
         return this.http.get<Observable<ProgramData>>(`${this.baseUrl}/Program/byId?Id=${id}`).pipe(map(res => res['data']))
+    }
+    ///////////////////////////////////////////// INTAKES /////////////////////////////////////////////////
+    // --------- register-intake ------------------
+    registerIntake(data: IntakeData) {
+        return this.http.post(`${this.baseUrl}/Intake`, data)
+    }
+    // ------------------- display-intakes ----------------
+    getIntakes(data: ConsultancyDetailsOptions): Observable<IntakeData[]> {
+        return this.http.get<IntakeData[]>(`${this.baseUrl}/Intake?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&limit=${data.limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.CurrentPage}`).pipe(map(response => response['data']))
+    }
+    // ------------- delete-Intake -----------------
+    deleteIntake(id: number) {
+        return this.http.delete(`${this.baseUrl}/Intake/byId?Id=${id}`)
+    }
+    // ------------- edit-Program ------------------
+    updateIntake(id: number, data: IntakeData) {
+        return this.http.put(`${this.baseUrl}/Intake?id=${id}`, data)
+    }
+      // --------- single-intake-details ------------------
+      getIntakeDetails(id: number): Observable<IntakeData> {
+        return this.http.get<Observable<IntakeData>>(`${this.baseUrl}/Intake/byId?Id=${id}`).pipe(map(res => res['data']))
     }
 }

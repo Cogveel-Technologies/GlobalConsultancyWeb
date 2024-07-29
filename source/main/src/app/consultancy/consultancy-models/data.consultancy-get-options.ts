@@ -6,4 +6,6 @@ export interface ConsultancyDetailsOptions{
     CurrentPage:number,
     isDeleted?:boolean,
     InstituteId?:number,
+    ProgramId?:number,
+    SessionId?:number
 }

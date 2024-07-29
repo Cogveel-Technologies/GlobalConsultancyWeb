@@ -25,7 +25,9 @@ export class ConsultancyService {
       sortExpression: 'asc',
       CurrentPage: 1,
       searchText:'',
-      InstituteId:9
+      InstituteId:9,
+      ProgramId:24,
+      SessionId:2
     }
     return defaultData
   }

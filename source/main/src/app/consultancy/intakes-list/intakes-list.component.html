@@ -58,24 +58,24 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let intake of (intakes | async)">
-                                    <td data-label="Program ID">{{ intake.ProgramId }}</td>
-                                    <td data-label="Institute ID">{{ intake.InstituteId }}</td>
-                                    <td data-label="Session ID">{{ intake.SessionId }}</td>
-                                    <td data-label="Number of Intakes">{{ intake.NoOfIntake }}</td>
-                                    <td data-label="Year">{{ intake.Year }}</td>
+                                    <td data-label="Program ID">{{ intake.programId }}</td>
+                                    <td data-label="Institute ID">{{ intake.instituteId }}</td>
+                                    <td data-label="Session ID">{{ intake.sessionId }}</td>
+                                    <td data-label="Number of Intakes">{{ intake.noOfIntake }}</td>
+                                    <td data-label="Year">{{ intake.year }}</td>
                                     <td data-label="Actions">
                                         <button mat-icon-button color="primary"
-                                            [routerLink]="['/consultancy/edit-intake', intake.Id]">
+                                            [routerLink]="['/consultancy/edit-intake', intake.id]">
                                             <mat-icon>edit</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="warn">
+                                        <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                        <mat-paginator #paginator [pageIndex]="0" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]" (page)="onPageChange($event)">
                         </mat-paginator>
                     </div>
                 </div>
