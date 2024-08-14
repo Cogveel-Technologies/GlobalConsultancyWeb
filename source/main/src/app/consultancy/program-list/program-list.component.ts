@@ -27,12 +27,14 @@ export class ProgramListComponent {
   editMode:boolean;
   programs!:Observable<ProgramData[]>;
   defaultData:ConsultancyDetailsOptions;
+  pageSize:number;
+  currentPage:number;
 
 
   ngOnInit() { 
     // call get api here to show default list of program data
     this.defaultData = this.consultancyService.defaultRenderData()
-    this.programs = this.consultancyApiService.getPrograms(this.defaultData)
+    this.programs = this.consultancyApiService.getPrograms(this.pageSize,this.currentPage,this.defaultData)
   }
 
   addProgram() {
@@ -46,7 +48,7 @@ export class ProgramListComponent {
 
   deleteProgram(id: number) {
      this.consultancyApiService.deleteProgram(id).subscribe(res => {
-      this.programs = this.consultancyApiService.getPrograms(this.defaultData)
+      // this.programs = this.consultancyApiService.getPrograms(this.defaultData)
       alert("Deleted Successfully");
     })
   }

@@ -2,7 +2,8 @@
   <div class="content-block">
     <div class="block-header" *ngFor="let breadscrum of breadscrums">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="editMode ? 'Edit Institute' : breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      <app-breadcrumb [title]="editMode ? 'Edit Institute' : breadscrum.title" [items]="breadscrum.items"
+        [active_item]="breadscrum.active">
       </app-breadcrumb>
     </div>
 
@@ -35,29 +36,18 @@
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>info</mat-icon>
                   </mat-form-field>
                 </div>
-                <div class="col-md-4 mb-1">
+                <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Province</mat-label>
                     <input matInput formControlName="province">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
                   </mat-form-field>
                 </div>
-                <div class="col-md-4 mb-1">
+                <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Country</mat-label>
                     <input matInput formControlName="country">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>public</mat-icon>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4 mb-1">
-                  <mat-form-field appearance="fill" class="example-full-width">
-                    <mat-label>Consultancy</mat-label>
-                    <mat-select formControlName="consultancyId">
-                      <mat-option *ngFor="let consultancy of Consultancies" [value]="consultancy">
-                        {{ consultancy }}
-                      </mat-option>
-                    </mat-select>
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
                   </mat-form-field>
                 </div>
               </div>
@@ -119,11 +109,11 @@
               <!-- Submit/Update and Cancel Buttons -->
               <div class="row mb-1">
                 <div class="col-auto">
-                  <button type="submit" class="btn-space" mat-raised-button color="primary">{{editMode ? 'Update' : 'Register'}}</button>
+                  <button type="submit" class="btn-space" mat-raised-button color="primary">{{editMode ? 'Update' :
+                    'Register'}}</button>
                   <button type="button" mat-raised-button color="warn">Cancel</button>
                 </div>
               </div>
-
             </form>
           </div>
         </div>

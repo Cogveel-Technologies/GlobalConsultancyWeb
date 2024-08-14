@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
+import { FormControl, FormGroup } from '@angular/forms';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, startWith, Subscription, switchMap, tap } from 'rxjs';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -21,19 +26,37 @@ export class InstitutionListComponent {
     },
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private consultancyService:ConsultancyService,private consultancyApiService:ConsultancyApi) { }
+  constructor(private router: Router, private route: ActivatedRoute, private consultancyService:ConsultancyService,private consultancyApiService:ConsultancyApi, private toastr:ToastrService) { }
   editMode: boolean
   institutes: any;
-  pageSize = 5;
-  currentPage = 1;
-  defaultData:ConsultancyDetailsOptions
-
-
-
-
+  defaultData:ConsultancyDetailsOptions;
+  features:FormGroup;
+  totalItems:number = 10;
+  private subscriptions: Subscription = new Subscription();
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  
+  updateDom(params:ConsultancyDetailsOptions){
+    // return this.institutes = this.consultancyApiService.getInstitutes(params);
+  }
   ngOnInit() {
-    this.defaultData = this.consultancyService.defaultRenderData()
-    this.institutes = this.consultancyApiService.getInstitutes(this.defaultData);
+    this.defaultData = {...this.consultancyService.defaultRenderData()};
+    this.updateDom(this.defaultData)
+
+
+    this.features = new FormGroup({
+      searchText: new FormControl(this.defaultData.searchText),
+      sort: new FormControl(this.defaultData.sortExpression),
+    })
+
+
+    const search$ = this.features.get('searchText').valueChanges.pipe(startWith(this.features.get('searchText').value),debounceTime(1000), distinctUntilChanged());
+;
+    const sort$ = this.features.get('sort').valueChanges.pipe(startWith(this.features.get("sort").value));
+
+
+
+
   }
 
   addInstitute() {
@@ -44,33 +67,32 @@ export class InstitutionListComponent {
     const con =  confirm("Are you sure?")
     if(con){
       this.consultancyApiService.deleteInstitute(id).subscribe(res=> {
-        this.institutes = this.consultancyApiService.getInstitutes(this.defaultData)
+        // this.institutes = this.consultancyApiService.getInstitutes(this.defaultData)
         alert("Deleted Successfully")
       });
     }
   }
-
-  
-
- 
 
   refreshPage() {
     console.log("Refresh button clicked");
     // Add your refresh logic here
   }
 
-
-
-  editConsultancy(userId: number) {
-    this.router.navigate(['consultancy/register-consultancy'], { queryParams: { editMode: true } })
-
-
+  onPageChange($event:PageEvent){
+    console.log($event)
+    this.features.get('currentPage').setValue($event.pageIndex+1)
+    this.features.get("pageSize").setValue($event.pageSize)
   }
-  onPageChange($event){
-    this.pageSize = $event.pageSize;
-    const paginatedData = {...this.defaultData};
-    paginatedData.limit = this.pageSize;
-    this.institutes = this.consultancyApiService.getInstitutes(paginatedData)
+
+  onSortChange(sortEvent:Sort){
+    if(sortEvent.direction === ''){
+      sortEvent.direction = 'asc'
+    }
+    this.features.get("sort").setValue(sortEvent.direction)
+  }
+
+  ngOnDestroy(){
+    this.subscriptions.unsubscribe()
   }
 
 }

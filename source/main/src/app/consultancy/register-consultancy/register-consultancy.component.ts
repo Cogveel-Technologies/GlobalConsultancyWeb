@@ -4,6 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { InstituteData } from '../consultancy-models/data.institute';
 import { ConsultancyApi } from '../consultancy-services/api.service';
+import { ToastrService } from 'ngx-toastr';
+import { ConsultancyServdece } from '../consultancy.service';
+import { ConsultancyService } from '../consultancy-services/consultancy.service';
 
 
 
@@ -29,7 +32,7 @@ export class RegisterConsultancyComponent {
   editId: number;
   subscriptions: Subscription = new Subscription();
 
-  constructor(private router: Router, private route: ActivatedRoute, private consultancyApiService: ConsultancyApi) { }
+  constructor(private router: Router, private route: ActivatedRoute, private consultancyApiService: ConsultancyApi, private toastr:ToastrService, private consultancyService:ConsultancyService) { }
 
   ngOnInit() {
     this.registerConsultancy = new FormGroup({
@@ -67,12 +70,13 @@ export class RegisterConsultancyComponent {
     newDetails.id = this.editId;
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateConsultancy(newDetails).subscribe(res => {
-        alert("Updated Sucessfully")
-        this.router.navigate(["consultancy", "consultancy-list"]);
+        this.consultancyService.showSuccessMsgAndNavigate("Updated Successfully",["consultancy", "consultancy-list"])
       }))
     } else {
-      this.subscriptions.add(this.consultancyApiService.registerConsultancy(newDetails).subscribe(res => alert("Registered Successfully")))
-      this.router.navigate(["consultancy", "consultancy-list"]);
+      this.subscriptions.add(this.consultancyApiService.registerConsultancy(newDetails).subscribe(res => {
+        console.log(res)
+        this.consultancyService.showSuccessMsgAndNavigate("Registered Successfully",["consultancy", "consultancy-list"])
+      }))
     }
    
   }

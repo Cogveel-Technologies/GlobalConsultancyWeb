@@ -1,11 +1,9 @@
 export interface ConsultancyDetailsOptions{
-    limit:number,
     OrderBy:string,
     sortExpression:string,
     searchText?:string,
-    CurrentPage:number,
     isDeleted?:boolean,
-    InstituteId?:number,
-    ProgramId?:number,
-    SessionId?:number
+    InstituteId?:string,
+    ProgramId?:string,
+    SessionId?:string
 }

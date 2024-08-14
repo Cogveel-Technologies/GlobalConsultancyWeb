@@ -2,11 +2,13 @@ import { HttpClient, HttpEvent, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from 'environments/environment';
 import { ConsultancyData } from "../consultancy-models/data.consultancy";
-import { map, Observable } from "rxjs";
+import { filter, map, Observable, tap } from "rxjs";
 import { ConsultancyDetailsOptions } from "../consultancy-models/data.consultancy-get-options";
 import { InstituteData } from "../consultancy-models/data.institute";
 import { ProgramData } from "../consultancy-models/data.program";
 import { IntakeData } from "../consultancy-models/data.intake";
+import { SessionData } from "../consultancy-models/data.session";
+import { loginService } from "app/login.service";
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +16,8 @@ import { IntakeData } from "../consultancy-models/data.intake";
 
 export class ConsultancyApi {
     private baseUrl = environment.apiUrl;
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private loginService:loginService) { }
+    totalConsultancy:number
 
     /////////////////////////////////////////// CONSULTANCY //////////////////////////////////////////////////
 
@@ -23,8 +26,8 @@ export class ConsultancyApi {
         return this.http.post(`${this.baseUrl}/Consultancy`, data)
     }
     // --------  get-consultancies (paginated) ----------
-    getConsultancy(data: ConsultancyDetailsOptions): Observable<ConsultancyData[]> {
-        return this.http.get<ConsultancyData[]>(`${this.baseUrl}/Consultancy?limit=${data.limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.CurrentPage}`).pipe(map(response => response['data']))
+    getConsultancy(limit:number,currentPage:number,data: ConsultancyDetailsOptions): Observable<ConsultancyData[]> {
+        return this.http.get<ConsultancyData[]>(`${this.baseUrl}/Consultancy?limit=${limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${currentPage}`).pipe(tap(res=>console.log(res)))
     }
     // --------  get-all-consultancies ----------
     getAllConsultancies(): Observable<ConsultancyData[]> {
@@ -50,8 +53,8 @@ export class ConsultancyApi {
         return this.http.post(`${this.baseUrl}/Institute`, data)
     }
     // ------------- display-institutes -------------
-    getInstitutes(data: ConsultancyDetailsOptions): Observable<InstituteData[]> {
-        return this.http.get<InstituteData[]>(`${this.baseUrl}/Institute?limit=${data.limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.CurrentPage}`).pipe(map(response => response['data']))
+    getInstitutes(limit:number,currentPage:number,data: ConsultancyDetailsOptions): Observable<InstituteData[]> {
+        return this.http.get<InstituteData[]>(`${this.baseUrl}/Institute?limit=${limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${currentPage}`).pipe(map(response => response['data']))
     }
     // ------------- delete-institute -----------------
     deleteInstitute(id: number) {
@@ -72,8 +75,8 @@ export class ConsultancyApi {
         return this.http.post(`${this.baseUrl}/Program`, data)
     }
     // ------------- display-programs -------------
-    getPrograms(data: ConsultancyDetailsOptions): Observable<ProgramData[]> {
-        return this.http.get<ProgramData[]>(`${this.baseUrl}/Program?InstituteId=${data.InstituteId}&limit=${data.limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.CurrentPage}`).pipe(map(response => response['data']))
+    getPrograms(limit:number,currentPage:number,data: ConsultancyDetailsOptions): Observable<ProgramData[]> {
+        return this.http.get<ProgramData[]>(`${this.baseUrl}/Program?InstituteId=${data.InstituteId}&limit=${limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${currentPage}`).pipe(map(response => response['data']))
     }
     // ------------- delete-Program -----------------
     deleteProgram(id: number) {
@@ -94,8 +97,8 @@ export class ConsultancyApi {
         return this.http.post(`${this.baseUrl}/Intake`, data)
     }
     // ------------------- display-intakes ----------------
-    getIntakes(data: ConsultancyDetailsOptions): Observable<IntakeData[]> {
-        return this.http.get<IntakeData[]>(`${this.baseUrl}/Intake?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&limit=${data.limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.CurrentPage}`).pipe(map(response => response['data']))
+    getIntakes(limit:number,currentPage:number,data: ConsultancyDetailsOptions): Observable<IntakeData[]> {
+        return this.http.get<IntakeData[]>(`${this.baseUrl}/Intake?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&limit=${limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${currentPage}`).pipe(map(response => response['data']))
     }
     // ------------- delete-Intake -----------------
     deleteIntake(id: number) {
@@ -108,5 +111,27 @@ export class ConsultancyApi {
       // --------- single-intake-details ------------------
       getIntakeDetails(id: number): Observable<IntakeData> {
         return this.http.get<Observable<IntakeData>>(`${this.baseUrl}/Intake/byId?Id=${id}`).pipe(map(res => res['data']))
+    }
+
+     ///////////////////////////////////////////// Session /////////////////////////////////////////////////
+    // --------- register-session ------------------
+    registersession(data: SessionData) {
+        return this.http.post(`${this.baseUrl}/session`, data)
+    }
+    // ------------------- display-session ----------------
+    getsession(limit:number,currentPage:number,data: ConsultancyDetailsOptions): Observable<SessionData[]> {
+        return this.http.get<SessionData[]>(`${this.baseUrl}/Session?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&limit=${limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${currentPage}`).pipe(map(response => response['data']))
+    }
+    // ------------- delete-session -----------------
+    deletesession(id: number) {
+        return this.http.delete(`${this.baseUrl}/Session/byId?Id=${id}`)
+    }
+    // ------------- edit-Program ------------------
+    updatesession(id: number, data: SessionData) {
+        return this.http.put(`${this.baseUrl}/Session?id=${id}`, data)
+    }
+      // --------- single-session-details ------------------
+      getsessionDetails(id: number): Observable<SessionData> {
+        return this.http.get<Observable<SessionData>>(`${this.baseUrl}/Session/byId?Id=${id}`).pipe(map(res => res['data']))
     }
 }

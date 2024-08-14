@@ -1,37 +1,19 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { of } from "rxjs";
+import { environment } from "environments/environment";
+import { login } from "./general-models/login.model";
+
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class loginService {
-
+    private baseUrl = environment.apiUrl;
     constructor(private http: HttpClient) { }
-    loggedInUser:any;
-    logIn() {
+    logIn(data:login) {
         // call api when available
-        return of({
-            name: "kamran",
-            email: "kamran@gmail.com",
-            password: "kamran@123",
-            role: "admin",
-            modules: "admin,consultancy,student"
-        })
+        return this.http.post(`${this.baseUrl}/Login`,data)
     }
 
-    isLoggedIn() {
-        return localStorage.getItem('name') != null;
-    }
-    role() {
-        return localStorage.getItem('role') != null;
-    }
-
-    setLoggedinUser(user:any){
-        this.loggedInUser = user;
-    }
-    getAccessibleModules(){
-        return this.loggedInUser.modules.split(",")
-    }
 }

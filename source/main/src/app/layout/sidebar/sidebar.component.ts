@@ -68,10 +68,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
    
-    const accessibleModules = this.loginService.getAccessibleModules();
+    const accessibleModules = localStorage.getItem("modulesAccess").split(",");
     function getModuleNameFromTitle(title:string){
       const name = title.split(".");
-      return name[1];
+      return name[1].toLowerCase();
     }
     if( accessibleModules){
       this.sidebarItems = ROUTES.filter(route => {
@@ -82,6 +82,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarItems = ROUTES.filter((sidebarItem) => {
       return sidebarItem
     })};
+    
   
     this.initLeftSidebar();
     this.bodyTag = this.document.body;

@@ -19,13 +19,14 @@ export class IntakesListComponent {
   constructor( private consultancyApiService:ConsultancyApi, private consultancyService:ConsultancyService){}
   intakes!:any
   defaultData:ConsultancyDetailsOptions
-  pageSize = 5;
+  pageSize:number;
+  currentPage:number;
 
 
   // get all data
   ngOnInit(){
     this.defaultData = this.consultancyService.defaultRenderData();
-    this.intakes = this.consultancyApiService.getIntakes(this.defaultData);
+    this.intakes = this.consultancyApiService.getIntakes(this.pageSize,this.currentPage,this.defaultData);
   }
 
   addProgram(){}
@@ -35,16 +36,10 @@ export class IntakesListComponent {
     if(con){
       this.consultancyApiService.deleteIntake(id).subscribe(res=> {
         alert("Deleted Successfully")
-        this.intakes = this.consultancyApiService.getIntakes(this.defaultData)
+        // this.intakes = this.consultancyApiService.getIntakes(this.defaultData)
       });
     }
   }
 
-  onPageChange($event){
-    this.pageSize = $event.pageSize;
-    const paginatedData = {...this.defaultData};
-    paginatedData.limit = this.pageSize;
-    this.intakes = this.consultancyApiService.getIntakes(paginatedData)
-  }
 
 }

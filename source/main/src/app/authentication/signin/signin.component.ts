@@ -6,6 +6,8 @@ import {
  
 } from '@angular/forms';
 import { loginService } from 'app/login.service';
+import { catchError, map, tap, throwError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signin',
@@ -13,18 +15,29 @@ import { loginService } from 'app/login.service';
   styleUrls: ['./signin.component.scss'],
 })
 export class SigninComponent{
-  constructor(private loginService:loginService, private router:Router) { }
+  constructor(private loginService:loginService, private router:Router, private toastr:ToastrService) { }
     signInForm: FormGroup;
     ngOnInit(): void {
         this.signInForm = new FormGroup({
-            email: new FormControl(''),
+            userName: new FormControl(''),
             password: new FormControl(''),
         })
+
+        localStorage.clear()
     }
-    signIn(){
-      this.loginService.logIn().subscribe(res=>{
-        this.loginService.setLoggedinUser(res);
-        this.router.navigate(['dashboard'])
-      })
+    signIn() {
+      const credentials = this.signInForm.value;
+      this.loginService.logIn(credentials).pipe(
+        map(res => {
+          return res['data'];
+        })).subscribe({
+        next: res => {
+          localStorage.setItem("token", res.jwtToken);
+          localStorage.setItem("modulesAccess", res.moduleAccessName);
+          localStorage.setItem("id",res.id)
+          this.router.navigate(['dashboard']);
+        }
+      });
     }
-}
+  }
+

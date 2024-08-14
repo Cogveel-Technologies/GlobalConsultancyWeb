@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { map, Subscription, tap } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 
 @Component({
@@ -24,15 +24,15 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   id: number;
   editId:number;
   instituteId: string;
-  index: number;
+  consultancyId:number
 
   // static data for consultancies
-  Consultancies: number[] = [1, 2, 3, 4];
+  Consultancies: number[] = [];
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private consultancyApiService: ConsultancyApi
+    private consultancyApiService: ConsultancyApi,
   ) {
     this.registerInstitute = new FormGroup({
       instituteName: new FormControl(''),
@@ -70,6 +70,7 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     const newDetails = this.registerInstitute.value;
+    console.log(newDetails)
     if (this.editMode) {
       this.subscriptions.add(
         this.consultancyApiService.updateInstitute(this.editId, newDetails).subscribe(res => {
@@ -79,7 +80,7 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
       );
     } else {
       this.subscriptions.add(
-        this.consultancyApiService.registerInstitute(newDetails).subscribe(res => {
+        this.consultancyApiService.registerInstitute(newDetails).pipe(tap(res=> console.log(res))).subscribe(res => {
           this.displayMessageAndNavigate("Registered Successfully", ["consultancy","institution-list"])
           this.router.navigate(['consultancy','institution-list']);
         })
