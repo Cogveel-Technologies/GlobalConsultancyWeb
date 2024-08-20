@@ -1,5 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { ConsultancyDetailsOptions } from 'app/consultancy/consultancy-models/data.consultancy-get-options';
+import { ConsultancyApi } from 'app/consultancy/consultancy-services/api.service';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
+
 
 @Component({
   selector: 'app-pagination',
@@ -16,5 +20,3 @@ export class PaginationComponent {
     this.pageChange.emit(event);
   }
 }
-
-

@@ -13,6 +13,7 @@ import {
 import { ROUTES } from './sidebar-items';
 import { AuthService } from '@core';
 import { RouteInfo } from './sidebar.metadata';
+import { loginService } from 'app/login.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -32,7 +33,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     public elementRef: ElementRef,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private loginService:loginService
   ) {
     this.routerObj = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -65,10 +67,23 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit() {
-    if (this.authService.currentUserValue) {
-      this.sidebarItems = ROUTES.filter((sidebarItem) => sidebarItem);
+   
+    const accessibleModules = localStorage.getItem("modulesAccess").split(",");
+    function getModuleNameFromTitle(title:string){
+      const name = title.split(".");
+      return name[1].toLowerCase();
     }
-
+    if( accessibleModules){
+      this.sidebarItems = ROUTES.filter(route => {
+        const moduleName = getModuleNameFromTitle(route.title.toLowerCase());
+        return accessibleModules.includes(moduleName);
+      });
+    }else{
+    this.sidebarItems = ROUTES.filter((sidebarItem) => {
+      return sidebarItem
+    })};
+    
+  
     this.initLeftSidebar();
     this.bodyTag = this.document.body;
   }

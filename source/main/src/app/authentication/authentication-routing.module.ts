@@ -6,12 +6,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { LockedComponent } from './locked/locked.component';
 import { Page404Component } from './page404/page404.component';
 import { Page500Component } from './page500/page500.component';
-// import { TestcomponentComponent } from 'app/testcomponent/testcomponent.component';
+
 const routes: Routes = [
-  // {
-  //   path: 'test',
-  //   component: TestcomponentComponent
-  // },
   {
     path: '',
     redirectTo: 'signin',

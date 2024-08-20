@@ -4,13 +4,35 @@ import { Page404Component } from './authentication/page404/page404.component';
 import { AuthGuard } from './core/guard/auth.guard';
 import { AuthLayoutComponent } from './layout/app-layout/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './layout/app-layout/main-layout/main-layout.component';
+
 import { TestcomponentComponent } from './testcomponent/testcomponent.component';
 import { LoGinComponent } from './lo-gin/lo-gin.component';
 import { PaginationComponent } from './shared/components/pagination/pagination.component';
 import { SortingComponent } from './shared/components/sorting/sorting.component';
 const routes: Routes = [
-  { path: 'test', component: TestcomponentComponent },
-  { path: 'loGin', component: LoGinComponent },
+  // Redirect root path to login page
+  { path: '', redirectTo: 'authentication/signin', pathMatch: 'full' },
+
+  // Authentication routes
+  {
+    path: 'authentication',
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./authentication/authentication.module').then(
+            (m) => m.AuthenticationModule
+          ),
+      },
+      {
+        path: '**', 
+        component: Page404Component // Handle any other routes within the authentication module
+      }
+    ],
+  },
+  
+  // Main application routes (protected)
   {
     path: 'pagination',
     component: PaginationComponent
@@ -24,7 +46,6 @@ const routes: Routes = [
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: '/authentication/signin', pathMatch: 'full' },
       {
         path: 'dashboard',
         loadChildren: () =>
@@ -50,7 +71,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./student/student.module').then((m) => m.StudentModule),
       },
-      
+ 
      
     //   {
     //     path: 'advance-table',
@@ -138,22 +159,16 @@ const routes: Routes = [
     //         (m) => m.MultilevelModule
     //       ),
     //   },
+
     ],
   },
-  {
-    path: 'authentication',
-    component: AuthLayoutComponent,
-    loadChildren: () =>
-      import('./authentication/authentication.module').then(
-        (m) => m.AuthenticationModule
-      ),
-  },
-  
+
+  // Wildcard route for 404
   { path: '**', component: Page404Component },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {})],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -22,9 +22,7 @@ export class LoGinComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
-    if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-    }
+  onLogin(){
+   console.log("logged in");
   }
 }

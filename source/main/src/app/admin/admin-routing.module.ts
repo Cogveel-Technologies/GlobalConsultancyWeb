@@ -5,7 +5,6 @@ import { ListusersComponent } from './listusers/listusers.component';
 import { AddAgentComponent } from './add-agent/add-agent.component';
 import { ListagentsComponent } from './listagents/listagents.component';
 import { RolesComponent } from './roles/roles.component';
-import { LoginComponent } from './login/login.component';
 import { UserResolver } from './listusers/user-resolver';
 import { ViewUserComponent } from './listusers/view-user/view-user.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
@@ -54,11 +53,7 @@ const routes: Routes = [
   {
     path: 'listroles',
     component: RolesComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
+  }
 ];
 
 @NgModule({
