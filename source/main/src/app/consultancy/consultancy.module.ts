@@ -10,6 +10,15 @@ import { RegisterConsultancyComponent } from './register-consultancy/register-co
 import { ConsultancyListComponent } from './consultancy-list/consultancy-list.component';
 import { RegisterInstituteComponent } from './register-institute/register-institute.component';
 import { InstitutionListComponent } from './institution-list/institution-list.component';
+import { ConsultancyAllDetailsComponent } from './consultancy-all-details/consultancy-all-details.component';
+import { InstituteAllDetailsComponent } from './institute-all-details/institute-all-details.component';
+import { IntakesListComponent } from './intakes-list/intakes-list.component';
+import { ProgramAllDetailsComponent } from './program-all-details/program-all-details.component';
+import { ProgramListComponent } from './program-list/program-list.component';
+import { RegisterIntakesComponent } from './register-intakes/register-intakes.component';
+import { RegisterProgramComponent } from './register-program/register-program.component';
+import { RegisterSessionComponent } from './register-session/register-session.component';
+import { SessionListComponent } from './session-list/session-list.component';
 
 @NgModule({
   declarations: [
@@ -17,18 +26,22 @@ import { InstitutionListComponent } from './institution-list/institution-list.co
     RegisterConsultancyComponent,
     ConsultancyListComponent,
     RegisterInstituteComponent,
-    InstitutionListComponent
+    InstitutionListComponent,
+    ConsultancyAllDetailsComponent,
+    InstituteAllDetailsComponent,
+    IntakesListComponent,
+    ProgramAllDetailsComponent,
+    ProgramListComponent,
+    RegisterIntakesComponent,
+    RegisterProgramComponent,
+    RegisterSessionComponent,
+    SessionListComponent,
   ],
   imports: [
+    SharedModule,
     CommonModule,
     ConsultancyRoutingModule,
-
-
-
-
-  
-   ComponentsModule,
-   SharedModule,
+    ComponentsModule,
   ]
 })
 export class ConsultancyModule { }

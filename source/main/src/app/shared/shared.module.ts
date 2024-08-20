@@ -5,8 +5,9 @@ import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from './material.module';
 import { FeatherIconsModule } from './components/feather-icons/feather-icons.module';
+import { CustomValidatorDirective } from 'app/custom-validator.directive';
 @NgModule({
-  declarations: [],
+  declarations: [ CustomValidatorDirective],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   exports: [
     CommonModule,
@@ -14,7 +15,8 @@ import { FeatherIconsModule } from './components/feather-icons/feather-icons.mod
     ReactiveFormsModule,
     RouterModule,
     MaterialModule,
-    FeatherIconsModule
+    FeatherIconsModule,
+    CustomValidatorDirective
   ]
 })
 export class SharedModule {}

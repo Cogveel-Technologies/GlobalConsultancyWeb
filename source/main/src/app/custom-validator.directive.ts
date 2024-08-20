@@ -9,7 +9,7 @@ export class CustomValidatorDirective implements Validator, OnInit {
   @Input('appCustomValidator') validationType: string;
   private control: NgControl;
 
-  constructor(private el: ElementRef, private renderer: Renderer2, private injector: Injector) {}
+  constructor(private el: ElementRef, private renderer: Renderer2, private injector: Injector) { }
 
   ngOnInit() {
     console.log('CustomValidatorDirective initialized with validationType:', this.validationType);
@@ -44,7 +44,7 @@ export class CustomValidatorDirective implements Validator, OnInit {
       case 'firstName':
         error = this.validateName(control.value) ? null : { 'invalidFirstName': true };
         break;
-     
+
       case 'middleName':
         error = this.validateName(control.value) ? null : { 'invalidMiddleName': true };
         break;
@@ -67,8 +67,8 @@ export class CustomValidatorDirective implements Validator, OnInit {
         error = this.validateCompanyName(control.value) ? null : { 'invalidAlternateCompanyName': true };
         break;
       case 'companyWebsite':
-          error = this.validateCompanyName(control.value) ? null : { 'invalidCompanyWebsite': true };
-          break;
+        error = this.validateCompanyName(control.value) ? null : { 'invalidCompanyWebsite': true };
+        break;
       case 'agentMiddleName':
         error = this.validateName(control.value) ? null : { 'invalidAgentMiddleName': true };
         break;
@@ -84,8 +84,74 @@ export class CustomValidatorDirective implements Validator, OnInit {
         break;
       case 'adminRole':
         error = this.validateName(control.value) ? null : { 'invalidAdminRole': true };
-          break;
-     
+        break;
+      case 'consultancyName':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidConsultancyName': true };
+        break;
+      case 'pincode':
+        error = this.validateNumber(control.value) ? null : { 'invalidPinCode': true };
+        break;
+      case 'country':
+        error = this.validateName(control.value) ? null : { 'invalidCountry': true };
+        break;
+      case 'state':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidState': true };
+        break;
+      case 'city':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidCity': true };
+        break;
+      case 'street':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidStreet': true };
+        break;
+      case 'registrationNo':
+        error = this.validateNumber(control.value) ? null : { 'invalidRegistrationNumber': true };
+        break;
+      case 'linkedInUrl':
+        error = this.validateName(control.value) ? null : { 'invalidLinkedInUrl': true };
+        break;
+      case 'fbUrl':
+        error = this.validateName(control.value) ? null : { 'invalidFacebookUrl': true };
+        break;
+      case 'yearEstablished':
+        error = this.validateNumber(control.value) ? null : { 'invalidYearEstablished': true };
+        break;
+      case 'instituteName':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidInstituteName': true };
+        break;
+      case 'province':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidProvince': true };
+        break;
+      case 'description':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidDescription': true };
+        break;
+      case 'programName':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidProgramName': true };
+        break;
+      case 'duration':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidDuration': true };
+        break;
+      case 'applicationFee':
+        error = this.validateNumber(control.value) ? null : { 'invalidApplicationFee': true };
+        break;
+      case 'tuitionFee':
+        error = this.validateNumber(control.value) ? null : { 'invalidTuitionFee': true };
+        break;
+      case 'levelOfEducation':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidLevelOfEducation': true };
+        break;
+      case 'subjectRequirements':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidSubjectRequirements': true };
+        break;
+      case 'academicRequirements':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidAcademicRequirements': true };
+        break;
+      case 'year':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidYear': true };
+        break;
+      case 'noOfIntakes':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidNumberOfIntakes': true };
+        break;
+
       default:
         console.warn('Unknown validation type:', this.validationType);
         error = null;
@@ -113,10 +179,21 @@ export class CustomValidatorDirective implements Validator, OnInit {
     return nameRegex.test(value);
   }
 
+  validateWithSpace(value: string): boolean {
+    const nameRegex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
+    return nameRegex.test(value);
+  }
+  
   validatePhoneNumber(value: string): boolean {
     const phoneRegex = /^\+?[1-9]\d{1,10}$/;
     return phoneRegex.test(value);
   }
+  validateNumber(value: string): boolean {
+    // Regex to allow numbers up to 100 digits long
+    const phoneRegex = /^\+?\d{1,200}$/;
+    return phoneRegex.test(value);
+  }
+  
 
   validateCompanyName(value: string): boolean {
     // Example validation logic for company name, can be adjusted as per requirements
@@ -208,6 +285,72 @@ export class CustomValidatorDirective implements Validator, OnInit {
     }
     if (error['invalidAdminRole']) {
       return 'Invalid Admin Role';
+    }
+    if (error['invalidConsultancyName']) {
+      return 'Invalid Consultancy Name';
+    }
+    if (error['invalidPinCode']) {
+      return 'Invalid Pincode';
+    }
+    if (error['invalidCountry']) {
+      return 'Invalid Country';
+    }
+    if (error['invalidState']) {
+      return 'Invalid State';
+    }
+    if (error['invalidCity']) {
+      return 'Invalid City';
+    }
+    if (error['invalidStreet']) {
+      return 'Invalid Street';
+    }
+    if (error['invalidRegistrationNumber']) {
+      return 'Invalid Registration Number';
+    }
+    if (error['invalidLinkedInUrl']) {
+      return 'Invalid LinkedIn Url';
+    }
+    if (error['invalidFacebookUrl']) {
+      return 'Invalid Facebook Url';
+    }
+    if (error['invalidYearEstablished']) {
+      return 'Invalid Year Established';
+    }
+    if (error['invalidInstituteName']) {
+      return 'Invalid Institute name';
+    }
+    if (error['invalidProvince']) {
+      return 'Invalid Province';
+    }
+    if (error['invalidDescription']) {
+      return 'Invalid Description';
+    }
+    if (error['invalidProgramName']) {
+      return 'Invalid program name';
+    }
+    if (error['invalidDuration']) {
+      return 'Invalid duration';
+    }
+    if (error['invalidApplicationFee']) {
+      return 'Invalid application fee';
+    }
+    if (error['invalidTuitionFee']) {
+      return 'Invalid tuition fee';
+    }
+    if (error['invalidLevelOfEducation']) {
+      return 'Invalid level of education';
+    }
+    if (error['invalidSubjectRequirements']) {
+      return 'Invalid subject requirement';
+    }
+    if (error['invalidAcademicRequirements']) {
+      return 'Invalid academic requirement';
+    }
+    if (error['invalidYear']) {
+      return 'Invalid year';
+    }
+    if (error['invalidNumberOfIntakes']) {
+      return 'Invalid number of intakes';
     }
     return 'Invalid Value';
   }

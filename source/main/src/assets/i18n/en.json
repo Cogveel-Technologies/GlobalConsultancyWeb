@@ -47,7 +47,13 @@
         "REGISTER_CONSULTANCY": "Register Consultancy",
         "CONSULTANCY_LIST": "Consultancy List",
         "REGISTER_INSTITUTE": "Register Institute",
-        "INSTITUTION-LIST": "Institution List"
+        "INSTITUTION-LIST": "Institution List",
+        "REGISTER-PROGRAM":"Register Program",
+        "PROGRAM-LIST":"Program List",
+        "REGISTER-INTAKE":"Register Intake",
+        "INTAKE-LIST":"Intake List",
+        "REGISTER-SESSION":"Register Session",
+        "SESSION-LIST":"Session List"
       }
     },
     "STUDENT": {

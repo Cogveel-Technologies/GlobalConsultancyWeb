@@ -1,6 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
-import * as CryptoJS from 'crypto-js';  // Import CryptoJS
+import { ConsultancyService } from '../consultancy-services/consultancy.service';
+import { ConsultancyData } from '../consultancy-models/data.consultancy';
+import {  combineLatest, distinctUntilChanged, map, Observable, startWith, switchMap, tap, throttleTime } from 'rxjs';
+import { ConsultancyApi } from '../consultancy-services/api.service';
+import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
+import { Sort } from '@angular/material/sort';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-consultancy-list',
@@ -8,113 +16,86 @@ import * as CryptoJS from 'crypto-js';  // Import CryptoJS
   styleUrls: ['./consultancy-list.component.scss']
 })
 export class ConsultancyListComponent implements OnInit {
-
   breadscrums = [
     {
       title: 'Consultancy List',
-      items: ['Consultancies'],
+      items: ['Consultancy'],
       active: 'Consultancy List',
     },
   ];
-  users = [
-    // Sample users data with unique id field...
-    {
-      id: 1,
-      ConsultancyName: "Tech Innovators Consultancy",
-      Phone1: 1234567890,
-      Phone2: 9876543210,
-      Email1: "info@techinnovators.com",
-      Email2: "support@techinnovators.com",
-      Country: "USA",
-      State: "California",
-      City: "San Francisco",
-      Address: "123 Market Street",
-      Street: "Market Street",
-      Pincode: "94103",
-      RegistrationNo: "TIC-2024-001",
-      Website: "https://techinnovators.com",
-      FbUrl: "https://facebook.com/techinnovators",
-      LinkedInUrl: "https://linkedin.com/company/techinnovators",
-      YearEstablished: 2010,
-      Password: "securepassword123"
-    },
-    {
-      id: 2,
-      ConsultancyName: "Future Insights Consultancy",
-      Phone1: 2234567890,
-      Phone2: 2876543210,
-      Email1: "info@futureinsights.com",
-      Email2: "support@futureinsights.com",
-      Country: "USA",
-      State: "California",
-      City: "Los Angeles",
-      Address: "456 Sunset Boulevard",
-      Street: "Sunset Boulevard",
-      Pincode: "90028",
-      RegistrationNo: "FIC-2024-002",
-      Website: "https://futureinsights.com",
-      FbUrl: "https://facebook.com/futureinsights",
-      LinkedInUrl: "https://linkedin.com/company/futureinsights",
-      YearEstablished: 2012,
-      Password: "anothersecurepassword"
-    },
-  ];
 
-  filteredUsers = [...this.users]; // Initialize with all users
+  constructor(
+    private router: Router,
+    private consultancyService: ConsultancyService,
+    private consultancyApiService: ConsultancyApi,
+    private toastr: ToastrService
+  ) { }
 
-  constructor(private router: Router) { }
+  editMode: boolean;
+  consultancies!: Observable<ConsultancyData[]>;
+  defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
+  length: number;
+  currentPage: number = 1;
+  paginationOptions: number[] = [5, 10, 25, 100];
+  pageSize: number = this.paginationOptions[0];
+  search = new FormControl();
+  searchText$ = this.search.valueChanges.pipe(startWith(''));
+  private subscriptions: Subscription = new Subscription();
 
-  ngOnInit() { }
 
-  addUser() {
-    console.log("Add user button clicked");
+
+
+
+  getConsultancies(limit: number, currentPage: number, params: ConsultancyDetailsOptions) {
+    return this.consultancyApiService.getConsultancy(limit, currentPage, params).pipe(tap(res => {
+      if(res['data']){
+      this.currentPage = res['pageInfo']['currentPage'] + 1;
+      }
+    }), map(res => res['data']));
   }
 
-  refreshPage() {
-    console.log("Refresh button clicked");
-    // Add your refresh logic here
+  ngOnInit() {
+
+    // Retrieve consultancy data
+    this.consultancies = this.getConsultancies(this.pageSize, this.currentPage, this.defaultData);
+
+    // latest values emitted
+    this.consultancies = combineLatest([this.searchText$])
+    .pipe(
+      throttleTime(1000,undefined,{ leading: true, trailing: true }),
+      distinctUntilChanged(),
+      switchMap(([searchTerm]) => {
+        this.defaultData.searchText = searchTerm || '';
+        return this.getConsultancies(this.pageSize, this.currentPage, this.defaultData);
+      })
+    );
+  
   }
 
-  deleteUser(userId: number) {
-    console.log(`Delete user button clicked for user ${userId}`);
-    // Add your delete logic here
+
+
+  addConsultancy() {
+    this.router.navigate(['consultancy/register-consultancy']);
   }
 
-  encryptData(data: any): string {
-    const key = CryptoJS.enc.Utf8.parse('1234567890123456');  // Your secret key
-    const iv = CryptoJS.enc.Utf8.parse('1234567890123456');  // Initialization vector
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), key, { iv: iv });
-    return encrypted.toString();
-  }
-
-  editUser(userId: number) {
-    const edit = this.users.find(el => el.id === userId);
-    console.log(edit);
-    if (edit) {
-      const encryptedData = this.encryptData(edit);
-      this.router.navigate(['/admin/register-consultancy'], {
-        queryParams: {
-          data: encryptedData
-          
-        }
+  deleteConsultancy(id: number) {
+    const con = confirm("Are you sure?");
+    if (con) {
+      this.consultancyApiService.deleteConsultancy(id).subscribe(res => {
+        this.consultancies = this.getConsultancies(this.pageSize, this.currentPage, this.defaultData);
       });
     }
   }
 
-  filterUsers(searchTerm: string) {
-    if (!searchTerm) {
-      this.filteredUsers = [...this.users];
-    } else {
-      const lowerCaseTerm = searchTerm.toLowerCase();
-      this.filteredUsers = this.users.filter(user =>
-        user.ConsultancyName.toLowerCase().includes(lowerCaseTerm) ||
-        user.Email1.toLowerCase().includes(lowerCaseTerm) ||
-        user.Email2.toLowerCase().includes(lowerCaseTerm) ||
-        user.Country.toLowerCase().includes(lowerCaseTerm) ||
-        user.State.toLowerCase().includes(lowerCaseTerm) ||
-        user.City.toLowerCase().includes(lowerCaseTerm) ||
-        user.Address.toLowerCase().includes(lowerCaseTerm)
-      );
+  onSortChange(sortEvent: Sort) {
+    if (sortEvent.direction === '') {
+      sortEvent.direction = 'asc'
     }
+    // this.features.get("sort").setValue(sortEvent.direction)
+  }
+
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe()
   }
 }

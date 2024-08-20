@@ -7,7 +7,7 @@ import { ConsultancyData } from "./consultancy-models/data.consultancy";
     providedIn:"root"
 })
 
-export class ConsultancyService{
+export class ConsultancyServdece{
     constructor(){}
     data = [
         {

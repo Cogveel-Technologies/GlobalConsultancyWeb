@@ -1,87 +1,95 @@
-
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { InstituteService } from '../institute.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { InstituteData } from '../consultancy-models/data.institute';
-
+import { map, Subscription, tap } from 'rxjs';
+import { ConsultancyApi } from '../consultancy-services/api.service';
 
 @Component({
   selector: 'app-register-consultancy',
   templateUrl: './register-institute.component.html',
   styleUrls: ['./register-institute.component.scss']
 })
-export class RegisterInstituteComponent {
+export class RegisterInstituteComponent implements OnInit, OnDestroy {
+  subscriptions: Subscription = new Subscription();
   breadscrums = [
     {
       title: 'Add Institute',
-      items: ['Register Institute'],
+      items: ['Consultancy'],
       active: 'Add Institute',
     },
   ];
-  registerConsultancy: FormGroup;
-  editMode: boolean;
-  subscription: Subscription[] = [];
+  registerInstitute: FormGroup;
+  editMode: boolean = false;
   details: any;
   id: number;
-  editData: any;
-  edit: any
-  instituteId: string
-  index:number
+  editId:number;
+  instituteId: string;
+  consultancyId:number
 
+  // static data for consultancies
+  Consultancies: number[] = [];
 
-
-  constructor(private intituteService: InstituteService, private router: Router, private route: ActivatedRoute,) {
-
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private consultancyApiService: ConsultancyApi,
+  ) {
+    this.registerInstitute = new FormGroup({
+      instituteName: new FormControl(''),
+      aboutInstitute: new FormControl(''),
+      province: new FormControl(''),
+      country: new FormControl(''),
+      consultancyId: new FormControl(''),
+      yearEstablished: new FormControl(''),
+      email: new FormControl(''),
+      phoneNo: new FormControl(''),
+      website: new FormControl(''),
+      linkedInUrl: new FormControl(''),
+      fbUrl: new FormControl('')
+    });
   }
+
   ngOnInit() {
-    this.registerConsultancy = new FormGroup({
-      InstituteName: new FormControl(''),
-      AboutInstitute: new FormControl(''),
-      Province: new FormControl(''),
-      Country: new FormControl(''),
-      YearEstablished: new FormControl(''),
-      Email: new FormControl(''),
-      PhoneNo: new FormControl(''),
-      Website: new FormControl(''),
-      LinkedInUrl: new FormControl(''),
-      FbUrl: new FormControl('')
-    })
+    // for editMode
+    const editInstitute = this.route.snapshot.data['editResponse'];
+    console.log(editInstitute)
 
-    this.route.url.subscribe(urlSegments => {
-      const currentUrl = this.router.url;
-      if (currentUrl.includes('/institute-list/edit-institute')) {
-        this.editMode = true
+     this.editId = +this.route.snapshot.paramMap.get('id');
+     if (editInstitute) {
+       this.editMode = true;
+       this.registerInstitute.patchValue(editInstitute);
+     }
+  }
 
-        // Get the ID parameter from the route
-        this.route.params.subscribe(params => {
-          this.instituteId = params['id'];
-          const InstituteDetails = this.intituteService.ELEMENT_DATA.find(el => el.InstituteName === this.instituteId);
-          this.registerConsultancy.patchValue(InstituteDetails)
-          // call api and provide id
+  // display error or register message and navigate
+
+  displayMessageAndNavigate(message:string, path:string[]){
+    alert(message)
+    this.router.navigate(path)
+  }
+
+  onSubmit() {
+    const newDetails = this.registerInstitute.value;
+    if (this.editMode) {
+      this.subscriptions.add(
+        this.consultancyApiService.updateInstitute(this.editId, newDetails).subscribe(res => {
         })
-      } else {
-        this.editMode = false
-      }
-    })
+          
+      );
+    } else {
+      newDetails.consultancyId = +localStorage.getItem("id");
+      console.log(newDetails)
+      this.subscriptions.add(
+        this.consultancyApiService.registerInstitute(newDetails).subscribe(res => {
+          this.displayMessageAndNavigate("Registered Successfully", ["consultancy","institution-list"])
+          this.router.navigate(['consultancy','institution-list']);
+        })
+      );
+    }
+    
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.forEach(sub => sub.unsubscribe());
-    }
+    this.subscriptions.unsubscribe();
   }
-
-
-
-  onSubmit() {
-    const newDetails = this.registerConsultancy.value;
-    if(this.editMode){
-      this.intituteService.ELEMENT_DATA[this.index] = newDetails
-    }else{
-      this.intituteService.ELEMENT_DATA.push(newDetails)
-    }
-  }
-
 }

@@ -1,72 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  AbstractControl,
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
+  FormControl,
+  FormGroup,
+ 
 } from '@angular/forms';
-import { AuthService } from '@core';
-import { UnsubscribeOnDestroyAdapter } from '@shared';
+import { loginService } from 'app/login.service';
+import { catchError, map, tap, throwError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.scss'],
 })
-export class SigninComponent
-  extends UnsubscribeOnDestroyAdapter
-  implements OnInit
-{
-  loginForm!: UntypedFormGroup;
-  submitted = false;
-  error = '';
-  hide = true;
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private router: Router,
-    private authService: AuthService
-  ) {
-    super();
-  }
-  ngOnInit() {
-    this.loginForm = this.formBuilder.group({
-      email: [
-        'admin@lorax.com',
-        [Validators.required, Validators.email, Validators.minLength(5)],
-      ],
-      password: ['admin', Validators.required],
-    });
-  }
+export class SigninComponent{
+  constructor(private loginService:loginService, private router:Router, private toastr:ToastrService) { }
+    signInForm: FormGroup;
+    ngOnInit(): void {
+        this.signInForm = new FormGroup({
+            userName: new FormControl(''),
+            password: new FormControl(''),
+        })
 
-  get form(): { [key: string]: AbstractControl } {
-    return this.loginForm.controls;
-  }
-  onSubmit() {
-    this.submitted = true;
-    this.error = '';
-    if (this.loginForm.invalid) {
-      this.error = 'Username and Password not valid !';
-      return;
-    } else {
-      this.subs.sink = this.authService
-        .login(this.form['email'].value, this.form['password'].value)
-        .subscribe(
-          (res) => {
-            if (res) {
-              const token = this.authService.currentUserValue.token;
-              if (token) {
-                // this.router.navigate(['/dashboard/main']);
-                this.router.navigate(['/admin/listusers']);
-              }
-            } else {
-              this.error = 'Invalid Login';
-            }
-          },
-          (error) => {
-            this.error = error;
-            this.submitted = false;
-          }
-        );
+        localStorage.clear()
+    }
+    signIn() {
+      const credentials = this.signInForm.value;
+      this.loginService.logIn(credentials).pipe(
+        map(res => {
+          return res['data'];
+        })).subscribe({
+        next: res => {
+          console.log(res)
+          localStorage.setItem("token", res.jwtToken);
+          localStorage.setItem("modulesAccess", res.moduleAccessName);
+          localStorage.setItem("id",res.id)
+          this.router.navigate(['dashboard']);
+        }
+      });
     }
   }
-}
+
