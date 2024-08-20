@@ -19,7 +19,7 @@ import { AddAgentComponent } from './add-agent/add-agent.component';
 import { ListagentsComponent } from './listagents/listagents.component';
 import { RolesComponent } from './roles/roles.component';
 
-import { LoginComponent } from './login/login.component';
+// import { LoginComponent } from './login/login.component';
 import { ViewUserComponent } from './listusers/view-user/view-user.component';
 import { DocumentTypeComponent } from './document-type/document-type.component';
 
@@ -31,7 +31,7 @@ import { DocumentTypeComponent } from './document-type/document-type.component';
     AddAgentComponent,
     ListagentsComponent,
     RolesComponent,
-    LoginComponent,
+    // LoginComponent,
     ViewUserComponent,
     DocumentTypeComponent,
 

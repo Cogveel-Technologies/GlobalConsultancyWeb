@@ -13,7 +13,7 @@ import { FeatherIconsModule } from './components/feather-icons/feather-icons.mod
     // PaginationComponent,
     // SortingComponent
   ],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, MaterialModule, FeatherIconsModule],
   exports: [
     CommonModule,
     FormsModule,

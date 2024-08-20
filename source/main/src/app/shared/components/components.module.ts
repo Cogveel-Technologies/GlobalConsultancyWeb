@@ -5,14 +5,19 @@ import { SharedModule } from "../shared.module";
 import { CustomSortComponent } from "./custom-sort/custom-sort.component";
 import { PaginationComponent } from "./pagination/pagination.component";
 import { SortingComponent } from "./sorting/sorting.component";
+import { SearchComponent } from "./search/search.component";
 
 
 @NgModule({
-  declarations: [FileUploadComponent, BreadcrumbComponent,
-     PaginationComponent, SortingComponent,
-    CustomSortComponent
+  declarations: [
+    FileUploadComponent,
+     BreadcrumbComponent,
+     PaginationComponent, 
+     SortingComponent,
+     CustomSortComponent,
+     SearchComponent
     ],
   imports: [SharedModule],
-  exports: [FileUploadComponent, BreadcrumbComponent,CustomSortComponent, PaginationComponent, SortingComponent],
+  exports: [FileUploadComponent, BreadcrumbComponent,CustomSortComponent, PaginationComponent, SortingComponent, SearchComponent],
 })
 export class ComponentsModule {}

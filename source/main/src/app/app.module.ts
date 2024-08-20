@@ -35,6 +35,7 @@ import { GlobalErrorHandler } from './global-error-handler/global-error-handler'
 
 
 
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
@@ -48,8 +49,7 @@ export function createTranslateLoader(http: HttpClient) {
     RightSidebarComponent,
     AuthLayoutComponent,
     MainLayoutComponent,
-    LoGinComponent,    
-  ],
+    LoGinComponent,  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
