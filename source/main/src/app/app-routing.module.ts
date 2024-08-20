@@ -6,11 +6,19 @@ import { AuthLayoutComponent } from './layout/app-layout/auth-layout/auth-layout
 import { MainLayoutComponent } from './layout/app-layout/main-layout/main-layout.component';
 import { TestcomponentComponent } from './testcomponent/testcomponent.component';
 import { LoGinComponent } from './lo-gin/lo-gin.component';
-import { AdminModule } from './admin/admin.module';
-
+import { PaginationComponent } from './shared/components/pagination/pagination.component';
+import { SortingComponent } from './shared/components/sorting/sorting.component';
 const routes: Routes = [
   { path: 'test', component: TestcomponentComponent },
   { path: 'loGin', component: LoGinComponent },
+  {
+    path: 'pagination',
+    component: PaginationComponent
+  },
+  {
+    path: 'sorting',
+    component: SortingComponent
+  },
   {
     path: '',
     component: MainLayoutComponent,
@@ -42,6 +50,8 @@ const routes: Routes = [
         loadChildren: () =>
           import('./student/student.module').then((m) => m.StudentModule),
       },
+      
+     
     //   {
     //     path: 'advance-table',
     //     loadChildren: () =>

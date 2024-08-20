@@ -1,4 +1,3 @@
-
 // import { Component } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -27,7 +26,7 @@ export class RolesComponent {
    this.thirdForm = this.fb.group({
       
       adminRole: [''],
-      termcondition: [false, Validators.requiredTrue]
+    
     });
   }
 

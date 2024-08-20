@@ -6,28 +6,35 @@ import { StudentRegisterComponent } from './student-register/student-register.co
 import { StudentApplicationComponent } from './student-application/student-application.component';
 import { StudentDocumentComponent } from './student-document/student-document.component';
 import { ComponentsModule } from '../shared/components/components.module';
-import { SharedModule } from '../shared/shared.module';
 
+// import { CustomsortpaginationModule } from 'app/customsortpagination/customsortpagination.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {
   OwlDateTimeModule,
   OwlNativeDateTimeModule,
 } from '@danielmoncada/angular-datetime-picker';
-import { ListStudentsComponent } from './list-students/list-students.component';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { ListstudentsComponent } from './list-students/list-students.component';
 import { ViewStudentComponent } from './list-students/view-student/view-student.component';
-// import { MatFileUploadModule } from 'mat-file-upload';
+import { SharedModule } from '@shared/shared.module';
+// import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+// import { SortingComponent } from '@shared/components/sorting/sorting.component';
+
 
 @NgModule({
   declarations: [
     StudentRegisterComponent,
     StudentApplicationComponent,
     StudentDocumentComponent,
-    ListStudentsComponent,
+   
+    ListstudentsComponent,
     ViewStudentComponent,
-    // MatFileUploadModule,
+    // PaginationComponent,
+    // SortingComponent
+  
   ],
   imports: [
     CommonModule,
@@ -36,9 +43,10 @@ import { ViewStudentComponent } from './list-students/view-student/view-student.
     OwlNativeDateTimeModule,
     NgxDatatableModule,
     ComponentsModule,
-    SharedModule,
+     SharedModule,
     MatInputModule,
     MatFormFieldModule,
+    
     MatSelectModule,
     // MatFileUploadModule
   ]

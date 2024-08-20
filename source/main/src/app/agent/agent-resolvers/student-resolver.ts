@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AgentService } from '../agent.service';
 import { Student } from '../models/student.model';
@@ -7,16 +7,15 @@ import { Student } from '../models/student.model';
 @Injectable({
   providedIn: 'root'
 })
-export class StudentResolver implements Resolve<Student[]> {
+export class StudentResolver implements Resolve<Student> {
   constructor(private agentService: AgentService) {}
 
-  resolve(): Observable<Student[]> {
-    const data = this.agentService.getStudents();
-    
-    data.subscribe(students => {
-      console.log(students, "view resolver");
-    });
-    
-    return data;
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Student> {
+    const studentId = route.queryParams['id'];
+    console.log(studentId,"resolver...........")
+    if (studentId) {
+      return this.agentService.getStudentById(+studentId);
+    }
+    return null;
   }
 }
