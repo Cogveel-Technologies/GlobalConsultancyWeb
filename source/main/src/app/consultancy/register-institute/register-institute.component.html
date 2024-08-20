@@ -21,7 +21,7 @@
                 <div class="col-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Institute Name</mat-label>
-                    <input matInput formControlName="instituteName">
+                    <input matInput formControlName="instituteName" required appCustomValidator="instituteName">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>school</mat-icon>
                   </mat-form-field>
                 </div>
@@ -32,21 +32,21 @@
                 <div class="col-md-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>About Institute</mat-label>
-                    <textarea matInput formControlName="aboutInstitute" class="col-12"></textarea>
+                    <textarea matInput formControlName="aboutInstitute" class="col-12" appCustomValidator="aboutInstitute" required appCustomValidator="description"></textarea>
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>info</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Province</mat-label>
-                    <input matInput formControlName="province">
+                    <input matInput formControlName="province" required appCustomValidator="province">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Country</mat-label>
-                    <input matInput formControlName="country">
+                    <input matInput formControlName="country" required appCustomValidator="country">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>public</mat-icon>
                   </mat-form-field>
                 </div>
@@ -57,14 +57,14 @@
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Year Established</mat-label>
-                    <input matInput formControlName="yearEstablished" type="number">
+                    <input matInput formControlName="yearEstablished" type="number" required appCustomValidator="yearEstablished">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>calendar_today</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Website</mat-label>
-                    <input matInput formControlName="website">
+                    <input matInput formControlName="website" required appCustomValidator="companyWebsite">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>language</mat-icon>
                   </mat-form-field>
                 </div>
@@ -82,7 +82,7 @@
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Phone</mat-label>
-                    <input matInput formControlName="phoneNo">
+                    <input matInput formControlName="phoneNo" required appCustomValidator="phoneNumber">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
                   </mat-form-field>
                 </div>
@@ -93,14 +93,14 @@
                 <div class="col-md-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Fb URL</mat-label>
-                    <input matInput formControlName="fbUrl">
+                    <input matInput formControlName="fbUrl"  required appCustomValidator="fbUrl">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>facebook</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>LinkedIn URL</mat-label>
-                    <input matInput formControlName="linkedInUrl">
+                    <input matInput formControlName="linkedInUrl" required appCustomValidator="linkedInUrl">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>linkedin</mat-icon>
                   </mat-form-field>
                 </div>
@@ -109,7 +109,7 @@
               <!-- Submit/Update and Cancel Buttons -->
               <div class="row mb-1">
                 <div class="col-auto">
-                  <button type="submit" class="btn-space" mat-raised-button color="primary">{{editMode ? 'Update' :
+                  <button type="submit" class="btn-space" mat-raised-button color="primary" [disabled]="!registerInstitute.valid">{{editMode ? 'Update' :
                     'Register'}}</button>
                   <button type="button" mat-raised-button color="warn">Cancel</button>
                 </div>

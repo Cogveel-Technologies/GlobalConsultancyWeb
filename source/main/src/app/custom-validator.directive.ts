@@ -86,7 +86,7 @@ export class CustomValidatorDirective implements Validator, OnInit {
         error = this.validateName(control.value) ? null : { 'invalidAdminRole': true };
         break;
       case 'consultancyName':
-        error = this.validateName(control.value) ? null : { 'invalidConsultancyName': true };
+        error = this.validateWithSpace(control.value) ? null : { 'invalidConsultancyName': true };
         break;
       case 'pincode':
         error = this.validateNumber(control.value) ? null : { 'invalidPinCode': true };
@@ -95,13 +95,13 @@ export class CustomValidatorDirective implements Validator, OnInit {
         error = this.validateName(control.value) ? null : { 'invalidCountry': true };
         break;
       case 'state':
-        error = this.validateName(control.value) ? null : { 'invalidState': true };
+        error = this.validateWithSpace(control.value) ? null : { 'invalidState': true };
         break;
       case 'city':
-        error = this.validateName(control.value) ? null : { 'invalidCity': true };
+        error = this.validateWithSpace(control.value) ? null : { 'invalidCity': true };
         break;
       case 'street':
-        error = this.validateName(control.value) ? null : { 'invalidStreet': true };
+        error = this.validateWithSpace(control.value) ? null : { 'invalidStreet': true };
         break;
       case 'registrationNo':
         error = this.validateNumber(control.value) ? null : { 'invalidRegistrationNumber': true };
@@ -114,6 +114,42 @@ export class CustomValidatorDirective implements Validator, OnInit {
         break;
       case 'yearEstablished':
         error = this.validateNumber(control.value) ? null : { 'invalidYearEstablished': true };
+        break;
+      case 'instituteName':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidInstituteName': true };
+        break;
+      case 'province':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidProvince': true };
+        break;
+      case 'description':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidDescription': true };
+        break;
+      case 'programName':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidProgramName': true };
+        break;
+      case 'duration':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidDuration': true };
+        break;
+      case 'applicationFee':
+        error = this.validateNumber(control.value) ? null : { 'invalidApplicationFee': true };
+        break;
+      case 'tuitionFee':
+        error = this.validateNumber(control.value) ? null : { 'invalidTuitionFee': true };
+        break;
+      case 'levelOfEducation':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidLevelOfEducation': true };
+        break;
+      case 'subjectRequirements':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidSubjectRequirements': true };
+        break;
+      case 'academicRequirements':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidAcademicRequirements': true };
+        break;
+      case 'year':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidYear': true };
+        break;
+      case 'noOfIntakes':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidNumberOfIntakes': true };
         break;
 
       default:
@@ -143,6 +179,11 @@ export class CustomValidatorDirective implements Validator, OnInit {
     return nameRegex.test(value);
   }
 
+  validateWithSpace(value: string): boolean {
+    const nameRegex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
+    return nameRegex.test(value);
+  }
+  
   validatePhoneNumber(value: string): boolean {
     const phoneRegex = /^\+?[1-9]\d{1,10}$/;
     return phoneRegex.test(value);
@@ -274,6 +315,42 @@ export class CustomValidatorDirective implements Validator, OnInit {
     }
     if (error['invalidYearEstablished']) {
       return 'Invalid Year Established';
+    }
+    if (error['invalidInstituteName']) {
+      return 'Invalid Institute name';
+    }
+    if (error['invalidProvince']) {
+      return 'Invalid Province';
+    }
+    if (error['invalidDescription']) {
+      return 'Invalid Description';
+    }
+    if (error['invalidProgramName']) {
+      return 'Invalid program name';
+    }
+    if (error['invalidDuration']) {
+      return 'Invalid duration';
+    }
+    if (error['invalidApplicationFee']) {
+      return 'Invalid application fee';
+    }
+    if (error['invalidTuitionFee']) {
+      return 'Invalid tuition fee';
+    }
+    if (error['invalidLevelOfEducation']) {
+      return 'Invalid level of education';
+    }
+    if (error['invalidSubjectRequirements']) {
+      return 'Invalid subject requirement';
+    }
+    if (error['invalidAcademicRequirements']) {
+      return 'Invalid academic requirement';
+    }
+    if (error['invalidYear']) {
+      return 'Invalid year';
+    }
+    if (error['invalidNumberOfIntakes']) {
+      return 'Invalid number of intakes';
     }
     return 'Invalid Value';
   }

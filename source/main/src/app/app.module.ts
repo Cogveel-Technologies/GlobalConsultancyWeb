@@ -30,10 +30,10 @@ import { LoGinComponent } from './lo-gin/lo-gin.component';
 import { AgentModule } from './agent/agent.module';
 import { checkToken } from './general-interceptors/token.interceptors';
 import { ToastrModule } from 'ngx-toastr';
-// import { HttpErrorInterceptor } from './general-interceptors/error.interceptor';
-// import { CustomValidatorDirective } from './custom-validator.directive';
-// import { TestcomponentComponent } from './testcomponent/testcomponent.component';
-// import { MatFileUploadModule } from 'mat-file-upload';
+import { ResponseInterceptor } from './general-interceptors/response.interceptor';
+import { GlobalErrorHandler } from './global-error-handler/global-error-handler';
+
+
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -76,8 +76,8 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS,useClass: checkToken,multi: true},
-    // {provide: HTTP_INTERCEPTORS,useClass: HttpErrorInterceptor,multi: true},
-    
+    {provide: HTTP_INTERCEPTORS,useClass: ResponseInterceptor,multi: true},
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     fakeBackendProvider,
     WINDOW_PROVIDERS,
   ],

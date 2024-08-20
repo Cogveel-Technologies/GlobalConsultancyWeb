@@ -64,19 +64,27 @@ export class RegisterConsultancyComponent {
     }
 
   }
+
+  navigateToConsultancyList(){
+    this.router.navigate(["consultancy", "consultancy-list"])
+  }
   
   onSubmit() {
     let newDetails = this.registerConsultancy.value;
     newDetails.id = this.editId;
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateConsultancy(newDetails).subscribe(res => {
-        this.consultancyService.showSuccessMsgAndNavigate("Updated Successfully",["consultancy", "consultancy-list"])
+        if(res['status'] < 400 && res['status'] >= 200){
+          this.navigateToConsultancyList()
+        }
       }))
     } else {
-      this.subscriptions.add(this.consultancyApiService.registerConsultancy(newDetails).subscribe(res => {
-        console.log(res)
-        this.consultancyService.showSuccessMsgAndNavigate("Registered Successfully",["consultancy", "consultancy-list"])
+      this.subscriptions.add(this.consultancyApiService.registerConsultancy(newDetails).subscribe(res=> {
+        if(res['status'] < 400 && res['status'] >= 200){
+          this.navigateToConsultancyList()
+        }
       }))
+      
     }
    
   }

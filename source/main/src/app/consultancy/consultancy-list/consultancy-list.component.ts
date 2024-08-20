@@ -2,13 +2,13 @@ import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { ConsultancyData } from '../consultancy-models/data.consultancy';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, Subject, switchMap, tap } from 'rxjs';
+import {  combineLatest, distinctUntilChanged, map, Observable, startWith, switchMap, tap, throttleTime } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
-import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-consultancy-list',
@@ -33,35 +33,43 @@ export class ConsultancyListComponent implements OnInit {
 
   editMode: boolean;
   consultancies!: Observable<ConsultancyData[]>;
-  defaultData: ConsultancyDetailsOptions =  { ...this.consultancyService.defaultRenderData() };
-  length:number;
-  pageSize:number;
-  currentPage:number;
-  search = new BehaviorSubject<string>(this.defaultData.searchText);
+  defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
+  length: number;
+  currentPage: number = 1;
+  paginationOptions: number[] = [5, 10, 25, 100];
+  pageSize: number = this.paginationOptions[0];
+  search = new FormControl();
+  searchText$ = this.search.valueChanges.pipe(startWith(''));
   private subscriptions: Subscription = new Subscription();
 
-  
 
 
 
-  updateDOM(params: ConsultancyDetailsOptions) {
-    return this.consultancies = this.consultancyApiService.getConsultancy(this.pageSize,this.currentPage,params).pipe(tap(res=>{
-      this.length = res['pageInfo']['totalRecords'];
-    }), map(res=>res['data']));
+
+  getConsultancies(limit: number, currentPage: number, params: ConsultancyDetailsOptions) {
+    return this.consultancyApiService.getConsultancy(limit, currentPage, params).pipe(tap(res => {
+      if(res['data']){
+      this.currentPage = res['pageInfo']['currentPage'] + 1;
+      }
+    }), map(res => res['data']));
   }
 
   ngOnInit() {
 
     // Retrieve consultancy data
-    this.updateDOM(this.defaultData);
+    this.consultancies = this.getConsultancies(this.pageSize, this.currentPage, this.defaultData);
 
-    // Subscribe to search text changes
-    this.subscriptions.add(combineLatest([ this.search.pipe(debounceTime(700),distinctUntilChanged())]).pipe(switchMap(([search]) => {
-      // this.defaultData.limit = pagination.pageSize;
-      // this.defaultData.CurrentPage = pagination.pageIndex + 1;
-      this.defaultData.searchText = search
-      return this.updateDOM(this.defaultData);
-    })).subscribe())
+    // latest values emitted
+    this.consultancies = combineLatest([this.searchText$])
+    .pipe(
+      throttleTime(1000,undefined,{ leading: true, trailing: true }),
+      distinctUntilChanged(),
+      switchMap(([searchTerm]) => {
+        this.defaultData.searchText = searchTerm || '';
+        return this.getConsultancies(this.pageSize, this.currentPage, this.defaultData);
+      })
+    );
+  
   }
 
 
@@ -74,8 +82,7 @@ export class ConsultancyListComponent implements OnInit {
     const con = confirm("Are you sure?");
     if (con) {
       this.consultancyApiService.deleteConsultancy(id).subscribe(res => {
-        this.toastr.success("Deleted Successfully")
-        this.updateDOM(this.defaultData);
+        this.consultancies = this.getConsultancies(this.pageSize, this.currentPage, this.defaultData);
       });
     }
   }
@@ -86,11 +93,7 @@ export class ConsultancyListComponent implements OnInit {
     }
     // this.features.get("sort").setValue(sortEvent.direction)
   }
- 
 
-  receiveSearchText(val: string) {
-    this.search.next(val)
-  }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe()

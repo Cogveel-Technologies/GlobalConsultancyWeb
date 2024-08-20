@@ -4,7 +4,7 @@ import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { FormControl, FormGroup } from '@angular/forms';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, startWith, Subscription, switchMap, tap } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, map, startWith, Subscription, switchMap, tap } from 'rxjs';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ToastrService } from 'ngx-toastr';
@@ -35,13 +35,16 @@ export class InstitutionListComponent {
   private subscriptions: Subscription = new Subscription();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  currentPage: number = 1;
+  paginationOptions: number[] = [5, 10, 25, 100];
+  pageSize: number = this.paginationOptions[0];
   
-  updateDom(params:ConsultancyDetailsOptions){
-    // return this.institutes = this.consultancyApiService.getInstitutes(params);
+  getInstitutes(pageSize:number,currentPage:number, params:ConsultancyDetailsOptions){
+     this.institutes = this.consultancyApiService.getInstitutes(pageSize,currentPage,params)
   }
   ngOnInit() {
     this.defaultData = {...this.consultancyService.defaultRenderData()};
-    this.updateDom(this.defaultData)
+    this.getInstitutes(this.pageSize, this.currentPage, this.defaultData)
 
 
     this.features = new FormGroup({
@@ -55,8 +58,6 @@ export class InstitutionListComponent {
     const sort$ = this.features.get('sort').valueChanges.pipe(startWith(this.features.get("sort").value));
 
 
-
-
   }
 
   addInstitute() {
@@ -67,8 +68,7 @@ export class InstitutionListComponent {
     const con =  confirm("Are you sure?")
     if(con){
       this.consultancyApiService.deleteInstitute(id).subscribe(res=> {
-        // this.institutes = this.consultancyApiService.getInstitutes(this.defaultData)
-        alert("Deleted Successfully")
+        this.institutes = this.consultancyApiService.getInstitutes(this.pageSize,this.currentPage,this.defaultData)
       });
     }
   }

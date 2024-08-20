@@ -70,17 +70,17 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     const newDetails = this.registerInstitute.value;
-    console.log(newDetails)
     if (this.editMode) {
       this.subscriptions.add(
         this.consultancyApiService.updateInstitute(this.editId, newDetails).subscribe(res => {
-          this.displayMessageAndNavigate("Updated Successfully", ["consultancy","institution-list"])
         })
           
       );
     } else {
+      newDetails.consultancyId = +localStorage.getItem("id");
+      console.log(newDetails)
       this.subscriptions.add(
-        this.consultancyApiService.registerInstitute(newDetails).pipe(tap(res=> console.log(res))).subscribe(res => {
+        this.consultancyApiService.registerInstitute(newDetails).subscribe(res => {
           this.displayMessageAndNavigate("Registered Successfully", ["consultancy","institution-list"])
           this.router.navigate(['consultancy','institution-list']);
         })
