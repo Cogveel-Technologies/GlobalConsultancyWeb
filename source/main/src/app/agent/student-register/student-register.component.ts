@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgentService } from '../agent.service';
-import * as CryptoJS from 'crypto-js';  // Import CryptoJS
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-student-register',
@@ -22,17 +23,22 @@ export class StudentRegisterComponent implements OnInit {
   user: any;
   errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute,
-    private agentService: AgentService) {
+  constructor(
+    private fb: FormBuilder, 
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private snackBar: MatSnackBar, 
+    private agentService: AgentService
+  ) {
     this.initThirdForm();
   }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      const encryptedData = params['data'];
-      if (encryptedData) {
-        this.user = this.decryptData(encryptedData);
-        this.patchForm();
+      const studentId = params['id'];
+      if (studentId) {
+        console.log(studentId, ".....................");
+        this.fetchStudentById(studentId);
       }
     });
   }
@@ -44,19 +50,40 @@ export class StudentRegisterComponent implements OnInit {
       citizenship: ['', Validators.required],
       language: ['', Validators.required],
       passportExpiry: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      emailAddress: ['', [Validators.required, Validators.email]],
       contactNo: ['', Validators.required],
-      agent: ['', Validators.required],
       residentialAddress: ['', Validators.required],
       mailingAddress: ['', Validators.required],
+      agentId: ['', Validators.required],
+      password: ['', Validators.required],
+      instituteId: ['', Validators.required],
+    });
+
+    // Debug: Log form status changes
+    this.thirdForm.statusChanges.subscribe(status => {
+      console.log('Form Status: ', status);
+      console.log('Form Errors: ', this.thirdForm.errors);
+      console.log('Form Controls: ', this.thirdForm.controls);
     });
   }
 
-  decryptData(data: string): any {
-    const key = CryptoJS.enc.Utf8.parse('1234567890123456');  // Your secret key
-    const iv = CryptoJS.enc.Utf8.parse('1234567890123456');  // Initialization vector
+  decryptData(data: string): string {
+    const key = CryptoJS.enc.Utf8.parse('1234567890123456');
+    const iv = CryptoJS.enc.Utf8.parse('1234567890123456');
     const decrypted = CryptoJS.AES.decrypt(data, key, { iv: iv });
-    return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+    return decrypted.toString(CryptoJS.enc.Utf8);
+  }
+
+  fetchStudentById(studentId: string) {
+    this.agentService.getStudentById(+studentId).subscribe(
+      student => {
+        this.user = student;
+        this.patchForm();
+      },
+      error => {
+        console.error('Error fetching student data:', error);
+      }
+    );
   }
 
   patchForm() {
@@ -67,11 +94,13 @@ export class StudentRegisterComponent implements OnInit {
         citizenship: this.user.citizenship || '',
         language: this.user.language || '',
         passportExpiry: this.user.passportExpiry || '',
-        email: this.user.email || '',
+        emailAddress: this.user.emailAddress || '',
         contactNo: this.user.contactNo || '',
-        agent: this.user.agent || '',
         residentialAddress: this.user.residentialAddress || '',
         mailingAddress: this.user.mailingAddress || '',
+        agentId: this.user.agentId || '',
+        password: this.user.password || '',
+        instituteId: this.user.instituteId || '',
       });
     }
   }
@@ -82,18 +111,22 @@ export class StudentRegisterComponent implements OnInit {
         this.agentService.updateStudentData(this.user.id, this.thirdForm.value).subscribe(
           response => {
             console.log('Update Success', response);
+            this.router.navigate(['/agent/list-students']);
           },
           error => {
             console.log('Update Error', error);
+            this.showSnackBar('Update failed. Please try again.');
           }
         );
       } else {
         this.agentService.submitStudentData(this.thirdForm.value).subscribe(
           response => {
             console.log('Submit Success', response);
+            this.router.navigate(['/agent/list-students']);
           },
           error => {
             console.log('Submit Error', error);
+            this.showSnackBar('Submission failed. Please try again.');
           }
         );
       }
@@ -104,6 +137,12 @@ export class StudentRegisterComponent implements OnInit {
   }
 
   isFormPrefilled(): boolean {
-    return !!this.user && !!this.user.id; // Check if user and user.id exist and are truthy
+    return !!this.user && !!this.user.id;
+  }
+
+  showSnackBar(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 4000,
+    });
   }
 }

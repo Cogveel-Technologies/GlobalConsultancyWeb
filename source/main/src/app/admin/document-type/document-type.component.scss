@@ -1,4 +1,8 @@
-/* Base styles */
+.snackbar-success {
+    font-size: 20px;
+    padding: 16px;
+  }
+  /* Base styles */
 td {
   // width: 150px; 
   // max-width: 150px; 
@@ -12,6 +16,16 @@ td {
     flex-direction: column;
     align-items: flex-start;
     padding-bottom: 10px;
+  }
+
+  .edit-input
+  {
+    width: 50%;
+  }
+  .edit-input-container
+  {
+    display: flex;
+    justify-content: end;
   }
 
   .materialTableHeader .left {
@@ -86,12 +100,3 @@ td {
     margin-right: 2px;
   }
 }
-.allign
-{
-  vertical-align:middle;
-  font-size: 1.1rem;
-  color: #ccc;
-  cursor: pointer;
-
-}
-

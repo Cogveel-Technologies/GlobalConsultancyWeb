@@ -2,8 +2,7 @@
   <div class="container-fluid">
     <div class="block-header" *ngFor="let breadscrum of breadscrums">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
-      </app-breadcrumb>
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active"></app-breadcrumb>
     </div>
 
     <div class="row">
@@ -17,7 +16,7 @@
                 </li>
                 <li class="tbl-search-box">
                   <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                  <input placeholder="Search" type="text" #filter (input)="filterStudents(filter.value)" class="browser-default search-field" aria-label="Search box">
+                  <input placeholder="Search" type="text" [formControl]="searchControl" class="browser-default search-field" aria-label="Search box">
                 </li>
               </ul>
             </div>
@@ -38,13 +37,6 @@
                   </div>
                 </li>
                 <li class="tbl-header-btn">
-                  <div class="m-l-10" matTooltip="DELETE">
-                    <button mat-mini-fab color="warn">
-                      <mat-icon class="col-white">delete</mat-icon>
-                    </button>
-                  </div>
-                </li>
-                <li>
                   <div class="export-button m-l-10" matTooltip="XLSX">
                     <img src="assets/images/icons/xlsx.png" alt="" />
                   </div>
@@ -66,34 +58,42 @@
             <table class="table table-hover table-responsive">
               <thead>
                 <tr>
-                  <!-- <th>S No.</th> -->
-                  <th>Student Name</th>
-                  <th>DOB</th>
-                  <!-- <th>Citizenship</th> -->
-                  <!-- <th>Language</th> -->
-                  <th>Passport Expiry</th>
-                  <th>Email</th>
-                  <th>Contact No.</th>
-                  <th>Agent</th>
-                  <th>Residential Address</th>
-                  <!-- <th>Mailing Address</th> -->
+                  <th>
+                      <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['id']" (sortChange)="onSortChange($event)"></app-sorting>
+                  </th>
+                  <th>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['StudentName']" (sortChange)="onSortChange($event)"></app-sorting>
+                  </th>
+                  <!-- <th>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['dob']" (sortChange)="onSortChange($event)"></app-sorting>
+                  </th>
+                  <th>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['passportExpiry']" (sortChange)="onSortChange($event)"></app-sorting>
+                  </th> -->
+                  <th>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['EmailAddress']" (sortChange)="onSortChange($event)"></app-sorting>
+                  </th>
+                  <th>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['ContactNo']" (sortChange)="onSortChange($event)"></app-sorting>
+                  </th>
+                  <th>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['AgentId']" (sortChange)="onSortChange($event)"></app-sorting>
+                  </th>
                   <th>Actions</th>
                 </tr>
               </thead>
+              
               <tbody>
-                <tr *ngFor="let student of filteredStudents">
-                  <!-- <td data-label="S No.">{{ student.id }}</td> -->
+                <tr *ngFor="let student of students$ | async; let i = index">
+                  <td data-label="S No.">{{ i + 1 }}</td>
                   <td data-label="Student Name">{{ student.studentName }}</td>
-                  <td data-label="DOB">{{ student.dob }}</td>
-                  <!-- <td data-label="Citizenship">{{ student.citizenship }}</td> -->
-                  <!-- <td data-label="Language">{{ student.language }}</td> -->
-                  <td data-label="Passport Expiry">{{ student.passportExpiry }}</td>
-                  <td data-label="Email">{{ student.email }}</td>
+                  <!-- <td data-label="DOB">{{ student.dob }}</td> -->
+                  <!-- <td data-label="Passport Expiry">{{ student.passportExpiry }}</td> -->
+                  <td data-label="Email">{{ student.emailAddress }}</td>
                   <td data-label="Contact No.">{{ student.contactNo }}</td>
-                  <td data-label="Agent">{{ student.agent }}</td>
-                  <td data-label="Residential Address">{{ student.residentialAddress }}</td>
-                  <!-- <td data-label="Mailing Address">{{ student.mailingAddress }}</td> -->
+                  <td data-label="Agent">{{ student.agentId }}</td>
                   <td data-label="Actions">
+                  
                     <button mat-icon-button color="primary" (click)="editStudent(student.id)" matTooltip="Edit">
                       <mat-icon>edit</mat-icon>
                     </button>
@@ -110,10 +110,30 @@
                 </tr>
               </tbody>
             </table>
-            <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+             
+            <app-pagination 
+            [length]="totalStudents"
+             [pageSize]="pageSize" 
+             [pageSizeOptions]="pageSizeOptions" 
+             (pageChange)="onPageChange($event)">
+            </app-pagination>
+            
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+     <!-- <tr *ngFor="let student of students$ | async">
+                  <td data-label="S No.">{{ student.id }}</td>
+                  <td data-label="Student Name">{{ student.studentName }}</td>
+                  <td data-label="DOB">{{ student.dob}}</td>
+                  <td data-label="Citizenship">{{ student.citizenship }}</td>
+                  <td data-label="Language">{{ student.language }}</td>
+                  <td data-label="Passport Expiry">{{ student.passportExpiry}}</td>
+                  <td data-label="Email">{{ student.emailAddress }}</td>
+                  <td data-label="Contact No.">{{ student.contactNo }}</td>
+                  <td data-label="Agent">{{ student.agentId }}</td>
+                  <td data-label="Residential Address">{{ student.residentialAddress }}</td>
+                  -->

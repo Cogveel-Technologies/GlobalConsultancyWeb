@@ -1,0 +1,90 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+    <!-- Your content goes here  -->
+    <div class="row clearfix">
+      <div class="col-lg-3 col-md-12">
+        <div class="card">
+          <div class="m-b-20">
+            <div class="contact-grid">
+              <div class="profile-header bg-dark">
+                <div class="user-name">{{user.firstName}}</div>
+                <div class="name-center">{{user.middleName}}</div>
+              </div>
+              <div class="position-relative">
+                <img src="assets/images/user/user.png" class="profile-img user-img" alt="">
+                <mat-icon matSuffix class="profile-img-edit" matTooltip="Edit">edit</mat-icon>
+              </div>
+              <p>
+                <mat-icon>location_on</mat-icon> {{user.address}}
+              </p>
+              <div>
+                <span class="phone">
+                  <mat-icon>phone</mat-icon>{{user.phoneNumber}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+            <mat-tab label="Basic Details">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-hover mt-2">
+                        <thead>
+                          <tr>
+                            <th>Field</th>
+                            <th>Details</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><mat-icon color="primary">person</mat-icon> First Name</td>
+                            <td>{{ user.firstName }}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">person</mat-icon> Middle Name</td>
+                            <td>{{ user.middleName }}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">person</mat-icon> Last Name</td>
+                            <td>{{ user.lastName }}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">phone</mat-icon> Phone</td>
+                            <td>{{ user.phoneNumber }}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">email</mat-icon> Email</td>
+                            <td>{{ user.email }}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">wc</mat-icon> Gender</td>
+                            <td>{{ user.gender }}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">location_on</mat-icon> Address</td>
+                            <td>{{ user.address }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

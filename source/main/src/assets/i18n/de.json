@@ -27,7 +27,8 @@
         "ADD_AGENTS": "Add Agents",
         "LIST_AGENTS": "List Agents",
         "LIST_ROLES": "List Roles",
-         "LIST_LOGIN": "Login"
+         "LIST_LOGIN": "Login",
+          "DOCUMENT_TYPE": "Document Type"
       }
     },
     "AGENT": {

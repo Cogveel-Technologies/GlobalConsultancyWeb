@@ -19,7 +19,10 @@ import { AddAgentComponent } from './add-agent/add-agent.component';
 import { ListagentsComponent } from './listagents/listagents.component';
 import { RolesComponent } from './roles/roles.component';
 
-// import { CustomValidatorDirective } from 'app/custom-validator.directive';
+import { LoginComponent } from './login/login.component';
+import { ViewUserComponent } from './listusers/view-user/view-user.component';
+import { DocumentTypeComponent } from './document-type/document-type.component';
+
 
 @NgModule({
   declarations: [
@@ -28,17 +31,20 @@ import { RolesComponent } from './roles/roles.component';
     AddAgentComponent,
     ListagentsComponent,
     RolesComponent,
+    LoginComponent,
+    ViewUserComponent,
+    DocumentTypeComponent,
+
   ],
   imports: [
     CommonModule,
-     AdminRoutingModule,
-
-
+    AdminRoutingModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     NgxDatatableModule,
     ComponentsModule,
-    SharedModule,
+    SharedModule
+    // CustomsortpaginationModule
     
   ]
 })

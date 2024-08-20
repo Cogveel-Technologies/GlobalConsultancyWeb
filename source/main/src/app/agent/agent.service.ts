@@ -1,72 +1,141 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject, throwError } from 'rxjs'; // Import throwError
 import { Student } from './models/student.model';
+import { tap, map, catchError } from 'rxjs/operators';
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pageInfo: {
+    currentPage: number;
+    totalPages: number;
+    totalRecords: number;
+  };
+  status: number;
+  message: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AgentService {
-  constructor(private http: HttpClient) { }
-// Dummy data for testing
-private students: Student[] = [
-  { id: 1, studentName: 'Hadim', dob: '2000-01-01', citizenship: 'USA', 
-    language: 'English', passportExpiry: '2025-01-01', email: 'mark@example.com',
-     contactNo: '1234567890', agent: 'Agent A', residentialAddress: '123 Main St',
-      mailingAddress: '123 Main St' },
+  private apiUrl = 'https://www.affectionate-mcnulty.180-179-213-167.plesk.page/api';
+  // private currentPageSubject = new BehaviorSubject<number>(1);
+  // private pageSizeSubject = new BehaviorSubject<number>(10);
 
-      
-  { id: 2, studentName: 'Wani', dob: '2001-02-02', citizenship: 'AMM', language: 'Ammlish', passportExpiry: '2025-02-02', email: 'jacob@example.com', contactNo: '2345678901', agent: 'Agent B', residentialAddress: '456 Elm St', mailingAddress: '456 Elm St' },
-  { id: 3, studentName: 'Alice', dob: '2002-03-03', citizenship: 'CAN', language: 'French', passportExpiry: '2026-03-03', email: 'alice@example.com', contactNo: '3456789012', agent: 'Agent C', residentialAddress: '789 Oak St', mailingAddress: '789 Oak St' },
-  { id: 4, studentName: 'Bob', dob: '2003-04-04', citizenship: 'UK', language: 'English', passportExpiry: '2027-04-04', email: 'bob@example.com', contactNo: '4567890123', agent: 'Agent D', residentialAddress: '101 Pine St', mailingAddress: '101 Pine St' },
-  { id: 5, studentName: 'Charlie', dob: '2004-05-05', citizenship: 'AUS', language: 'English', passportExpiry: '2028-05-05', email: 'charlie@example.com', contactNo: '5678901234', agent: 'Agent E', residentialAddress: '202 Birch St', mailingAddress: '202 Birch St' },
-  { id: 6, studentName: 'David', dob: '2005-06-06', citizenship: 'NZ', language: 'Maori', passportExpiry: '2029-06-06', email: 'david@example.com', contactNo: '6789012345', agent: 'Agent F', residentialAddress: '303 Cedar St', mailingAddress: '303 Cedar St' },
-  { id: 7, studentName: 'Eve', dob: '2006-07-07', citizenship: 'IND', language: 'Hindi', passportExpiry: '2030-07-07', email: 'eve@example.com', contactNo: '7890123456', agent: 'Agent G', residentialAddress: '404 Spruce St', mailingAddress: '404 Spruce St' },
-  { id: 8, studentName: 'Frank', dob: '2007-08-08', citizenship: 'JPN', language: 'Japanese', passportExpiry: '2031-08-08', email: 'frank@example.com', contactNo: '8901234567', agent: 'Agent H', residentialAddress: '505 Maple St', mailingAddress: '505 Maple St' },
-  { id: 9, studentName: 'Grace', dob: '2008-09-09', citizenship: 'GER', language: 'German', passportExpiry: '2032-09-09', email: 'grace@example.com', contactNo: '9012345678', agent: 'Agent I', residentialAddress: '606 Willow St', mailingAddress: '606 Willow St' },
-  { id: 10, studentName: 'Heidi', dob: '2009-10-10', citizenship: 'FRA', language: 'French', passportExpiry: '2033-10-10', email: 'heidi@example.com', contactNo: '0123456789', agent: 'Agent J', residentialAddress: '707 Ash St', mailingAddress: '707 Ash St' },
-  { id: 11, studentName: 'Ivan', dob: '2010-11-11', citizenship: 'RUS', language: 'Russian', passportExpiry: '2034-11-11', email: 'ivan@example.com', contactNo: '1234509876', agent: 'Agent K', residentialAddress: '808 Elm St', mailingAddress: '808 Elm St' },
-  { id: 12, studentName: 'Judy', dob: '2011-12-12', citizenship: 'BRA', language: 'Portuguese', passportExpiry: '2035-12-12', email: 'judy@example.com', contactNo: '2345610987', agent: 'Agent L', residentialAddress: '909 Pine St', mailingAddress: '909 Pine St' }
-];
+  constructor(private http: HttpClient) {}
 
-  getStudents(): Observable<Student[]> {
-    return of(this.students); // Return the dummy data as an observable
+  private buildUrl(path: string): string {
+    return `${this.apiUrl}/${path}`;
   }
 
-  submitStudentData(studentData: Student): Observable<any> {
-    console.log("Register student");
-    // Replace 'your-api-endpoint' with your actual API endpoint
-    return this.http.post('your-api-endpoint', studentData);
+  submitStudentData(studentData: Student) {
+    const url = this.buildUrl('Student');
+    console.log(studentData, "student data");
+    return this.http.post(url, studentData);
   }
 
-  updateStudentData(studentId: number, studentData: Student): Observable<any> {
-    console.log("Update student");
-    // Replace 'your-api-endpoint' with your actual API endpoint
-    return this.http.put(`your-api-endpoint/${studentId}`, studentData);
+  // Get a list of students with pagination, sorting, and searching
+  getStudentsList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean }): Observable<PaginatedResponse<Student>> {
+    let url = `${this.apiUrl}/Student?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
+    if (params.searchTerm) {
+      url += `&searchText=${params.searchTerm}`;
+    }
+    if (params.isDeleted !== undefined) {
+      url += `&isDeleted=${params.isDeleted}`;
+    }
+
+    return this.http.get<PaginatedResponse<Student>>(url).pipe(
+      tap(response => console.log('Fetched students:', response)),  // Log the full response
+      catchError(this.handleError<PaginatedResponse<Student>>('getStudentsList', {
+        data: [], 
+        pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+        status: 0, 
+        message: '' 
+      }))
+    );
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      return of(result as T);
+    };
+  }
+
+  getStudentById(id: number): Observable<Student> {
+    console.log(id, "service iddddddddddddddddddddd");
+    const url = this.buildUrl(`Student/byId?id=${id}`); // Correctly format the query parameter
+    return this.http.get<{ data: Student, status: number, message: string }>(url).pipe(
+      tap(response => console.log('Fetched student:', response)),
+      map(response => response.data), // Extract the student data
+      catchError(error => {
+        console.error('Error fetching student:', error);
+        return of(null); // Return a safe value or handle the error appropriately
+      })
+    );
   }
 
   deleteStudent(studentId: number): Observable<any> {
     console.log(`Delete student with id ${studentId}`);
-    // Replace 'your-api-endpoint' with your actual API endpoint
-    return this.http.delete(`your-api-endpoint/${studentId}`);
-  }
-  ///methods of student-document
-
-  submitStudentDocument(studentData: FormData): Observable<any> {
-    console.log("Submitting student data");
-    return this.http.post('your-api-endpoint', studentData);
-  }
-
-  updateStudentDocument(studentId: number, studentData: FormData): Observable<any> {
-    console.log("Updating student data");
-    return this.http.put(`your-api-endpoint/${studentId}`, studentData);
+    const url = this.buildUrl(`Student/byId?id=${studentId}`); // Correctly format the query parameter
+    return this.http.delete(url).pipe(
+      tap(response => console.log('Delete response:', response)),
+      catchError(error => {
+        console.error('Error deleting student:', error);
+        return throwError(() => new Error('Error deleting student')); // Return an observable with an error message
+      })
+    );
   }
 
-  // getStudentsList(): Observable<any> {
-  //   return this.http.get('/api/students');
-  // }
-  getStudentsList(): Observable<Student[]> {
-    return of(this.students); // Return the dummy data as an observable
+  updateStudentData(studentId: number, studentData: Student): Observable<any> {
+    console.log("Update student with id:", studentId, "and data:", studentData);
+    const url = this.buildUrl(`Student/${studentId}`); // Correctly format the URL with the student ID
+    return this.http.put(url, studentData).pipe(
+      tap(response => console.log('Update response:', response)),
+      catchError(error => {
+        console.error('Error updating student:', error);
+        return throwError(() => new Error('Error updating student')); // Return an observable with an error message
+      })
+    );
   }
 
+  // Methods for student-document-type
+  submitStudentDocument(formData: FormData): Observable<any> {
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value); // Logging the FormData content
+    });
+  
+    return this.http.post(`${this.apiUrl}/StudentDocument`, formData);
+  }
+  
+  getDocumentTypes(): Observable<{ data: any[], status: number, message: string }> {
+    return this.http.get<{ data: any[], status: number, message: string }>(`${this.apiUrl}/DocumentType/all`);
+  }
+  
+  
+  //METHODS OF  ADD STUDENTDOCUMENT and EDIT
+  getUploadedDocuments(studentId: number): Observable<any> {
+    const url = `${this.apiUrl}/StudentDocument/StudentId?StudentId=${studentId}`;
+    return this.http.get<any>(url).pipe(
+      map(response => response.data) // Extract the 'data' property from the response
+    );
+  }
+
+  getDocumentById(documentId: number): Observable<any> {
+    const url = `${this.apiUrl}/StudentDocument/${documentId}`;
+    return this.http.get<any>(url).pipe(
+      map(response => response.data) // Extract the 'data' property from the response
+    );
+  }
+
+  updateStudentDocument(documentId: number, documentData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/StudentDocument/${documentId}`, documentData)
+    .pipe(
+      catchError(error => {
+        console.error('Error updating document:', error);
+        return throwError(() => new Error('Error updating document')); // Return an observable with an error message
+      })
+    );
+  }
 }

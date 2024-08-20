@@ -15,6 +15,8 @@
           <div class="body">
             <form class="m-4" [formGroup]="documentForm" (ngSubmit)="onDocumentFormSubmit()">
               <div class="row">
+
+                <!-- Student Name Field -->
                 <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Student Name</mat-label>
@@ -23,31 +25,36 @@
                   </mat-form-field>
                 </div>
 
+                <!-- Student Phone Number Field -->
                 <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Student Phone Number</mat-label>
-                    <input matInput formControlName="contactNo"  readonly>
+                    <input matInput formControlName="contactNo" readonly>
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
                   </mat-form-field>
                 </div>
-                <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Document Type</mat-label>
-                    <mat-select formControlName="documentType" required>
-                      <mat-option value="passport">Passport</mat-option>
-                      <mat-option value="idCard">ID Card</mat-option>
-                      <mat-option value="birthCertificate">Birth Certificate</mat-option>
-                      <!-- Add more options as needed -->
-                    </mat-select>
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>description</mat-icon>
-                  </mat-form-field>
-                </div>
 
+                <!-- Document Type Dropdown -->
+                <mat-form-field class="example-full-width">
+                  <mat-label>Document Type</mat-label>
+                  <mat-select formControlName="documentType" required>
+                    <mat-option *ngFor="let type of documentTypes" [value]="type.id">
+                      {{ type.documentType }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>description</mat-icon>
+                </mat-form-field>
+
+
+                <!-- File Upload Component -->
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
                   <label>Upload</label>
                   <app-file-upload formControlName="file"></app-file-upload>
                 </div>
+
               </div>
+
+              <!-- Remarks Textarea -->
               <div class="row">
                 <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
@@ -57,19 +64,62 @@
                   </mat-form-field>
                 </div>
               </div>
+
+              <!-- Submit and Cancel Buttons -->
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                  <button class="btn-space"  [routerLink]="['/agent/list-students']" [disabled]="!documentForm.valid" mat-raised-button color="primary">
-                    {{ isFormPrefilled() ? 'Update Document' : 'Submit' }}
+                  <button class="btn-space" [disabled]="!documentForm.valid" mat-raised-button color="primary">
+                    {{ isEditMode ? 'Update' : 'Submit' }}
                   </button>
-                  <button type="button" mat-raised-button color="warn"  [routerLink]="['/agent/list-students']">Cancel</button>
+                  <button type="button" mat-raised-button color="warn" [routerLink]="['/agent/list-students']">Cancel</button>
                 </div>
               </div>
             </form>
+
+            <div class="row mt-4">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                  <div class="header mb-3">
+                    <h2>Document Type List</h2>
+                  </div>
+
+                  <!-- Uploaded Document Table -->
+                  <table class="table table-hover table-resposive" *ngIf="uploadedDocument$ | async as document">
+
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Sr No.</th>
+                        <th>Document Type</th>
+                        <th>Remarks</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td data-label="Sr No.">1</td> <!-- Fixed serial number since it's a single document -->
+                        <td data-label="Document Type">
+                          {{ getDocumentTypeName(document.documentTypeId) }}
+                        </td>
+                        <td data-label="Remarks">{{ document.remarks }}</td>
+                        <td data-label="Actions">
+                          <button mat-icon-button color="primary" (click)="viewDocument(document.file)">
+                            <mat-icon>visibility</mat-icon>
+                          </button>
+                          <button mat-icon-button color="primary" (click)="editDocument(document.id)">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </td>
+                        
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </section>

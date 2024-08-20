@@ -21,19 +21,6 @@
                       <input matInput formControlName="adminRole" required appCustomValidator="adminRole">
                     </mat-form-field>
                   </div>
-                  
-  
-  
-                
-  
-                <div class="row">
-                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                    <mat-checkbox class="example-margin" formControlName="termcondition" appCustomValidator>
-                      I accept terms and conditions
-                    </mat-checkbox>
-                  </div>
-                </div>
-  
                 <div class="row">
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                     <button class="btn-space" [disabled]="!thirdForm?.valid" mat-raised-button color="primary">Submit</button>

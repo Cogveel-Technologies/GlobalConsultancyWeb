@@ -1,0 +1,9 @@
+<div>
+    <span *ngFor="let field of sortFields" (click)="sort(field)" class="sortable-header" class="text-nowrap">
+      {{ field }}
+      <mat-icon *ngIf="sortField === field && sortDirection === 'asc'"  class="allign">arrow_upward</mat-icon>
+      <mat-icon *ngIf="sortField === field && sortDirection === 'desc'"  class="allign">arrow_downward</mat-icon>
+      <mat-icon *ngIf="sortField !== field"  class="allign">arrow_upward</mat-icon> <!-- Default icon -->
+    </span>
+  </div>
+   

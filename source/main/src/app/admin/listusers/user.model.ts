@@ -8,5 +8,6 @@ export interface User {
     gender: string;
     email: string;
     address: string;
+    phoneNumber: string;
   }
   

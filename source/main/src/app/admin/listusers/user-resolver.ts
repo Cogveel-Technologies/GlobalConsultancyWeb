@@ -1,39 +1,23 @@
-// user-resolver.service.ts
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AdminService } from '../admin.service';
-// import { User } from '../models/user.model';
 import { User } from './user.model';
-
 
 @Injectable({
   providedIn: 'root'
 })
-// export class UserResolver implements Resolve<User[]> {
-//   constructor(private adminService: AdminService) {}
-
-//   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User[]> {
-    
-//     return this.adminService.getUsers();
-//   }
-// }
-export class UserResolver implements Resolve<User[]> {
+export class UserResolver implements Resolve<User | null> {
   constructor(private adminService: AdminService) {}
 
- 
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User | null> {
+    const userId = route.queryParams['id'];
+    console.log(userId, "resolver...");
+    
 
-  resolve(): Observable<User[]> {
-    const data = this.adminService.getUsers();
-    
-    data.subscribe(users => {
-      console.log(users, "view resolvermmmmmmmmmmmmmmmmmmmmmmmmmmm");
-    });
-    
-    return data;
+    if (userId) {
+      return this.adminService.getUserById(+userId);
+    }
+    return of(null);
   }
 }
-// resolve(): Observable<User[]> {
-//   return this.adminService.getUsers();
-// }
-// }

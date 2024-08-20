@@ -98,6 +98,14 @@ export const ROUTES: RouteInfo[] = [
         groupTitle: false,
         submenu: []
       },
+      {
+        path: 'admin/documenttype',
+        title: 'MENUITEMS.ADMIN.LIST.DOCUMENT_TYPE',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        submenu: []
+      },
     ]
   },
   {
