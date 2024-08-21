@@ -1,5 +1,63 @@
-.login-form{
-    margin: 5em auto;
-    width: 90%;
-    overflow: hidden;
-}
+/* Custom background gradient */
+.bg-gradient {
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
+  }
+  
+  /* Card styling */
+  .card {
+    border-radius: 15px;
+  }
+  
+  .card-body {
+    padding: 2rem;
+  }
+  
+  .btn-primary {
+    background-color: #ff416c;
+    border-color: #ff416c;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  
+  .btn-primary:hover {
+    background-color: #ff4b2b;
+    border-color: #ff4b2b;
+  }
+  
+  .form-control {
+    border-radius: 10px;
+  }
+  
+  .form-control:focus {
+    border-color: #ff416c;
+    box-shadow: 0 0 0 0.25rem rgba(255, 65, 108, 0.25);
+  }
+  
+  /* Link styling */
+  a.text-primary {
+    color: #ff416c !important;
+    transition: color 0.3s;
+  }
+  
+  a.text-primary:hover {
+    color: #ff4b2b !important;
+  }
+  
+  .list-inline-item a {
+    color: #ff416c;
+    transition: color 0.3s;
+  }
+  
+  .list-inline-item a:hover {
+    color: #ff4b2b;
+  }
+  
+  /* Form label styling with icons */
+  .form-floating label i {
+    margin-right: 10px;
+    color: #ff416c;
+  }
+  
+  .form-floating label {
+    display: flex;
+    align-items: center;
+  }
