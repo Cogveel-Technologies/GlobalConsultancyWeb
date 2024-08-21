@@ -21,6 +21,11 @@ export class IntakesListComponent {
   defaultData:ConsultancyDetailsOptions
   pageSize:number;
   currentPage:number;
+  selectedAllOptions:boolean=false;
+
+  programs: string[] = ['Program 1', 'Program 2', 'Program 3'];
+  institutes: string[] = ['Institute 1', 'Institute 2', 'Institute 3'];
+  sessions: string[] = ['Session 1', 'Session 2', 'Session 3'];
 
 
   // get all data

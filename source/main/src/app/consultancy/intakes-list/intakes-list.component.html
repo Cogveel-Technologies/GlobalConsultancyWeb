@@ -5,8 +5,51 @@
             <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
             </app-breadcrumb>
         </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card p-4">
+                    <div class="horizontal-form">
+                        <mat-form-field appearance="fill" class="form-field">
+                            <mat-label>Program</mat-label>
+                            <mat-icon matPrefix>school</mat-icon>
+                            <mat-select formControlName="program">
+                                <mat-option *ngFor="let program of programs" [value]="program">
+                                    {{ program }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
 
-        <div class="row">
+                        <mat-form-field appearance="fill" class="form-field">
+                            <mat-label>Institute</mat-label>
+                            <mat-icon matPrefix>business</mat-icon>
+                            <mat-select formControlName="institute">
+                                <mat-option *ngFor="let institute of institutes" [value]="institute">
+                                    {{ institute }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="form-field">
+                            <mat-label>Session</mat-label>
+                            <mat-icon matPrefix>calendar_today</mat-icon>
+                            <mat-select formControlName="session">
+                                <mat-option *ngFor="let session of sessions" [value]="session">
+                                    {{ session }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <button mat-raised-button color="primary" class="search-button">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row" *ngIf="selectedAllOptions">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="materialTableHeader">
@@ -38,7 +81,7 @@
             </div>
         </div>
 
-        <div class="row clearfix">
+        <div class="row clearfix" *ngIf="selectedAllOptions">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="header">
