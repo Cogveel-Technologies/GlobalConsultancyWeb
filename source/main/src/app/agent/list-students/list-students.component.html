@@ -111,12 +111,11 @@
               </tbody>
             </table>
              
-            <app-pagination 
+            <app-pagination
             [length]="totalStudents"
-             [pageSize]="pageSize" 
-             [pageSizeOptions]="pageSizeOptions" 
-             (pageChange)="onPageChange($event)">
-            </app-pagination>
+            [pageSize]="pageSize"
+            (pageChange)="onPageChange($event)">
+          </app-pagination>
             
           </div>
         </div>
