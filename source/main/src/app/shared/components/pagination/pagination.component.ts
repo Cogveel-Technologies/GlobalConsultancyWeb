@@ -1,9 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { ConsultancyDetailsOptions } from 'app/consultancy/consultancy-models/data.consultancy-get-options';
-import { ConsultancyApi } from 'app/consultancy/consultancy-services/api.service';
-import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
-
+export const PAGE_SIZE_OPTIONS = [5, 10, 25, 100]; // Define and export the array
 
 @Component({
   selector: 'app-pagination',
@@ -11,10 +8,12 @@ import { ConsultancyService } from 'app/consultancy/consultancy-services/consult
   styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent {
+  
   @Input() length: number;
-  @Input() pageSize: number;
-  @Input() pageSizeOptions: number[];
+  @Input() pageSize: number = 5; // Default to the first value in pageSizeOptions
   @Output() pageChange = new EventEmitter<PageEvent>();
+
+  pageSizeOptions = PAGE_SIZE_OPTIONS; // Use the exported array
 
   onPageChange(event: PageEvent) {
     this.pageChange.emit(event);
