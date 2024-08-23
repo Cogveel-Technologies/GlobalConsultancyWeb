@@ -31,8 +31,10 @@ export class IntakesListComponent {
   // get all data
   ngOnInit(){
     this.defaultData = this.consultancyService.defaultRenderData();
-    this.intakes = this.consultancyApiService.getIntakes(this.pageSize,this.currentPage,this.defaultData);
+    this.intakes = this.consultancyApiService.getIntakes(this.defaultData);
   }
+
+ 
 
   addProgram(){}
 

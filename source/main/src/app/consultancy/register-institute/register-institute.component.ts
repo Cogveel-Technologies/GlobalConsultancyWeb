@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Subscription, tap } from 'rxjs';
+import {  Subscription, tap } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 
 @Component({

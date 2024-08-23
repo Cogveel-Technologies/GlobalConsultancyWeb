@@ -2,13 +2,14 @@ import { HttpClient, HttpEvent, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from 'environments/environment';
 import { ConsultancyData } from "../consultancy-models/data.consultancy";
-import { filter, map, Observable, tap } from "rxjs";
+import { map, Observable, tap } from "rxjs";
 import { ConsultancyDetailsOptions } from "../consultancy-models/data.consultancy-get-options";
 import { InstituteData } from "../consultancy-models/data.institute";
 import { ProgramData } from "../consultancy-models/data.program";
 import { IntakeData } from "../consultancy-models/data.intake";
 import { SessionData } from "../consultancy-models/data.session";
 import { loginService } from "app/login.service";
+import { SpecificInstitutes } from "../consultancy-models/data.specificInstitutes";
 
 @Injectable({
     providedIn: 'root'
@@ -26,8 +27,8 @@ export class ConsultancyApi {
         return this.http.post(`${this.baseUrl}/Consultancy`, data)
     }
     // --------  get-consultancies (paginated) ----------
-    getConsultancy(limit: number, currentPage: number, data: ConsultancyDetailsOptions): Observable<ConsultancyData[]> {
-        return this.http.get<ConsultancyData[]>(`${this.baseUrl}/Consultancy?limit=${limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${currentPage}`)
+    getConsultancy( data: ConsultancyDetailsOptions): Observable<ConsultancyData[]> {
+        return this.http.get<ConsultancyData[]>(`${this.baseUrl}/Consultancy?limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
     }
     // --------  get-all-consultancies ----------
     getAllConsultancies(): Observable<ConsultancyData[]> {
@@ -53,16 +54,16 @@ export class ConsultancyApi {
         return this.http.post(`${this.baseUrl}/Institute`, data)
     }
     // ------------- display-institutes -------------
-    getInstitutes(limit: number, currentPage: number, data: ConsultancyDetailsOptions): Observable<InstituteData[]> {
-        return this.http.get<InstituteData[]>(`${this.baseUrl}/Institute?limit=${limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${currentPage}`)
+    getInstitutes(data: ConsultancyDetailsOptions): Observable<InstituteData[]> {
+        return this.http.get<InstituteData[]>(`${this.baseUrl}/Institute?ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
         .pipe(map(res => {
             return res['data']
-            // return res.filter(el => el['consultancyId'] === +localStorage.getItem('id'));
         }))
     } 
-    // --------  get-all-institutes ----------
-    getAllInstitutes(): Observable<ConsultancyData[]> {
-        return this.http.get<Observable<ConsultancyData[]>>(`${this.baseUrl}/Institute/All`).pipe(map(response => response['data']), tap(res=>console.log(res)))
+    
+    // ------------- get specific institutes related to loggedin consultancy ------------- ----------
+    getSpecificInstitutes(consultancyId:string): Observable<SpecificInstitutes[]> {
+        return this.http.get<Observable<SpecificInstitutes[]>>(`${this.baseUrl}/Institute/All?ConsultancyId=${consultancyId}`).pipe(map(response => response['data']))
     }
     // ------------- delete-institute -----------------
     deleteInstitute(id: number) {
@@ -83,8 +84,8 @@ export class ConsultancyApi {
         return this.http.post(`${this.baseUrl}/Program`, data)
     }
     // ------------- display-programs -------------
-    getPrograms(limit: number, currentPage: number, data: ConsultancyDetailsOptions): Observable<ProgramData[]> {
-        return this.http.get<ProgramData[]>(`${this.baseUrl}/Program?InstituteId=${data.InstituteId}&limit=${limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${currentPage}`).pipe(map(response => response['data']))
+    getPrograms( data: ConsultancyDetailsOptions): Observable<ProgramData[]> {
+        return this.http.get<ProgramData[]>(`${this.baseUrl}/Program?InstituteId=${data.InstituteId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`).pipe(map(response => response['data']))
     }
     // ------------- delete-Program -----------------
     deleteProgram(id: number) {
@@ -99,14 +100,18 @@ export class ConsultancyApi {
     getProgramDetails(id: number): Observable<ProgramData> {
         return this.http.get<Observable<ProgramData>>(`${this.baseUrl}/Program/byId?Id=${id}`).pipe(map(res => res['data']))
     }
+     // ------------- get specific institutes related to loggedin consultancy ------------- ----------
+     getSpecificPrograms(consultancyId:string): Observable<SpecificInstitutes[]> {
+        return this.http.get<Observable<SpecificInstitutes[]>>(`${this.baseUrl}/Institute/All?ConsultancyId=${consultancyId}`).pipe(map(response => response['data']))
+    }
     ///////////////////////////////////////////// INTAKES /////////////////////////////////////////////////
     // --------- register-intake ------------------
     registerIntake(data: IntakeData) {
         return this.http.post(`${this.baseUrl}/Intake`, data)
     }
     // ------------------- display-intakes ----------------
-    getIntakes(limit: number, currentPage: number, data: ConsultancyDetailsOptions): Observable<IntakeData[]> {
-        return this.http.get<IntakeData[]>(`${this.baseUrl}/Intake?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&limit=${limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${currentPage}`).pipe(map(response => response['data']))
+    getIntakes( data: ConsultancyDetailsOptions): Observable<IntakeData[]> {
+        return this.http.get<IntakeData[]>(`${this.baseUrl}/Intake?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`).pipe(map(response => response['data']))
     }
     // ------------- delete-Intake -----------------
     deleteIntake(id: number) {
@@ -127,8 +132,8 @@ export class ConsultancyApi {
         return this.http.post(`${this.baseUrl}/session`, data)
     }
     // ------------------- display-session ----------------
-    getsession(limit: number, currentPage: number, data: ConsultancyDetailsOptions): Observable<SessionData[]> {
-        return this.http.get<SessionData[]>(`${this.baseUrl}/Session?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&limit=${limit}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${currentPage}`).pipe(map(response => response['data']))
+    getsession( data: ConsultancyDetailsOptions): Observable<SessionData[]> {
+        return this.http.get<SessionData[]>(`${this.baseUrl}/Session?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`).pipe(map(response => response['data']))
     }
     // ------------- delete-session -----------------
     deletesession(id: number) {
@@ -141,5 +146,9 @@ export class ConsultancyApi {
     // --------- single-session-details ------------------
     getsessionDetails(id: number): Observable<SessionData> {
         return this.http.get<Observable<SessionData>>(`${this.baseUrl}/Session/byId?Id=${id}`).pipe(map(res => res['data']))
+    }
+    // ------------------------ Country Api ---------------------------------
+    getAllCountries(){
+        return this.http.get(`${this.baseUrl}/Country/All`).pipe(map(res => res['data']))
     }
 }

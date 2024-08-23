@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ProgramData } from '../consultancy-models/data.program';
-import { ProgramService } from '../consultancy-services/program.service';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
-import { Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
+import { SpecificInstitutes } from '../consultancy-models/data.specificInstitutes';
+import { FormControl, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -23,19 +24,27 @@ export class ProgramListComponent {
     },
   ];
 
-  constructor(private router: Router, private route:ActivatedRoute, private programService:ProgramService, private consultancyApiService:ConsultancyApi, private consultancyService:ConsultancyService) { }
+  constructor(private router: Router, private consultancyApiService:ConsultancyApi) { }
   editMode:boolean;
   programs!:Observable<ProgramData[]>;
   defaultData:ConsultancyDetailsOptions;
-  pageSize:number;
-  currentPage:number;
+  consultancyId:string = localStorage.getItem("id");
+  selectedInstitute:boolean=false;
+  institutes:Observable<string[]>;
+  instituteForm:FormGroup
 
 
   ngOnInit() { 
-    // call get api here to show default list of program data
-    this.defaultData = this.consultancyService.defaultRenderData()
-    this.programs = this.consultancyApiService.getPrograms(this.pageSize,this.currentPage,this.defaultData)
+    this.instituteForm = new FormGroup({
+      instituteList: new FormControl(),
+    })
+
+   this.institutes = this.consultancyApiService.getSpecificPrograms(this.consultancyId).pipe(map(res=>{
+    return res.map(el=> el.name)
+   }))
   }
+
+  onSubmit(){}
 
   addProgram() {
     this.router.navigate(['consultancy/register-program'])
@@ -57,8 +66,6 @@ export class ProgramListComponent {
 
   editConsultancy(userId: number) {
     this.router.navigate(['consultancy/register-consultancy'],{queryParams:{editMode:true}})
-    
-
   }
 
  

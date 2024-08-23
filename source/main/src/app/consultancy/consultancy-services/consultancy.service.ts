@@ -18,16 +18,23 @@ export class ConsultancyService {
   data: ConsultancyData[];
   editMode: boolean = false;
   editId = new BehaviorSubject<number|null>(null);
+  pageSizeOptions = [5, 10, 25, 100]; // Dropdown options for page size
+
+
 
 
   defaultRenderData(): ConsultancyDetailsOptions {
     const defaultData = {
       OrderBy: 'id',
       sortExpression: 'asc',
+      pageSize: this.pageSizeOptions[0],
+      currentPage:1,
+      totalElements:0,
       searchText:'',
       InstituteId:'',
       ProgramId:'',
       SessionId:'',
+      ConsultancyId:''
     }
     return defaultData
   }

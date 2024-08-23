@@ -35,9 +35,6 @@ export class ConsultancyListComponent implements OnInit {
   consultancies!: Observable<ConsultancyData[]>;
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   length: number;
-  currentPage: number = 1;
-  paginationOptions: number[] = [5, 10, 25, 100];
-  pageSize: number = this.paginationOptions[0];
   search = new FormControl();
   searchText$ = this.search.valueChanges.pipe(startWith(''));
   private subscriptions: Subscription = new Subscription();
@@ -46,10 +43,10 @@ export class ConsultancyListComponent implements OnInit {
 
 
 
-  getConsultancies(limit: number, currentPage: number, params: ConsultancyDetailsOptions) {
-    return this.consultancyApiService.getConsultancy(limit, currentPage, params).pipe(tap(res => {
+  getConsultancies(params: ConsultancyDetailsOptions) {
+    return this.consultancyApiService.getConsultancy(params).pipe(tap(res => {
       if(res['data']){
-      this.currentPage = res['pageInfo']['currentPage'] + 1;
+      // this.currentPage = res['pageInfo']['currentPage'] + 1;
       }
     }), map(res => res['data']));
   }
@@ -57,7 +54,7 @@ export class ConsultancyListComponent implements OnInit {
   ngOnInit() {
 
     // Retrieve consultancy data
-    this.consultancies = this.getConsultancies(this.pageSize, this.currentPage, this.defaultData);
+    this.consultancies = this.getConsultancies(this.defaultData);
 
     // latest values emitted
     this.consultancies = combineLatest([this.searchText$])
@@ -66,7 +63,7 @@ export class ConsultancyListComponent implements OnInit {
       distinctUntilChanged(),
       switchMap(([searchTerm]) => {
         this.defaultData.searchText = searchTerm || '';
-        return this.getConsultancies(this.pageSize, this.currentPage, this.defaultData);
+        return this.getConsultancies(this.defaultData);
       })
     );
   
@@ -82,7 +79,7 @@ export class ConsultancyListComponent implements OnInit {
     const con = confirm("Are you sure?");
     if (con) {
       this.consultancyApiService.deleteConsultancy(id).subscribe(res => {
-        this.consultancies = this.getConsultancies(this.pageSize, this.currentPage, this.defaultData);
+        this.consultancies = this.getConsultancies(this.defaultData);
       });
     }
   }

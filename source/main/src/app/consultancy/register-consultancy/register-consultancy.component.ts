@@ -82,6 +82,7 @@ export class RegisterConsultancyComponent {
       this.subscriptions.add(this.consultancyApiService.registerConsultancy(newDetails).subscribe(res=> {
         if(res['status'] < 400 && res['status'] >= 200){
           this.navigateToConsultancyList()
+          console.log(res)
         }
       }))
       
