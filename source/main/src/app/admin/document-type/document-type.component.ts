@@ -138,34 +138,3 @@ export class DocumentTypeComponent implements OnInit {
   }
 }
 
-
-
-
-
-
-// onDocumentFormSubmit() {
-//   if (this.documentForm.valid) {
-//     const documentData = {
-//       documenttype: this.documentForm.get('documenttype').value
-//     };
-    
-//     this.adminService.uploadDocument(documentData).subscribe(
-//       (response) => {
-//         console.log('Document submission successful', response);
-//         // this.documentForm.reset();  // Reset the form after submission
-//         this.loadDocuments();  // Reload documents after submission
-
-//         // Show success snackbar
-//         this.snackBar.open('Document submitted successfully!', 'Close', {
-//           duration: 3000,
-//           horizontalPosition: 'center',
-//           verticalPosition: 'bottom',
-//           panelClass: ['snackbar-success']  // Custom style class
-//         });
-//       },
-//       (error) => {
-//         console.error('Document submission failed', error);
-//       }
-//     );
-//   }
-// }

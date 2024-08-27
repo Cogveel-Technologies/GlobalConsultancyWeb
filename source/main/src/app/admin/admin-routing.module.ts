@@ -10,6 +10,7 @@ import { ViewUserComponent } from './listusers/view-user/view-user.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { SortingComponent } from '@shared/components/sorting/sorting.component';
 import { DocumentTypeComponent } from './document-type/document-type.component';
+import { ListRolesComponent } from './list-roles/list-roles.component';
 
 const routes: Routes = [
   {
@@ -53,6 +54,10 @@ const routes: Routes = [
   {
     path: 'listroles',
     component: RolesComponent
+  },
+  {
+    path: 'listrole',
+    component: ListRolesComponent
   }
 ];
 

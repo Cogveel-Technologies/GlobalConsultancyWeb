@@ -22,6 +22,7 @@ import { RolesComponent } from './roles/roles.component';
 // import { LoginComponent } from './login/login.component';
 import { ViewUserComponent } from './listusers/view-user/view-user.component';
 import { DocumentTypeComponent } from './document-type/document-type.component';
+import { ListRolesComponent } from './list-roles/list-roles.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { DocumentTypeComponent } from './document-type/document-type.component';
     // LoginComponent,
     ViewUserComponent,
     DocumentTypeComponent,
+    ListRolesComponent,
 
   ],
   imports: [
