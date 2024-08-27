@@ -23,10 +23,10 @@
       "TEXT": "Admin",
       "LIST": {
         "ADD_USERS": "Add Users",
-        "LIST_USERS": "List Users",
+        "LIST_USERS": "Users",
         "ADD_AGENTS": "Add Agents",
         "LIST_AGENTS": "List Agents",
-        "LIST_ROLES": "List Roles",
+        "LIST_ROLES": "Roles",
         "LIST_LOGIN": "Login",
         "DOCUMENT_TYPE": "Document Type"
       }
@@ -35,7 +35,7 @@
       "TEXT": "Agent",
       "LIST": {
         "REGISTER_STUDENT": "Register Student",
-        "LIST_STUDENTS": "List Students",
+        "LIST_STUDENTS": "Students",
         "STUDENT_APPLICATION": "Student Application",
         "STUDENT_APPLICATION_LIST": "Student Application List",
         "STUDENT_DOCUMENT": "Student Document",

@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Student } from 'app/agent/models/student.model';
 import { AgentService } from 'app/agent/agent.service';
+import { PaginatedResponse } from 'app/agent/agent.service';// Import the PaginatedResponse interface
+
+import { StudentDocument } from 'app/agent/models/studentDocument.model';
 
 @Component({
   selector: 'app-view-student',
@@ -20,7 +23,8 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   ];
 
   documentTypes: any[] = []; 
-  uploadedDocument$: Observable<any>;
+  // uploadedDocument$: Observable<any>;
+  uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>; // Correctly define the Observable
   
   private subscriptions: Subscription = new Subscription();  // Manage all subscriptions
 
