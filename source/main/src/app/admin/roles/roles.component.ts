@@ -1,6 +1,6 @@
-// import { Component } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-roles',
@@ -18,7 +18,7 @@ export class RolesComponent {
     },
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private adminservice: AdminService) {
     this.initThirdForm();
   }
 

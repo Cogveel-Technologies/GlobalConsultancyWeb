@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject, throwError } from 'rxjs'; // Import throwError
 import { Student } from './models/student.model';
 import { tap, map, catchError } from 'rxjs/operators';
+import { StudentDocument } from './models/studentDocument.model';
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -115,12 +116,27 @@ export class AgentService {
   
   
   //METHODS OF  ADD STUDENTDOCUMENT and EDIT
-  getUploadedDocuments(studentId: number): Observable<any> {
-    const url = `${this.apiUrl}/StudentDocument/StudentId?StudentId=${studentId}`;
-    return this.http.get<any>(url).pipe(
-      map(response => response.data) // Extract the 'data' property from the response
+  // getUploadedDocuments(studentId: number): Observable<any> {
+  //   const url = `${this.apiUrl}/StudentDocument/StudentId?StudentId=${studentId}`;
+  //   return this.http.get<any>(url).pipe(
+  //     map(response => response.data) // Extract the 'data' property from the response
+  //   );
+  // }
+  
+  getUploadedDocuments(params: { studentId: number, limit: number, orderBy: string, sortExpression: string, currentPage: number, isDeleted: boolean }): Observable<PaginatedResponse<StudentDocument>> {
+    let url = `${this.apiUrl}/StudentDocument?StudentId=${params.studentId}&limit=${params.limit}&OrderBy=${params.orderBy}&sortExpression=${params.sortExpression}&CurrentPage=${params.currentPage}&isDeleted=${params.isDeleted}`;
+  
+    return this.http.get<PaginatedResponse<StudentDocument>>(url).pipe(
+      tap(response => console.log('Fetched documents:', response)),  // Log the full response
+      catchError(this.handleError<PaginatedResponse<StudentDocument>>('getUploadedDocuments', {
+        data: [], 
+        pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+        status: 0, 
+        message: '' 
+      }))
     );
   }
+  
 
   getDocumentById(documentId: number): Observable<any> {
     const url = `${this.apiUrl}/StudentDocument/${documentId}`;

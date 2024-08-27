@@ -128,6 +128,8 @@ export class AdminService {
 addDocumentType(documentData: any): Observable<any> {
   return this.http.post<any>(`${this.apiUrl}/DocumentType`, documentData);
 }
+
+ 
 getDocuments(): Observable<{ data: any[], status: number, message: string }> {
   return this.http.get<{ data: any[], status: number, message: string }>(`${this.apiUrl}/DocumentType/all`);
 }

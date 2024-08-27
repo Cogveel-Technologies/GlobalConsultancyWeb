@@ -103,9 +103,12 @@
               </tbody>
             </table>
             <!-- Other HTML code for the component -->
-
-            <app-pagination [length]="totalUsers" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (pageChange)="onPageChange($event)">
-            </app-pagination>
+            <app-pagination
+            [length]="totalUsers"
+            [pageSize]="pageSize"
+            (pageChange)="onPageChange($event)">
+          </app-pagination>
+          
           </div>
         </div>
       </div>

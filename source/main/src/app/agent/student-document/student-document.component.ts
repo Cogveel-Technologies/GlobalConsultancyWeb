@@ -5,7 +5,9 @@ import { AgentService } from '../agent.service';
 import { Router } from '@angular/router';
 import { Student } from 'app/agent/models/student.model';
 import { Observable, Subscription } from 'rxjs';
+import { PaginatedResponse } from '../agent.service'; // Import the PaginatedResponse interface
 
+import { StudentDocument } from '../models/studentDocument.model';
 @Component({
   selector: 'app-student-document',
   templateUrl: './student-document.component.html',
@@ -14,7 +16,8 @@ import { Observable, Subscription } from 'rxjs';
 export class StudentDocumentComponent implements OnInit, OnDestroy {
   documentForm: FormGroup;
   documentTypes: any[] = [];  
-  uploadedDocument$: Observable<any>;  // Observable to hold the single uploaded document
+
+  uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>; // Correctly define the Observable
   breadscrums = [
     {
       title: 'Student Details',
@@ -89,10 +92,17 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
 
   loadUploadedDocument() {
     if (this.student) {
-      this.uploadedDocument$ = this.agentService.getUploadedDocuments(this.student.id);
+      this.uploadedDocument$ = this.agentService.getUploadedDocuments({
+        studentId: this.student.id,
+        limit: 10, // You can adjust this value as needed
+        orderBy: 'Id', // You can change this to the appropriate field name
+        sortExpression: 'desc', // Sort order
+        currentPage: 1, // The page number you want to load
+        isDeleted: false // Set this based on whether you want to include deleted records
+      });
     }
   }
-
+  
   onDocumentFormSubmit() {
     if (this.documentForm.valid && this.student) {
       const documentTypeId = this.documentForm.get('documentType')?.value;
