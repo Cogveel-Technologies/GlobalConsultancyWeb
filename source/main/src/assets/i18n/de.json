@@ -28,7 +28,8 @@
         "LIST_AGENTS": "List Agents",
         "LIST_ROLES": "Roles",
         "LIST_LOGIN": "Login",
-        "DOCUMENT_TYPE": "Document Type"
+        "DOCUMENT_TYPE": "Document Type",
+        "CONSULTANCY": "Consultancy"
       }
     },
     "AGENT": {
