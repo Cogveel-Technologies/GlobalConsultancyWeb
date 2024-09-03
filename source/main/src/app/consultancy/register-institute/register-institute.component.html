@@ -44,10 +44,14 @@
                   </mat-form-field>
                 </div>
                 <div class="col-md-6 mb-1">
-                  <mat-form-field appearance="fill" class="example-full-width">
-                    <mat-label>Country</mat-label>
-                    <input matInput formControlName="country" required appCustomValidator="country">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>public</mat-icon>
+                  <mat-form-field appearance="fill" class="w-100 mb-0">
+                    <mat-label>Select a country</mat-label>
+                    <mat-icon matPrefix>home</mat-icon>
+                    <mat-select formControlName="countryId" (selectionChange)="onCountryChange($event)" >
+                      <mat-option *ngFor="let country of (countries | async)" [value]="country.id" required>
+                        {{ country.countryName }}
+                      </mat-option>
+                    </mat-select>
                   </mat-form-field>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 export interface SessionData {
-    Id:number,
-    SessionName:string,
-    InstituteId:number,
-    Year:string
+    id:number,
+    sessionName:string,
+    instituteId:number,
+    year:string
 }

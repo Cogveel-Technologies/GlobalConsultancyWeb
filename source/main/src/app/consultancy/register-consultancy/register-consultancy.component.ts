@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { InstituteData } from '../consultancy-models/data.institute';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ToastrService } from 'ngx-toastr';
-import { ConsultancyServdece } from '../consultancy.service';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 
 
@@ -82,6 +81,7 @@ export class RegisterConsultancyComponent {
       this.subscriptions.add(this.consultancyApiService.registerConsultancy(newDetails).subscribe(res=> {
         if(res['status'] < 400 && res['status'] >= 200){
           this.navigateToConsultancyList()
+          console.log(res)
         }
       }))
       

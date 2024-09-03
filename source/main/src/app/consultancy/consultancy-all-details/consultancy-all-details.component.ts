@@ -21,11 +21,6 @@ export class ConsultancyAllDetailsComponent {
   keys:string[];
   ngOnInit(){
     // receive data from resolver
-    this.details = this.route.snapshot.data['consultancyDetails'];
-
-    // transform the object into array
-     this.keys = Object.keys(this.details);
-     console.log(this.keys)
-    
+    this.details = this.route.snapshot.data['consultancyDetails']; 
   }
 }

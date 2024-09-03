@@ -1,20 +1,98 @@
-
 <section class="content">
-    <div class="container-fluid">
-        <div class="block-header" *ngFor="let breadscrum of breadscrums">
-            <!-- breadcrumb -->
-            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
-            </app-breadcrumb>
-        </div>
-        <div class="table body table-responsive">
-            <table class="table table-hover table-responsive">
-                <tr *ngFor="let key of keys">
-                    <ng-container *ngIf="key !== 'Id'">
-                        <th>{{key}}:</th>
-                        <td>{{details[key]}}</td>
-                    </ng-container>
-                </tr>
-            </table>
-        </div>
+  <div class="container-fluid">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
     </div>
+    <div class="row clearfix">
+      <div class="col-lg-3 col-md-12">
+        <div class="card">
+          <div class="m-b-20">
+            <div class="contact-grid">
+              <div class="profile-header bg-dark">
+                <div class="user-name">{{details.instituteName}}</div>
+                <!-- <div class="name-center">{{details.middleName}}</div> -->
+              </div>
+              <div class="position-relative">
+                <img src="assets/images/user/success.webp" class="profile-img user-img" alt="">
+                <mat-icon matSuffix class="profile-img-edit" matTooltip="Edit">edit</mat-icon>
+              </div>
+              <p>
+                <mat-icon>location_on</mat-icon> {{details.province}}
+              </p>
+              <div>
+                <span class="phone">
+                  <mat-icon>phone</mat-icon>{{details.phoneNo}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+            <mat-tab label="Basic Details">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-hover mt-2">
+                        <thead>
+                          <tr>
+                            <th>Field</th>
+                            <th>Details</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><mat-icon color="primary">school</mat-icon> Institute Name</td>
+                            <td>{{details.instituteName}}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">info</mat-icon> About Institute</td>
+                            <td>{{details.aboutInstitute}}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">place</mat-icon> Province</td>
+                            <td>{{details.province}}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">event</mat-icon> Year Established</td>
+                            <td>{{details.yearEstablished}}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">email</mat-icon> Email</td>
+                            <td>{{details.email}}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">phone</mat-icon> Phone Number</td>
+                            <td>{{details.phoneNo}}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">language</mat-icon> Website</td>
+                            <td>{{details.website}}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">linkedin</mat-icon> LinkedIn URL</td>
+                            <td>{{details.linkedInUrl}}</td>
+                          </tr>
+                          <tr>
+                            <td><mat-icon color="primary">facebook</mat-icon> Facebook URL</td>
+                            <td>{{details.fbUrl}}</td>
+                          </tr>
+                        </tbody>
+
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

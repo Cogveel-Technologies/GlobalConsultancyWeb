@@ -15,55 +15,30 @@
             </div>
             <div class="body">
               <form class="m-5" [formGroup]="registerIntake" (submit)="onSubmit()">
-                <div class="row">
-                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-1">
-                    <mat-form-field class="example-full-width">
-                      <mat-label>Select a program</mat-label>
-                      <mat-select formControlName="programId"  required>
-                        <mat-option *ngFor="let program of programs" [value]="program" >
-                          {{program}}
-                        </mat-option>
-                      </mat-select>
-                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>school</mat-icon>
-                    </mat-form-field>
-                  </div>
-                </div>
+                
   
                 <div class="row">
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-1">
                     <mat-form-field appearance="fill" class="example-full-width">
-                      <mat-label>Select an institute</mat-label>
-                      <mat-select formControlName="instituteId" required>
-                        <mat-option *ngFor="let institute of institutes" [value]="institute">
-                          {{institute}}
-                        </mat-option>
-                      </mat-select>
-                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>account_balance</mat-icon>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-1">
-                    <mat-form-field appearance="fill" class="example-full-width">
                       <mat-label>Select a session</mat-label>
-                      <mat-select formControlName="sessionId" required>
-                        <mat-option *ngFor="let session of sessions" [value]="session">
-                          {{session}}
+                      <mat-select formControlName="sessionId" required (selectionChange)="onSessionChange($event)">
+                        <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
+                          {{session.name}}
                         </mat-option>
                       </mat-select>
                       <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>event</mat-icon>
                     </mat-form-field>
                   </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-1">
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-1">
                     <mat-form-field appearance="fill" class="example-full-width">
                       <mat-label>Year</mat-label>
                       <input matInput formControlName="year" required appCustomValidator="year">
-                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>group</mat-icon>
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>event</mat-icon>
                     </mat-form-field>
                   </div>
                 </div>
-  
+
+                
                 <div class="row">
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-1">
                     <mat-form-field appearance="fill" class="example-full-width">

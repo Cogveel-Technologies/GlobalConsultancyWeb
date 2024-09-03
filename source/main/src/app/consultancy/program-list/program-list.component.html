@@ -6,7 +6,45 @@
             </app-breadcrumb>
         </div>
 
-        <div class="row">
+            <div class="card p-4" *ngIf="!selectedOptions">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100 mb-0">
+                            <mat-label>Select an institute</mat-label>
+                            <mat-icon matPrefix>school</mat-icon>
+                            <mat-select  required (selectionChange)="onInstituteChange($event)">
+                                <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
+                                    {{ institute.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100 mb-0">
+                            <mat-label>Select a session</mat-label>
+                            <mat-icon matPrefix>school</mat-icon>
+                            <mat-select required (selectionChange)="onSessionChange($event)">
+                                <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
+                                    {{ session.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100 mb-0">
+                            <mat-label>Select an intake</mat-label>
+                            <mat-icon matPrefix>home</mat-icon>
+                            <mat-select required (selectionChange)="onIntakeChange($event)">
+                                <mat-option *ngFor="let intake of (intakes | async)" [value]="intake.id">
+                                    {{ intake.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+        <div class="row" *ngIf="selectedOptions">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="materialTableHeader">
@@ -16,9 +54,7 @@
                                     <h2>List of programs</h2>
                                 </li>
                                 <li class="tbl-search-box">
-                                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                                    <input placeholder="Search" type="text" #filter class="browser-default search-field"
-                                        aria-label="Search box">
+                                    <app-search [searchText]="search"></app-search>
                                 </li>
                             </ul>
                         </div>
@@ -38,24 +74,20 @@
             </div>
         </div>
 
-        <div class="row clearfix">
+        <div class="row clearfix" *ngIf="selectedOptions">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
-                    <div class="header">
-                        <h2>Hover Rows</h2>
-                    </div>
                     <div class="body table-responsive">
-                        <table class="table table-hover table-responsive" >
+                        <table class="table table-hover table-responsive" matSort (matSortChange)="onSortChange($event)">
                             <thead>
                                 <tr>
-                                    <th>Program Name</th>
-                                    <th>Duration</th>
-                                    <th>Application Fee</th>
-                                    <th>Tuition Fee</th>
-                                    <th>Level Of Education</th>
-                                    <th>Status</th>
-                                    <th>Program Category </th>
-                                    <th>Program Intake</th>
+                                    <th mat-sort-header="programName">Program Name</th>
+                                    <th mat-sort-header="duration">Duration</th>
+                                    <th mat-sort-header="applicationFee">Application Fee</th>
+                                    <th mat-sort-header="levelOfEducation">Level Of Education</th>
+                                    <th mat-sort-header="status">Status</th>
+                                    <th mat-sort-header="programCategory">Program Category </th>
+                                    <th mat-sort-header="programIntake">Program Intake</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -64,7 +96,6 @@
                                     <td data-label="Program Name">{{ program.programName }}</td>
                                     <td data-label="Duration">{{ program.duration }}</td>
                                     <td data-label="Application Fee">{{ program.applicationFee }}</td>
-                                    <td data-label="Tuition Fee">{{ program.tuitionFee }}</td>
                                     <td data-label="Level of Education">{{ program.levelOfEducation }}</td>
                                     <td data-label="Status">{{ program.status }}</td>
                                     <td data-label="Program Category ID">{{ program.programCategoryId }}</td>
@@ -86,7 +117,9 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+                        <app-pagination [pageSize]="defaultData.pageSize" (pageChange)="onPageChange($event)" [length]="records">
+                        </app-pagination>
+
                     </div>
                 </div>
             </div>

@@ -68,7 +68,8 @@ const routes: Routes = [
   {
     path: 'institution-list',
     component: InstitutionListComponent,
-  }, {
+  }, 
+  {
     path: 'register-program',
     component: RegisterProgramComponent
   }, {

@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, of, Subscription, switchMap } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
+import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
+import { Observable } from 'rxjs';
+import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
+import { ConsultancyService } from '../consultancy-services/consultancy.service';
 
 @Component({
   selector: 'app-register-intakes',
@@ -10,22 +14,27 @@ import { ConsultancyApi } from '../consultancy-services/api.service';
   styleUrls: ['./register-intakes.component.scss']
 })
 export class RegisterIntakesComponent {
-  editMode: boolean = false;
-  subscriptions: Subscription = new Subscription();
-  editId:number;
+
+  constructor(private route:ActivatedRoute, private consultancyApiService:ConsultancyApi, private router:Router, private consultancyService:ConsultancyService) {}
   breadscrums = [
     {
       title: 'Add Intake',
       items: ['Consultancy'],
       active: 'Add Intake',
     },
-  ]; //  breadcrumb data
-  programs = [12,13,1313,24]; //  program data
-  institutes = [33,2323,11,434,9]; //  institute data
-  sessions = [2323,11,243,21,1,2]; //  session data
+  ];
 
+  editMode: boolean = false;
+  subscriptions: Subscription = new Subscription();
+  consultancyId:string = localStorage.getItem("id");
+  editId:number;
+  defaultData:ConsultancyDetailsOptions = {...this.consultancyService.defaultRenderData()}
+  institutes: Observable<SpecificConsultancyRelated[]>;
+  sessions:Observable<SpecificConsultancyRelated[]>;
+  programs = [12,13,1313,24]; //  program data
   registerIntake: FormGroup;
-  constructor(private route:ActivatedRoute, private consultancyApiService:ConsultancyApi, private router:Router) {}
+  sessionId$:BehaviorSubject<number|null>= new BehaviorSubject<number|null>(null)
+
 
   ngOnInit(): void {
     // Initialize data for programs, institutes, sessions
@@ -36,27 +45,42 @@ export class RegisterIntakesComponent {
       noOfIntake: new FormControl(''),
       year: new FormControl('')
     });
-
+    
+    this.defaultData.ConsultancyId = this.consultancyId
+    this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData)
+    
     const editIntake = this.route.snapshot.data['editResponse'];
-    this.editId = +this.route.snapshot.paramMap.get('id');
     if (editIntake) {
+      this.editId = +this.route.snapshot.paramMap.get('id');
       this.editMode = true;
       this.registerIntake.patchValue(editIntake);
     }
+
+    combineLatest([this.sessionId$]).pipe(switchMap(([sessionId])=>{
+      if(sessionId){
+        this.defaultData.SessionId = String(sessionId);
+      return this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData)
+      }else{
+        return of([])
+      }
+    })).subscribe()
   }
+
+  onSessionChange(event:any){
+    console.log(event)
+  }
+ 
 
   onSubmit() {
     let newDetails = this.registerIntake.value;
-    console.log(newDetails)
-    console.log(this.editMode)
+    newDetails.consultancyId = this.consultancyId
+    
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateIntake(this.editId,newDetails).subscribe(res => {
-        alert("Updated Sucessfully")
         this.router.navigate(["consultancy", "intake-list"]);
       }))
     } else {
       this.subscriptions.add(this.consultancyApiService.registerIntake(newDetails).subscribe(res => {
-        alert("Registered Successfully")
         this.router.navigate(["consultancy", "intake-list"]);
       }))
      

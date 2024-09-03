@@ -6,10 +6,12 @@ import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from './material.module';
 import { FeatherIconsModule } from './components/feather-icons/feather-icons.module';
+import { CustomValidatorDirective } from 'app/custom-validator.directive';
 // import { PaginationComponent } from 'app/pagination/pagination.component';
 // import { SortingComponent } from 'app/sorting/sorting.component';
 @NgModule({
   declarations: [
+    CustomValidatorDirective,
     // PaginationComponent,
     // SortingComponent
   ],
@@ -20,7 +22,8 @@ import { FeatherIconsModule } from './components/feather-icons/feather-icons.mod
     ReactiveFormsModule,
     RouterModule,
     MaterialModule,
-    FeatherIconsModule
+    FeatherIconsModule,
+    CustomValidatorDirective
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

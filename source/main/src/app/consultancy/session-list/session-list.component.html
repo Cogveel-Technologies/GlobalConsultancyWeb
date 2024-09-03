@@ -5,21 +5,38 @@
             <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
             </app-breadcrumb>
         </div>
+         <!-- show when country is not selected -->
 
-        <div class="row">
+    <form [formGroup]="instituteListForm"  *ngIf="!instituteSelected">
+        <div class="card p-4" >
+          <div class="row g-3">
+            <div class="col-md-9">
+              <mat-form-field appearance="fill" class="w-100 mb-0">
+                <mat-label>Select an institute</mat-label>
+                <mat-icon matPrefix>home</mat-icon>
+                <mat-select formControlName="instituteList" required (selectionChange)="onInstituteChange($event)">
+                  <mat-option *ngFor="let institute of (institutes | async)" [value]="institute">
+                    {{ institute.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+  
+  
+
+        <div class="row" *ngIf="instituteSelected">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="materialTableHeader">
                         <div class="left">
                             <ul class="header-buttons-left ms-0">
                                 <li class="tbl-title me-2">
-                                    <h2>List of Intakes</h2>
+                                    <h2>List of Sessions</h2>
                                 </li>
-                                <li class="tbl-search-box">
-                                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                                    <input placeholder="Search" type="text" #filter class="browser-default search-field"
-                                        aria-label="Search box">
-                                </li>
+                                <app-search [searchText]="search"></app-search>
                             </ul>
                         </div>
                         <div class="right">
@@ -38,41 +55,36 @@
             </div>
         </div>
 
-        <div class="row clearfix">
+        <div class="row clearfix" *ngIf="instituteSelected">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
-                    <div class="header">
-                        <h2>Hover Rows</h2>
-                    </div>
                     <div class="body table-responsive">
-                        <table class="table table-hover table-responsive">
+                        <table class="table table-hover table-responsive" matSort (matSortChange)="onSortChange($event)">
                             <thead>
                                 <tr>
-                                    <th>Session Name</th>
-                                    <th>Institute Id</th>
-                                    <th>Year</th>
+                                    <th mat-sort-header="sessionName">Session Name</th>
+                                    <th mat-sort-header="year">Year</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let session of (sessions | async)">
-                                    <td data-label="Session Name">{{ session.SessionName }}</td>
-                                    <td data-label="Institute ID">{{ session.InstituteId }}</td>
-                                    <td data-label="Year">{{ session.Year }}</td>
+                                    <td data-label="Session Name">{{ session.sessionName }}</td>
+                                    <td data-label="Year">{{ session.year }}</td>
                                     <td data-label="Actions">
                                         <button mat-icon-button color="primary"
-                                            [routerLink]="['/consultancy/edit-session', session.Id]">
+                                            [routerLink]="['/consultancy/edit-session', session.id]">
                                             <mat-icon>edit</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="warn">
+                                        <button mat-icon-button color="warn" (click)=onDeleteSession(session.id)>
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
-                        </mat-paginator>
+                        <app-pagination [pageSize]="defaultData.pageSize" (pageChange)="onPageChange($event)" [length]="records">
+                        </app-pagination>
                     </div>
                 </div>
             </div>

@@ -1,12 +1,8 @@
-
 import { Injectable } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
 import { ConsultancyData } from "../consultancy-models/data.consultancy";
-import { ConsultancyApi } from "./api.service";
 import { ConsultancyDetailsOptions } from "../consultancy-models/data.consultancy-get-options";
 import { BehaviorSubject } from "rxjs";
-import { ToastrService } from "ngx-toastr";
-import { PageEvent } from "@angular/material/paginator";
+import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
 
 
 @Injectable({
@@ -14,30 +10,29 @@ import { PageEvent } from "@angular/material/paginator";
 })
 
 export class ConsultancyService {
-  constructor(private route: ActivatedRoute, private consultancyApiService: ConsultancyApi, private toastr:ToastrService, private router:Router) { }
+  constructor() { }
   data: ConsultancyData[];
-  editMode: boolean = false;
-  editId = new BehaviorSubject<number|null>(null);
+  selectedCountryName: BehaviorSubject<string> = new BehaviorSubject<string>('') 
+  pageSize:number = PAGE_SIZE_OPTIONS[0]
+
+
 
 
   defaultRenderData(): ConsultancyDetailsOptions {
     const defaultData = {
       OrderBy: 'id',
       sortExpression: 'asc',
+      pageSize: this.pageSize,
+      currentPage:1,
+      totalElements:0,
       searchText:'',
       InstituteId:'',
       ProgramId:'',
       SessionId:'',
+      ConsultancyId:'',
+      CountryId:'',
+      IntakeId:''
     }
     return defaultData
   }
-
-  showSuccessMsgAndNavigate(msg:string,path:string[]){
-    this.toastr.success(msg)
-    this.router.navigate(path)
-  }
-
- 
-
-
 }

@@ -146,10 +146,13 @@ export class CustomValidatorDirective implements Validator, OnInit {
         error = this.validateWithSpace(control.value) ? null : { 'invalidAcademicRequirements': true };
         break;
       case 'year':
-        error = this.validateWithSpace(control.value) ? null : { 'invalidYear': true };
+        error = this.validateWithNumberAndAlpha(control.value) ? null : { 'invalidYear': true };
         break;
       case 'noOfIntakes':
-        error = this.validateWithSpace(control.value) ? null : { 'invalidNumberOfIntakes': true };
+        error = this.validateNumber(control.value) ? null : { 'invalidNumberOfIntakes': true };
+        break;
+      case 'sessionName':
+        error = this.validateWithSpace(control.value) ? null : { 'invalidSessionName': true };
         break;
 
       default:
@@ -183,6 +186,12 @@ export class CustomValidatorDirective implements Validator, OnInit {
     const nameRegex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
     return nameRegex.test(value);
   }
+
+  validateWithNumberAndAlpha(value: string): boolean {
+    const regex = /^[a-zA-Z0-9]+(?:\s[a-zA-Z0-9]+)*$/;
+    return regex.test(value);
+  }
+  
   
   validatePhoneNumber(value: string): boolean {
     const phoneRegex = /^\+?[1-9]\d{1,10}$/;
@@ -351,6 +360,9 @@ export class CustomValidatorDirective implements Validator, OnInit {
     }
     if (error['invalidNumberOfIntakes']) {
       return 'Invalid number of intakes';
+    }
+    if (error['invalidSessionName']) {
+      return 'Invalid session name';
     }
     return 'Invalid Value';
   }
