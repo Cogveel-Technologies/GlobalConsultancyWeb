@@ -68,8 +68,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
    
-    const accessibleModules = localStorage.getItem("modulesAccess").toLowerCase().split(",");
-    console.log(accessibleModules)
+    const accessibleModules = localStorage.getItem("modulesAccess").split(",");
     function getModuleNameFromTitle(title:string){
       const name = title.split(".");
       return name[1].toLowerCase();

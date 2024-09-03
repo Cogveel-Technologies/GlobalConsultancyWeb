@@ -55,11 +55,20 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
     this.subscriptions.add(documentTypesSubscription);
   }
 
+ 
   loadUploadedDocument() {
     if (this.student) {
-      this.uploadedDocument$ = this.agentService.getUploadedDocuments(this.student.id);
+      this.uploadedDocument$ = this.agentService.getUploadedDocuments({
+        studentId: this.student.id,
+        limit: 10, // You can adjust this value as needed
+        orderBy: 'Id', // You can change this to the appropriate field name
+        sortExpression: 'desc', // Sort order
+        currentPage: 1, // The page number you want to load
+        isDeleted: false // Set this based on whether you want to include deleted records
+      });
     }
   }
+  
 
   getDocumentTypeName(documentTypeId: number): string {
     const documentType = this.documentTypes.find(type => type.id === documentTypeId);

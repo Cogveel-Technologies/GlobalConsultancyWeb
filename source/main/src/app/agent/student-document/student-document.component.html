@@ -45,7 +45,6 @@
                   <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>description</mat-icon>
                 </mat-form-field>
 
-
                 <!-- File Upload Component -->
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
                   <label>Upload</label>
@@ -76,31 +75,31 @@
               </div>
             </form>
 
-            <div class="row mt-4">
+            <!-- Display uploaded documents -->
+            <div class="row mt-4" *ngIf="uploadedDocument$ | async as response">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
                   <div class="header mb-3">
-                    <h2>Document Type List</h2>
+                    <h2>Uploaded Documents</h2>
                   </div>
 
                   <!-- Uploaded Document Table -->
-                  <table class="table table-hover table-resposive" *ngIf="uploadedDocument$ | async as document">
-
+                  <table class="table table-hover table-responsive">
                     <thead class="thead-light">
                       <tr>
                         <th>Sr No.</th>
                         <th>Document Type</th>
                         <th>Remarks</th>
+                        <th>Uploaded By</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td data-label="Sr No.">1</td> <!-- Fixed serial number since it's a single document -->
-                        <td data-label="Document Type">
-                          {{ getDocumentTypeName(document.documentTypeId) }}
-                        </td>
+                      <tr *ngFor="let document of response.data; let i = index">
+                        <td data-label="Sr No.">{{ i + 1 }}</td>
+                        <td data-label="Document Type">{{ getDocumentTypeName(document.documentTypeId) }}</td>
                         <td data-label="Remarks">{{ document.remarks }}</td>
+                        <td data-label="Uploaded By">{{ document.uploadedBy }}</td>
                         <td data-label="Actions">
                           <button mat-icon-button color="primary" (click)="viewDocument(document.file)">
                             <mat-icon>visibility</mat-icon>
@@ -109,13 +108,23 @@
                             <mat-icon>edit</mat-icon>
                           </button>
                         </td>
-                        
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
+
+            <!-- Pagination Info -->
+            <!-- <div class="row mt-3" *ngIf="uploadedDocument$ | async as response">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="pagination-info">
+                  <p>Total Records: {{ response.pageInfo.totalRecords }}</p>
+                  <p>Total Pages: {{ response.pageInfo.totalPages }}</p>
+                  <p>Current Page: {{ response.pageInfo.currentPage }}</p>
+                </div>
+              </div>
+            </div> -->
 
           </div>
         </div>

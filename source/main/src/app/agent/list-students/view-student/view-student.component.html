@@ -134,31 +134,43 @@
                 <div class="example-container">
                   
                    <!-- Uploaded Document Table -->
-                   <table class="table table-hover table-resposive" *ngIf="uploadedDocument$ | async as document">
-
+                   <table class="table table-hover table-responsive">
                     <thead class="thead-light">
                       <tr>
                         <th>Sr No.</th>
                         <th>Document Type</th>
                         <th>Remarks</th>
+                        <th>Uploaded By</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td data-label="Sr No.">1</td> <!-- Fixed serial number since it's a single document -->
-                        <td data-label="Document Type">
-                          {{ getDocumentTypeName(document.documentTypeId) }}
-                        </td>
+                      <!-- Iterate over the 'data' array within the PaginatedResponse -->
+                      <tr *ngFor="let document of (uploadedDocument$ | async)?.data; let i = index">
+                        <td data-label="Sr No.">{{ i + 1 }}</td>
+                        <td data-label="Document Type">{{ getDocumentTypeName(document.documentTypeId) }}</td>
                         <td data-label="Remarks">{{ document.remarks }}</td>
+                        <td data-label="Uploaded By">{{ document.uploadedBy }}</td>
                         <td data-label="Actions">
                           <button mat-icon-button color="primary" (click)="viewDocument(document.file)">
                             <mat-icon>visibility</mat-icon>
                           </button>
+                          <!-- Uncomment and implement the edit functionality as needed -->
+                          <!--
+                          <button mat-icon-button color="primary" (click)="editDocument(document.id)">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          -->
                         </td>
+                      </tr>
+                      <!-- Optional: Handle the case when there are no documents -->
+                      <tr *ngIf="(uploadedDocument$ | async)?.data?.length === 0">
+                        <td colspan="5" class="text-center">No documents uploaded.</td>
                       </tr>
                     </tbody>
                   </table>
+                  
+                 
                 </div>
                 
               </div>

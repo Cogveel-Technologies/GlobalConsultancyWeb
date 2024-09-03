@@ -8,6 +8,8 @@ import { AdminService } from '../admin.service';
 import { User } from './user.model';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
+
 
 @Component({
   selector: 'app-listusers',
@@ -28,11 +30,9 @@ export class ListusersComponent implements OnInit {
   searchControl: FormControl = new FormControl('');
   sortField: string = 'id'; // Default sort field
   sortDirection: 'asc' | 'desc' = 'desc'; // Default sort direction
-  pageSize: number = 10; // Default page size
+  pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
   currentPage: number = 1; // Default current page
   totalPages: number = 1; // Total number of pages
-
-  pageSizeOptions = [5, 10, 25, 100]; // Dropdown options for page size
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -40,13 +40,16 @@ export class ListusersComponent implements OnInit {
   private sortFieldSubject = new BehaviorSubject<string>(this.sortField);
   private sortDirectionSubject = new BehaviorSubject<'asc' | 'desc'>(this.sortDirection);
   private searchTermSubject = new BehaviorSubject<string>('');
-
+  
   constructor(
     private router: Router,
     private adminService: AdminService,
     private snackBar: MatSnackBar
-  ) {}
-
+  ) {
+    this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
+    this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize); // Then use it here
+  }
+  
   ngOnInit() {
     // Combine search, pagination, and sorting
     this.users$ = combineLatest([

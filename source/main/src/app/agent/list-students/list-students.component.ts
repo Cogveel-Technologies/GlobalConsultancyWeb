@@ -9,6 +9,7 @@ import { Student } from '../models/student.model';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 // import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
 @Component({
   selector: 'app-list-students',
   templateUrl: './list-students.component.html',
@@ -28,12 +29,10 @@ export class ListstudentsComponent implements OnInit {
   searchControl: FormControl = new FormControl('');
   sortField: string = 'id'; // Default sort field
   sortDirection: 'asc' | 'desc' = 'desc'; // Default sort direction
-  pageSize: number = 10; // Default page size
   currentPage: number = 1; // Default current page
   totalPages: number = 1; // Total number of pages
-
-  pageSizeOptions = [5, 10, 25, 100]; // Dropdown options for page size
-
+  pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
+ 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
   private currentPageSubject = new BehaviorSubject<number>(this.currentPage);
@@ -45,7 +44,10 @@ export class ListstudentsComponent implements OnInit {
     private router: Router,
     private agentService: AgentService,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
+    this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize); // Then use it here
+  }
 
   ngOnInit() {
     // Combine search, pagination, and sorting
