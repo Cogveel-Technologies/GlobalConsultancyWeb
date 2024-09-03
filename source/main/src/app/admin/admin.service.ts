@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { User } from './listusers/user.model';
 import { tap, map, catchError } from 'rxjs/operators';
+import { Role } from './list-roles/role.model';
+import { Consultancy } from './consultancy-list/consultancy.model';
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -23,17 +25,12 @@ export class AdminService {
   private currentPageSubject = new BehaviorSubject<number>(1);
   private pageSizeSubject = new BehaviorSubject<number>(10);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private buildUrl(path: string): string {
     return `${this.apiUrl}/${path}`;
   }
-    // // Sample mock data
-    // private mockDocuments = [
-    //   { documenttype: 'Passport' },
-    //   { documenttype: 'Driver License' },
-    //   { documenttype: 'ID Card' }
-    // ];
+
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {
@@ -57,14 +54,13 @@ export class AdminService {
     return this.http.get<PaginatedResponse<User>>(url).pipe(
       tap(response => console.log('Fetched users:', response)),  // Log the full response
       catchError(this.handleError<PaginatedResponse<User>>('getUsersList', {
-        data: [], 
+        data: [],
         pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
-        status: 0, 
-        message: '' 
+        status: 0,
+        message: ''
       }))
     );
   }
-
   // // Get the current page from BehaviorSubject
   // getCurrentPage(): Observable<number> {
   //   return this.currentPageSubject.asObservable();
@@ -124,21 +120,103 @@ export class AdminService {
     );
   }
 
-//////documentType methods//////
-addDocumentType(documentData: any): Observable<any> {
-  return this.http.post<any>(`${this.apiUrl}/DocumentType`, documentData);
-}
+  //////documentType methods//////
+  addDocumentType(documentData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/DocumentType`, documentData);
+  }
 
+
+  getDocuments(): Observable<{ data: any[], status: number, message: string }> {
+    return this.http.get<{ data: any[], status: number, message: string }>(`${this.apiUrl}/DocumentType/all`);
+  }
+  deleteDocument(documentId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/DocumentType/byId?id=${documentId}`);
+    // const url = this.buildUrl(`User/byId?id=${userId}`);
+  }
+  editDocument(documentId: number, documentData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/DocumentType/${documentId}`, documentData)
+  }
+
+
+  /// Methods Of Roles Component
+
+  createRole(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/Role`, data);
+  }
+
+  // Get a list of roles with pagination, sorting, and searching
+  getRolesList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean }): Observable<PaginatedResponse<Role>> {
+    let url = `${this.apiUrl}/Role?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
+    if (params.searchTerm) {
+      url += `&searchText=${params.searchTerm}`;
+    }
+    if (params.isDeleted !== undefined) {
+      url += `&isDeleted=${params.isDeleted}`;
+    }
+
+    return this.http.get<PaginatedResponse<Role>>(url).pipe(
+      tap(response => console.log('Fetched roles:', response)),  // Log the full response
+      catchError(this.handleError<PaginatedResponse<Role>>('getRolesList', {
+        data: [],
+        pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+        status: 0,
+        message: ''
+      }))
+    );
+  }
+
+
+  deleteRole(id: any) {
+    return this.http.delete<any>(`${this.apiUrl}/Role/byId?id=${id}`);
+  }
+  updateRole(id: number, roleName: string): Observable<any> {
+    const url = `${this.apiUrl}/Role/${id}`;  // Assuming the API endpoint uses the ID in the URL path
+    const body = { roleName };  // The body should be an object with the roleName property
+  
+    return this.http.put<any>(url, body);  // Send the PUT request with the URL and body
+  }
+
+ //methods for consultancy
+ registerConsultancy(consultancyData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/Consultancy`, consultancyData);
+  }
  
-getDocuments(): Observable<{ data: any[], status: number, message: string }> {
-  return this.http.get<{ data: any[], status: number, message: string }>(`${this.apiUrl}/DocumentType/all`);
-}
-deleteDocument(documentId: number): Observable<any> {
-  return this.http.delete(`${this.apiUrl}/DocumentType/byId?id=${documentId}`);
-  // const url = this.buildUrl(`User/byId?id=${userId}`);
-}
-editDocument(documentId: number, documentData: any): Observable<any> {
-  return this.http.put(`${this.apiUrl}/DocumentType/${documentId}`, documentData)
+  deleteConsultancy(consultancyId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/Consultancy/byId?id=${consultancyId}`);
+  }
+ 
+  
+  // methods for list-consultancy
+  // Get a list of consultancies with pagination, sorting, and searching
+getConsultancyList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean }): Observable<PaginatedResponse<Consultancy>> {
+  let url = `${this.apiUrl}/Consultancy?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
+  if (params.searchTerm) {
+    url += `&searchText=${params.searchTerm}`;
+  }
+  if (params.isDeleted !== undefined) {
+    url += `&isDeleted=${params.isDeleted}`;
+  }
 
+  return this.http.get<PaginatedResponse<Consultancy>>(url).pipe(
+    tap(response => console.log('Fetched consultancies:', response)),  // Log the full response
+    catchError(this.handleError<PaginatedResponse<Consultancy>>('getConsultancyList', {
+      data: [],
+      pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+      status: 0,
+      message: ''
+    }))
+  );
 }
+
+getConsultancyById(id: number): Observable<Consultancy> {
+  return this.http.get<Observable<Consultancy>>(`${this.apiUrl}/Consultancy/byId?Id=${id}`).pipe(map(res => res['data']))
+}
+updateConsultancy(consultancyId: number, consultancyData: any): Observable<any> {
+  return this.http.put(`${this.apiUrl}/Consultancy/${consultancyId}`, consultancyData);
+}
+   // --------- update-consutancy ----------------
+//    updateConsultancy(data: ConsultancyData) {
+//     return this.http.put(`${this.baseUrl}/Consultancy/${data.id}`, data)
+// }
+
 }

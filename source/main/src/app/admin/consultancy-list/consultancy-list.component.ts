@@ -1,38 +1,38 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { switchMap, tap, map, throttleTime, distinctUntilChanged, startWith } from 'rxjs/operators';
-import * as CryptoJS from 'crypto-js';
-import { AgentService } from '../agent.service';
-import { Student } from '../models/student.model';
+import { AdminService } from '../admin.service';
+// import { Consultancy } from './consultancy.model';  // Adjust the model import to Consultancy
+import { Consultancy } from './consultancy.model';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-// import { PaginationComponent } from '@shared/components/pagination/pagination.component';
-import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
+import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';  // Ensure this is the correct import for your pagination options
+
 @Component({
-  selector: 'app-list-students',
-  templateUrl: './list-students.component.html',
-  styleUrls: ['./list-students.component.scss']
+  selector: 'app-consultancy-list',
+  templateUrl: './consultancy-list.component.html',
+  styleUrls: ['./consultancy-list.component.scss']
 })
-export class ListstudentsComponent implements OnInit {
+export class ConsultancyListComponent implements OnInit {
   breadscrums = [
     {
-      title: 'Students List',
-      items: ['Agent'],
-      active: 'Students List',
+      title: 'Consultancy List',
+      items: ['Tables'],
+      active: 'Consultancy List',
     },
   ];
-  students$: Observable<Student[]>;
-  totalStudents: number = 0;
+  consultancies$: Observable<Consultancy[]>;
+  totalConsultancies: number = 0;
 
   searchControl: FormControl = new FormControl('');
   sortField: string = 'id'; // Default sort field
   sortDirection: 'asc' | 'desc' = 'desc'; // Default sort direction
+  pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
   currentPage: number = 1; // Default current page
   totalPages: number = 1; // Total number of pages
-  pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
- 
+
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
   private currentPageSubject = new BehaviorSubject<number>(this.currentPage);
@@ -42,7 +42,7 @@ export class ListstudentsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private agentService: AgentService,
+    private adminService: AdminService,
     private snackBar: MatSnackBar
   ) {
     this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
@@ -51,7 +51,7 @@ export class ListstudentsComponent implements OnInit {
 
   ngOnInit() {
     // Combine search, pagination, and sorting
-    this.students$ = combineLatest([
+    this.consultancies$ = combineLatest([
       this.searchControl.valueChanges.pipe(
         startWith(''),
         throttleTime(100),
@@ -65,7 +65,7 @@ export class ListstudentsComponent implements OnInit {
     ]).pipe(
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
-        return this.agentService.getStudentsList({
+        return this.adminService.getConsultancyList({
           limit: pageSize,
           orderBy: sortField,
           sortExpression: sortDirection,
@@ -75,7 +75,7 @@ export class ListstudentsComponent implements OnInit {
       }),
       tap(response => {
         console.log('Refreshed service response:', response);
-        this.totalStudents = response.pageInfo.totalRecords || 0;
+        this.totalConsultancies = response.pageInfo.totalRecords || 0;
         this.totalPages = response.pageInfo.totalPages || 1;
         this.currentPage = response.pageInfo.currentPage || 1;
       }),
@@ -83,10 +83,10 @@ export class ListstudentsComponent implements OnInit {
     );
 
     // Trigger initial load
-    this.refreshStudents();
+    this.refreshConsultancies();
   }
 
-  refreshStudents() {
+  refreshConsultancies() {
     // Trigger refresh by updating subjects
     this.searchTermSubject.next(this.searchControl.value);
     this.sortFieldSubject.next(this.sortField);
@@ -95,59 +95,42 @@ export class ListstudentsComponent implements OnInit {
     this.currentPageSubject.next(this.currentPage);
   }
 
-  addStudent() {
-    this.router.navigate(['/agent/register-student']);
+  addConsultancy() {
+    this.router.navigate(['/admin/consultancy']);
   }
 
   refreshPage() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.navigate(['/agent/list-students']).then(() => {
+    this.router.navigate(['/admin/consultancy-list']).then(() => {
       window.location.reload();
     });
   }
 
-  deleteStudent(studentId: number) {
-    this.agentService.deleteStudent(studentId).subscribe({
+  deleteConsultancy(consultancyId: number) {
+    this.adminService.deleteConsultancy(consultancyId).subscribe({
       next: () => {
-        this.refreshStudents();
-        this.snackBar.open('Student deleted successfully', 'Close', { duration: 100 });
+        this.refreshConsultancies();
+        this.snackBar.open('Consultancy deleted successfully', 'Close', { duration: 100 });
       },
       error: () => {
-        this.snackBar.open('Error deleting student', 'Close', { duration: 100 });
+        this.snackBar.open('Error deleting consultancy', 'Close', { duration: 100 });
       }
     });
   }
 
-  encryptData(data: any): string {
-    const key = CryptoJS.enc.Utf8.parse('1234567890123456');
-    const iv = CryptoJS.enc.Utf8.parse('1234567890123456');
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), key, { iv: iv });
-    return encrypted.toString();
+  editConsultancy(consultancyId: number) {
+    this.router.navigate(['/admin/consultancy'], {
+      queryParams: { id: consultancyId }
+    });
   }
-
   
-    // Navigate to the registration form
-    editStudent(studentId: number) {
-      this.router.navigate(['/agent/register-student'], {
-        queryParams: { id: studentId, origin: 'listStudents' } // Pass the origin as 'listStudents'
-      });
-    }
-    
-  viewStudent(studentId: number) {
-    this.router.navigate(['/agent/view-student'], {
-      queryParams: { id: studentId }
+  
+
+  viewConsultancy(consultancyId: number) {
+    this.router.navigate(['/admin/view-consultancy'], {
+      queryParams: { id: consultancyId }
     });
   }
-
-  addStudentDocument(studentId: number) {
-    
-        this.router.navigate(['/agent/student-document'],
-           {
-          queryParams: { id: studentId }
-          
-        });
-      }
-    
 
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
@@ -159,6 +142,6 @@ export class ListstudentsComponent implements OnInit {
   onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' }) {
     this.sortField = field;
     this.sortDirection = direction;
-    this.refreshStudents();
+    this.refreshConsultancies();
   }
 }

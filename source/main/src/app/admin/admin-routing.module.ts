@@ -10,6 +10,11 @@ import { ViewUserComponent } from './listusers/view-user/view-user.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { SortingComponent } from '@shared/components/sorting/sorting.component';
 import { DocumentTypeComponent } from './document-type/document-type.component';
+import { ListRolesComponent } from './list-roles/list-roles.component';
+import { RegisterConsultancyComponent } from './register-consultancy/register-consultancy.component';
+import { ConsultancyListComponent } from './consultancy-list/consultancy-list.component';
+import { ConsultancyResolver } from './consultancy-list/consultancy.resolver';
+import { ViewConsultancyComponent } from './consultancy-list/view-consultancy/view-consultancy.component';
 
 const routes: Routes = [
   {
@@ -53,6 +58,28 @@ const routes: Routes = [
   {
     path: 'listroles',
     component: RolesComponent
+  },
+  {
+    path: 'listrole',
+    component: ListRolesComponent
+  },
+  {
+    path: 'consultancy',
+    component: RegisterConsultancyComponent,
+    resolve: {
+      consultancy: ConsultancyResolver,
+    },
+  },
+  {
+    path: 'consultancy-list',
+    component: ConsultancyListComponent
+  },
+  {
+    path: 'view-consultancy',
+    component: ViewConsultancyComponent,
+    resolve: {
+      consultancy: ConsultancyResolver,
+    },
   }
 ];
 

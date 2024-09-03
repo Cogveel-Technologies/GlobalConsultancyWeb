@@ -23,19 +23,20 @@
       "TEXT": "spanish admin",
       "LIST": {
         "ADD_USERS": "Add Users",
-        "LIST_USERS": "List Users",
+        "LIST_USERS": "Users",
         "ADD_AGENTS": "Add Agents",
         "LIST_AGENTS": "List Agents",
-        "LIST_ROLES": "List Roles",
-         "LIST_LOGIN": "Login",
-          "DOCUMENT_TYPE": "Document Type"
+        "LIST_ROLES": "Roles",
+        "LIST_LOGIN": "Login",
+        "DOCUMENT_TYPE": "Document Type",
+        "CONSULTANCY": "Consultancy"
       }
     },
     "AGENT": {
       "TEXT": "Agent",
       "LIST": {
         "REGISTER_STUDENT": "Register Student",
-        "LIST_STUDENTS": "List Students",
+        "LIST_STUDENTS": "Students",
         "STUDENT_APPLICATION": "Student Application",
         "STUDENT_APPLICATION_LIST": "Student Application List",
         "STUDENT_DOCUMENT": "Student Document",

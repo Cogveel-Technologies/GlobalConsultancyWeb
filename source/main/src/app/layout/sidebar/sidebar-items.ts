@@ -50,14 +50,7 @@ export const ROUTES: RouteInfo[] = [
     class: 'menu-toggle',
     groupTitle: false,
     submenu: [
-      // {
-      //   path: 'admin/adminusers',
-      //   title: 'MENUITEMS.ADMIN.LIST.ADD_USERS',
-      //   icon: '',
-      //   class: 'ml-menu',
-      //   groupTitle: false,
-      //   submenu: []
-      // },
+    
       {
         path: 'admin/listusers',
         title: 'MENUITEMS.ADMIN.LIST.LIST_USERS',
@@ -66,41 +59,28 @@ export const ROUTES: RouteInfo[] = [
         groupTitle: false,
         submenu: []
       },
+     
       {
-        path: 'admin/addagents',
-        title: 'MENUITEMS.ADMIN.LIST.ADD_AGENTS',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        submenu: []
-      },
-      {
-        path: 'admin/listagents',
-        title: 'MENUITEMS.ADMIN.LIST.LIST_AGENTS',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        submenu: []
-      },
-      {
-        path: 'admin/listroles',
+        path: 'admin/listrole',
         title: 'MENUITEMS.ADMIN.LIST.LIST_ROLES',
         icon: '',
         class: 'ml-menu',
         groupTitle: false,
         submenu: []
       },
+     
       {
-        path: 'admin/login',
-        title: 'MENUITEMS.ADMIN.LIST.LIST_LOGIN',
+        path: 'admin/documenttype',
+        title: 'MENUITEMS.ADMIN.LIST.DOCUMENT_TYPE',
         icon: '',
         class: 'ml-menu',
         groupTitle: false,
         submenu: []
       },
+     
       {
-        path: 'admin/documenttype',
-        title: 'MENUITEMS.ADMIN.LIST.DOCUMENT_TYPE',
+        path: 'admin/consultancy-list',
+        title: 'MENUITEMS.ADMIN.LIST.CONSULTANCY',
         icon: '',
         class: 'ml-menu',
         groupTitle: false,

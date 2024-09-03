@@ -5,8 +5,7 @@ td {
     word-wrap: break-word; 
     overflow-wrap: break-word;
   }
-
-
+  
   .profile-img-edit
   {
     position: absolute;
@@ -23,7 +22,7 @@ td {
     object-fit: cover !important;
     background: #fff;
   }
- 
+  
   /* Media queries for responsiveness */
   @media (max-width: 767px) {
     .materialTableHeader {

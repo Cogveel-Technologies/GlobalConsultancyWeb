@@ -1,38 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { switchMap, tap, map, throttleTime, distinctUntilChanged, startWith } from 'rxjs/operators';
-import * as CryptoJS from 'crypto-js';
-import { AgentService } from '../agent.service';
-import { Student } from '../models/student.model';
+import { AdminService } from '../admin.service';
+import { Role } from './role.model';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-// import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
+
 @Component({
-  selector: 'app-list-students',
-  templateUrl: './list-students.component.html',
-  styleUrls: ['./list-students.component.scss']
+  selector: 'app-list-roles',
+  templateUrl: './list-roles.component.html',
+  styleUrls: ['./list-roles.component.scss']
 })
-export class ListstudentsComponent implements OnInit {
+export class ListRolesComponent implements OnInit {
   breadscrums = [
     {
-      title: 'Students List',
-      items: ['Agent'],
-      active: 'Students List',
+      title: 'Roles List',
+      items: ['Tables'],
+      active: 'Admin Roles',
     },
   ];
-  students$: Observable<Student[]>;
-  totalStudents: number = 0;
+  roles$: Observable<Role[]>;
+  totalRoles: number = 0;
 
   searchControl: FormControl = new FormControl('');
   sortField: string = 'id'; // Default sort field
-  sortDirection: 'asc' | 'desc' = 'desc'; // Default sort direction
+  sortDirection: 'asc' | 'desc' = 'asc'; // Default sort direction
+  pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
   currentPage: number = 1; // Default current page
   totalPages: number = 1; // Total number of pages
-  pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
- 
+
+  // Inline editing variables
+  editingRoleId: number | null = null;
+  editingRoleName: string = '';
+
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
   private currentPageSubject = new BehaviorSubject<number>(this.currentPage);
@@ -42,16 +45,16 @@ export class ListstudentsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private agentService: AgentService,
+    private adminService: AdminService,
     private snackBar: MatSnackBar
   ) {
-    this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
-    this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize); // Then use it here
+    this.pageSize = PAGE_SIZE_OPTIONS[0];
+    this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
   }
 
   ngOnInit() {
     // Combine search, pagination, and sorting
-    this.students$ = combineLatest([
+    this.roles$ = combineLatest([
       this.searchControl.valueChanges.pipe(
         startWith(''),
         throttleTime(100),
@@ -65,7 +68,7 @@ export class ListstudentsComponent implements OnInit {
     ]).pipe(
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
-        return this.agentService.getStudentsList({
+        return this.adminService.getRolesList({
           limit: pageSize,
           orderBy: sortField,
           sortExpression: sortDirection,
@@ -75,7 +78,7 @@ export class ListstudentsComponent implements OnInit {
       }),
       tap(response => {
         console.log('Refreshed service response:', response);
-        this.totalStudents = response.pageInfo.totalRecords || 0;
+        this.totalRoles = response.pageInfo.totalRecords || 0;
         this.totalPages = response.pageInfo.totalPages || 1;
         this.currentPage = response.pageInfo.currentPage || 1;
       }),
@@ -83,10 +86,10 @@ export class ListstudentsComponent implements OnInit {
     );
 
     // Trigger initial load
-    this.refreshStudents();
+    this.refreshRoles();
   }
 
-  refreshStudents() {
+  refreshRoles() {
     // Trigger refresh by updating subjects
     this.searchTermSubject.next(this.searchControl.value);
     this.sortFieldSubject.next(this.sortField);
@@ -95,59 +98,60 @@ export class ListstudentsComponent implements OnInit {
     this.currentPageSubject.next(this.currentPage);
   }
 
-  addStudent() {
-    this.router.navigate(['/agent/register-student']);
+  addRole() {
+    this.router.navigate(['/admin/listroles']);
   }
 
   refreshPage() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.navigate(['/agent/list-students']).then(() => {
+    this.router.navigate(['/admin/listroles']).then(() => {
       window.location.reload();
     });
   }
 
-  deleteStudent(studentId: number) {
-    this.agentService.deleteStudent(studentId).subscribe({
+  deleteRole(roleId: number) {
+    this.adminService.deleteRole(roleId).subscribe({
       next: () => {
-        this.refreshStudents();
-        this.snackBar.open('Student deleted successfully', 'Close', { duration: 100 });
+        this.refreshRoles();
+        // this.snackBar.open('Role deleted successfully', 'Close', { duration: 3000 });
       },
       error: () => {
-        this.snackBar.open('Error deleting student', 'Close', { duration: 100 });
+        this.snackBar.open('Error deleting role', 'Close', { duration: 3000 });
       }
     });
   }
 
-  encryptData(data: any): string {
-    const key = CryptoJS.enc.Utf8.parse('1234567890123456');
-    const iv = CryptoJS.enc.Utf8.parse('1234567890123456');
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), key, { iv: iv });
-    return encrypted.toString();
+  // Inline editing methods
+  editRole(roleId: number, roleName: string) {
+    this.editingRoleId = roleId;
+    this.editingRoleName = roleName;
   }
 
-  
-    // Navigate to the registration form
-    editStudent(studentId: number) {
-      this.router.navigate(['/agent/register-student'], {
-        queryParams: { id: studentId, origin: 'listStudents' } // Pass the origin as 'listStudents'
+  cancelEdit() {
+    this.editingRoleId = null;
+    this.editingRoleName = '';
+  }
+
+  updateRole(roleId: number) {
+    if (this.editingRoleId !== null) {
+      // Create the updated data object
+      const updatedRoleName = this.editingRoleName;
+
+      // Call the service to update the role with the given ID and updated name
+      this.adminService.updateRole(roleId, updatedRoleName).subscribe({
+        next: () => {
+          // this.snackBar.open('Role updated successfully', 'Close', { duration: 3000 });
+          this.refreshRoles(); // Refresh the list after update
+          this.cancelEdit(); // Exit edit mode
+        },
+        error: () => {
+          this.snackBar.open('Error updating role', 'Close', { duration: 3000 });
+        }
       });
     }
-    
-  viewStudent(studentId: number) {
-    this.router.navigate(['/agent/view-student'], {
-      queryParams: { id: studentId }
-    });
-  }
 
-  addStudentDocument(studentId: number) {
-    
-        this.router.navigate(['/agent/student-document'],
-           {
-          queryParams: { id: studentId }
-          
-        });
-      }
-    
+
+  }
 
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
@@ -159,6 +163,6 @@ export class ListstudentsComponent implements OnInit {
   onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' }) {
     this.sortField = field;
     this.sortDirection = direction;
-    this.refreshStudents();
+    this.refreshRoles();
   }
 }

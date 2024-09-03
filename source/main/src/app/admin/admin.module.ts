@@ -22,6 +22,10 @@ import { RolesComponent } from './roles/roles.component';
 // import { LoginComponent } from './login/login.component';
 import { ViewUserComponent } from './listusers/view-user/view-user.component';
 import { DocumentTypeComponent } from './document-type/document-type.component';
+import { ListRolesComponent } from './list-roles/list-roles.component';
+import { RegisterConsultancyComponent } from './register-consultancy/register-consultancy.component';
+import { ConsultancyListComponent } from './consultancy-list/consultancy-list.component';
+import { ViewConsultancyComponent } from './consultancy-list/view-consultancy/view-consultancy.component';
 
 
 @NgModule({
@@ -34,6 +38,10 @@ import { DocumentTypeComponent } from './document-type/document-type.component';
     // LoginComponent,
     ViewUserComponent,
     DocumentTypeComponent,
+    ListRolesComponent,
+    RegisterConsultancyComponent,
+    ConsultancyListComponent,
+    ViewConsultancyComponent,
 
   ],
   imports: [
