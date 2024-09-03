@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { InstituteData } from '../consultancy-models/data.institute';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ToastrService } from 'ngx-toastr';
-import { ConsultancyServdece } from '../consultancy.service';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 
 

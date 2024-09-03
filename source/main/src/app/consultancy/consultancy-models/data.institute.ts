@@ -4,11 +4,11 @@ export interface InstituteData {
     instituteName: string,
     aboutInstitute: string,
     province: string,
-    country: string,
+    countryId: number,
     yearEstablished: number,
     email: string,
     phoneNo: string,
     website: string,
     linkedInUrl: string,
-    fbUrl: string
+    fbUrl: string,
 }

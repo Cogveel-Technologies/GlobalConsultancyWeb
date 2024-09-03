@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {  Subscription, tap } from 'rxjs';
+import {  Subscription } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
+import { Observable } from 'rxjs';
+import { ConsultancyService } from '../consultancy-services/consultancy.service';
+import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 
 @Component({
   selector: 'app-register-consultancy',
@@ -10,6 +13,13 @@ import { ConsultancyApi } from '../consultancy-services/api.service';
   styleUrls: ['./register-institute.component.scss']
 })
 export class RegisterInstituteComponent implements OnInit, OnDestroy {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private consultancyApiService: ConsultancyApi,
+    private consultancyService: ConsultancyService
+  ) {}
+
   subscriptions: Subscription = new Subscription();
   breadscrums = [
     {
@@ -22,23 +32,20 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   editMode: boolean = false;
   details: any;
   id: number;
-  editId:number;
+  editId: number;
   instituteId: string;
-  consultancyId:number
+  consultancyId: number;
+  countries: Observable<{ countryName: string, id: number }[]>;
+  defaultData:ConsultancyDetailsOptions = {...this.consultancyService.defaultRenderData()};
+  countryId: number;
+  countryName: string;
 
-  // static data for consultancies
-  Consultancies: number[] = [];
-
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private consultancyApiService: ConsultancyApi,
-  ) {
+  ngOnInit() {
     this.registerInstitute = new FormGroup({
       instituteName: new FormControl(''),
       aboutInstitute: new FormControl(''),
       province: new FormControl(''),
-      country: new FormControl(''),
+      countryId: new FormControl(''),
       consultancyId: new FormControl(''),
       yearEstablished: new FormControl(''),
       email: new FormControl(''),
@@ -47,46 +54,48 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
       linkedInUrl: new FormControl(''),
       fbUrl: new FormControl('')
     });
-  }
-
-  ngOnInit() {
+    // get countries for dropdown
+    this.countries = this.consultancyApiService.getAllCountries()
     // for editMode
     const editInstitute = this.route.snapshot.data['editResponse'];
-    console.log(editInstitute)
-
-     this.editId = +this.route.snapshot.paramMap.get('id');
-     if (editInstitute) {
-       this.editMode = true;
-       this.registerInstitute.patchValue(editInstitute);
-     }
+    if (editInstitute) {
+      console.log(editInstitute)
+      this.editId = +this.route.snapshot.paramMap.get('id');
+      this.editMode = true;
+      this.registerInstitute.patchValue(editInstitute);
+    }
   }
 
-  // display error or register message and navigate
+  // on country selection
+  onCountryChange(event: any) {
+    this.countryId = event.value;
+  }
 
-  displayMessageAndNavigate(message:string, path:string[]){
-    alert(message)
-    this.router.navigate(path)
+  // navigate to institute list page
+  navigateToInstituteList() {
+    this.router.navigate(['consultancy', 'institution-list']);
   }
 
   onSubmit() {
     const newDetails = this.registerInstitute.value;
+    
     if (this.editMode) {
       this.subscriptions.add(
         this.consultancyApiService.updateInstitute(this.editId, newDetails).subscribe(res => {
+          this.navigateToInstituteList()
         })
-          
       );
     } else {
+      // add consultancy id and country id to data supposed to send to the backend
       newDetails.consultancyId = +localStorage.getItem("id");
-      console.log(newDetails)
+      newDetails.countryId = this.countryId
       this.subscriptions.add(
         this.consultancyApiService.registerInstitute(newDetails).subscribe(res => {
-          this.displayMessageAndNavigate("Registered Successfully", ["consultancy","institution-list"])
-          this.router.navigate(['consultancy','institution-list']);
+          this.navigateToInstituteList()
         })
       );
     }
-    
+
   }
 
   ngOnDestroy() {

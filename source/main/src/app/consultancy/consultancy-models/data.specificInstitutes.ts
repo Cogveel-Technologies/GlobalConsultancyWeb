@@ -1,4 +1,4 @@
-export interface SpecificInstitutes{
+export interface SpecificConsultancyRelated{
     id:number,
     name:string
 }

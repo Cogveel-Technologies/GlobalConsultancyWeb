@@ -13,7 +13,7 @@
             <div class="left">
               <ul class="header-buttons-left ms-0">
                 <li class="tbl-title me-2">
-                  <h2>Consultancy Listt</h2>
+                  <h2>Consultancy List</h2>
                 </li>
                 <app-search [searchText]="search"></app-search>
               </ul>
@@ -37,9 +37,6 @@
     <div class="row clearfix">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
-          <div class="header">
-            <h2>Hover Rows</h2>
-          </div>
           <div class="body table-responsive">
             <table class="table table-hover table-responsive" matSort (matSortChange)="onSortChange($event)">
               <thead>

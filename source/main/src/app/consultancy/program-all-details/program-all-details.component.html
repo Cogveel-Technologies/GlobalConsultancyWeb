@@ -5,17 +5,103 @@
             <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
             </app-breadcrumb>
         </div>
-        <div class="table body table-responsive">
-            <table class="table table-hover table-responsive">
-                <tr *ngFor="let key of keys">
-                    <ng-container *ngIf="key !== 'Id'">
-                        <th>{{key}}:</th>
-                        <td>{{details[key]}}</td>
-                    </ng-container>
-                </tr>
-            </table>
+        <!-- Your content goes here  -->
+        <div class="row clearfix">
+            <div class="col-lg-3 col-md-12">
+                <div class="card">
+                    <div class="m-b-20">
+                        <div class="contact-grid">
+                            <div class="profile-header bg-dark">
+                                <div class="user-name">{{details.programName}}</div>
+                                <!-- <div class="name-center">{{details.middleName}}</div> -->
+                            </div>
+                            <div class="position-relative">
+                                <img src="assets/images/user/success.webp" class="profile-img user-img" alt="">
+                                <mat-icon matSuffix class="profile-img-edit" matTooltip="Edit">edit</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-12">
+                <div class="card">
+                    <mat-tab-group>
+                        <mat-tab label="Basic Details">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover mt-2">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Field</th>
+                                                        <th>Details</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">school</mat-icon> Program Name</td>
+                                                      <td>{{details.programName}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">timer</mat-icon> Duration</td>
+                                                      <td>{{details.duration}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">attach_money</mat-icon> Application Fee</td>
+                                                      <td>{{details.applicationFee}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">account_balance_wallet</mat-icon> Tuition Fee</td>
+                                                      <td>{{details.tuitionFee}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">school</mat-icon> Level of Education</td>
+                                                      <td>{{details.levelOfEducation}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">check_circle</mat-icon> Status</td>
+                                                      <td>{{details.status}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">category</mat-icon> Program Category</td>
+                                                      <td>{{details.programCategoryId}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">calendar_today</mat-icon> Program Intake</td>
+                                                      <td>{{details.programIntake}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">note_add</mat-icon> Subject Requirements</td>
+                                                      <td>{{details.subjectRequirements}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">book</mat-icon> Academic Requirements</td>
+                                                      <td>{{details.academicRequirements}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">apps</mat-icon> Program Category</td>
+                                                      <td>{{details.programCategoryId}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">event</mat-icon> Program Intake</td>
+                                                      <td>{{details.programIntake}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td><mat-icon color="primary">calendar_view_month</mat-icon> Intake</td>
+                                                      <td>{{details.intakeId}}</td>
+                                                    </tr>
+                                                  </tbody>
+                                                  
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
         </div>
     </div>
 </section>
-
-

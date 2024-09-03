@@ -16,6 +16,7 @@ export class PaginationComponent {
   pageSizeOptions = PAGE_SIZE_OPTIONS; // Use the exported array
 
   onPageChange(event: PageEvent) {
+    console.log(event)
     this.pageChange.emit(event);
   }
 }

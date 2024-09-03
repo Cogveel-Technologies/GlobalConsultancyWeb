@@ -21,7 +21,8 @@
                                 <div class="col-12 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Program Name</mat-label>
-                                        <input matInput formControlName="programName" required appCustomValidator="programName">
+                                        <input matInput formControlName="programName" required
+                                            appCustomValidator="programName">
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>school</mat-icon>
                                     </mat-form-field>
@@ -33,7 +34,8 @@
                                 <div class="col-md-12 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Program Description</mat-label>
-                                        <textarea matInput formControlName="programDescription" required appCustomValidator="description"></textarea>
+                                        <textarea matInput formControlName="programDescription" required
+                                            appCustomValidator="description"></textarea>
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>description</mat-icon>
                                     </mat-form-field>
@@ -41,7 +43,8 @@
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Duration</mat-label>
-                                        <input matInput formControlName="duration" required appCustomValidator="duration">
+                                        <input matInput formControlName="duration" required
+                                            appCustomValidator="duration">
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>schedule</mat-icon>
                                     </mat-form-field>
@@ -49,7 +52,8 @@
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Application Fee</mat-label>
-                                        <input matInput formControlName="applicationFee" type="number" required appCustomValidator="applicationFee">
+                                        <input matInput formControlName="applicationFee" type="number" required
+                                            appCustomValidator="applicationFee">
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>attach_money</mat-icon>
                                     </mat-form-field>
@@ -61,7 +65,8 @@
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Tuition Fee</mat-label>
-                                        <input matInput formControlName="tutionFee" type="number" required appCustomValidator="tuitionFee">
+                                        <input matInput formControlName="tutionFee" type="number" required
+                                            appCustomValidator="tuitionFee">
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>money</mat-icon>
                                     </mat-form-field>
@@ -69,7 +74,8 @@
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Level Of Education</mat-label>
-                                        <input matInput formControlName="levelOfEducation" required appCustomValidator="levelOfEducation">
+                                        <input matInput formControlName="levelOfEducation" required
+                                            appCustomValidator="levelOfEducation">
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>school</mat-icon>
                                     </mat-form-field>
@@ -81,26 +87,70 @@
                                 <div class="col-12 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Subject Requirements</mat-label>
-                                        <textarea matInput formControlName="subjectRequirements" appCustomValidator="subjectRequirements" required ></textarea>
+                                        <textarea matInput formControlName="subjectRequirements"
+                                            appCustomValidator="subjectRequirements" required></textarea>
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>book</mat-icon>
                                     </mat-form-field>
                                 </div>
                             </div>
 
-                            <!-- Academic Requirements and Program Category ID -->
+                            <div class="col-md-12 mb-1">
+                                <mat-form-field appearance="fill" class="example-full-width">
+                                    <mat-label>Academic Requirements</mat-label>
+                                    <textarea matInput formControlName="academicRequirements"
+                                        appCustomValidator="academicRequirements" required></textarea>
+                                    <mat-icon class="material-icons-two-tone color-icon p-3"
+                                        matSuffix>assignment</mat-icon>
+                                </mat-form-field>
+                            </div>
+
+                            
+                            <!-- Intake ID and session ID -->
                             <div class="row mb-1">
-                                <div class="col-md-12 mb-1">
+                                
+                                <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
-                                        <mat-label>Academic Requirements</mat-label>
-                                        <textarea matInput formControlName="academicRequirements" appCustomValidator="academicRequirements" required></textarea>
+                                        <mat-label>Institute</mat-label>
+                                        <mat-select formControlName="instituteId" required (selectionChange)="onInstituteChange($event)">
+                                            <mat-option *ngFor="let institute of (instituteOptions | async)"
+                                                [value]="institute.id">{{
+                                                institute.name }}</mat-option>
+                                        </mat-select>
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
-                                            matSuffix>assignment</mat-icon>
+                                            matSuffix>business</mat-icon>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
-                                        <mat-label>Program Category Id</mat-label>
+                                        <mat-label>Session</mat-label>
+                                        <mat-select formControlName="sessionId" required (selectionChange)="onSessionChange($event)">
+                                            <mat-option *ngFor="let session of (sessionOptions|async)" [value]="session.id">{{ session.name
+                                                }}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="material-icons-two-tone color-icon p-3"
+                                            matSuffix>event</mat-icon>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mb-1">
+                                <mat-form-field appearance="fill" class="example-full-width">
+                                    <mat-label>Intake</mat-label>
+                                    <mat-select formControlName="intakeId" required (selectionChange)="onIntakeChange($event)">
+                                        <mat-option *ngFor="let intake of (intakeOptions|async)" [value]="intake.id">{{ intake.name
+                                            }}</mat-option>
+                                    </mat-select>
+                                    <mat-icon class="material-icons-two-tone color-icon p-3"
+                                        matSuffix>event</mat-icon>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Academic Requirements and Program Category ID -->
+                            <div class="row mb-1">
+                                <div class="col-md-6 mb-1">
+                                    <mat-form-field appearance="fill" class="example-full-width">
+                                        <mat-label>Program Category</mat-label>
                                         <mat-select formControlName="programCategoryId" required>
                                             <mat-option *ngFor="let category of programCategoryOptions"
                                                 [value]="category">{{ category }}</mat-option>
@@ -112,41 +162,40 @@
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Program Intake</mat-label>
-                                        <mat-select formControlName="programIntake" required>
-                                            <mat-option *ngFor="let intake of programIntakeOptions" [value]="intake">{{
-                                                intake }}</mat-option>
-                                        </mat-select>
+                                        <input matInput formControlName="programIntake" type="number" required
+                                            appCustomValidator="programintake">
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
-                                            matSuffix>group</mat-icon>
+                                            matSuffix>person</mat-icon>
                                     </mat-form-field>
                                 </div>
                             </div>
 
-                            <!-- Intake ID and Institute ID -->
                             <div class="row mb-1">
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
-                                        <mat-label>Intake</mat-label>
-                                        <mat-select formControlName="intakeId" required>
-                                            <mat-option *ngFor="let intake of intakeOptions" [value]="intake">{{ intake
-                                                }}</mat-option>
+                                        <mat-label>Course type</mat-label>
+                                        <mat-select formControlName="courseTypeId" required>
+                                            <mat-option *ngFor="let category of programCategoryOptions"
+                                                [value]="category">{{ category }}</mat-option>
                                         </mat-select>
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
-                                            matSuffix>event</mat-icon>
+                                            matSuffix>category</mat-icon>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
-                                        <mat-label>Institute</mat-label>
-                                        <mat-select formControlName="instituteId"  required>
-                                            <mat-option *ngFor="let institute of instituteOptions"
-                                                [value]="institute">{{ institute }}</mat-option>
+                                        <mat-label>Is public</mat-label>
+                                        <mat-select formControlName="isPublic" required>
+                                            <mat-option *ngFor="let category of isPublic"
+                                                [value]="category">{{ category }}</mat-option>
                                         </mat-select>
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
-                                            matSuffix>business</mat-icon>
+                                            matSuffix>category</mat-icon>
                                     </mat-form-field>
                                 </div>
                             </div>
+
+
 
                             <!-- Status -->
                             <div class="row mb-1">
@@ -166,7 +215,8 @@
                             <!-- Submit/Update and Cancel Buttons -->
                             <div class="row mb-1">
                                 <div class="col-auto">
-                                    <button type="submit" class="btn-space" mat-raised-button color="primary" [disabled]="!registerProgram.valid">{{editMode
+                                    <button type="submit" class="btn-space" mat-raised-button color="primary"
+                                        [disabled]="!registerProgram.valid">{{editMode
                                         ? 'Update' : 'Register'}}</button>
                                     <button type="button" mat-raised-button color="warn">Cancel</button>
                                 </div>

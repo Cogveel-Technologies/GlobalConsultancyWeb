@@ -23,5 +23,6 @@ export class InstituteAllDetailsComponent {
      this.details = this.route.snapshot.data['instituteDetails']
 
      this.keys = Object.keys(this.details);
+     console.log(this.keys)
   }
 }

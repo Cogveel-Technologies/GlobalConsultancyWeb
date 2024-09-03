@@ -1,8 +1,12 @@
-import { Component,OnInit,OnDestroy,AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, of, Subscription, switchMap } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
+import { Observable } from 'rxjs';
+import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
+import { ConsultancyService } from '../consultancy-services/consultancy.service';
+import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 
 @Component({
   selector: 'app-register-program',
@@ -10,6 +14,8 @@ import { ConsultancyApi } from '../consultancy-services/api.service';
   styleUrls: ['./register-program.component.scss']
 })
 export class RegisterProgramComponent {
+  constructor(private route: ActivatedRoute, private consultancyApiService: ConsultancyApi, private router: Router, private consultancyService:ConsultancyService) { }
+
   breadscrums = [
     {
       title: 'Add Program',
@@ -17,27 +23,33 @@ export class RegisterProgramComponent {
       active: 'Add Program',
     },
   ];
-  registerProgram:FormGroup;
-  editMode:boolean;
-  programCategoryOptions = [101, 102, 103,1]; 
+  registerProgram: FormGroup;
+  editMode: boolean;
+  programCategoryOptions = [101, 102, 103, 1];
   programIntakeOptions = [200, 201, 202];
-  intakeOptions = [1001, 1002, 1003,12]; 
-  instituteOptions = [5001, 5002, 5003,9]; 
-  statusOptions = ["Active","Inactive"]
+  statusOptions: string[] = ["Active", "Inactive"];
+  isPublic: boolean[] = [true, false]
   subscriptions: Subscription = new Subscription();
-  editId:number
+  editId: number;
+  consultancyId:string = localStorage.getItem("id");
+  defaultData:ConsultancyDetailsOptions = {...this.consultancyService.defaultRenderData()};
+  instituteOptions: Observable<SpecificConsultancyRelated[]>;
+  sessionOptions: Observable<SpecificConsultancyRelated[]>;
+  intakeOptions: Observable<SpecificConsultancyRelated[]>;
+  institute$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+  session$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+  intake$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
 
 
-  constructor( private route:ActivatedRoute, private consultancyApiService:ConsultancyApi, private router:Router){
-    
-  }
-  ngOnInit(){
+
+  ngOnInit() {
     this.registerProgram = new FormGroup({
       programName: new FormControl(''),
       programDescription: new FormControl(''),
       duration: new FormControl(''),
       applicationFee: new FormControl(''),
       tutionFee: new FormControl(''),
+      sessionId: new FormControl(''),
       levelOfEducation: new FormControl(''),
       status: new FormControl(''),
       subjectRequirements: new FormControl(''),
@@ -45,43 +57,63 @@ export class RegisterProgramComponent {
       programCategoryId: new FormControl(''),
       programIntake: new FormControl(''),
       intakeId: new FormControl(''),
-      instituteId: new FormControl('')
+      instituteId: new FormControl(''),
+      courseTypeId: new FormControl(''),
+      isPublic: new FormControl('')
     });
 
-    this.editId = +this.route.snapshot.paramMap.get('id');
     const details = this.route.snapshot.data['editResponse']
-    console.log(details)
-    if(details){
+
+    if (details) {
+      this.editId = +this.route.snapshot.paramMap.get('id');
       this.editMode = true
       this.registerProgram.patchValue(details)
     }
-  
+
+    this.instituteOptions = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
+
+    this.subscriptions.add(combineLatest([this.institute$, this.session$, this.intake$]).pipe(switchMap(([instituteId, sessionId, intakeId]) => {
+      if (instituteId && !sessionId) {
+        this.defaultData.InstituteId = String(instituteId);
+         this.sessionOptions = this.consultancyApiService.getSpecificSessions(this.defaultData);
+         return of([])
+      } else if (sessionId && !intakeId) {
+        this.defaultData.SessionId = String(sessionId);
+         this.intakeOptions = this.consultancyApiService.getSpecificIntakes(this.defaultData);
+         return of([])
+      }else {
+        return of([])
+      }
+    })).subscribe())
   }
 
-  ngAfterViewInit(){
-    
+  onInstituteChange(event:any){
+    this.institute$.next(event.value)
+  }
+  onSessionChange(event:any){
+    this.session$.next(event.value)
+  }
+  onIntakeChange(event:any){
+    this.intake$.next(event.value)
+  }
+
+  onSubmit() {
+    let newDetails = this.registerProgram.value;
+    newDetails.consultancyId = +this.consultancyId;
+    console.log(newDetails)
+    if (this.editMode) {
+      this.subscriptions.add(this.consultancyApiService.updateProgram(this.editId, newDetails).subscribe(res => {
+        this.router.navigate(["consultancy", "program-list"]);
+      }))
+    } else {
+      this.subscriptions.add(this.consultancyApiService.registerProgram(newDetails).subscribe(res => {
+        this.router.navigate(["consultancy", "program-list"]);
+      }))
+    }
   }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
 
-  
-  
-  onSubmit(){
-    let newDetails = this.registerProgram.value;
-    console.log(newDetails)
-    if (this.editMode) {
-      this.subscriptions.add(this.consultancyApiService.updateProgram(this.editId,newDetails).subscribe(res => {
-        alert("Updated Sucessfully")
-        this.router.navigate(["consultancy", "program-list"]);
-      }))
-    } else {
-      this.subscriptions.add(this.consultancyApiService.registerProgram(newDetails).subscribe(res =>{
-         alert("Registered Successfully")
-         this.router.navigate(["consultancy", "program-list"]);
-        }))
-    }
-  }
-  
 }

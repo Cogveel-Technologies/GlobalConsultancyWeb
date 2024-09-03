@@ -5,27 +5,15 @@
             <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
             </app-breadcrumb>
         </div>
-        <div class="card p-4">
+        <div class="card p-4" *ngIf="!intakeSelected">
             <div class="row g-3">
-                <div class="col-md-6">
-                    <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Institute</mat-label>
-                        <mat-icon matPrefix>business</mat-icon>
-                        <mat-select formControlName="institute">
-                            <mat-option *ngFor="let institute of institutes" [value]="institute">
-                                {{ institute }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-        
                 <div class="col-md-6">
                     <mat-form-field appearance="fill" class="w-100 mb-0">
                         <mat-label>Session</mat-label>
                         <mat-icon matPrefix>calendar_today</mat-icon>
-                        <mat-select formControlName="session">
-                            <mat-option *ngFor="let session of sessions" [value]="session">
-                                {{ session }}
+                        <mat-select formControlName="session" (selectionChange)="onSessionChange($event)">
+                            <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
+                                {{ session.name }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -36,7 +24,7 @@
 
 
 
-        <div class="row" *ngIf="selectedAllOptions">
+        <div class="row" *ngIf="intakeSelected">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="materialTableHeader">
@@ -45,11 +33,7 @@
                                 <li class="tbl-title me-2">
                                     <h2>List of Intakes</h2>
                                 </li>
-                                <li class="tbl-search-box">
-                                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                                    <input placeholder="Search" type="text" #filter class="browser-default search-field"
-                                        aria-label="Search box">
-                                </li>
+                                <app-search [searchText]="search"></app-search>
                             </ul>
                         </div>
                         <div class="right">
@@ -68,29 +52,20 @@
             </div>
         </div>
 
-        <div class="row clearfix" *ngIf="selectedAllOptions">
+        <div class="row clearfix" *ngIf="intakeSelected">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
-                    <div class="header">
-                        <h2>Hover Rows</h2>
-                    </div>
                     <div class="body table-responsive">
-                        <table class="table table-hover table-responsive">
+                        <table class="table table-hover table-responsive" matSort (matSortChange)="onSortChange($event)">
                             <thead>
                                 <tr>
-                                    <th>Program Id</th>
-                                    <th>Institute Id</th>
-                                    <th>Session Id</th>
-                                    <th>No Of Intake</th>
-                                    <th>Year</th>
+                                    <th mat-sort-header="noOfIntake">No of intakes</th>
+                                    <th mat-sort-header="year">Year</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let intake of (intakes | async)">
-                                    <td data-label="Program ID">{{ intake.programId }}</td>
-                                    <td data-label="Institute ID">{{ intake.instituteId }}</td>
-                                    <td data-label="Session ID">{{ intake.sessionId }}</td>
                                     <td data-label="Number of Intakes">{{ intake.noOfIntake }}</td>
                                     <td data-label="Year">{{ intake.year }}</td>
                                     <td data-label="Actions">
@@ -105,6 +80,8 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <app-pagination [pageSize]="defaultData.pageSize" (pageChange)="onPageChange($event)" [length]="records">
+                        </app-pagination>
                     </div>
                 </div>
             </div>
