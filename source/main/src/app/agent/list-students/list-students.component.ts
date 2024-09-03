@@ -125,12 +125,14 @@ export class ListstudentsComponent implements OnInit {
     return encrypted.toString();
   }
 
-  editStudent(studentId: number) {
-    this.router.navigate(['/agent/register-student'], {
-      queryParams: { id: studentId }
-    });
-  }
-
+  
+    // Navigate to the registration form
+    editStudent(studentId: number) {
+      this.router.navigate(['/agent/register-student'], {
+        queryParams: { id: studentId, origin: 'listStudents' } // Pass the origin as 'listStudents'
+      });
+    }
+    
   viewStudent(studentId: number) {
     this.router.navigate(['/agent/view-student'], {
       queryParams: { id: studentId }
