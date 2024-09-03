@@ -107,11 +107,13 @@ export class StudentRegisterComponent implements OnInit {
 
   onThirdFormSubmit() {
     if (this.thirdForm.valid) {
+      const origin = this.route.snapshot.queryParams['origin']; // Fetch the origin parameter
+  
       if (this.isFormPrefilled()) {
         this.agentService.updateStudentData(this.user.id, this.thirdForm.value).subscribe(
           response => {
             console.log('Update Success', response);
-            this.router.navigate(['/agent/list-students']);
+            this.navigateToOrigin(origin);
           },
           error => {
             console.log('Update Error', error);
@@ -135,7 +137,19 @@ export class StudentRegisterComponent implements OnInit {
       console.log('Form is not valid');
     }
   }
-
+  
+  // Utility method to handle navigation based on origin
+  navigateToOrigin(origin: string) {
+    if (origin === 'studentProfile') {
+      this.router.navigate(['/student/student-profile']);
+    } else if (origin === 'listStudents') {
+      this.router.navigate(['/agent/list-students']);
+    } else {
+      // Navigate to a defined default route or handle the absence of origin
+      this.router.navigate(['/home']); // Ensure this route exists
+    }
+  }
+  
   isFormPrefilled(): boolean {
     return !!this.user && !!this.user.id;
   }
@@ -145,4 +159,19 @@ export class StudentRegisterComponent implements OnInit {
       duration: 4000,
     });
   }
+  onCancel() {
+    const origin = this.route.snapshot.queryParams['origin'];
+  
+    if (origin === 'studentProfile') {
+      this.router.navigate(['/student/student-profile']);
+    } else if (origin === 'listStudents') {
+      this.router.navigate(['/agent/list-students']);
+    } else {
+      // Navigate to a defined default route or handle the absence of origin
+      this.router.navigate(['/home']); // Ensure this route exists
+    }
+  }
+  
+  
+  
 }

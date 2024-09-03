@@ -4,6 +4,7 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { User } from './listusers/user.model';
 import { tap, map, catchError } from 'rxjs/operators';
 import { Role } from './list-roles/role.model';
+import { Consultancy } from './consultancy-list/consultancy.model';
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -174,5 +175,48 @@ export class AdminService {
   
     return this.http.put<any>(url, body);  // Send the PUT request with the URL and body
   }
+
+ //methods for consultancy
+ registerConsultancy(consultancyData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/Consultancy`, consultancyData);
+  }
+ 
+  deleteConsultancy(consultancyId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/Consultancy/byId?id=${consultancyId}`);
+  }
+ 
   
+  // methods for list-consultancy
+  // Get a list of consultancies with pagination, sorting, and searching
+getConsultancyList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean }): Observable<PaginatedResponse<Consultancy>> {
+  let url = `${this.apiUrl}/Consultancy?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
+  if (params.searchTerm) {
+    url += `&searchText=${params.searchTerm}`;
+  }
+  if (params.isDeleted !== undefined) {
+    url += `&isDeleted=${params.isDeleted}`;
+  }
+
+  return this.http.get<PaginatedResponse<Consultancy>>(url).pipe(
+    tap(response => console.log('Fetched consultancies:', response)),  // Log the full response
+    catchError(this.handleError<PaginatedResponse<Consultancy>>('getConsultancyList', {
+      data: [],
+      pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+      status: 0,
+      message: ''
+    }))
+  );
+}
+
+getConsultancyById(id: number): Observable<Consultancy> {
+  return this.http.get<Observable<Consultancy>>(`${this.apiUrl}/Consultancy/byId?Id=${id}`).pipe(map(res => res['data']))
+}
+updateConsultancy(consultancyId: number, consultancyData: any): Observable<any> {
+  return this.http.put(`${this.apiUrl}/Consultancy/${consultancyId}`, consultancyData);
+}
+   // --------- update-consutancy ----------------
+//    updateConsultancy(data: ConsultancyData) {
+//     return this.http.put(`${this.baseUrl}/Consultancy/${data.id}`, data)
+// }
+
 }

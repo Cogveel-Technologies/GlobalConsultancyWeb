@@ -77,6 +77,15 @@ export const ROUTES: RouteInfo[] = [
         groupTitle: false,
         submenu: []
       },
+     
+      {
+        path: 'admin/consultancy-list',
+        title: 'MENUITEMS.ADMIN.LIST.CONSULTANCY',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        submenu: []
+      },
     ]
   },
   {

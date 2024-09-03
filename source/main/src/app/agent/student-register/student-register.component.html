@@ -144,7 +144,8 @@
                                     <button class="btn-space" [disabled]="!thirdForm.valid" mat-raised-button color="primary">
                                         {{ isFormPrefilled() ? 'Update Student' : 'Submit' }}
                                     </button>
-                                    <button type="button" mat-raised-button color="warn" [routerLink]="['/agent/list-students']">Cancel</button>
+                                    <button type="button" mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+
                                 </div>
                             </div>
                         </form>
