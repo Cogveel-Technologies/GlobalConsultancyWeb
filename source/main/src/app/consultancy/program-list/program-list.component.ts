@@ -45,6 +45,7 @@ export class ProgramListComponent {
   records: number;
   pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number }> = new BehaviorSubject<{ pageSize: number, pageIndex: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage });
   sorting$: BehaviorSubject<string> = new BehaviorSubject<string>(this.defaultData.sortExpression);
+  courseStatus:boolean[]= [true,false];
 
 
 getPrograms(params:ConsultancyDetailsOptions){
@@ -60,14 +61,18 @@ getPrograms(params:ConsultancyDetailsOptions){
 
     this.subscription.add(combineLatest([this.institute$, this.session$, this.intake$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(switchMap(([instituteId, sessionId, intakeId, search, pageRelated,sorting]) => {
       if (instituteId && !sessionId) {
+        console.log("institute")
         this.defaultData.InstituteId = String(instituteId);
          this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData);
          return of([])
       } else if (sessionId && !intakeId) {
+        console.log("session")
         this.defaultData.SessionId = String(sessionId);
          this.intakes = this.consultancyApiService.getSpecificIntakes(this.defaultData);
+         this.session$.next(null)
          return of([])
       } else if (intakeId) {
+        console.log("intake")
         this.defaultData.IntakeId = String(intakeId);
         this.defaultData.searchText = search
         this.defaultData.pageSize = pageRelated.pageSize

@@ -10,6 +10,41 @@
                 <div class="row g-3">
                     <div class="col-md-4">
                         <mat-form-field appearance="fill" class="w-100 mb-0">
+                            <mat-label>Select program category</mat-label>
+                            <mat-icon matPrefix>school</mat-icon>
+                            <mat-select  required (selectionChange)="onInstituteChange($event)">
+                                <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
+                                    {{ institute.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100 mb-0">
+                            <mat-label>Select course type</mat-label>
+                            <mat-icon matPrefix>school</mat-icon>
+                            <mat-select required (selectionChange)="onSessionChange($event)">
+                                <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
+                                    {{ session.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100 mb-0">
+                            <mat-label>is Public</mat-label>
+                            <mat-icon matPrefix>home</mat-icon>
+                            <mat-select required (selectionChange)="onIntakeChange($event)">
+                                <mat-option *ngFor="let status of courseStatus" [value]="status">
+                                    {{ status }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100 mb-0">
                             <mat-label>Select an institute</mat-label>
                             <mat-icon matPrefix>school</mat-icon>
                             <mat-select  required (selectionChange)="onInstituteChange($event)">
@@ -83,11 +118,8 @@
                                 <tr>
                                     <th mat-sort-header="programName">Program Name</th>
                                     <th mat-sort-header="duration">Duration</th>
-                                    <th mat-sort-header="applicationFee">Application Fee</th>
                                     <th mat-sort-header="levelOfEducation">Level Of Education</th>
                                     <th mat-sort-header="status">Status</th>
-                                    <th mat-sort-header="programCategory">Program Category </th>
-                                    <th mat-sort-header="programIntake">Program Intake</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -95,11 +127,8 @@
                                 <tr *ngFor="let program of (programs | async)">
                                     <td data-label="Program Name">{{ program.programName }}</td>
                                     <td data-label="Duration">{{ program.duration }}</td>
-                                    <td data-label="Application Fee">{{ program.applicationFee }}</td>
                                     <td data-label="Level of Education">{{ program.levelOfEducation }}</td>
                                     <td data-label="Status">{{ program.status }}</td>
-                                    <td data-label="Program Category ID">{{ program.programCategoryId }}</td>
-                                    <td data-label="Program Intake">{{ program.programIntake }}</td>
                                     <td data-label="Actions">
 
                                         <button mat-icon-button
