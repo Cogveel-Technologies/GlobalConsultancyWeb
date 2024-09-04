@@ -64,13 +64,7 @@
                                 </div>
 
 
-                                <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                                    <mat-form-field class="example-full-width">
-                                        <mat-label>Passport Expiry</mat-label>
-                                        <input matInput formControlName="passportExpiry" required appCustomValidator="passportExpiry" type="date">
-                                        <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>date_range</mat-icon>
-                                    </mat-form-field>
-                                </div> -->
+                               
                             </div>
                             <div class="row">
                                 <!-- Email Address Field -->
@@ -110,15 +104,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="row">
-                                <!-- Agent ID Field -->
-                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                                    <mat-form-field class="example-full-width">
-                                        <mat-label>Agent ID</mat-label>
-                                        <input matInput formControlName="agentId" required appCustomValidator="agentId" type="number">
-                                        <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>person</mat-icon>
-                                    </mat-form-field>
-                                </div>
+                         
                                 
                                 <!-- Password Field -->
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
@@ -130,14 +116,32 @@
                                 </div>
                                 
                                 <!-- Institute ID Field -->
-                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                                    <mat-form-field class="example-full-width">
+                                <div class="row">
+                                    <!-- Institute ID Field (Dropdown) -->
+                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                      <mat-form-field class="example-full-width">
                                         <mat-label>Institute ID</mat-label>
-                                        <input matInput formControlName="instituteId" required appCustomValidator="instituteId" type="number">
-                                        <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>school</mat-icon>
-                                    </mat-form-field>
-                                </div>
-                            </div>
+                                        <mat-select formControlName="instituteId" required>
+                                          <mat-option *ngFor="let institute of institutes" [value]="institute.id">
+                                            {{ institute.name }}
+                                          </mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                    </div>
+                                  
+                                    <!-- Agent ID Field (Dropdown) -->
+                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                      <mat-form-field class="example-full-width">
+                                        <mat-label>Agent ID</mat-label>
+                                        <mat-select formControlName="agentId" required>
+                                          <mat-option *ngFor="let agent of agents" [value]="agent.id">
+                                            {{ agent.name }}
+                                          </mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                  
                             <div class="row">
                                 <!-- Submit and Cancel Buttons -->
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">

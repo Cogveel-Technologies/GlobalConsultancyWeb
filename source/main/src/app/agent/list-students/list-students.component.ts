@@ -140,10 +140,9 @@ export class ListstudentsComponent implements OnInit {
   }
 
   addStudentDocument(studentId: number) {
-    
-        this.router.navigate(['/agent/student-document'],
+     this.router.navigate(['/agent/student-document'],
            {
-          queryParams: { id: studentId }
+          queryParams: { id: studentId, origin: 'listStudents' }
           
         });
       }
