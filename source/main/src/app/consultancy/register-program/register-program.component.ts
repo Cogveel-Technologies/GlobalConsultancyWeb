@@ -80,6 +80,8 @@ export class RegisterProgramComponent {
       } else if (sessionId && !intakeId) {
         this.defaultData.SessionId = String(sessionId);
          this.intakeOptions = this.consultancyApiService.getSpecificIntakes(this.defaultData);
+         this.session$.next(null);
+         this.institute$.next(null);
          return of([])
       }else {
         return of([])
