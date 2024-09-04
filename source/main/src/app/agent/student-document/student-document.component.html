@@ -70,7 +70,8 @@
                   <button class="btn-space" [disabled]="!documentForm.valid" mat-raised-button color="primary">
                     {{ isEditMode ? 'Update' : 'Submit' }}
                   </button>
-                  <button type="button" mat-raised-button color="warn" [routerLink]="['/agent/list-students']">Cancel</button>
+                  
+                  <button type="button" mat-raised-button color="warn" (click)="onCancel()">Back</button>
                 </div>
               </div>
             </form>
@@ -90,7 +91,7 @@
                         <th>Sr No.</th>
                         <th>Document Type</th>
                         <th>Remarks</th>
-                        <th>Uploaded By</th>
+                        <!-- <th>Uploaded By</th> -->
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -99,13 +100,13 @@
                         <td data-label="Sr No.">{{ i + 1 }}</td>
                         <td data-label="Document Type">{{ getDocumentTypeName(document.documentTypeId) }}</td>
                         <td data-label="Remarks">{{ document.remarks }}</td>
-                        <td data-label="Uploaded By">{{ document.uploadedBy }}</td>
+                        <!-- <td data-label="Uploaded By">{{ document.uploadedBy }}</td> -->
                         <td data-label="Actions">
                           <button mat-icon-button color="primary" (click)="viewDocument(document.file)">
                             <mat-icon>visibility</mat-icon>
                           </button>
-                          <button mat-icon-button color="primary" (click)="editDocument(document.id)">
-                            <mat-icon>edit</mat-icon>
+                          <button mat-icon-button color="warn" (click)="deleteDocument(document.id)">
+                            <mat-icon>delete</mat-icon>
                           </button>
                         </td>
                       </tr>

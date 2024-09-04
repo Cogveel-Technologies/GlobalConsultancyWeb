@@ -101,7 +101,7 @@ export class AgentService {
     );
   }
 
-  // Methods for student-document-type
+  // Methods for student-document
   submitStudentDocument(formData: FormData): Observable<any> {
     formData.forEach((value, key) => {
       console.log(`${key}:`, value); // Logging the FormData content
@@ -113,7 +113,15 @@ export class AgentService {
   getDocumentTypes(): Observable<{ data: any[], status: number, message: string }> {
     return this.http.get<{ data: any[], status: number, message: string }>(`${this.apiUrl}/DocumentType/all`);
   }
-  
+
+  // deleteStudentDocument(documentId: number): Observable<any> {
+  //   const url = `${this.apiUrl}/StudentDocument/${documentId}`;
+  //   return this.http.delete(url);
+  // }
+  deleteStudentDocument(documentId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/StudentDocument/byId?id=${documentId}`);
+  }
+ 
   
   //METHODS OF  ADD STUDENTDOCUMENT and EDIT
   // getUploadedDocuments(studentId: number): Observable<any> {

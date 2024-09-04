@@ -97,6 +97,16 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
       });
     }
   }
+  editDocument(){
+    if (this.student){
+      this.router.navigate(['/agent/student-document'],
+        {
+       queryParams: { id: this.student.id, origin: 'studentProfile' }
+       
+     });
+    }
+   
+  }
   
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

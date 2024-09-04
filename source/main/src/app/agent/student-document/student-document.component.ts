@@ -6,8 +6,8 @@ import { Router } from '@angular/router';
 import { Student } from 'app/agent/models/student.model';
 import { Observable, Subscription } from 'rxjs';
 import { PaginatedResponse } from '../agent.service'; // Import the PaginatedResponse interface
-
 import { StudentDocument } from '../models/studentDocument.model';
+
 @Component({
   selector: 'app-student-document',
   templateUrl: './student-document.component.html',
@@ -16,8 +16,7 @@ import { StudentDocument } from '../models/studentDocument.model';
 export class StudentDocumentComponent implements OnInit, OnDestroy {
   documentForm: FormGroup;
   documentTypes: any[] = [];  
-
-  uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>; // Correctly define the Observable
+  uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>;
   breadscrums = [
     {
       title: 'Student Details',
@@ -42,16 +41,14 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Subscribe to route data
     const routeSubscription = this.route.data.subscribe((data: { student: Student | null }) => {
       this.student = data.student;
       console.log('Resolved student:', this.student);
       this.patchForm();
-      this.loadUploadedDocument();  // Load the uploaded document when the component initializes
+      this.loadUploadedDocument();
     });
     this.subscriptions.add(routeSubscription);
 
-    // Load document types when component initializes
     this.loadDocumentTypes();
   }
 
@@ -94,11 +91,11 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
     if (this.student) {
       this.uploadedDocument$ = this.agentService.getUploadedDocuments({
         studentId: this.student.id,
-        limit: 10, // You can adjust this value as needed
-        orderBy: 'Id', // You can change this to the appropriate field name
-        sortExpression: 'desc', // Sort order
-        currentPage: 1, // The page number you want to load
-        isDeleted: false // Set this based on whether you want to include deleted records
+        limit: 10,
+        orderBy: 'Id',
+        sortExpression: 'desc',
+        currentPage: 1,
+        isDeleted: false 
       });
     }
   }
@@ -109,21 +106,22 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
       const studentId = this.student.id;
       const remarks = this.documentForm.get('remarks')?.value;
       const file = this.documentForm.get('file')?.value;
-      const uploadedBy = 'yourUserId'; // Replace 'yourUserId' with the actual user ID or username.
+      const uploadedBy = 'yourUserId'; // Replace with the actual user ID or username.
 
-      // Create a FormData object to match backend expectations
       const formData = new FormData();
       formData.append('DocumentTypeId', documentTypeId);
-      formData.append('StudentId', studentId.toString()); // Convert studentId to string
+      formData.append('StudentId', studentId.toString());
       formData.append('Remarks', remarks);
       formData.append('UploadedBy', uploadedBy);
       formData.append('File', file);
+
+      const origin = this.route.snapshot.queryParams['origin'];
 
       if (this.isEditMode && this.documentToEditId !== null) {
         const updateSubscription = this.agentService.updateStudentDocument(this.documentToEditId, formData).subscribe(
           response => {
             console.log('Update Success', response);
-            window.location.reload();
+            this.navigateToOrigin(origin);
           },
           error => {
             console.log('Update Error', error);
@@ -159,6 +157,19 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
   viewDocument(documentUrl: string) {
     window.open(documentUrl, '_blank');
   }
+  deleteDocument(documentId: number) {
+    const deleteSubscription = this.agentService.deleteStudentDocument(documentId).subscribe(
+      response => {
+        console.log('Delete Success', response);
+        this.loadUploadedDocument();  // Reload the document list after deletion
+      },
+      error => {
+        console.log('Delete Error', error);
+        this.errorMessage = 'Error deleting the document. Please try again later.';
+      }
+    );
+    this.subscriptions.add(deleteSubscription);
+  }
    
   editDocument(documentId: number) {
     const editSubscription = this.agentService.getDocumentById(documentId).subscribe(
@@ -171,7 +182,6 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
           remarks: document.remarks,
         });
 
-        // If the file needs to be handled differently, ensure the correct approach here.
         this.documentForm.get('file')?.setValue(document.file);
       },
       error => {
@@ -182,8 +192,29 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
     this.subscriptions.add(editSubscription);
   }
 
+  onCancel() {
+    const origin = this.route.snapshot.queryParams['origin'];
+
+    if (origin === 'studentProfile') {
+      this.router.navigate(['/student/student-profile']);
+    } else if (origin === 'listStudents') {
+      this.router.navigate(['/agent/list-students']);
+    } else {
+      this.router.navigate(['/home']);
+    }
+  }
+
+  navigateToOrigin(origin: string) {
+    if (origin === 'studentProfile') {
+      this.router.navigate(['/student/student-profile']);
+    } else if (origin === 'listStudents') {
+      this.router.navigate(['/agent/list-students']);
+    } else {
+      this.router.navigate(['/home']);
+    }
+  }
+
   ngOnDestroy() {
-    // Unsubscribe from all subscriptions
     this.subscriptions.unsubscribe();
   }
 }

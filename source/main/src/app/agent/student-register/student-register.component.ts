@@ -146,7 +146,7 @@ export class StudentRegisterComponent implements OnInit {
       this.router.navigate(['/agent/list-students']);
     } else {
       // Navigate to a defined default route or handle the absence of origin
-      this.router.navigate(['/home']); // Ensure this route exists
+      this.router.navigate(['/agent/list-students']); // Ensure this route exists
     }
   }
   
@@ -168,7 +168,7 @@ export class StudentRegisterComponent implements OnInit {
       this.router.navigate(['/agent/list-students']);
     } else {
       // Navigate to a defined default route or handle the absence of origin
-      this.router.navigate(['/home']); // Ensure this route exists
+      this.router.navigate(['/agent/list-students']); // Ensure this route exists
     }
   }
   
