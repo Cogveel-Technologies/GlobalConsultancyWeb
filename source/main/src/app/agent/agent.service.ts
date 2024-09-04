@@ -100,7 +100,15 @@ export class AgentService {
       })
     );
   }
-
+  //methods for dropdwon menu in student register component
+  getAgents(): Observable<any> {
+    const url = this.buildUrl('Agent/all');
+    return this.http.get(url);
+  } 
+  getInstitutes(): Observable<any> {
+    const url = this.buildUrl('Institute/all');
+    return this.http.get(url);
+  }
   // Methods for student-document
   submitStudentDocument(formData: FormData): Observable<any> {
     formData.forEach((value, key) => {

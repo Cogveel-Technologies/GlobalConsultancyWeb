@@ -22,6 +22,8 @@ export class StudentRegisterComponent implements OnInit {
   ];
   user: any;
   errorMessage: string = '';
+  agents: any[] = []; // To store agent list from backend
+  institutes: any[] = []; // To store institute list from backend
 
   constructor(
     private fb: FormBuilder, 
@@ -41,6 +43,8 @@ export class StudentRegisterComponent implements OnInit {
         this.fetchStudentById(studentId);
       }
     });
+    this.fetchAgents();
+    this.fetchInstitutes();
   }
 
   initThirdForm() {
@@ -54,9 +58,9 @@ export class StudentRegisterComponent implements OnInit {
       contactNo: ['', Validators.required],
       residentialAddress: ['', Validators.required],
       mailingAddress: ['', Validators.required],
-      agentId: ['', Validators.required],
+      agentId: ['', Validators.required], // Dropdown for agent
       password: ['', Validators.required],
-      instituteId: ['', Validators.required],
+      instituteId: ['', Validators.required], // Dropdown for institute
     });
 
     // Debug: Log form status changes
@@ -65,6 +69,32 @@ export class StudentRegisterComponent implements OnInit {
       console.log('Form Errors: ', this.thirdForm.errors);
       console.log('Form Controls: ', this.thirdForm.controls);
     });
+  }
+
+  // Fetch agents from backend
+  fetchAgents() {
+    this.agentService.getAgents().subscribe(
+      (data) => {
+        this.agents = data;
+        console.log('Agents:', this.agents);
+      },
+      (error) => {
+        console.error('Error fetching agents:', error);
+      }
+    );
+  }
+
+  // Fetch institutes from backend
+  fetchInstitutes() {
+    this.agentService.getInstitutes().subscribe(
+      (data) => {
+        this.institutes = data;
+        console.log('Institutes:', this.institutes);
+      },
+      (error) => {
+        console.error('Error fetching institutes:', error);
+      }
+    );
   }
 
   decryptData(data: string): string {
@@ -98,9 +128,9 @@ export class StudentRegisterComponent implements OnInit {
         contactNo: this.user.contactNo || '',
         residentialAddress: this.user.residentialAddress || '',
         mailingAddress: this.user.mailingAddress || '',
-        agentId: this.user.agentId || '',
+        agentId: this.user.agentId || '', // Set agent from fetched data
         password: this.user.password || '',
-        instituteId: this.user.instituteId || '',
+        instituteId: this.user.instituteId || '', // Set institute from fetched data
       });
     }
   }
@@ -108,7 +138,7 @@ export class StudentRegisterComponent implements OnInit {
   onThirdFormSubmit() {
     if (this.thirdForm.valid) {
       const origin = this.route.snapshot.queryParams['origin']; // Fetch the origin parameter
-  
+
       if (this.isFormPrefilled()) {
         this.agentService.updateStudentData(this.user.id, this.thirdForm.value).subscribe(
           response => {
@@ -124,7 +154,7 @@ export class StudentRegisterComponent implements OnInit {
         this.agentService.submitStudentData(this.thirdForm.value).subscribe(
           response => {
             console.log('Submit Success', response);
-            this.router.navigate(['/agent/list-students']);
+            this.navigateToOrigin(origin);
           },
           error => {
             console.log('Submit Error', error);
@@ -137,7 +167,7 @@ export class StudentRegisterComponent implements OnInit {
       console.log('Form is not valid');
     }
   }
-  
+
   // Utility method to handle navigation based on origin
   navigateToOrigin(origin: string) {
     if (origin === 'studentProfile') {
@@ -149,7 +179,7 @@ export class StudentRegisterComponent implements OnInit {
       this.router.navigate(['/agent/list-students']); // Ensure this route exists
     }
   }
-  
+
   isFormPrefilled(): boolean {
     return !!this.user && !!this.user.id;
   }
@@ -159,9 +189,10 @@ export class StudentRegisterComponent implements OnInit {
       duration: 4000,
     });
   }
+
   onCancel() {
     const origin = this.route.snapshot.queryParams['origin'];
-  
+
     if (origin === 'studentProfile') {
       this.router.navigate(['/student/student-profile']);
     } else if (origin === 'listStudents') {
@@ -171,7 +202,4 @@ export class StudentRegisterComponent implements OnInit {
       this.router.navigate(['/agent/list-students']); // Ensure this route exists
     }
   }
-  
-  
-  
 }
