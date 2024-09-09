@@ -5,21 +5,24 @@
             <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
             </app-breadcrumb>
         </div>
-        <!-- Your content goes here  -->
         <div class="row clearfix">
             <div class="col-lg-3 col-md-12">
                 <div class="card">
                     <div class="m-b-20">
                         <div class="contact-grid">
                             <div class="profile-header bg-dark">
-                                <div class="user-name">{{details.programName}}</div>
+                                <div class="user-name">{{details.agentFirstName}}</div>
                                 <!-- <div class="name-center">{{details.middleName}}</div> -->
                             </div>
                             <div class="position-relative">
                                 <img src="assets/images/user/success.webp" class="profile-img user-img" alt="">
                                 <mat-icon matSuffix class="profile-img-edit" matTooltip="Edit">edit</mat-icon>
                             </div>
-    
+                            <div>
+                                <span class="phone">
+                                    <mat-icon>phone</mat-icon>{{details.agentPhone}}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -41,55 +44,56 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                      <td><mat-icon color="primary">school</mat-icon> Program Name</td>
-                                                      <td>{{details.programName}}</td>
+                                                        <td><mat-icon color="primary">business</mat-icon> Agent Company
+                                                            Name</td>
+                                                        <td>{{details.agentCompany}}</td>
                                                     </tr>
                                                     <tr>
-                                                      <td><mat-icon color="primary">timer</mat-icon> Duration</td>
-                                                      <td>{{details.duration}}</td>
+                                                        <td><mat-icon color="primary">alternate_email</mat-icon>
+                                                            Alternate Company Name</td>
+                                                        <td>{{details.alternateCompanyName}}</td>
                                                     </tr>
                                                     <tr>
-                                                      <td><mat-icon color="primary">attach_money</mat-icon> Application Fee</td>
-                                                      <td>{{details.applicationFee}}</td>
+                                                        <td><mat-icon color="primary">location_on</mat-icon> Company
+                                                            Address</td>
+                                                        <td>{{details.companyAddress}}</td>
                                                     </tr>
                                                     <tr>
-                                                      <td><mat-icon color="primary">account_balance_wallet</mat-icon> Tuition Fee</td>
-                                                      <td>{{details.tuitionFee}}</td>
+                                                        <td><mat-icon color="primary">public</mat-icon> Company Website
+                                                        </td>
+                                                        <td>{{details.companyWebsite}}</td>
                                                     </tr>
                                                     <tr>
-                                                      <td><mat-icon color="primary">school</mat-icon> Level of Education</td>
-                                                      <td>{{details.levelOfEducation}}</td>
+                                                        <td><mat-icon color="primary">person</mat-icon> Agent First Name
+                                                        </td>
+                                                        <td>{{details.agentFirstName}}</td>
                                                     </tr>
                                                     <tr>
-                                                      <td><mat-icon color="primary">check_circle</mat-icon> Status</td>
-                                                      <td>{{details.status}}</td>
+                                                        <td><mat-icon color="primary">person</mat-icon> Agent Middle Name
+                                                        </td>
+                                                        <td>{{details.agentMiddleName}}</td>
                                                     </tr>
                                                     <tr>
-                                                      <td><mat-icon color="primary">category</mat-icon> Program Category</td>
-                                                      <td>{{details.programCategoryId}}</td>
+                                                        <td><mat-icon color="primary">person</mat-icon> Agent Last Name
+                                                        </td>
+                                                        <td>{{details.agentLastName}}</td>
                                                     </tr>
                                                     <tr>
-                                                      <td><mat-icon color="primary">calendar_today</mat-icon> Program Intake</td>
-                                                      <td>{{details.programIntake}}</td>
+                                                        <td><mat-icon color="primary">email</mat-icon> Agent Email</td>
+                                                        <td>{{details.agentEmail}}</td>
                                                     </tr>
                                                     <tr>
-                                                      <td><mat-icon color="primary">note_add</mat-icon> Subject Requirements</td>
-                                                      <td>{{details.subjectRequirements}}</td>
+                                                        <td><mat-icon color="primary">phone</mat-icon> Agent Phone</td>
+                                                        <td>{{details.agentPhone}}</td>
                                                     </tr>
                                                     <tr>
-                                                      <td><mat-icon color="primary">book</mat-icon> Academic Requirements</td>
-                                                      <td>{{details.academicRequirements}}</td>
+                                                        <td><mat-icon color="primary">linkedin</mat-icon> LinkedIn
+                                                            Profile</td>
+                                                        <td>{{details.linkedInProfile}}</td>
                                                     </tr>
-                                                    <tr>
-                                                      <td><mat-icon color="primary">event</mat-icon> Program Intake</td>
-                                                      <td>{{details.programIntake}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td><mat-icon color="primary">calendar_view_month</mat-icon> Intake</td>
-                                                      <td>{{details.intakeId}}</td>
-                                                    </tr>
-                                                  </tbody>
-                                                  
+                                                </tbody>
+
+
                                             </table>
                                         </div>
                                     </div>

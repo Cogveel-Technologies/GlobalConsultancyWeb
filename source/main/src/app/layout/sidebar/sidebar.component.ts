@@ -11,6 +11,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { ROUTES } from './sidebar-items';
+// import { RouteInfo } from './sidebar.model';
 import { AuthService } from '@core';
 import { RouteInfo } from './sidebar.metadata';
 import { loginService } from 'app/login.service';
@@ -24,6 +25,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   public sidebarItems!: RouteInfo[];
   public innerHeight?: number;
   public bodyTag!: HTMLElement;
+  public roleName:string;
   listMaxHeight?: string;
   listMaxWidth?: string;
   headerHeight = 60;
@@ -66,22 +68,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     }
   }
-  ngOnInit() {
-   
-    const accessibleModules = localStorage.getItem("modulesAccess").toLocaleLowerCase().split(",");
-    function getModuleNameFromTitle(title:string){
-      const name = title.split(".");
-      return name[1].toLowerCase();
-    }
-    if( accessibleModules){
-      this.sidebarItems = ROUTES.filter(route => {
-        const moduleName = getModuleNameFromTitle(route.title.toLowerCase());
-        return accessibleModules.includes(moduleName);
-      });
-    }else{
+  ngOnInit() { 
+    this.roleName = localStorage.getItem("role")
     this.sidebarItems = ROUTES.filter((sidebarItem) => {
       return sidebarItem
-    })};
+    });
     
   
     this.initLeftSidebar();

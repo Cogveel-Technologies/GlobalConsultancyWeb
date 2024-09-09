@@ -152,8 +152,8 @@
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Program Category</mat-label>
                                         <mat-select formControlName="programCategoryId" required>
-                                            <mat-option *ngFor="let category of programCategoryOptions"
-                                                [value]="category">{{ category }}</mat-option>
+                                            <mat-option *ngFor="let category of (programCategoryOptions|async)"
+                                                [value]="category.id">{{ category.name }}</mat-option>
                                         </mat-select>
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>category</mat-icon>
@@ -175,8 +175,8 @@
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Course type</mat-label>
                                         <mat-select formControlName="courseTypeId" required>
-                                            <mat-option *ngFor="let category of programCategoryOptions"
-                                                [value]="category">{{ category }}</mat-option>
+                                            <mat-option *ngFor="let category of (courseTypeOptions|async)"
+                                                [value]="category.id">{{ category.name }}</mat-option>
                                         </mat-select>
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>category</mat-icon>
@@ -218,7 +218,7 @@
                                     <button type="submit" class="btn-space" mat-raised-button color="primary"
                                         [disabled]="!registerProgram.valid">{{editMode
                                         ? 'Update' : 'Register'}}</button>
-                                    <button type="button" mat-raised-button color="warn">Cancel</button>
+                                    <button type="button" mat-raised-button color="warn" (click)="navigateToProgramList()">Cancel</button>
                                 </div>
                             </div>
                         </form>

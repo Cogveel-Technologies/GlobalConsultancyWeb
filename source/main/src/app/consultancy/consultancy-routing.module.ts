@@ -26,6 +26,11 @@ import { allConsultancyDetails } from './consultancy-resolvers/allDetails-consul
 import { ProgramResolver } from './consultancy-resolvers/edit-program.resolver';
 import { allProgramDetails } from './consultancy-resolvers/allDetails-program.resolver';
 import { ConsultancyResolver } from './consultancy-resolvers/edit-consultancy.resolver';
+import { RegisterAgentComponent } from './register-agent/register-agent.component';
+import { AgentListComponent } from './agent-list/agent-list.component';
+import { AgentResolver } from './consultancy-resolvers/edit-agent.resolver';
+import { AgentAllDetailsComponent } from './agent-all-details/agent-all-details.component';
+import { allAgentDetails } from './consultancy-resolvers/allDetails-agent.resolver';
 
 
 
@@ -109,7 +114,25 @@ const routes: Routes = [
   {
     path: 'session-list',
     component: SessionListComponent
-  }
+  },
+  {
+    path: 'register-agent',
+    component: RegisterAgentComponent
+  },
+  {
+    path: 'agent-list',
+    component: AgentListComponent
+  },
+  {
+    path: 'edit-agent/:id',
+    component: RegisterAgentComponent,
+    resolve: { editResponse: AgentResolver }
+  },
+  {
+    path: 'agent-details/:id',
+    component: AgentAllDetailsComponent,
+    resolve: { agentDetails: allAgentDetails }
+  },
 
 
 ];

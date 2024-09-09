@@ -98,6 +98,10 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
 
   }
 
+  onCancel(){
+    this.navigateToInstituteList()
+  }
+
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }

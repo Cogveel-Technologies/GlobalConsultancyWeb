@@ -25,10 +25,10 @@ export class RegisterProgramComponent {
   ];
   registerProgram: FormGroup;
   editMode: boolean;
-  programCategoryOptions = [101, 102, 103, 1];
-  programIntakeOptions = [200, 201, 202];
+  programCategoryOptions:Observable<SpecificConsultancyRelated[]>;
+  courseTypeOptions:Observable<SpecificConsultancyRelated[]>;
   statusOptions: string[] = ["Active", "Inactive"];
-  isPublic: boolean[] = [true, false]
+  isPublic: boolean[] = [true, false];
   subscriptions: Subscription = new Subscription();
   editId: number;
   consultancyId:string = localStorage.getItem("id");
@@ -71,6 +71,8 @@ export class RegisterProgramComponent {
     }
 
     this.instituteOptions = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
+    this.programCategoryOptions = this.consultancyApiService.getCategory("programCategory");
+    this.courseTypeOptions = this.consultancyApiService.getCategory("courseType");
 
     this.subscriptions.add(combineLatest([this.institute$, this.session$, this.intake$]).pipe(switchMap(([instituteId, sessionId, intakeId]) => {
       if (instituteId && !sessionId) {
@@ -78,6 +80,7 @@ export class RegisterProgramComponent {
          this.sessionOptions = this.consultancyApiService.getSpecificSessions(this.defaultData);
          return of([])
       } else if (sessionId && !intakeId) {
+        console.log("hello")
         this.defaultData.SessionId = String(sessionId);
          this.intakeOptions = this.consultancyApiService.getSpecificIntakes(this.defaultData);
          this.session$.next(null);
@@ -99,17 +102,21 @@ export class RegisterProgramComponent {
     this.intake$.next(event.value)
   }
 
+  navigateToProgramList(){
+    this.router.navigate(["consultancy", "program-list"]);
+  }
+
   onSubmit() {
     let newDetails = this.registerProgram.value;
     newDetails.consultancyId = +this.consultancyId;
     console.log(newDetails)
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateProgram(this.editId, newDetails).subscribe(res => {
-        this.router.navigate(["consultancy", "program-list"]);
+        this.navigateToProgramList()
       }))
     } else {
       this.subscriptions.add(this.consultancyApiService.registerProgram(newDetails).subscribe(res => {
-        this.router.navigate(["consultancy", "program-list"]);
+        this.navigateToProgramList()
       }))
     }
   }

@@ -14,7 +14,7 @@ import { PageEvent } from '@angular/material/paginator';
   styleUrls: ['./session-list.component.scss']
 })
 export class SessionListComponent {
-  constructor(private consultancyApiService: ConsultancyApi, private consultancyService: ConsultancyService) { }
+  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService) { }
   breadscrums = [
     {
       title: 'Session List',
@@ -29,12 +29,16 @@ export class SessionListComponent {
   instituteListForm: FormGroup;
   institutes: Observable<SpecificConsultancyRelated[]>;
   institute$: BehaviorSubject<null | number> = new BehaviorSubject<null | number>(null);
-  subscription: Subscription;
+  subscription: Subscription = new Subscription();
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
   pagination$: BehaviorSubject<{pageSize:number,pageIndex:number}> = new BehaviorSubject<{pageSize:number,pageIndex:number}>({pageSize:this.defaultData.pageSize, pageIndex:this.defaultData.currentPage});
   sorting$: BehaviorSubject<string> = new BehaviorSubject<string>(this.defaultData.sortExpression);
+  totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
+
+  
   
 
   // get sessions
@@ -54,7 +58,7 @@ export class SessionListComponent {
     // get institutes
     this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
     
-   combineLatest([this.institute$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
+   this.subscription.add(combineLatest([this.institute$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(),
       switchMap(([instituteId, search, pageRelated,sort]) => {
@@ -73,7 +77,7 @@ export class SessionListComponent {
         if (res.length) {
           this.instituteSelected = true
         }
-      })
+      }))
   }
 
   onInstituteChange(event: any) {
@@ -84,24 +88,25 @@ export class SessionListComponent {
   onDeleteSession(id: number) {
     const con = confirm("Are you sure?")
     if (con) {
-      this.consultancyApiService.deleteSession(id).subscribe(res => {
+      this.subscription.add(this.consultancyApiService.deleteSession(id).subscribe(res => {
         this.sessions = this.getSessions(this.defaultData)
-      });
+      }));
     }
   }
 
-  // page event
-  onPageChange(event: PageEvent) {
-    this.pagination$.next({pageSize:event.pageSize,pageIndex:event.pageIndex+1})
-  }
-
-   // sort event
-   onSortChange(event: any) {
-    if (event.direction === '') {
-      event.direction = 'asc'
+    // page event
+    onPageChange(event: PageEvent) {
+      console.log(event)
+      this.pagination$.next({pageSize:event.pageSize,pageIndex:event.pageIndex+1})
     }
-    this.sorting$.next(event.direction)
-  }
+  
+     // sort event
+     onSortChange(event: any) {
+      if (event.direction === '') {
+        event.direction = 'asc'
+      }
+      this.sorting$.next(event.direction)
+    }
 
   onDestroy(){
     this.subscription.unsubscribe()

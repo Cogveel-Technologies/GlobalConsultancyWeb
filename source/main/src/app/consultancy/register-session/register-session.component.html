@@ -48,7 +48,7 @@
                             <div class="row">
                                 <div class="col-auto">
                                     <button type="submit" class="btn-space" mat-raised-button color="primary" [disabled]="!registerSession.valid">{{editMode ? 'Update' : 'Submit'}}</button>
-                                    <button type="button" mat-raised-button color="warn">Cancel</button>
+                                    <button type="button" mat-raised-button color="warn" (click)="routeToSessionList()">Cancel</button>
                                 </div>
                             </div>
                         </form>

@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { ConsultancyApi } from '../consultancy-services/api.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register-session',
@@ -26,6 +26,7 @@ export class RegisterSessionComponent {
   consultancyId:string = localStorage.getItem("id");
   instituteId:number;
   editId:number;
+  subscription:Subscription = new Subscription()
 
 
   ngOnInit(){
@@ -42,7 +43,6 @@ export class RegisterSessionComponent {
     // edit session
     const editSession = this.route.snapshot.data['editResponse'];
     if(editSession){
-      console.log(editSession)
       this.editId = +this.route.snapshot.paramMap.get('id');
       this.instituteId = editSession.instituteId;
       this.editMode =true;
@@ -67,15 +67,18 @@ export class RegisterSessionComponent {
      sessionDetails.consultancyId = +this.consultancyId;
     
     if (this.editMode) {
-      console.log(sessionDetails)
-      this.consultancyApiService.updateSession(this.editId, sessionDetails)
-      .subscribe(res=> this.routeToSessionList())
+      this.subscription.add(this.consultancyApiService.updateSession(this.editId, sessionDetails)
+      .subscribe(res=> this.routeToSessionList()))
     } else {
        // call api to record new session in db
        sessionDetails.instituteId = this.instituteId;
-       this.consultancyApiService.registerSession(sessionDetails)
-       .subscribe(res => this.routeToSessionList())
+       this.subscription.add(this.consultancyApiService.registerSession(sessionDetails)
+       .subscribe(res => this.routeToSessionList()))
       
     }
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe()
   }
 }
