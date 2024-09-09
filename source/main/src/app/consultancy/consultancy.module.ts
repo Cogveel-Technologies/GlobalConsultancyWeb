@@ -19,6 +19,9 @@ import { RegisterIntakesComponent } from './register-intakes/register-intakes.co
 import { RegisterProgramComponent } from './register-program/register-program.component';
 import { RegisterSessionComponent } from './register-session/register-session.component';
 import { SessionListComponent } from './session-list/session-list.component';
+import { RegisterAgentComponent } from './register-agent/register-agent.component';
+import { AgentListComponent } from './agent-list/agent-list.component';
+import { AgentAllDetailsComponent } from './agent-all-details/agent-all-details.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,9 @@ import { SessionListComponent } from './session-list/session-list.component';
     RegisterProgramComponent,
     RegisterSessionComponent,
     SessionListComponent,
+    RegisterAgentComponent,
+    AgentListComponent,
+    AgentAllDetailsComponent,
   ],
   imports: [
     SharedModule,

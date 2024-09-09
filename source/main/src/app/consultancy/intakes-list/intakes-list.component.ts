@@ -21,24 +21,24 @@ export class IntakesListComponent {
       active: 'Intake List',
     },
   ];
-  constructor(private consultancyApiService: ConsultancyApi, private consultancyService: ConsultancyService) { }
+  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService) { }
   intakes!: Observable<IntakeData[]>
-  defaultData: ConsultancyDetailsOptions = this.consultancyService.defaultRenderData();
-  pageSize: number;
-  currentPage: number;
   intakeSelected: boolean = false;
   consultancyId: string = localStorage.getItem("id");
   sessionListForm: FormGroup;
-  programs: string[] = ['Program 1', 'Program 2', 'Program 3'];
-  institutes: string[] = ['Institute 1', 'Institute 2', 'Institute 3'];
   sessions: Observable<SpecificConsultancyRelated[]>
   session$: BehaviorSubject<null | number> = new BehaviorSubject<null | number>(null);
   subscription: Subscription = new Subscription();
+  defaultData:ConsultancyDetailsOptions = this.consultancyService.defaultRenderData();
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
-  pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number }> = new BehaviorSubject<{ pageSize: number, pageIndex: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage });
+  pagination$: BehaviorSubject<{pageSize:number,pageIndex:number}> = new BehaviorSubject<{pageSize:number,pageIndex:number}>({pageSize:this.defaultData.pageSize, pageIndex:this.defaultData.currentPage});
   sorting$: BehaviorSubject<string> = new BehaviorSubject<string>(this.defaultData.sortExpression);
+  totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
+  
+  
 
   getIntakes(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getIntakes(params).pipe
@@ -62,7 +62,7 @@ export class IntakesListComponent {
       distinctUntilChanged(),
       switchMap(([sessionId, search, pageRelated, sort]) => {
         if (sessionId) {
-          this.defaultData.SessionId = String(sessionId);
+          this.defaultData.IntakeId = String(sessionId);
           this.defaultData.searchText = search;
           this.defaultData.pageSize = pageRelated.pageSize;
           this.defaultData.currentPage = pageRelated.pageIndex;
@@ -79,9 +79,22 @@ export class IntakesListComponent {
   }
 
   onSessionChange(event: any) {
-    console.log(event)
     this.session$.next(event.value)
   }
+
+    // page event
+    onPageChange(event: PageEvent) {
+      console.log(event)
+      this.pagination$.next({pageSize:event.pageSize,pageIndex:event.pageIndex+1})
+    }
+  
+     // sort event
+     onSortChange(event: any) {
+      if (event.direction === '') {
+        event.direction = 'asc'
+      }
+      this.sorting$.next(event.direction)
+    }
 
   addProgram() { }
 
@@ -92,19 +105,6 @@ export class IntakesListComponent {
         this.intakes = this.getIntakes(this.defaultData);
       }));
     }
-  }
-
-  // page event
-  onPageChange(event: PageEvent) {
-    this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
-  }
-
-  // sort event
-  onSortChange(event: any) {
-    if (event.direction === '') {
-      event.direction = 'asc'
-    }
-    this.sorting$.next(event.direction)
   }
 
   onDestroy() {

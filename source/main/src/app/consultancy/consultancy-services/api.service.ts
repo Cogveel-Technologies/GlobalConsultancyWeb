@@ -10,6 +10,7 @@ import { IntakeData } from "../consultancy-models/data.intake";
 import { SessionData } from "../consultancy-models/data.session";
 import { loginService } from "app/login.service";
 import { SpecificConsultancyRelated } from "../consultancy-models/data.specificInstitutes";
+import { AgentDetails } from "../consultancy-models/data.agent";
 
 @Injectable({
     providedIn: 'root'
@@ -83,7 +84,7 @@ export class ConsultancyApi {
     }
     // ------------- display-programs -------------
     getPrograms(data: ConsultancyDetailsOptions): Observable<ProgramData[]> {
-        return this.http.get<ProgramData[]>(`${this.baseUrl}/Program?InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&IntakeId=${data.IntakeId}&ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&CurrentPage=${data.currentPage}`)
+        return this.http.get<ProgramData[]>(`${this.baseUrl}/Program?InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&IntakeId=${data.IntakeId}&IsPublic=${data.IsPublic}&ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
     }
     // ------------- delete-Program -----------------
     deleteProgram(id: number) {
@@ -99,8 +100,12 @@ export class ConsultancyApi {
         return this.http.get<Observable<ProgramData>>(`${this.baseUrl}/Program/byId?Id=${id}`).pipe(map(res => res['data']))
     }
     // ------------- get specific institutes related to loggedin consultancy ------------- ----------
-    getSpecificPrograms(consultancyId: string): Observable<SpecificConsultancyRelated[]> {
-        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Institute/All?ConsultancyId=${consultancyId}`).pipe(map(response => response['data']))
+    getSpecificPrograms(programCategory: string): Observable<SpecificConsultancyRelated[]> {
+        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Institute/All?ConsultancyId=${programCategory}`).pipe(map(response => response['data']))
+    }
+    // ------------------------ get program category ----------------------------
+    getCategory(filterBy: string): Observable<SpecificConsultancyRelated[]> {
+        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/DropDown/All?DropDownListName=${filterBy}`).pipe(map(response => response['data']))
     }
     ///////////////////////////////////////////// INTAKES /////////////////////////////////////////////////
     // --------- register-intake ------------------
@@ -124,7 +129,7 @@ export class ConsultancyApi {
         return this.http.get<Observable<IntakeData>>(`${this.baseUrl}/Intake/byId?Id=${id}`).pipe(map(res => res['data']))
     }
     // ------------- get specific sessions related to loggedin consultancy ------------- ----------
-    getSpecificIntakes(data:ConsultancyDetailsOptions): Observable<SpecificConsultancyRelated[]> {
+    getSpecificIntakes(data: ConsultancyDetailsOptions): Observable<SpecificConsultancyRelated[]> {
         return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Intake/All?SessionId=${data.SessionId}`).pipe(map(response => response['data']))
     }
 
@@ -150,11 +155,36 @@ export class ConsultancyApi {
         return this.http.get<Observable<SessionData>>(`${this.baseUrl}/Session/byId?Id=${id}`).pipe(map(res => res['data']))
     }
     // ------------- get specific sessions related to loggedin consultancy ------------- ----------
-    getSpecificSessions(data:ConsultancyDetailsOptions): Observable<SpecificConsultancyRelated[]> {
+    getSpecificSessions(data: ConsultancyDetailsOptions): Observable<SpecificConsultancyRelated[]> {
         return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Session/All?InstituteId=${data.InstituteId}&ConsultancyId=${data.ConsultancyId}`).pipe(map(response => response['data']))
     }
     // ------------------------ Country Api ---------------------------------
     getAllCountries(): Observable<{ countryName: string, id: number }[]> {
         return this.http.get<Observable<{ countryName: string, id: number }[]>>(`${this.baseUrl}/Country/All`).pipe(map(res => res['data']))
     }
+
+    /////////////////////////////////////////// AGENT //////////////////////////////////////////////////
+
+    // --------- register-agent ------------------
+    registerAgent(data: AgentDetails) {
+        return this.http.post(`${this.baseUrl}/Agent`, data)
+    }
+    // ------------------- display-agent ----------------
+    getAgents(data: ConsultancyDetailsOptions): Observable<AgentDetails[]> {
+        return this.http.get<AgentDetails[]>(`${this.baseUrl}/Agent?ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
+    }
+    // ------------- delete-agent -----------------
+    deleteAgent(id: number) {
+        return this.http.delete(`${this.baseUrl}/Agent/byId?Id=${id}`)
+    }
+    // ------------- edit-Program ------------------
+    updateAgent(id: number, data: AgentDetails) {
+        return this.http.put(`${this.baseUrl}/Agent/${id}`, data)
+    }
+    // --------- single-session-details ------------------
+    getAgentDetails(id: number): Observable<AgentDetails> {
+        return this.http.get<Observable<AgentDetails>>(`${this.baseUrl}/Agent/byId?Id=${id}`).pipe(map(res => res['data']))
+    }
+
+
 }

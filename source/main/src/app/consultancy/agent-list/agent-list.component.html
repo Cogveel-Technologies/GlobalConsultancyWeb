@@ -1,0 +1,79 @@
+
+<section class="content">
+    <div class="container-fluid">
+      <div class="block-header" *ngFor="let breadscrum of breadscrums">
+        <!-- breadcrumb -->
+        <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+        </app-breadcrumb>
+      </div>
+  
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="materialTableHeader">
+              <div class="left">
+                <ul class="header-buttons-left ms-0">
+                  <li class="tbl-title me-2">
+                    <h2>Agent List</h2>
+                  </li>
+                  <app-search [searchText]="search"></app-search>
+                </ul>
+              </div>
+              <div class="right">
+                <ul class="tbl-export-btn">
+                  <li class="tbl-header-btn">
+                    <div class="m-l-10" matTooltip="ADD">
+                      <button mat-mini-fab color="primary">
+                        <mat-icon class="col-white">add</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="body table-responsive">
+              <table class="table table-hover table-responsive" matSort (matSortChange)="onSortChange($event)" >
+                <thead>
+                  <tr>
+                    <th mat-sort-header="agentCompany">Agent Company</th>
+                    <th mat-sort-header="agentFirstName">Agent Name</th>
+                    <th mat-sort-header="agentPhone">Phone</th>
+                    <th mat-sort-header="agentEmail">Email</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let agent of (agents | async)">
+                    <td data-label="Consultancy Name">{{ agent.agentCompany }}</td>
+                    <td data-label="Phone">{{ agent.agentFirstName }}</td>
+                    <td data-label="State">{{ agent.agentPhone }}</td>
+                    <td data-label="Registration No">{{ agent.agentEmail }}</td>
+                    <td data-label="Actions">
+                      <button mat-icon-button [routerLink]="['/consultancy/agent-details', agent.id]">
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+                      <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-agent', agent.id]">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <app-pagination [pageSize]="defaultData.pageSize" (pageChange)="onPageChange($event)" [length]="records"></app-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

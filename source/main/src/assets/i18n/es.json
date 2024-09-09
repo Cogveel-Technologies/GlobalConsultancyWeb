@@ -49,7 +49,9 @@
         "REGISTER_CONSULTANCY": "Register Consultancy",
         "CONSULTANCY_LIST": "Consultancy List",
         "REGISTER_INSTITUTE": "Register Institute",
-        "INSTITUTION-LIST": "Institution List"
+        "INSTITUTION-LIST": "Institution List",
+        "REGISTER_AGENT": "Register Agent",
+        "AGENT_LIST": "Agent List"
       }
     },
     "STUDENT": {

@@ -1,0 +1,120 @@
+<section class="content">
+    <div class="content-block">
+      <div class="block-header" *ngFor="let breadscrum of breadscrums">
+        <!-- breadcrumb -->
+        <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="!editMode ? breadscrum.active : 'Edit Agent'"></app-breadcrumb>
+      </div>
+  
+      <div class="row clearfix">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="body">
+              <form class="m-4" [formGroup]="registerAgent" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Agent Company</mat-label>
+                      <input matInput formControlName="agentCompany" required appCustomValidator="agentCompany">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>business</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Alternate Company Name</mat-label>
+                      <input matInput formControlName="alternateCompanyName" appCustomValidator="alternateCompanyName">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>business_center</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Company Address</mat-label>
+                      <textarea matInput formControlName="companyAddress" required appCustomValidator="address"></textarea>
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_on</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <div class="row">
+                  <div class="col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Company Website</mat-label>
+                      <input matInput formControlName="companyWebsite" required appCustomValidator="companyWebsite">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>public</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Agent First Name</mat-label>
+                      <input matInput formControlName="agentFirstName" required appCustomValidator="agentFirstName">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>person</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Agent Middle Name</mat-label>
+                      <input matInput formControlName="agentMiddleName" required appCustomValidator="agentMiddleName">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>person_outline</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Agent Last Name</mat-label>
+                      <input matInput formControlName="agentLastName" required appCustomValidator="agentLastName">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>person</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <div class="row">
+                  <div class="col-md-12 col-sm-12 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Agent Phone</mat-label>
+                      <input matInput formControlName="agentPhone" required maxlength="12" appCustomValidator="phoneNumber">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Email</mat-label>
+                      <input matInput formControlName="agentEmail" required appCustomValidator="email">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-3">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Password</mat-label>
+                      <input matInput formControlName="password" required appCustomValidator="password">
+                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <div class="row">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>LinkedIn</mat-label>
+                    <input matInput formControlName="linkedInProfile" required appCustomValidator="linkedIn">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <button class="btn-space" [disabled]="!registerAgent.valid" mat-raised-button color="primary">{{editMode ? 'Update' : 'Submit' }}</button>
+                    <button type="button" mat-raised-button color="warn" (click)="navigateToAgentList()">Cancel</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
