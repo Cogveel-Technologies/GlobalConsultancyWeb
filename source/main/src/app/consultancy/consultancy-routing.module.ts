@@ -31,6 +31,7 @@ import { AgentListComponent } from './agent-list/agent-list.component';
 import { AgentResolver } from './consultancy-resolvers/edit-agent.resolver';
 import { AgentAllDetailsComponent } from './agent-all-details/agent-all-details.component';
 import { allAgentDetails } from './consultancy-resolvers/allDetails-agent.resolver';
+import { AuthGuard } from '@core/guard/auth.guard';
 
 
 
@@ -59,52 +60,60 @@ const routes: Routes = [
   {
     path: 'register-institute',
     component: RegisterInstituteComponent,
+    canActivate:[AuthGuard]
 
   },
   {
     path: 'edit-institute/:id',
     component: RegisterInstituteComponent,
-    resolve: { editResponse: InstituteResolver }
+    resolve: { editResponse: InstituteResolver },
   }, {
     path: 'institute-details/:id',
     component: InstituteAllDetailsComponent,
-    resolve: { instituteDetails: allInstituteDetails }
+    resolve: { instituteDetails: allInstituteDetails },
   },
   {
     path: 'institution-list',
     component: InstitutionListComponent,
+    canActivate:[AuthGuard],
   }, 
   {
     path: 'register-program',
-    component: RegisterProgramComponent
+    component: RegisterProgramComponent,
+    canActivate:[AuthGuard]
   }, {
     path: 'program-details/:id',
     component: ProgramAllDetailsComponent,
-    resolve: { programDetails: allProgramDetails }
+    resolve: { programDetails: allProgramDetails },
+    canActivate:[AuthGuard]
   }, {
     path: 'program-list',
-    component: ProgramListComponent
+    component: ProgramListComponent,
+    canActivate:[AuthGuard]
   },
   {
     path: 'edit-program/:id',
     component: RegisterProgramComponent,
-    resolve: { editResponse: ProgramResolver }
+    resolve: { editResponse: ProgramResolver },
   }, {
     path: 'register-intake',
-    component: RegisterIntakesComponent
+    component: RegisterIntakesComponent,
+    canActivate:[AuthGuard]
   },
   {
     path: 'edit-intake/:id',
     component: RegisterIntakesComponent,
-    resolve: { editResponse: IntakeResolver }
+    resolve: { editResponse: IntakeResolver },
   },
   {
     path: 'intake-list',
     component: IntakesListComponent,
+    canActivate:[AuthGuard]
 
   }, {
     path: 'register-session',
-    component: RegisterSessionComponent
+    component: RegisterSessionComponent,
+    canActivate:[AuthGuard]
   },
   {
     path: 'edit-session/:id',
@@ -113,25 +122,28 @@ const routes: Routes = [
   },
   {
     path: 'session-list',
-    component: SessionListComponent
+    component: SessionListComponent,
+    canActivate:[AuthGuard]
   },
   {
     path: 'register-agent',
-    component: RegisterAgentComponent
+    component: RegisterAgentComponent,
+    canActivate:[AuthGuard]
   },
   {
     path: 'agent-list',
-    component: AgentListComponent
+    component: AgentListComponent,
+    canActivate:[AuthGuard]
   },
   {
     path: 'edit-agent/:id',
     component: RegisterAgentComponent,
-    resolve: { editResponse: AgentResolver }
+    resolve: { editResponse: AgentResolver },
   },
   {
     path: 'agent-details/:id',
     component: AgentAllDetailsComponent,
-    resolve: { agentDetails: allAgentDetails }
+    resolve: { agentDetails: allAgentDetails },
   },
 
 

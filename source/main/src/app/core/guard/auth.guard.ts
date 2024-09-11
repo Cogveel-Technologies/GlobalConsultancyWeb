@@ -8,12 +8,15 @@ import { AuthService } from '../service/auth.service';
 })
 export class AuthGuard  {
   constructor(private authService: AuthService, private router: Router) {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (localStorage.getItem('token')) {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    const accessiblePaths = JSON.parse(localStorage.getItem('accessiblePaths') || '[]');
+    const requestedRoute = state.url;
+    
+    if (accessiblePaths.includes(requestedRoute)) {
       return true;
+    } else {
+      this.router.navigate(['/authentication/signin']);
+      return false;
     }
-    this.router.navigate(['/authentication/signin']);
-    return false;
   }
 }

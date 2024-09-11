@@ -31,7 +31,6 @@ export class RegisterIntakesComponent {
   defaultData:ConsultancyDetailsOptions = {...this.consultancyService.defaultRenderData()}
   institutes: Observable<SpecificConsultancyRelated[]>;
   sessions:Observable<SpecificConsultancyRelated[]>;
-  programs = [12,13,1313,24]; //  program data
   registerIntake: FormGroup;
   sessionId$:BehaviorSubject<number|null>= new BehaviorSubject<number|null>(null)
 
@@ -69,6 +68,10 @@ export class RegisterIntakesComponent {
   onSessionChange(event:any){
     console.log(event)
   }
+
+  navigateToIntakeList(){
+    this.router.navigate(["consultancy", "intake-list"]);
+  }
  
 
   onSubmit() {
@@ -77,11 +80,11 @@ export class RegisterIntakesComponent {
     
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateIntake(this.editId,newDetails).subscribe(res => {
-        this.router.navigate(["consultancy", "intake-list"]);
+        this.navigateToIntakeList()
       }))
     } else {
       this.subscriptions.add(this.consultancyApiService.registerIntake(newDetails).subscribe(res => {
-        this.router.navigate(["consultancy", "intake-list"]);
+        this.navigateToIntakeList()
       }))
      
     }

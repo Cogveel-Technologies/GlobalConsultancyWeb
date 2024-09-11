@@ -95,7 +95,7 @@ export class InstitutionListComponent {
 
 
   addInstitute() {
-    this.router.navigate(['consultancy/register-consultancy'])
+    this.router.navigate(['/consultancy/register-institute'])
   }
 
   deleteInstitute(id: number) {

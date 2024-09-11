@@ -6,6 +6,7 @@ import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultanc
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, startWith, Subscription, switchMap, throttleTime } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-agent-list',
@@ -13,7 +14,7 @@ import { PageEvent } from '@angular/material/paginator';
   styleUrls: ['./agent-list.component.scss']
 })
 export class AgentListComponent {
-  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService) { }
+  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router:Router) { }
 
   breadscrums = [
     {
@@ -85,6 +86,10 @@ export class AgentListComponent {
         event.direction = 'asc'
       }
       this.sorting$.next(event.direction)
+    }
+
+    addAgent(){
+      this.router.navigate(["consultancy/register-agent"])
     }
 
 

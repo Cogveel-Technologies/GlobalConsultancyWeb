@@ -7,6 +7,7 @@ import { IntakeData } from '../consultancy-models/data.intake';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-intakes-list',
@@ -21,7 +22,7 @@ export class IntakesListComponent {
       active: 'Intake List',
     },
   ];
-  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService) { }
+  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router:Router) { }
   intakes!: Observable<IntakeData[]>
   intakeSelected: boolean = false;
   consultancyId: string = localStorage.getItem("id");
@@ -96,7 +97,9 @@ export class IntakesListComponent {
       this.sorting$.next(event.direction)
     }
 
-  addProgram() { }
+  addIntake() { 
+    this.router.navigate(['/consultancy/register-intake'])
+  }
 
   deleteIntake(id: number) {
     const con = confirm("Are you sure?")
