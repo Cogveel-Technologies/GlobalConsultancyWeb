@@ -24,7 +24,7 @@ export class IntakesListComponent {
   ];
   constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router:Router) { }
   intakes!: Observable<IntakeData[]>
-  intakeSelected: boolean = false;
+  sessionSelected: boolean = false;
   consultancyId: string = localStorage.getItem("id");
   sessionListForm: FormGroup;
   sessions: Observable<SpecificConsultancyRelated[]>
@@ -55,15 +55,30 @@ export class IntakesListComponent {
       session: new FormControl()
     })
 
-    this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData)
+      // check if user is navigating from the edit form
+      this.consultancyService.showList.subscribe(state=>{
+        console.log(state)
+        this.sessionSelected = state;
+      })
 
+    // check if user is on edit or view page (render back to list)
+    if(this.sessionSelected){
+      const sessionId = localStorage.getItem("sessionId");
+      this.session$.next(+sessionId);
+      this.defaultData.SessionId = sessionId;
+      this.intakes = this.getIntakes(this.defaultData);
+    }
+
+   if(!this.sessionSelected)  {
+    this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData)
+   }
   
     this.subscription.add(combineLatest([this.session$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(),
       switchMap(([sessionId, search, pageRelated, sort]) => {
         if (sessionId) {
-          this.defaultData.IntakeId = String(sessionId);
+          this.defaultData.SessionId = String(sessionId);
           this.defaultData.searchText = search;
           this.defaultData.pageSize = pageRelated.pageSize;
           this.defaultData.currentPage = pageRelated.pageIndex;
@@ -74,13 +89,14 @@ export class IntakesListComponent {
         }
       })).subscribe(res => {
         if (res.length) {
-          this.intakeSelected = true
+          this.sessionSelected = true
         }
       }))
   }
 
   onSessionChange(event: any) {
     this.session$.next(event.value)
+    localStorage.setItem("sessionId", event.value)
   }
 
     // page event
@@ -110,7 +126,8 @@ export class IntakesListComponent {
     }
   }
 
-  onDestroy() {
+  ngOnDestroy() {
+    this.consultancyService.showList.next(false);
     this.subscription.unsubscribe()
   }
 }

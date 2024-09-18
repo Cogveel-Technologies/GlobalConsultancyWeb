@@ -85,7 +85,6 @@ const routes: Routes = [
     path: 'program-details/:id',
     component: ProgramAllDetailsComponent,
     resolve: { programDetails: allProgramDetails },
-    canActivate:[AuthGuard]
   }, {
     path: 'program-list',
     component: ProgramListComponent,

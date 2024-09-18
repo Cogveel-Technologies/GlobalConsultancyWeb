@@ -57,7 +57,22 @@ export class SessionListComponent {
     })
 
     // get institutes
-    this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
+    if(!this.instituteSelected){
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
+    }
+
+     // check if user is navigating from the edit form
+     this.consultancyService.showList.subscribe(state=>{
+      this.instituteSelected = state;
+    })
+
+      // check if user is on edit or view page (render back to list)
+      if(this.instituteSelected){
+        const instituteId = localStorage.getItem("instituteId");
+        this.institute$.next(+instituteId);
+        this.defaultData.InstituteId = instituteId;
+        this.institutes = this.getSessions(this.defaultData);
+      }
 
     this.subscription.add(combineLatest([this.institute$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
@@ -83,6 +98,7 @@ export class SessionListComponent {
 
   onInstituteChange(event: any) {
     this.institute$.next(event.value.id)
+    localStorage.setItem("instituteId",event.value.id)
   }
 
 
@@ -113,7 +129,8 @@ export class SessionListComponent {
     this.router.navigate(["consultancy/register-session"])
   }
 
-  onDestroy() {
+  ngOnDestroy() {
+    this.consultancyService.showList.next(false);
     this.subscription.unsubscribe()
   }
 }

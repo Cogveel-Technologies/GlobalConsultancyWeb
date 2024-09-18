@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./register-agent.component.scss']
 })
 export class RegisterAgentComponent {
-  constructor(private fb: FormBuilder, private consultancyApiService:ConsultancyApi, private route:ActivatedRoute, private router:Router){}
+  constructor(private fb: FormBuilder, private consultancyApiService: ConsultancyApi, private route: ActivatedRoute, private router: Router) { }
   breadscrums = [
     {
       title: 'Agents',
@@ -18,13 +18,13 @@ export class RegisterAgentComponent {
       active: 'Add Agents',
     },
   ];
-  registerAgent : FormGroup;
-  subscription:Subscription = new Subscription();
+  registerAgent: FormGroup;
+  subscription: Subscription = new Subscription();
   consultancyId = localStorage.getItem("id");
-  editId:number
-  editMode:boolean
+  editId: number
+  editMode: boolean
 
-  ngOnInit(){
+  ngOnInit() {
     this.registerAgent = this.fb.group({
       agentCompany: [''],
       alternateCompanyName: [''],
@@ -36,20 +36,21 @@ export class RegisterAgentComponent {
       agentPhone: [''],
       agentEmail: [''],
       password: [''],
-      linkedInProfile:['']
+      linkedInProfile: ['']
     });
 
-     // for editMode
-     const editAgent = this.route.snapshot.data['editResponse'];
-     if (editAgent) {
-       this.editId = +this.route.snapshot.paramMap.get('id');
-       this.editMode = true;
-       this.registerAgent.patchValue(editAgent);
-     }
+    // for editMode
+    const editAgent = this.route.snapshot.data['editResponse'];
+    
+    if (editAgent) {
+      this.editId = +this.route.snapshot.paramMap.get('id');
+      this.editMode = true;
+      this.registerAgent.patchValue(editAgent);
+    }
   }
 
-  navigateToAgentList(){
-    this.router.navigate(["consultancy","agent-list"])
+  navigateToAgentList() {
+    this.router.navigate(["consultancy", "agent-list"])
   }
 
 
@@ -60,13 +61,17 @@ export class RegisterAgentComponent {
     if (this.editMode) {
       this.subscription.add(
         this.consultancyApiService.updateAgent(this.editId, details).subscribe(res => {
-          this.navigateToAgentList()
+          if (res['status'] >= 200 && res['status'] < 300) {
+            this.navigateToAgentList()
+          }
         })
       );
     } else {
       this.subscription.add(
         this.consultancyApiService.registerAgent(details).subscribe(res => {
-          this.navigateToAgentList()
+          if (res['status'] >= 200 && res['status'] < 300) {
+            this.navigateToAgentList()
+          }
         })
       );
     }

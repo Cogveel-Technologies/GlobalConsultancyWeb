@@ -69,8 +69,15 @@ export class RegisterIntakesComponent {
     console.log(event)
   }
 
+
+
   navigateToIntakeList(){
-    this.router.navigate(["consultancy", "intake-list"]);
+    if(this.editMode){
+      this.consultancyService.showList.next(true)
+      this.router.navigate(["consultancy", "intake-list"]);
+    }else{
+      this.router.navigate(["consultancy", "intake-list"]);
+    }
   }
  
 
@@ -80,11 +87,15 @@ export class RegisterIntakesComponent {
     
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateIntake(this.editId,newDetails).subscribe(res => {
+        if (res['status'] >= 200 && res['status'] < 300) {
         this.navigateToIntakeList()
+      }
       }))
     } else {
       this.subscriptions.add(this.consultancyApiService.registerIntake(newDetails).subscribe(res => {
+        if (res['status'] >= 200 && res['status'] < 300) {
         this.navigateToIntakeList()
+      }
       }))
      
     }
