@@ -103,7 +103,12 @@ export class RegisterProgramComponent {
   }
 
   navigateToProgramList(){
-    this.router.navigate(["consultancy", "program-list"]);
+    if(this.editMode){
+      this.consultancyService.showList.next(true)
+      this.router.navigate(["consultancy", "program-list"]);
+    }else{
+      this.router.navigate(["consultancy", "program-list"]);
+    }
   }
 
   onSubmit() {
@@ -112,11 +117,15 @@ export class RegisterProgramComponent {
     console.log(newDetails)
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateProgram(this.editId, newDetails).subscribe(res => {
+        if (res['status'] >= 200 && res['status'] < 300) {
         this.navigateToProgramList()
+      }
       }))
     } else {
       this.subscriptions.add(this.consultancyApiService.registerProgram(newDetails).subscribe(res => {
+        if (res['status'] >= 200 && res['status'] < 300) {
         this.navigateToProgramList()
+      }
       }))
     }
   }

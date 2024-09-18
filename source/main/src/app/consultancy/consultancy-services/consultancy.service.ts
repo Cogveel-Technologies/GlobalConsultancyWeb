@@ -7,6 +7,7 @@ import { FormControl } from "@angular/forms";
 import { PageEvent } from "@angular/material/paginator";
 
 
+
 @Injectable({
   providedIn: "root"
 })
@@ -16,6 +17,7 @@ export class ConsultancyService {
   data: ConsultancyData[];
   selectedCountryName: BehaviorSubject<string> = new BehaviorSubject<string>('') 
   pageSize:number = PAGE_SIZE_OPTIONS[0]
+  showList:BehaviorSubject<null | boolean> = new BehaviorSubject(null);
 
   defaultRenderData(): ConsultancyDetailsOptions {
     const defaultData = {

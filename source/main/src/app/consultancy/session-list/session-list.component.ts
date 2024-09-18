@@ -7,6 +7,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-session-list',
@@ -14,7 +15,7 @@ import { PageEvent } from '@angular/material/paginator';
   styleUrls: ['./session-list.component.scss']
 })
 export class SessionListComponent {
-  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService) { }
+  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router:Router) { }
   breadscrums = [
     {
       title: 'Session List',
@@ -33,17 +34,17 @@ export class SessionListComponent {
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
-  pagination$: BehaviorSubject<{pageSize:number,pageIndex:number}> = new BehaviorSubject<{pageSize:number,pageIndex:number}>({pageSize:this.defaultData.pageSize, pageIndex:this.defaultData.currentPage});
+  pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number }> = new BehaviorSubject<{ pageSize: number, pageIndex: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage });
   sorting$: BehaviorSubject<string> = new BehaviorSubject<string>(this.defaultData.sortExpression);
   totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
 
-  
-  
+
+
 
   // get sessions
   getSessions(data: ConsultancyDetailsOptions) {
-    return this.consultancyApiService.getSession(this.defaultData).pipe(map(response =>{
+    return this.consultancyApiService.getSession(this.defaultData).pipe(map(response => {
       this.records = response['pageInfo']['totalRecords'];
       return response['data']
     }))
@@ -56,12 +57,27 @@ export class SessionListComponent {
     })
 
     // get institutes
-    this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
-    
-   this.subscription.add(combineLatest([this.institute$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
+    if(!this.instituteSelected){
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
+    }
+
+     // check if user is navigating from the edit form
+     this.consultancyService.showList.subscribe(state=>{
+      this.instituteSelected = state;
+    })
+
+      // check if user is on edit or view page (render back to list)
+      if(this.instituteSelected){
+        const instituteId = localStorage.getItem("instituteId");
+        this.institute$.next(+instituteId);
+        this.defaultData.InstituteId = instituteId;
+        this.institutes = this.getSessions(this.defaultData);
+      }
+
+    this.subscription.add(combineLatest([this.institute$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(),
-      switchMap(([instituteId, search, pageRelated,sort]) => {
+      switchMap(([instituteId, search, pageRelated, sort]) => {
         if (instituteId) {
           this.defaultData.InstituteId = String(instituteId);
           this.defaultData.searchText = search;
@@ -82,9 +98,10 @@ export class SessionListComponent {
 
   onInstituteChange(event: any) {
     this.institute$.next(event.value.id)
+    localStorage.setItem("instituteId",event.value.id)
   }
 
- 
+
   onDeleteSession(id: number) {
     const con = confirm("Are you sure?")
     if (con) {
@@ -94,21 +111,26 @@ export class SessionListComponent {
     }
   }
 
-    // page event
-    onPageChange(event: PageEvent) {
-      console.log(event)
-      this.pagination$.next({pageSize:event.pageSize,pageIndex:event.pageIndex+1})
-    }
-  
-     // sort event
-     onSortChange(event: any) {
-      if (event.direction === '') {
-        event.direction = 'asc'
-      }
-      this.sorting$.next(event.direction)
-    }
+  // page event
+  onPageChange(event: PageEvent) {
+    console.log(event)
+    this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
+  }
 
-  onDestroy(){
+  // sort event
+  onSortChange(event: any) {
+    if (event.direction === '') {
+      event.direction = 'asc'
+    }
+    this.sorting$.next(event.direction)
+  }
+
+  addSession() { 
+    this.router.navigate(["consultancy/register-session"])
+  }
+
+  ngOnDestroy() {
+    this.consultancyService.showList.next(false);
     this.subscription.unsubscribe()
   }
 }

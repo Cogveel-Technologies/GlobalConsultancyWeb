@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProgramData } from '../consultancy-models/data.program';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConsultancyServdece } from '../consultancy.service';
+import { ConsultancyService } from '../consultancy-services/consultancy.service';
 
 @Component({
   selector: 'app-program-all-details',
@@ -15,7 +17,7 @@ export class ProgramAllDetailsComponent {
       active: 'Program Details',
     },
   ];
-  constructor(private route:ActivatedRoute){}
+  constructor(private route:ActivatedRoute, private consultancyService:ConsultancyService, private router:Router){}
   details:ProgramData;
   keys:any;
 
@@ -23,5 +25,10 @@ export class ProgramAllDetailsComponent {
      // for all details (on view button)
      this.details = this.route.snapshot.data['programDetails']
      this.keys = Object.keys(this.details);
+  }
+
+  backToList(){
+    this.consultancyService.showList.next(true)
+    this.router.navigate(["/consultancy/program-list"]);
   }
 }

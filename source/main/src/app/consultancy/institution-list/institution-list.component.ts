@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterStateSnapshot } from '@angular/router';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
@@ -37,7 +37,8 @@ export class InstitutionListComponent {
   countrySelected: boolean = false;
   countryListForm: FormGroup;
   countries: Observable<{ countryName: string, id: number }[]>;
-  country$: BehaviorSubject<SpecificConsultancyRelated> = new BehaviorSubject<SpecificConsultancyRelated | null>(null);
+  country$: BehaviorSubject<string|null> = new BehaviorSubject<string | null>(null);
+  currentUrl:string;
   countryId: string;
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   search = new FormControl();
@@ -58,19 +59,31 @@ export class InstitutionListComponent {
   }
 
   ngOnInit() {
-
     this.countryListForm = new FormGroup({
       countryList: new FormControl(),
     })
 
+    this.subscriptions.add(this.consultancyService.showList.subscribe(state=>{
+      this.countrySelected = state;
+    }))
+
+    if(this.countrySelected){
+      const countryId = localStorage.getItem("countryId")
+      this.country$.next(countryId)
+      this.defaultData.CountryId = countryId
+      this.universities = this.getInstitutes(this.defaultData)
+    }
+
     // fetching all countries for the dropdown
     this.countries = this.consultancyApiService.getAllCountries();
+
 
     // implementing filter on the basis of country
     this.subscriptions.add(combineLatest([this.country$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(), switchMap(([id, search, pageRelated, sort]) => {
         if (id) {
+          console.log("debugging")
           this.defaultData.CountryId = String(id);
           this.defaultData.searchText = search;
           this.defaultData.pageSize = pageRelated.pageSize;
@@ -95,7 +108,7 @@ export class InstitutionListComponent {
 
 
   addInstitute() {
-    this.router.navigate(['consultancy/register-consultancy'])
+    this.router.navigate(['/consultancy/register-institute'])
   }
 
   deleteInstitute(id: number) {
@@ -109,6 +122,7 @@ export class InstitutionListComponent {
 
   // page event
   onPageChange(event: PageEvent) {
+    console.log("hello")
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
   }
 
@@ -121,8 +135,8 @@ export class InstitutionListComponent {
   }
 
   ngOnDestroy() {
+    this.consultancyService.showList.next(false)
     this.subscriptions.unsubscribe();
-    localStorage.removeItem("countryId");
   }
 
 }

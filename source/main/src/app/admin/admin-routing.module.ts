@@ -15,11 +15,12 @@ import { RegisterConsultancyComponent } from './register-consultancy/register-co
 import { ConsultancyListComponent } from './consultancy-list/consultancy-list.component';
 import { ConsultancyResolver } from './consultancy-list/consultancy.resolver';
 import { ViewConsultancyComponent } from './consultancy-list/view-consultancy/view-consultancy.component';
-
+import { AuthGuard } from '@core/guard/auth.guard';
 const routes: Routes = [
   {
     path: 'adminusers',
     component: AdminusersComponent,
+    // canActivate: [AuthGuard],  // Apply AuthGuard
     resolve: {
       users: UserResolver
     }
@@ -27,61 +28,74 @@ const routes: Routes = [
   {
     path: 'documenttype',
     component: DocumentTypeComponent,
+    canActivate: [AuthGuard]   // Apply AuthGuard
   },
   {
     path: 'listusers',
     component: ListusersComponent,
+    canActivate: [AuthGuard]   // Apply AuthGuard
   },
   {
     path: 'pagination',
     component: PaginationComponent,
+    canActivate: [AuthGuard]   // Apply AuthGuard
   },
   {
     path: 'sorting',
     component: SortingComponent,
+    canActivate: [AuthGuard]   // Apply AuthGuard
   },
   {
     path: 'view-users',
     component: ViewUserComponent,
     resolve: {
       user: UserResolver,
-    },
+    }
+    // No AuthGuard here
   },
   {
     path: 'addagents',
-    component: AddAgentComponent
+    component: AddAgentComponent,
+    canActivate: [AuthGuard]   // Apply AuthGuard
   },
   {
     path: 'listagents',
-    component: ListagentsComponent
+    component: ListagentsComponent,
+    canActivate: [AuthGuard]   // Apply AuthGuard
   },
   {
     path: 'listroles',
-    component: RolesComponent
+    component: RolesComponent,
+    // canActivate: [AuthGuard]   // Apply AuthGuard
   },
   {
     path: 'listrole',
-    component: ListRolesComponent
+    component: ListRolesComponent,
+    canActivate: [AuthGuard]   // Apply AuthGuard
   },
   {
     path: 'consultancy',
     component: RegisterConsultancyComponent,
+    // canActivate: [AuthGuard],  // Apply AuthGuard
     resolve: {
       consultancy: ConsultancyResolver,
     },
   },
   {
     path: 'consultancy-list',
-    component: ConsultancyListComponent
+    component: ConsultancyListComponent,
+    canActivate: [AuthGuard]   // Apply AuthGuard
   },
   {
     path: 'view-consultancy',
     component: ViewConsultancyComponent,
     resolve: {
       consultancy: ConsultancyResolver,
-    },
+    }
+    // No AuthGuard here
   }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

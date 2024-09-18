@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {  Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { Observable } from 'rxjs';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
@@ -18,7 +18,7 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private consultancyApiService: ConsultancyApi,
     private consultancyService: ConsultancyService
-  ) {}
+  ) { }
 
   subscriptions: Subscription = new Subscription();
   breadscrums = [
@@ -36,7 +36,7 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   instituteId: string;
   consultancyId: number;
   countries: Observable<{ countryName: string, id: number }[]>;
-  defaultData:ConsultancyDetailsOptions = {...this.consultancyService.defaultRenderData()};
+  defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   countryId: number;
   countryName: string;
 
@@ -73,16 +73,23 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
 
   // navigate to institute list page
   navigateToInstituteList() {
-    this.router.navigate(['consultancy', 'institution-list']);
+    if(this.editMode){
+      this.consultancyService.showList.next(true)
+      this.router.navigate(['consultancy', 'institution-list']);
+    }else{
+      this.router.navigate(['consultancy', 'institution-list']);
+    }
   }
 
   onSubmit() {
     const newDetails = this.registerInstitute.value;
-    
+
     if (this.editMode) {
       this.subscriptions.add(
         this.consultancyApiService.updateInstitute(this.editId, newDetails).subscribe(res => {
-          this.navigateToInstituteList()
+          if (res['status'] >= 200 && res['status'] < 300) {
+            this.navigateToInstituteList();
+          }
         })
       );
     } else {
@@ -91,16 +98,16 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
       newDetails.countryId = this.countryId
       this.subscriptions.add(
         this.consultancyApiService.registerInstitute(newDetails).subscribe(res => {
-          this.navigateToInstituteList()
+          if (res['status'] >= 200 && res['status'] < 300) {
+            this.navigateToInstituteList()
+          }
         })
       );
     }
 
   }
 
-  onCancel(){
-    this.navigateToInstituteList()
-  }
+ 
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

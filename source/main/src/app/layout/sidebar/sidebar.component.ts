@@ -30,6 +30,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   listMaxWidth?: string;
   headerHeight = 60;
   routerObj;
+  menu:any;
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
@@ -69,8 +70,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit() { 
-    this.roleName = localStorage.getItem("role")
-    this.sidebarItems = ROUTES.filter((sidebarItem) => {
+    this.menu = JSON.parse(localStorage.getItem("menu"))
+    const accessiblePaths =  this.extractPaths(this.menu);
+    localStorage.setItem('accessiblePaths', JSON.stringify(accessiblePaths));
+    console.log(this.menu)
+    this.sidebarItems = this.menu.filter((sidebarItem) => {
       return sidebarItem
     });
     
@@ -117,5 +121,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.renderer.removeClass(this.document.body, 'side-closed-hover');
       this.renderer.addClass(this.document.body, 'submenu-closed');
     }
+  }
+   extractPaths(menu: any[]): string[] {
+    let paths: string[] = [];
+    menu.forEach(item => {
+      if (item.path) {
+        paths.push(item.path);
+      }
+      if (item.submenu && item.submenu.length > 0) {
+        paths = paths.concat(this.extractPaths(item.submenu));
+      }
+    });
+    return paths;
   }
 }

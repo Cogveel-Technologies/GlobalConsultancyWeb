@@ -7,7 +7,6 @@ import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultanc
 import { FormControl, FormGroup } from '@angular/forms';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
-import { ToastrService } from 'ngx-toastr';
 import { PageEvent } from '@angular/material/paginator';
 
 
@@ -33,9 +32,9 @@ export class ProgramListComponent {
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   consultancyId: string = localStorage.getItem("id");
   selectedOptions: boolean = false;
-  institutes: Observable<SpecificConsultancyRelated[]>;
-  sessions: Observable<SpecificConsultancyRelated[]>;
-  intakes: Observable<SpecificConsultancyRelated[]>;
+  institutes: Observable<SpecificConsultancyRelated[] | null>;
+  sessions: Observable<SpecificConsultancyRelated[] | null>;
+  intakes: Observable<SpecificConsultancyRelated[] | null>;
   instituteForm: FormGroup;
   institute$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   session$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
@@ -64,47 +63,79 @@ export class ProgramListComponent {
   }
 
   ngOnInit() {
-    this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
+    if(!this.selectedOptions){
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
+    }
 
+    this.consultancyService.showList.subscribe(state=>{
+      this.selectedOptions = state;
+    })
+
+    // if we click on view or edit pencil, and then navigate back
+    if(this.selectedOptions){
+      const instituteId = localStorage.getItem("instituteId")
+      const sessionId =  localStorage.getItem("sessionId")
+      const intakeId = localStorage.getItem("intakeId")
+      const isPublic = JSON.parse(localStorage.getItem("isPublic"))
+      this.institute$.next(+instituteId)
+      this.intake$.next(+intakeId)
+      this.isPublic$.next(isPublic)
+      this.defaultData.InstituteId = instituteId
+      this.defaultData.SessionId = sessionId
+      this.defaultData.IntakeId = intakeId
+      this.defaultData.IsPublic = localStorage.getItem("isPublic")
+      this.programs = this.getPrograms(this.defaultData)
+    }
 
     this.subscription.add(
       combineLatest([this.institute$, this.session$, this.intake$, this.isPublic$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
         switchMap(([instituteId, sessionId, intakeId, isPublic, search, pageRelated, sorting]) => {
-
-          console.log("institute: " + instituteId);
-          console.log("session: " + sessionId);
-          console.log("intake: " + intakeId);
+          
+          this.defaultData.InstituteId = String(instituteId);
+          console.log("institute"+ instituteId)
+          console.log("session"+ sessionId)
+          console.log("intake"+ intakeId)
 
           if (instituteId && !sessionId && !intakeId) {
-            this.defaultData.InstituteId = String(instituteId);
+            this.previousInstituteState = instituteId
             // Make API call for sessions based on institute
             this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData);
             return of([]);  // Return empty observable since you're handling the API call separately
           }
           // When institute and session are selected but intake is not
           else if (instituteId && sessionId && !intakeId) {
-            this.defaultData.SessionId = String(sessionId);
-            // check if user may change institute after selecting a session
-            if (instituteId !== this.previousInstituteState) {
+            this.previousSessionState = sessionId;
+
+             // check if user may change institute after selecting a session
+             if (instituteId !== this.previousInstituteState) {
               this.previousInstituteState = instituteId;
               this.session$.next(null)
               this.intake$.next(null)
             }
+
+            this.defaultData.SessionId = String(sessionId);
+           
             // Make API call for intakes based on session
             this.intakes = this.consultancyApiService.getSpecificIntakes(this.defaultData);
             return of([]);
-          } 
-          else if (instituteId && intakeId && isPublic === null) {
-            this.defaultData.IntakeId = String(intakeId)
-            // check if user may change institute after selecting a session and intake
-            if (instituteId !== this.previousInstituteState) {
-              this.intake$.next(null)
+          } else if (instituteId && sessionId && intakeId && isPublic === null){
+            // check if user may change institute after selecting an intake
+            if (sessionId !== this.previousSessionState) {
+              this.defaultData.SessionId = String(sessionId);
+              this.intakes = this.consultancyApiService.getSpecificIntakes(this.defaultData);
+              this.previousSessionState = sessionId
             }
+            if (instituteId !== this.previousInstituteState) {
+              this.session$.next(null)
+              this.intake$.next(null)
+              this.intakes = null
+              return of([]);
+          }else{
             return of([]);
           }
+        }
           // When all dropdowns are selected and isPublic is not null
           else if (instituteId && intakeId && isPublic !== null) {
-            console.log("entered")
             this.defaultData.IntakeId = String(intakeId);
             this.defaultData.searchText = search;
             this.defaultData.pageSize = pageRelated.pageSize;
@@ -131,16 +162,20 @@ export class ProgramListComponent {
 
   onInstituteChange(event: any) {
     this.institute$.next(event.value)
+    localStorage.setItem("instituteId",event.value)
   }
   onSessionChange(event: any) {
     this.session$.next(event.value)
+    localStorage.setItem("sessionId",event.value)
   }
   onIntakeChange(event: any) {
     this.intake$.next(event.value)
+    localStorage.setItem("intakeId",event.value)
   }
 
   isPublic(event: any) {
     this.isPublic$.next(event.value)
+    localStorage.setItem("isPublic",event.value)
   }
 
   addProgram() {
@@ -168,6 +203,11 @@ export class ProgramListComponent {
         this.programs = this.getPrograms(this.defaultData);
       }));
     }
+  }
+
+  ngOnDestroy() {
+    this.consultancyService.showList.next(false)
+    this.subscription.unsubscribe();
   }
 
 }
