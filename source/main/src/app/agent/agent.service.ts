@@ -106,7 +106,7 @@ export class AgentService {
     return this.http.get(url);
   } 
   getInstitutes(): Observable<any> {
-    const url = this.buildUrl('Institute/all');
+    const url = this.buildUrl('Institute/All');
     return this.http.get(url);
   }
   // Methods for student-document
@@ -122,12 +122,9 @@ export class AgentService {
     return this.http.get<{ data: any[], status: number, message: string }>(`${this.apiUrl}/DocumentType/all`);
   }
 
-  // deleteStudentDocument(documentId: number): Observable<any> {
-  //   const url = `${this.apiUrl}/StudentDocument/${documentId}`;
-  //   return this.http.delete(url);
-  // }
+  
   deleteStudentDocument(documentId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/StudentDocument/byId?id=${documentId}`);
+    return this.http.delete(`${this.apiUrl}/StudentDocument/DocumentId?id=${documentId}`);
   }
  
   
