@@ -11,9 +11,7 @@
             <div class="materialTableHeader">
               <div class="left">
                 <ul class="header-buttons-left ms-0">
-                  <li class="tbl-title me-2">
-                    <h2>Roles List</h2>
-                  </li>
+                  
                   <li class="tbl-search-box">
                     <label for="search-input"><i class="material-icons search-icon">search</i></label>
                     <input placeholder="Search" type="text" [formControl]="searchControl" class="browser-default search-field" aria-label="Search box">
@@ -51,19 +49,18 @@
       <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <div class="card">
-            <div class="header">
-              <h2>Role Details</h2>
-            </div>
+           
             <div class="body table-responsive">
                 <table class="table table-hover table-responsive">
                     <thead>
                       <tr>
-                        <th>S No.</th>
+                        
                         <th>
                           <app-sorting 
                             [sortField]="sortField" 
                             [sortDirection]="sortDirection" 
                             [sortFields]="['RoleName']" 
+                            [sortLabels]="['Role Name']"
                             (sortChange)="onSortChange($event)">
                           </app-sorting>
                         </th>
@@ -73,7 +70,7 @@
                     
                     <tbody>
                       <tr *ngFor="let role of roles$ | async; let i = index">
-                        <td data-label="S No.">{{ i + 1 }}</td>
+                       
                         <td data-label="Role Name">
                           <div *ngIf="editingRoleId !== role.id; else editMode">
                             {{ role.roleName }}

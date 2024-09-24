@@ -17,7 +17,7 @@ export class RolesComponent implements OnInit, OnDestroy {
   breadscrums = [
     {
       title: 'Admin Roles',
-      items: ['Roles'],
+      items: ['Admin'],
       active: 'Add Roles',
     },
   ];

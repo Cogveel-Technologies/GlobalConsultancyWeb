@@ -16,13 +16,15 @@ export class AdminusersComponent implements OnInit, OnDestroy {
   hide3 = true;
   breadscrums = [
     {
-      title: 'Admin Users',
-      items: ['Forms'],
-      active: 'Add Users',
+      title: 'Add Users',
+      items: ['Admin'],
+      active: 'Users',
     },
   ];
   user: any;
   errorMessage: string = '';
+  genders: string[] = ['Male', 'Female', 'Other'];
+
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -55,7 +57,8 @@ export class AdminusersComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       address: [''],
       gender: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
+      // phoneNumber: ['', Validators.required],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^\d{12}$/)]],
     });
 
     // Debug: Log form status changes

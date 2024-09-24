@@ -1,6 +1,4 @@
-
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-// import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-sorting',
@@ -11,6 +9,7 @@ export class SortingComponent {
   @Input() sortField: string;
   @Input() sortDirection: 'asc' | 'desc';
   @Input() sortFields: string[] = [];
+  @Input() sortLabels: string[] = []; // New input for display labels
 
   @Output() sortChange = new EventEmitter<{ field: string, direction: 'asc' | 'desc' }>();
 
@@ -19,4 +18,3 @@ export class SortingComponent {
     this.sortChange.emit({ field, direction });
   }
 }
-

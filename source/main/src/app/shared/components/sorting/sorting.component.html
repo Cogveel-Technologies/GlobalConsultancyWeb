@@ -1,9 +1,13 @@
+
+
 <div>
-    <span *ngFor="let field of sortFields" (click)="sort(field)" class="sortable-header" class="text-nowrap">
-      {{ field }}
-      <mat-icon *ngIf="sortField === field && sortDirection === 'asc'"  class="allign">arrow_upward</mat-icon>
-      <mat-icon *ngIf="sortField === field && sortDirection === 'desc'"  class="allign">arrow_downward</mat-icon>
-      <mat-icon *ngIf="sortField !== field"  class="allign">arrow_upward</mat-icon> <!-- Default icon -->
-    </span>
-  </div>
-  
+  <span *ngFor="let field of sortFields; let i = index" (click)="sort(field)" class="sortable-header text-nowrap">
+    {{ sortLabels[i] || field }} <!-- Use the label if provided, otherwise fallback to the field name -->
+    
+    <mat-icon *ngIf="sortField === field && sortDirection === 'asc'" class="align arrow_upward">arrow_upward</mat-icon>
+    <mat-icon *ngIf="sortField === field && sortDirection === 'desc'" class="align arrow_downward">arrow_downward</mat-icon>
+    
+    <!-- Optional: Add a visual cue when the field is not sorted -->
+    <mat-icon *ngIf="sortField !== field" class="align">filter_list</mat-icon> <!-- Default sorting icon -->
+  </span>
+</div>

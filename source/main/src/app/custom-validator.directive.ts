@@ -45,6 +45,10 @@ export class CustomValidatorDirective implements Validator, OnInit {
         error = this.validateName(control.value) ? null : { 'invalidFirstName': true };
         break;
 
+      case 'Name':
+        error = this.validateName(control.value) ? null : { 'invalidName': true };
+        break;
+
       case 'middleName':
         error = this.validateName(control.value) ? null : { 'invalidMiddleName': true };
         break;
@@ -177,10 +181,16 @@ export class CustomValidatorDirective implements Validator, OnInit {
     return emailRegex.test(value);
   }
 
+  // validateName(value: string): boolean {
+  //   const nameRegex = /^[A-Z][a-zA-Z]*$/; // First letter must be uppercase, followed by any letters
+  //   return nameRegex.test(value);
+  // }
+  
   validateName(value: string): boolean {
     const nameRegex = /^[a-zA-Z]+$/;
     return nameRegex.test(value);
-  }
+  } 
+  
 
   validateWithSpace(value: string): boolean {
     const nameRegex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
@@ -225,6 +235,7 @@ export class CustomValidatorDirective implements Validator, OnInit {
     // Example validation logic for address: must be at least 10 characters
     return value && value.length >= 10;
   }
+  
 
   setError(error: ValidationErrors | null) {
     this.removeError();
@@ -255,6 +266,9 @@ export class CustomValidatorDirective implements Validator, OnInit {
     }
     if (error['invalidFirstName']) {
       return 'Invalid First Name';
+    }
+    if (error['invalidName']) {
+      return 'Invalid Name';
     }
     if (error['invalidMiddleName']) {
       return 'Invalid Middle Name';

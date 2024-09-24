@@ -11,9 +11,7 @@
       <div class="row clearfix">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
           <div class="card">
-            <div class="header ">
-              <h2>Add Document Type</h2>
-            </div>
+           
             <div class="body">
               <form class="m-4" [formGroup]="documentForm" (ngSubmit)="onDocumentFormSubmit()">
                 <div class="row">
@@ -21,7 +19,7 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Document Type</mat-label>
                       <input matInput formControlName="documenttype" placeholder="Enter document type">
-                      <mat-icon matSuffix>description</mat-icon>
+                      
                       <mat-error *ngIf="documentForm.get('documenttype').invalid && documentForm.get('documenttype').touched">
                         Document type is required
                       </mat-error>
@@ -41,21 +39,21 @@
               <div class="row mt-4">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                   <div class="card">
-                    <div class="header">
+                    <!-- <div class="header">
                       <h2>Document Type List</h2>
-                    </div>
+                    </div> -->
                     <div class="body table-responsive">
                       <table class="table table-hover table-resposive">
                         <thead class="thead-light">
                           <tr>
-                            <th scope="col">Sr. No.</th>
+                            
                             <th scope="col">Document Type</th>
                             <th scope="col">Actions</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let document of (documents$ | async); let i = index">
-                            <td data-label="S No.">{{ i + 1 }}</td>
+                            
                             <!-- <td>{{ i + 1 }}</td> -->
                             <td data-label="Document Type">
                               <div *ngIf="editingDocumentId !== document.id; else editMode">
