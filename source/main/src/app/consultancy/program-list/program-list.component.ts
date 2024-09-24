@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProgramData } from '../consultancy-models/data.program';
 import { ConsultancyApi } from '../consultancy-services/api.service';
-import { BehaviorSubject, combineLatest, map, Observable, of, startWith, Subscription, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, of, startWith, Subscription, switchMap, tap } from 'rxjs';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { PageEvent } from '@angular/material/paginator';
+import { distinctUntilChanged } from 'rxjs';
 
 
 
@@ -21,7 +22,7 @@ export class ProgramListComponent {
   breadscrums = [
     {
       title: 'Program List',
-      items: ['Programs'],
+      items: ['Consultancy'],
       active: 'Program List',
     },
   ];
@@ -52,6 +53,9 @@ export class ProgramListComponent {
   previousSessionState: (number | null) = null;
   previousIntakeState: (number | null) = null;
   previousInstituteState: (number | null) = null;
+  sessionFormControl = new FormControl(); 
+  intakeFormControl = new FormControl();
+
 
 
   getPrograms(params: ConsultancyDetailsOptions) {
@@ -87,76 +91,101 @@ export class ProgramListComponent {
       this.programs = this.getPrograms(this.defaultData)
     }
 
-    this.subscription.add(
-      combineLatest([this.institute$, this.session$, this.intake$, this.isPublic$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
-        switchMap(([instituteId, sessionId, intakeId, isPublic, search, pageRelated, sorting]) => {
-          
-          this.defaultData.InstituteId = String(instituteId);
-          console.log("institute"+ instituteId)
-          console.log("session"+ sessionId)
-          console.log("intake"+ intakeId)
 
-          if (instituteId && !sessionId && !intakeId) {
-            this.previousInstituteState = instituteId
-            // Make API call for sessions based on institute
-            this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData);
-            return of([]);  // Return empty observable since you're handling the API call separately
-          }
-          // When institute and session are selected but intake is not
-          else if (instituteId && sessionId && !intakeId) {
-            this.previousSessionState = sessionId;
+this.subscription.add(
+  combineLatest([
+    this.institute$.pipe(distinctUntilChanged()),  
+    this.session$.pipe(distinctUntilChanged()),    
+    this.intake$.pipe(distinctUntilChanged()),    
+    this.isPublic$.pipe(distinctUntilChanged()), 
+    this.searchTerm$,
+    this.pagination$,
+    this.sorting$
+  ])
+  .pipe(
+    switchMap(([instituteId, sessionId, intakeId, isPublic, search, pageRelated, sorting]) => {
+      console.log(instituteId)
+      console.log(sessionId)
+      console.log(intakeId)
 
-             // check if user may change institute after selecting a session
-             if (instituteId !== this.previousInstituteState) {
-              this.previousInstituteState = instituteId;
-              this.session$.next(null)
-              this.intake$.next(null)
-            }
+      console.log(this.previousSessionState)
+      
+      // When the institute changes (or is reselected), reset session and intake
+      if (instituteId && instituteId !== this.previousInstituteState) {
 
-            this.defaultData.SessionId = String(sessionId);
-           
-            // Make API call for intakes based on session
-            this.intakes = this.consultancyApiService.getSpecificIntakes(this.defaultData);
-            return of([]);
-          } else if (instituteId && sessionId && intakeId && isPublic === null){
-            // check if user may change institute after selecting an intake
-            if (sessionId !== this.previousSessionState) {
-              this.defaultData.SessionId = String(sessionId);
-              this.intakes = this.consultancyApiService.getSpecificIntakes(this.defaultData);
-              this.previousSessionState = sessionId
-            }
-            if (instituteId !== this.previousInstituteState) {
-              this.session$.next(null)
-              this.intake$.next(null)
-              this.intakes = null
-              return of([]);
-          }else{
-            return of([]);
-          }
+        // Store the last selected institute
+        this.previousInstituteState = instituteId;
+
+        // Reset session form control and BehaviorSubject to ensure no default value
+        this.sessionFormControl.reset(); 
+        this.intakeFormControl.reset();
+        this.session$.next(null);  
+        this.intake$.next(null);
+        this.sessions = null;
+        this.intakes = null
+
+        // Make API call for sessions based on the selected institute
+        this.defaultData.InstituteId = String(instituteId);
+        this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData).pipe(
+          tap(() => {
+            // After getting the new sessions, clear the session selection to avoid default
+            this.sessionFormControl.reset();
+            this.session$.next(null);
+          })
+        );
+        
+        return of([]);  // Return empty observable
+      }
+
+      // When institute and session are selected, but intake is not
+      if (instituteId && sessionId && !intakeId) {
+        console.log("hello")
+        if (sessionId !== this.previousSessionState) {
+          console.log("hello2222")
+          this.previousSessionState = sessionId;
+          this.defaultData.SessionId = String(sessionId);
+
+          // Make API call for intakes based on session
+          this.intakes = this.consultancyApiService.getSpecificIntakes(this.defaultData);
+          return of([]);
+        }else{
+           // Make API call for intakes based on session
+           this.intakes = this.consultancyApiService.getSpecificIntakes(this.defaultData);
+           return of([]);
         }
-          // When all dropdowns are selected and isPublic is not null
-          else if (instituteId && intakeId && isPublic !== null) {
-            this.defaultData.IntakeId = String(intakeId);
-            this.defaultData.searchText = search;
-            this.defaultData.pageSize = pageRelated.pageSize;
-            this.defaultData.currentPage = pageRelated.pageIndex;
-            this.defaultData.sortExpression = sorting;
-            this.defaultData.IsPublic = String(isPublic);
+      }
 
-            // Fetch programs based on all selections
-            return this.programs = this.getPrograms(this.defaultData);
-          }
-          // Default case: no valid selection yet
-          else {
-            return of([]);
-          }
-        })
-      ).subscribe((res) => {
-        if (res.length) {
-          this.selectedOptions = true;
+      if (instituteId && sessionId && intakeId) {
+        console.log("helllooooo")
+        if (sessionId !== this.previousSessionState) {
+          this.intake$.next(null)
+          this.previousSessionState = sessionId;
         }
-      })
-    );
+      }
+
+      // Handle rest of the selections (intake and isPublic)
+      if (instituteId && intakeId && isPublic !== null) {
+        this.defaultData.IntakeId = String(intakeId);
+        this.defaultData.searchText = search;
+        this.defaultData.pageSize = pageRelated.pageSize;
+        this.defaultData.currentPage = pageRelated.pageIndex;
+        this.defaultData.sortExpression = sorting;
+        this.defaultData.IsPublic = String(isPublic);
+
+        // Fetch programs based on all selections
+        return this.programs = this.getPrograms(this.defaultData);
+      }
+
+      // Default case: return an empty observable
+      return of([]);
+    })
+  ).subscribe((res) => {
+    if (res.length) {
+      this.selectedOptions = true;
+    }
+  })
+);
+
 
   }
 
@@ -170,6 +199,7 @@ export class ProgramListComponent {
   }
   onIntakeChange(event: any) {
     this.intake$.next(event.value)
+    console.log("hello")
     localStorage.setItem("intakeId",event.value)
   }
 

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProgramData } from '../consultancy-models/data.program';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConsultancyServdece } from '../consultancy.service';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 
 @Component({
@@ -13,7 +12,7 @@ export class ProgramAllDetailsComponent {
   breadscrums = [
     {
       title: 'Program Details',
-      items: ['Consultancy'],
+      items: ['Program List'],
       active: 'Program Details',
     },
   ];

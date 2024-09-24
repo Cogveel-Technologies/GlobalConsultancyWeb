@@ -13,9 +13,9 @@ export class RegisterAgentComponent {
   constructor(private fb: FormBuilder, private consultancyApiService: ConsultancyApi, private route: ActivatedRoute, private router: Router) { }
   breadscrums = [
     {
-      title: 'Agents',
+      title: 'Add Agent',
       items: ['Consultancy'],
-      active: 'Add Agents',
+      active: 'Add Agent',
     },
   ];
   registerAgent: FormGroup;

@@ -73,12 +73,18 @@ export class CustomValidatorDirective implements Validator, OnInit {
       case 'companyWebsite':
         error = this.validateCompanyName(control.value) ? null : { 'invalidCompanyWebsite': true };
         break;
+      case 'linkedInUrl':
+        error = this.validateCompanyName(control.value) ? null : { 'invalidLinkedInUrl': true };
+        break;
+      case 'fbUrl':
+        error = this.validateCompanyName(control.value) ? null : { 'invalidFacebookUrl': true };
+        break;
       case 'agentMiddleName':
         error = this.validateName(control.value) ? null : { 'invalidAgentMiddleName': true };
         break;
 
       case 'password':
-        error = this.validatePassword(control.value) ? null : { 'invalidPassword': true };
+        error = this.validatePassword(control.value) ? null : { 'PasswordMustBeAtLeast8&MustContainAtLeastOneNumberAndOneSpecialCharacter': true };
         break;
       case 'gender':
         error = this.validateGender(control.value) ? null : { 'invalidGender': true };
@@ -120,19 +126,19 @@ export class CustomValidatorDirective implements Validator, OnInit {
         error = this.validateNumber(control.value) ? null : { 'invalidYearEstablished': true };
         break;
       case 'instituteName':
-        error = this.validateWithSpace(control.value) ? null : { 'invalidInstituteName': true };
+        error = this.validateWithNumberAndAlpha(control.value) ? null : { 'invalidInstituteName': true };
         break;
       case 'province':
         error = this.validateWithSpace(control.value) ? null : { 'invalidProvince': true };
         break;
       case 'description':
-        error = this.validateWithSpace(control.value) ? null : { 'invalidDescription': true };
+        error = this.validateWithNumberAndAlpha(control.value) ? null : { 'invalidDescription': true };
         break;
       case 'programName':
-        error = this.validateWithSpace(control.value) ? null : { 'invalidProgramName': true };
+        error = this.validateWithNumberAndAlpha(control.value) ? null : { 'invalidProgramName': true };
         break;
       case 'duration':
-        error = this.validateWithSpace(control.value) ? null : { 'invalidDuration': true };
+        error = this.validateWithNumberAndAlpha(control.value) ? null : { 'invalidDuration': true };
         break;
       case 'applicationFee':
         error = this.validateNumber(control.value) ? null : { 'invalidApplicationFee': true };
@@ -193,16 +199,18 @@ export class CustomValidatorDirective implements Validator, OnInit {
   
 
   validateWithSpace(value: string): boolean {
-    const nameRegex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
-    return nameRegex.test(value);
-  }
+    const regex = /^(?=.*[a-zA-Z])[a-zA-Z\s.,()\-]*\.?([a-zA-Z\s.,()\-]*\.?)*$/;
+    return regex.test(value);
+}
+
+
+
 
   validateWithNumberAndAlpha(value: string): boolean {
-    const regex = /^[a-zA-Z0-9]+(?:\s[a-zA-Z0-9]+)*$/;
+    const regex = /^(?=.*[a-zA-Z0-9])[a-zA-Z0-9\s.,()\-]*\.?([a-zA-Z0-9\s.,()\-]*\.?)*$/;
     return regex.test(value);
   }
-  
-  
+
   validatePhoneNumber(value: string): boolean {
     const phoneRegex = /^\+?[1-9]\d{1,10}$/;
     return phoneRegex.test(value);
@@ -212,7 +220,7 @@ export class CustomValidatorDirective implements Validator, OnInit {
     const phoneRegex = /^\+?\d{1,200}$/;
     return phoneRegex.test(value);
   }
-  
+
 
   validateCompanyName(value: string): boolean {
     // Example validation logic for company name, can be adjusted as per requirements
@@ -288,14 +296,17 @@ export class CustomValidatorDirective implements Validator, OnInit {
     if (error['invalidAgentCompany']) {
       return 'Invalid Agent Company';
     }
-    if (error['invalidPassword']) {
-      return 'Invalid Password';
+    if (error['PasswordMustBeAtLeast8&MustContainAtLeastOneNumberAndOneSpecialCharacter']) {
+      return 'Password must be at least 8 characters & must contain atleast one number and one special character';
     }
     if (error['invalidGender']) {
       return 'Invalid Gender';
     }
     if (error['invalidAddress']) {
       return 'Invalid Address';
+    }
+    if (error['invalidAlternateCompanyName']) {
+      return 'Invalid Alternate Company Name';
     }
     if (error['invalidAlternateCompanyName']) {
       return 'Invalid Alternate Company Name';

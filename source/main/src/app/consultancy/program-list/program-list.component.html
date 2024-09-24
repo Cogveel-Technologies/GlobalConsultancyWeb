@@ -10,7 +10,7 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Select an institute</mat-label>
+                        <mat-label>Select Institute</mat-label>
                         <mat-icon matPrefix>school</mat-icon>
                         <mat-select required (selectionChange)="onInstituteChange($event)">
                             <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
@@ -21,9 +21,9 @@
                 </div>
                 <div class="col-md-6">
                     <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Select a session</mat-label>
+                        <mat-label>Select Session</mat-label>
                         <mat-icon matPrefix>school</mat-icon>
-                        <mat-select required (selectionChange)="onSessionChange($event)">
+                        <mat-select required [formControl]="sessionFormControl" (selectionChange)="onSessionChange($event)">
                             <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
                                 {{ session.name }}
                             </mat-option>
@@ -32,9 +32,9 @@
                 </div>
                 <div class="col-md-6">
                     <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Select an intake</mat-label>
+                        <mat-label>Select Intake</mat-label>
                         <mat-icon matPrefix>home</mat-icon>
-                        <mat-select required (selectionChange)="onIntakeChange($event)">
+                        <mat-select required [formControl]="intakeFormControl" (selectionChange)="onIntakeChange($event)">
                             <mat-option *ngFor="let intake of (intakes | async)" [value]="intake.id">
                                 {{ intake.name }}
                             </mat-option>
@@ -61,9 +61,6 @@
                     <div class="materialTableHeader">
                         <div class="left">
                             <ul class="header-buttons-left ms-0">
-                                <li class="tbl-title me-2">
-                                    <h2>List of programs</h2>
-                                </li>
                                 <app-search [searchText]="search"></app-search>
                             </ul>
                         </div>

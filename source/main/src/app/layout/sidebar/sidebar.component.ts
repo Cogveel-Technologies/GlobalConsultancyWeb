@@ -10,8 +10,6 @@ import {
   HostListener,
   OnDestroy,
 } from '@angular/core';
-import { ROUTES } from './sidebar-items';
-// import { RouteInfo } from './sidebar.model';
 import { AuthService } from '@core';
 import { RouteInfo } from './sidebar.metadata';
 import { loginService } from 'app/login.service';
