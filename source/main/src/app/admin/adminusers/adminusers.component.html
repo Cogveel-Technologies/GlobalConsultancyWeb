@@ -9,9 +9,7 @@
     <div class="row clearfix">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
         <div class="card">
-          <div class="header">
-            <h2>Admin Users</h2>
-          </div>
+         
           <div class="body">
             <form class="m-4" [formGroup]="thirdForm" (ngSubmit)="onThirdFormSubmit()">
               <div class="row">
@@ -50,10 +48,15 @@
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Gender</mat-label>
-                    <input matInput formControlName="gender" required appCustomValidator="gender">
+                    <mat-select formControlName="gender" required appCustomValidator="gender">
+                      <mat-option *ngFor="let gender of genders" [value]="gender">
+                        {{ gender }}
+                      </mat-option>
+                    </mat-select>
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>face</mat-icon>
                   </mat-form-field>
                 </div>
+                
               </div>
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
@@ -68,11 +71,19 @@
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Phone</mat-label>
-                    <input matInput formControlName="phoneNumber" required appCustomValidator="phone" type="tel">
+                    <input 
+                      matInput 
+                      formControlName="phoneNumber" 
+                      required 
+                      appCustomValidator="phone" 
+                      type="tel" 
+                      maxlength="12"
+                      pattern="[0-9]*">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
                   </mat-form-field>
                 </div>
               </div>
+              
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">

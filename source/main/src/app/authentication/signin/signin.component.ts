@@ -38,6 +38,7 @@ export class SigninComponent{
           localStorage.setItem("id",res.id);
           localStorage.setItem("menu",JSON.stringify(res.menuItems));
           localStorage.setItem("role",res.roleName)
+          console.log(res.roleName);
           this.router.navigate(['dashboard']);
         }
       });

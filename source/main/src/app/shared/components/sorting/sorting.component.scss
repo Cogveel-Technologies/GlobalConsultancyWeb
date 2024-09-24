@@ -1,12 +1,43 @@
 .sortable-header {
-    // cursor: pointer;
-    // display: inline-flex;
-    // align-items: center;
-   
+  display: inline-flex;      /* Use flex to align icon and text properly */
+  align-items: center;      /* Center align text and icons vertically */
+  cursor: pointer;          /* Change cursor to pointer on hover */
+  margin-right: 10px;       /* Add space between headers */
+  transition: color 0.3s;   /* Smooth color transition on hover */
+
+  &:hover {
+    color: #007BFF;         /* Change text color on hover (adjust as needed) */
   }
-  .allign{
-    vertical-align:middle;
-    font-size: 1.1rem;
-    color: #ccc;
-    cursor: pointer;
-  } 
+}
+
+
+/* Additional styles to differentiate the sort direction icons */
+mat-icon {
+  font-size: 16px;          /* Set a base font size for icons */
+}
+
+.mat-icon.arrow_upward {
+  color: #28a745;           /* Green for ascending */
+}
+
+.mat-icon.arrow_downward {
+  color: #dc3545;          /* Red for descending */
+}
+
+.align {
+  margin-left: 4px;        /* Space between label and icon */
+  transition: transform 0.3s, opacity 0.3s; /* Smooth transition for arrow rotation and opacity */
+  opacity: 0;              /* Initially hide the icons */
+  pointer-events: none;    /* Prevent mouse events on the hidden icon */
+}
+
+.sortable-header:hover .align {
+  opacity: 1;              /* Show the arrows on hover */
+  pointer-events: auto;    /* Allow mouse events on hover */
+}
+
+/* Ensure the default sort icon is also hidden */
+.align.sort {
+  opacity: 0;              /* Hide default sort icon */
+  pointer-events: none;    /* Prevent mouse events */
+}

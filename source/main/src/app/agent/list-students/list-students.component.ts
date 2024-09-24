@@ -20,7 +20,7 @@ export class ListstudentsComponent implements OnInit {
     {
       title: 'Students List',
       items: ['Agent'],
-      active: 'Students List',
+      active: 'Students',
     },
   ];
   students$: Observable<Student[]>;

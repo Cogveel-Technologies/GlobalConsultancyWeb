@@ -7,9 +7,7 @@
         <div class="row clearfix">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
-                    <div class="header">
-                        <h2>Student Details</h2>
-                    </div>
+                   
                     <div class="body">
                         <form class="m-4" [formGroup]="thirdForm" (ngSubmit)="onThirdFormSubmit()">
                             <div class="row">
@@ -17,10 +15,11 @@
                                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
                                         <mat-label>Student Name</mat-label>
-                                        <input matInput formControlName="studentName" required appCustomValidator="studentName" type="text">
+                                        <input matInput formControlName="studentName" required appCustomValidator="Name" type="text">
                                         <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>face</mat-icon>
                                     </mat-form-field>
                                 </div>
+                                
                                 
                                 <!-- Date of Birth Field -->
                                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">

@@ -17,9 +17,9 @@ import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.comp
 export class ListRolesComponent implements OnInit {
   breadscrums = [
     {
-      title: 'Roles List',
-      items: ['Tables'],
-      active: 'Admin Roles',
+      title: 'Roles',
+      items: ['Admin'],
+      active: 'Roles',
     },
   ];
   roles$: Observable<Role[]>;

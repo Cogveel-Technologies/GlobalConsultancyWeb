@@ -20,8 +20,8 @@ export class ListusersComponent implements OnInit {
   breadscrums = [
     {
       title: 'Users List',
-      items: ['Tables'],
-      active: 'Admin Users',
+      items: ['Admin'],
+      active: 'Users',
     },
   ];
   users$: Observable<User[]>;

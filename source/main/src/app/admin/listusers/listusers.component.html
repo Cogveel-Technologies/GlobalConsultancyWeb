@@ -11,9 +11,7 @@
           <div class="materialTableHeader">
             <div class="left">
               <ul class="header-buttons-left ms-0">
-                <li class="tbl-title me-2">
-                  <h2>Users List</h2>
-                </li>
+               
                 <li class="tbl-search-box">
                   <label for="search-input"><i class="material-icons search-icon">search</i></label>
                   <input placeholder="Search" type="text" [formControl]="searchControl" class="browser-default search-field" aria-label="Search box">
@@ -51,30 +49,40 @@
     <div class="row clearfix">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
-          <div class="header">
-            <h2>Users Details</h2>
-          </div>
+         
           <div class="body table-responsive">
             <table class="table table-hover table-responsive">
               <thead>
                 <tr>
                   <th>
-                   <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['id']" (sortChange)="onSortChange($event)"></app-sorting>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" 
+                                 [sortFields]="['FirstName']" [sortLabels]="['First Name']"
+                                 (sortChange)="onSortChange($event)">
+                    </app-sorting>
                   </th>
                   <th>
-                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['FirstName']" (sortChange)="onSortChange($event)"></app-sorting>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" 
+                                 [sortFields]="['MiddleName']" [sortLabels]="['Middle Name']"
+                                 (sortChange)="onSortChange($event)">
+                    </app-sorting>
                   </th>
                   <th>
-                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['MiddleName']" (sortChange)="onSortChange($event)"></app-sorting>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" 
+                                 [sortFields]="['LastName']" [sortLabels]="['Last Name']"
+                                 (sortChange)="onSortChange($event)">
+                    </app-sorting>
                   </th>
                   <th>
-                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['LastName']" (sortChange)="onSortChange($event)"></app-sorting>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" 
+                                 [sortFields]="['Email']" [sortLabels]="['Email']"
+                                 (sortChange)="onSortChange($event)">
+                    </app-sorting>
                   </th>
                   <th>
-                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['Email']" (sortChange)="onSortChange($event)"></app-sorting>
-                  </th>
-                  <th>
-                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['Gender']" (sortChange)="onSortChange($event)"></app-sorting>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" 
+                                 [sortFields]="['Gender']" [sortLabels]="['Gender']"
+                                 (sortChange)="onSortChange($event)">
+                    </app-sorting>
                   </th>
                   <th>Actions</th>
                 </tr>
@@ -82,7 +90,7 @@
               
               <tbody>
                 <tr *ngFor="let user of users$ | async; let i = index">
-                  <td data-label="S No.">{{ i + 1 }}</td>
+                  <!-- <td data-label="S No.">{{ i + 1 }}</td> -->
                   <td data-label="First Name">{{ user.firstName }}</td>
                   <td data-label="Middle Name">{{ user.middleName }}</td>
                   <td data-label="Last Name">{{ user.lastName }}</td>

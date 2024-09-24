@@ -19,8 +19,8 @@ export class ConsultancyListComponent implements OnInit {
   breadscrums = [
     {
       title: 'Consultancy List',
-      items: ['Tables'],
-      active: 'Consultancy List',
+      items: ['Admin'],
+      active: 'Consultancy',
     },
   ];
   consultancies$: Observable<Consultancy[]>;

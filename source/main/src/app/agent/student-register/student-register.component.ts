@@ -192,9 +192,9 @@ export class StudentRegisterComponent implements OnInit {
   hide3 = true;
   breadscrums = [
     {
-      title: 'Student Details',
-      items: ['Forms'],
-      active: 'Add Student',
+      title: 'Register Student',
+      items: ['Admin'],
+      active: 'Students',
     },
   ];
   user: any;

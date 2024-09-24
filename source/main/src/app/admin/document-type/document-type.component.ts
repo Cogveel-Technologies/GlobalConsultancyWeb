@@ -13,7 +13,7 @@ import { map } from 'rxjs/operators';
 export class DocumentTypeComponent implements OnInit {
   breadscrums = [
     {
-      title: 'Document Type',
+      title: ' Add Document Type',
       items: ['Admin'],
       active: 'Document Type',
     },
