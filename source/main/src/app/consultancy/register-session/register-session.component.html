@@ -11,9 +11,6 @@
         <div class="row clearfix">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
-                    <div class="header">
-                        <h2>{{editMode? 'Edit Session' : 'Add Session' }}</h2>
-                    </div>
                     <div class="body">
                         <form class="m-4" [formGroup]="registerSession" (submit)="onSubmit()">
                             <div class="row">
@@ -28,9 +25,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <mat-form-field appearance="fill" class="w-100 mb-0">
-                                        <mat-label>Select an institute</mat-label>
+                                        <mat-label>Select Institute</mat-label>
                                         <mat-icon matPrefix>home</mat-icon>
-                                        <mat-select formControlName="instituteId" (selectionChange)="onInstituteChange($event)">
+                                        <mat-select formControlName="instituteId" (selectionChange)="onInstituteChange($event)" required>
                                           <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
                                             {{ institute.name }}
                                           </mat-option>

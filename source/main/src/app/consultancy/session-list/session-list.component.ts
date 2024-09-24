@@ -19,7 +19,7 @@ export class SessionListComponent {
   breadscrums = [
     {
       title: 'Session List',
-      items: ['Programs'],
+      items: ['Consultancy'],
       active: 'Session List',
     },
   ];

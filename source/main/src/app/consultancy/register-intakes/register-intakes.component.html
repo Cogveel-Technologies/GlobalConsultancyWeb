@@ -10,17 +10,12 @@
       <div class="row clearfix">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 ">
           <div class="card">
-            <div class="header">
-              <h2>{{editMode ? 'Edit Intake' : 'Add Intake'}}</h2>
-            </div>
             <div class="body">
               <form class="m-5" [formGroup]="registerIntake" (submit)="onSubmit()">
-                
-  
                 <div class="row">
                   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-1">
                     <mat-form-field appearance="fill" class="example-full-width">
-                      <mat-label>Select a session</mat-label>
+                      <mat-label>Select Session</mat-label>
                       <mat-select formControlName="sessionId" required (selectionChange)="onSessionChange($event)">
                         <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
                           {{session.name}}
@@ -42,7 +37,7 @@
                 <div class="row">
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-1">
                     <mat-form-field appearance="fill" class="example-full-width">
-                      <mat-label>No of intakes</mat-label>
+                      <mat-label>No Of Intakes</mat-label>
                       <input matInput formControlName="noOfIntake" type="number" required appCustomValidator="noOfIntakes">
                       <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>group</mat-icon>
                     </mat-form-field>

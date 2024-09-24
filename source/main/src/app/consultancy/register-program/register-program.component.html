@@ -10,9 +10,6 @@
         <div class="row">
             <div class="col-xl-12">
                 <div class="card">
-                    <div class="header">
-                        <h2>{{editMode ? 'Edit Program' : 'Add Program' }}</h2>
-                    </div>
                     <div class="body">
                         <form class="m-4" [formGroup]="registerProgram" (submit)="onSubmit()">
 
@@ -173,7 +170,7 @@
                             <div class="row mb-1">
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
-                                        <mat-label>Course type</mat-label>
+                                        <mat-label>Course Type</mat-label>
                                         <mat-select formControlName="courseTypeId" required>
                                             <mat-option *ngFor="let category of (courseTypeOptions|async)"
                                                 [value]="category.id">{{ category.name }}</mat-option>
@@ -184,7 +181,7 @@
                                 </div>
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
-                                        <mat-label>Is public</mat-label>
+                                        <mat-label>Is Public</mat-label>
                                         <mat-select formControlName="isPublic" required>
                                             <mat-option *ngFor="let category of isPublic"
                                                 [value]="category">{{ category }}</mat-option>

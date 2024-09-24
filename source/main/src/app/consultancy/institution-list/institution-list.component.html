@@ -34,9 +34,6 @@
           <div class="materialTableHeader">
             <div class="left">
               <ul class="header-buttons-left ms-0">
-                <li class="tbl-title me-2">
-                  <h2>Institute List</h2>
-                </li>
                 <app-search [searchText]="search"></app-search>
               </ul>
             </div>
@@ -65,7 +62,6 @@
                 <tr>
                   <th mat-sort-header="instituteName">Institute Name</th>
                   <th mat-sort-header="province">Province</th>
-                  <th mat-sort-header="yearEstablished">Year Established</th>
                   <th mat-sort-header="email">Email</th>
                   <th mat-sort-header="phoneNumber">Phone Number</th>
                   <th>Actions</th>
@@ -75,7 +71,6 @@
                 <tr *ngFor="let institute of (universities | async)">
                   <td data-label="Institute Name">{{ institute.instituteName }}</td>
                   <td data-label="Province">{{ institute.province }}</td>
-                  <td data-label="Year Established">{{ institute.yearEstablished }}</td>
                   <td data-label="Email">{{ institute.email }}</td>
                   <td data-label="Phone No">{{ institute.phoneNo }}</td>
                   <td data-label="Actions">
