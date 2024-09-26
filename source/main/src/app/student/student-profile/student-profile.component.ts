@@ -17,8 +17,8 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
   breadscrums = [
     {
       title: 'Profile',
-      items: ['Extra'],
-      active: 'Profile',
+      items: ['Admin'],
+      active: 'Student Profile',
     },
   ];
   documentTypes: any[] = [];

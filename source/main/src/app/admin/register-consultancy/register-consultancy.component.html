@@ -43,15 +43,29 @@
               <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
-                    <mat-label>Phone 1</mat-label>
-                    <input matInput formControlName="phone1" required appCustomValidator="phoneNumber" type="tel">
+                    <mat-label>Phone</mat-label>
+                    <input 
+                      matInput 
+                      formControlName="phone1"
+                      required 
+                      appCustomValidator="phoneNumber" 
+                      type="tel" 
+                      maxlength="12"
+                      pattern="[0-9]*">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
-                    <mat-label>Phone 2</mat-label>
-                    <input matInput formControlName="phone2" appCustomValidator="phoneNumber" type="tel">
+                    <mat-label>Phone</mat-label>
+                    <input 
+                      matInput 
+                      formControlName="phone2"
+                      required 
+                      appCustomValidator="phoneNumber" 
+                      type="tel" 
+                      maxlength="12"
+                      pattern="[0-9]*">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
                   </mat-form-field>
                 </div>
