@@ -219,7 +219,7 @@ export class CustomValidatorDirective implements Validator, OnInit {
   }
 
   validatePhoneNumber(value: string): boolean {
-    const phoneRegex = /^\+?[1-9]\d{1,10}$/;
+    const phoneRegex = /^\+?[0-9]\d{1,12}$/;
     return phoneRegex.test(value);
   }
   validateNumber(value: string): boolean {
