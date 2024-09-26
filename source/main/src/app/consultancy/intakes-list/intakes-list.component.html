@@ -53,24 +53,35 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body table-responsive">
-                        <table class="table table-hover table-responsive" matSort (matSortChange)="onSortChange($event)">
+                        <table class="table table-hover table-responsive">
                             <thead>
                                 <tr>
-                                    <th mat-sort-header="noOfIntake">No of intakes</th>
-                                    <th mat-sort-header="year">Year</th>
-                                    <th>Actions</th>
+                                  <th>
+                                    <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression" 
+                                                 [sortFields]="['noOfIntake']" [sortLabels]="['Intakes']"
+                                                 (sortChange)="onSortChange($event)">
+                                    </app-sorting>
+                                  </th>
+                                  <th>
+                                    <app-sorting [sortField]="defaultData.OrderBy"  [sortDirection]="defaultData.sortExpression" 
+                                                 [sortFields]="['year']" [sortLabels]="['Year']"
+                                                 (sortChange)="onSortChange($event)">
+                                    </app-sorting>
+                                  </th>
+                                  
+                                  <th>Actions</th>
                                 </tr>
-                            </thead>
+                              </thead>
                             <tbody>
                                 <tr *ngFor="let intake of (intakes | async)">
                                     <td data-label="Number of Intakes">{{ intake.noOfIntake }}</td>
-                                    <td data-label="Year">{{ intake.year }}</td>
+                                    <td data-label="Year">{{ intake.year | date:'dd-MM-yyyy' }}</td>
                                     <td data-label="Actions">
                                         <button mat-icon-button color="primary"
-                                            [routerLink]="['/consultancy/edit-intake', intake.id]">
+                                            [routerLink]="['/consultancy/edit-intake', intake.id]" matTooltip="Edit">
                                             <mat-icon>edit</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)">
+                                        <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)" matTooltip="Delete">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </td>

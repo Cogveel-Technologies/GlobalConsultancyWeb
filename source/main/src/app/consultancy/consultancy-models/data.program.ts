@@ -4,7 +4,7 @@ export interface ProgramData {
     programDescription: string,
     duration: string,
     applicationFee: number,
-    tuitionFee: number,
+    tutionFee: number,
     levelOfEducation: string,
     status: string,
     subjectRequirements: string,

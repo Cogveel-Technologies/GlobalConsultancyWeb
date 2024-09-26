@@ -23,6 +23,7 @@ export class RegisterAgentComponent {
   consultancyId = localStorage.getItem("id");
   editId: number
   editMode: boolean
+  hide3 = true;
 
   ngOnInit() {
     this.registerAgent = this.fb.group({

@@ -7,6 +7,8 @@ import { SpecificConsultancyRelated } from '../consultancy-models/data.specificI
 import { Observable } from 'rxjs';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
+import { Moment } from 'moment';
+
 
 @Component({
   selector: 'app-register-intakes',
@@ -33,13 +35,12 @@ export class RegisterIntakesComponent {
   sessions:Observable<SpecificConsultancyRelated[]>;
   registerIntake: FormGroup;
   sessionId$:BehaviorSubject<number|null>= new BehaviorSubject<number|null>(null)
+  startYear: Moment;
 
 
   ngOnInit(): void {
     // Initialize data for programs, institutes, sessions
     this.registerIntake = new FormGroup({
-      programId: new FormControl(''),
-      instituteId: new FormControl(''),
       sessionId: new FormControl(''),
       noOfIntake: new FormControl(''),
       year: new FormControl('')
@@ -50,6 +51,7 @@ export class RegisterIntakesComponent {
     
     const editIntake = this.route.snapshot.data['editResponse'];
     if (editIntake) {
+      console.log(editIntake)
       this.editId = +this.route.snapshot.paramMap.get('id');
       this.editMode = true;
       this.registerIntake.patchValue(editIntake);
@@ -79,11 +81,18 @@ export class RegisterIntakesComponent {
       this.router.navigate(["consultancy", "intake-list"]);
     }
   }
- 
+
+  // Filter function to allow today and future dates
+  futureDateFilter = (date: Date | null): boolean => {
+    const today = new Date();
+    // Set time to midnight to compare only dates
+    today.setHours(0, 0, 0, 0);
+    return date ? date >= today : false; // Allow today and future dates
+  };
 
   onSubmit() {
     let newDetails = this.registerIntake.value;
-    newDetails.consultancyId = this.consultancyId
+    newDetails.consultancyId = +this.consultancyId
     
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateIntake(this.editId,newDetails).subscribe(res => {

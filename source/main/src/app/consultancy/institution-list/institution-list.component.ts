@@ -7,7 +7,6 @@ import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, startWit
 import { Observable } from 'rxjs';
 import { InstituteData } from '../consultancy-models/data.institute';
 import { FormControl, FormGroup } from '@angular/forms';
-import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { PageEvent } from '@angular/material/paginator';
 
 
@@ -45,9 +44,9 @@ export class InstitutionListComponent {
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
   pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number }> = new BehaviorSubject<{ pageSize: number, pageIndex: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage });
-  sorting$: BehaviorSubject<string> = new BehaviorSubject<string>(this.defaultData.sortExpression);
   totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
+  sorting$: BehaviorSubject<{field:string,direction:string}>= new BehaviorSubject<{field:string,direction:string}>({field:this.defaultData.OrderBy,direction:this.defaultData.sortExpression});
 
 
   getInstitutes(params: ConsultancyDetailsOptions) {
@@ -83,12 +82,12 @@ export class InstitutionListComponent {
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(), switchMap(([id, search, pageRelated, sort]) => {
         if (id) {
-          console.log("debugging")
           this.defaultData.CountryId = String(id);
           this.defaultData.searchText = search;
           this.defaultData.pageSize = pageRelated.pageSize;
           this.defaultData.currentPage = pageRelated.pageIndex;
-          this.defaultData.sortExpression = sort;
+          this.defaultData.sortExpression = sort.direction;
+          this.defaultData.OrderBy = sort.field
           return this.universities = this.getInstitutes(this.defaultData)
         } else {
           return of([])
@@ -126,13 +125,12 @@ export class InstitutionListComponent {
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
   }
 
-  // sort event
-  onSortChange(event: any) {
-    if (event.direction === '') {
-      event.direction = 'asc'
+
+     // sort event
+     onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
+      this.sorting$.next({field:field,direction:direction})
     }
-    this.sorting$.next(event.direction)
-  }
+
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false)

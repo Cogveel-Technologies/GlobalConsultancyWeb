@@ -84,7 +84,7 @@ export class CustomValidatorDirective implements Validator, OnInit {
         break;
 
       case 'password':
-        error = this.validatePassword(control.value) ? null : { 'PasswordMustBeAtLeast8&MustContainAtLeastOneNumberAndOneSpecialCharacter': true };
+        error = this.validatePassword(control.value) ? null : { 'invalidPassword': true };
         break;
       case 'gender':
         error = this.validateGender(control.value) ? null : { 'invalidGender': true };
@@ -317,8 +317,8 @@ export class CustomValidatorDirective implements Validator, OnInit {
     if (error['invalidAgentCompany']) {
       return 'Invalid Agent Company';
     }
-    if (error['PasswordMustBeAtLeast8&MustContainAtLeastOneNumberAndOneSpecialCharacter']) {
-      return 'Password must be at least 8 characters & must contain atleast one number and one special character';
+    if (error['invalidPassword']) {
+      return 'Password must be atleast 8 characters long & must contain atleast one number and one special character e.g ($&#)';
     }
     if (error['invalidGender']) {
       return 'Invalid Gender';

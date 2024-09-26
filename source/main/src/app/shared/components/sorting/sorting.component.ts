@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class SortingComponent {
   @Input() sortField: string;
-  @Input() sortDirection: 'asc' | 'desc';
+  @Input() sortDirection: 'asc' | 'desc'| string ;
   @Input() sortFields: string[] = [];
   @Input() sortLabels: string[] = []; // New input for display labels
 

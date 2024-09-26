@@ -84,17 +84,49 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body table-responsive">
-                        <table class="table table-hover table-responsive" matSort
-                            (matSortChange)="onSortChange($event)">
+                        <table class="table table-hover table-responsive">
                             <thead>
                                 <tr>
-                                    <th mat-sort-header="programName">Program Name</th>
-                                    <th mat-sort-header="duration">Duration</th>
-                                    <th mat-sort-header="levelOfEducation">Level Of Education</th>
-                                    <th mat-sort-header="status">Status</th>
-                                    <th>Actions</th>
+                                  <th>
+                                    <app-sorting 
+                                      [sortField]="defaultData.OrderBy" 
+                                      [sortDirection]="defaultData.sortExpression" 
+                                      [sortFields]="['programName']" 
+                                      [sortLabels]="['Program Name']"
+                                      (sortChange)="onSortChange($event)">
+                                    </app-sorting>
+                                  </th>
+                                  <th>
+                                    <app-sorting 
+                                      [sortField]="defaultData.OrderBy" 
+                                      [sortDirection]="defaultData.sortExpression" 
+                                      [sortFields]="['duration']" 
+                                      [sortLabels]="['Duration']"
+                                      (sortChange)="onSortChange($event)">
+                                    </app-sorting>
+                                  </th>
+                                  <th>
+                                    <app-sorting 
+                                      [sortField]="defaultData.OrderBy" 
+                                      [sortDirection]="defaultData.sortExpression" 
+                                      [sortFields]="['levelOfEducation']" 
+                                      [sortLabels]="['Level Of Education']"
+                                      (sortChange)="onSortChange($event)">
+                                    </app-sorting>
+                                  </th>
+                                  <th>
+                                    <app-sorting 
+                                      [sortField]="defaultData.OrderBy" 
+                                      [sortDirection]="defaultData.sortExpression" 
+                                      [sortFields]="['status']" 
+                                      [sortLabels]="['Status']"
+                                      (sortChange)="onSortChange($event)">
+                                    </app-sorting>
+                                  </th>
+                                  <th>Actions</th>
                                 </tr>
-                            </thead>
+                              </thead>
+                              
                             <tbody>
                                 <tr *ngFor="let program of (programs | async)">
                                     <td data-label="Program Name">{{ program.programName }}</td>
@@ -104,14 +136,14 @@
                                     <td data-label="Actions">
 
                                         <button mat-icon-button
-                                            [routerLink]="['/consultancy/program-details', program.id]">
+                                            [routerLink]="['/consultancy/program-details', program.id]" matTooltip="View">
                                             <mat-icon>visibility</mat-icon>
                                         </button>
                                         <button mat-icon-button color="primary"
-                                            [routerLink]="['/consultancy/edit-program', program.id]">
+                                            [routerLink]="['/consultancy/edit-program', program.id]" matTooltip="Edit">
                                             <mat-icon>edit</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="warn" (click)="deleteProgram(program.id)">
+                                        <button mat-icon-button color="warn" (click)="deleteProgram(program.id)" matTooltip="Delete">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </td>

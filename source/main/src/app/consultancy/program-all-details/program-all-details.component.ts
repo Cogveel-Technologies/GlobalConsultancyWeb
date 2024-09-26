@@ -24,6 +24,7 @@ export class ProgramAllDetailsComponent {
      // for all details (on view button)
      this.details = this.route.snapshot.data['programDetails']
      this.keys = Object.keys(this.details);
+     console.log(this.details)
   }
 
   backToList(){

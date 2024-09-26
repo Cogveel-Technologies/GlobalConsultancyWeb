@@ -133,13 +133,12 @@
 
                             <div class="col-md-12 mb-1">
                                 <mat-form-field appearance="fill" class="example-full-width">
-                                    <mat-label>Intake</mat-label>
+                                    <mat-label>Intakes</mat-label>
                                     <mat-select formControlName="intakeId" required (selectionChange)="onIntakeChange($event)">
                                         <mat-option *ngFor="let intake of (intakeOptions|async)" [value]="intake.id">{{ intake.name
                                             }}</mat-option>
                                     </mat-select>
-                                    <mat-icon class="material-icons-two-tone color-icon p-3"
-                                        matSuffix>event</mat-icon>
+                                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>group</mat-icon>
                                 </mat-form-field>
                             </div>
 
