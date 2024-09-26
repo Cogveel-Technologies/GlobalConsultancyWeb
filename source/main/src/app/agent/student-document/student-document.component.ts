@@ -19,9 +19,9 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
   uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>;
   breadscrums = [
     {
-      title: 'Student Details',
-      items: ['Forms'],
-      active: 'Add Document',
+      title: 'Add Document',
+      items: ['Agent'],
+      active: 'Students',
     },
   ];
   student: Student | null = null;

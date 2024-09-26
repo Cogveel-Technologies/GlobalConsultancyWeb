@@ -25,7 +25,7 @@
                                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
                                         <mat-label>Date of Birth</mat-label>
-                                        <input matInput [matDatepicker]="dobPicker" formControlName="dob" required>
+                                        <input matInput [matDatepicker]="dobPicker" formControlName="dob"  appCustomValidator="dob" required>
                                         <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
                                         <mat-datepicker #dobPicker></mat-datepicker>
                                         <!-- <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>event</mat-icon> -->
@@ -55,7 +55,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
                                         <mat-label>Passport Expiry</mat-label>
-                                        <input matInput [matDatepicker]="expiryPicker" formControlName="passportExpiry" required>
+                                        <input matInput [matDatepicker]="expiryPicker" formControlName="passportExpiry" appCustomValidator="passportexpiry" required>
                                         <mat-datepicker-toggle matSuffix [for]="expiryPicker"></mat-datepicker-toggle>
                                         <mat-datepicker #expiryPicker></mat-datepicker>
                                         <!-- <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>date_range</mat-icon> -->
@@ -63,20 +63,14 @@
                                 </div>
 
 
-                                <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                                    <mat-form-field class="example-full-width">
-                                        <mat-label>Passport Expiry</mat-label>
-                                        <input matInput formControlName="passportExpiry" required appCustomValidator="passportExpiry" type="date">
-                                        <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>date_range</mat-icon>
-                                    </mat-form-field>
-                                </div> -->
+                              
                             </div>
                             <div class="row">
                                 <!-- Email Address Field -->
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
                                         <mat-label>Email Address</mat-label>
-                                        <input matInput formControlName="emailAddress" required appCustomValidator="emailAddress" type="email">
+                                        <input matInput formControlName="emailAddress" required appCustomValidator="email" type="email">
                                         <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
                                     </mat-form-field>
                                 </div>
@@ -84,8 +78,8 @@
                                 <!-- Contact Number Field -->
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
-                                        <mat-label>Contact Number</mat-label>
-                                        <input matInput formControlName="contactNo" required appCustomValidator="contactNo" type="tel">
+                                        <mat-label>Phone Number</mat-label>
+                                        <input matInput formControlName="contactNo" required appCustomValidator="phoneNumber" type="tel">
                                         <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
                                     </mat-form-field>
                                 </div>
@@ -95,7 +89,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
                                         <mat-label>Residential Address</mat-label>
-                                        <textarea matInput formControlName="residentialAddress" required appCustomValidator="residentialAddress"></textarea>
+                                        <textarea matInput formControlName="residentialAddress" required appCustomValidator="address"></textarea>
                                         <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>home</mat-icon>
                                     </mat-form-field>
                                 </div>
@@ -104,7 +98,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
                                         <mat-label>Mailing Address</mat-label>
-                                        <textarea matInput formControlName="mailingAddress" required appCustomValidator="mailingAddress"></textarea>
+                                        <textarea matInput formControlName="mailingAddress" required appCustomValidator="address"></textarea>
                                         <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>mail_outline</mat-icon>
                                     </mat-form-field>
                                 </div>

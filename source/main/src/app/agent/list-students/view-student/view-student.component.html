@@ -18,7 +18,7 @@
               <div class=" position-relative">
 
                 <!-- <img src="assets/images/user/DSC_0339.JPG" class="user-img" alt=""> -->
-                <img src="assets/images/user/DSC_0339.JPG" class="profile-img user-img" alt="">
+                <img src="assets/images/user/user.png" class="profile-img user-img" alt="">
                 <mat-icon matSuffix class="profile-img-edit" matTooltip="Edit">edit</mat-icon>
                 
                 
@@ -76,7 +76,7 @@
                         <br>
                         <p class="text-muted">{{student.mailingAddress}}</p>
                       </div>
-                      <div class="col-md-3 col-6">
+                      <!-- <div class="col-md-3 col-6">
                         <strong>Agent Id</strong>
                         <br>
                         <p class="text-muted">{{student.agentId}}</p>
@@ -85,7 +85,7 @@
                         <strong>Id</strong>
                         <br>
                         <p class="text-muted">{{student.id}}</p>
-                      </div>
+                      </div> -->
                       <div class="col-md-3 col-6">
                         <strong>Citizenship</strong>
                         <br>
@@ -99,12 +99,12 @@
                       <div class="col-md-3 col-6">
                         <strong>Passport Expiry</strong>
                         <br>
-                        <p class="text-muted">{{student.passportExpiry}}</p>
+                        <p class="text-muted">{{student.passportExpiry | date: 'dd-MM-yyyy'}}</p>
                       </div>
                       <div class="col-md-3 col-6">
                         <strong>DOB</strong>
                         <br>
-                        <p class="text-muted">{{student.dob}}</p>
+                        <p class="text-muted">{{student.dob | date: 'dd-MM-yyyy'}}</p>
                       </div>
 
                     </div>
@@ -124,11 +124,11 @@
            <mat-tab>
               <ng-template mat-tab-label>
                 <mat-icon class="example-tab-icon msr-2">description</mat-icon>
-                Documents
+               View Documents
               </ng-template>
               <div class="header">
-                <h2>
-                  <strong>Documents</strong> Settings</h2>
+                <!-- <h2>
+                  <strong>Documents</strong> Settings</h2> -->
               </div>
               <div class="body">
                 <div class="example-container">
@@ -137,20 +137,20 @@
                    <table class="table table-hover table-responsive">
                     <thead class="thead-light">
                       <tr>
-                        <th>Sr No.</th>
+                        <!-- <th>Sr No.</th> -->
                         <th>Document Type</th>
                         <th>Remarks</th>
-                        <th>Uploaded By</th>
+                        <!-- <th>Uploaded By</th> -->
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       <!-- Iterate over the 'data' array within the PaginatedResponse -->
                       <tr *ngFor="let document of (uploadedDocument$ | async)?.data; let i = index">
-                        <td data-label="Sr No.">{{ i + 1 }}</td>
+                        <!-- <td data-label="Sr No.">{{ i + 1 }}</td> -->
                         <td data-label="Document Type">{{ getDocumentTypeName(document.documentTypeId) }}</td>
                         <td data-label="Remarks">{{ document.remarks }}</td>
-                        <td data-label="Uploaded By">{{ document.uploadedBy }}</td>
+                        <!-- <td data-label="Uploaded By">{{ document.uploadedBy }}</td> -->
                         <td data-label="Actions">
                           <button mat-icon-button color="primary" (click)="viewDocument(document.file)">
                             <mat-icon>visibility</mat-icon>
@@ -187,7 +187,7 @@
      <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="example-tab-icon msr-2">note</mat-icon>
-        Note
+       View Note
       </ng-template>
       <div class="header">
         <h2>
@@ -217,7 +217,7 @@
                <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon msr-2">add</mat-icon>
-                  Test
+                  View Test
                 </ng-template>
                 <div class="header">
                   <h2>
@@ -290,7 +290,7 @@
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon class="example-tab-icon msr-2">school</mat-icon>
-          Education
+          View Education
         </ng-template>
         <div class="header">
           <h2>

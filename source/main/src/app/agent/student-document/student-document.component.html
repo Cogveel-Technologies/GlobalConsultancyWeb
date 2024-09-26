@@ -9,9 +9,7 @@
     <div class="row clearfix">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
         <div class="card">
-          <div class="header">
-            <h2>Document Upload</h2>
-          </div>
+          
           <div class="body">
             <form class="m-4" [formGroup]="documentForm" (ngSubmit)="onDocumentFormSubmit()">
               <div class="row">
@@ -88,7 +86,7 @@
                   <table class="table table-hover table-responsive">
                     <thead class="thead-light">
                       <tr>
-                        <th>Sr No.</th>
+                        
                         <th>Document Type</th>
                         <th>Remarks</th>
                         <!-- <th>Uploaded By</th> -->
@@ -97,7 +95,7 @@
                     </thead>
                     <tbody>
                       <tr *ngFor="let document of response.data; let i = index">
-                        <td data-label="Sr No.">{{ i + 1 }}</td>
+                        
                         <td data-label="Document Type">{{ getDocumentTypeName(document.documentTypeId) }}</td>
                         <td data-label="Remarks">{{ document.remarks }}</td>
                         <!-- <td data-label="Uploaded By">{{ document.uploadedBy }}</td> -->

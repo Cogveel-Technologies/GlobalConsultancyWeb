@@ -164,6 +164,13 @@ export class CustomValidatorDirective implements Validator, OnInit {
       case 'sessionName':
         error = this.validateWithSpace(control.value) ? null : { 'invalidSessionName': true };
         break;
+      case 'dob':
+        error = this.validateDOB(control.value) ? null : { 'invaliddob': true };
+        break;
+      case 'passportexpiry':
+          error = this.validatePassportExpiry(control.value) ? null : { 'invalidPassportExpiry': true };
+          break;
+  
 
       default:
         console.warn('Unknown validation type:', this.validationType);
@@ -244,7 +251,21 @@ export class CustomValidatorDirective implements Validator, OnInit {
     return value && value.length >= 10;
   }
   
-
+  validateDOB(value: string): boolean {
+    const today = new Date();
+    const dob = new Date(value);
+  
+    // Date of birth must not be in the future
+    return dob <= today;
+  }
+  validatePassportExpiry(value: string): boolean {
+    const today = new Date();
+    const expiryDate = new Date(value);
+  
+    // Passport expiry date must be in the future
+    return expiryDate > today;
+  }
+    
   setError(error: ValidationErrors | null) {
     this.removeError();
     if (error) {
@@ -389,6 +410,13 @@ export class CustomValidatorDirective implements Validator, OnInit {
     if (error['invalidSessionName']) {
       return 'Invalid session name';
     }
+    if (error['invaliddob']) {
+      return 'Invalid dob';
+    }
+    if (error['invalidPassportExpiry']) {
+      return 'Invalid Passport Expiry';
+    }
+   
     return 'Invalid Value';
   }
 }
