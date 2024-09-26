@@ -79,7 +79,9 @@
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
                                         <mat-label>Phone Number</mat-label>
-                                        <input matInput formControlName="contactNo" required appCustomValidator="phoneNumber" type="tel">
+                                        <input matInput formControlName="contactNo" required appCustomValidator="phoneNumber" type="tel"
+                                        maxlength="12"
+                                        pattern="[0-9]*">
                                         <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
                                     </mat-form-field>
                                 </div>
@@ -115,11 +117,18 @@
                                 
                                 <!-- Password Field -->
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                                    <mat-form-field class="example-full-width">
+                                    <!-- <mat-form-field class="example-full-width">
                                         <mat-label>Password</mat-label>
                                         <input matInput formControlName="password" required appCustomValidator="password" type="password">
                                         <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>lock</mat-icon>
-                                    </mat-form-field>
+                                    </mat-form-field> -->
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Password</mat-label>
+                                        <input matInput formControlName="password" [type]="hide3 ? 'password' : 'text'" required appCustomValidator="password">
+                                        <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix (click)="hide3 = !hide3">
+                                          {{hide3 ? 'visibility_off' : 'visibility'}}
+                                        </mat-icon>
+                                      </mat-form-field>
                                 </div>
                                 
                                 <!-- Institute ID Field -->
