@@ -97,6 +97,7 @@ export class InstitutionListComponent {
           this.countrySelected = true;
         }
       }))
+
   }
 
   // selection event (selection of country)
