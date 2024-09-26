@@ -40,7 +40,7 @@ export class AgentListComponent {
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
   pagination$: BehaviorSubject<{pageSize:number,pageIndex:number}> = new BehaviorSubject<{pageSize:number,pageIndex:number}>({pageSize:this.defaultData.pageSize, pageIndex:this.defaultData.currentPage});
-  sorting$: BehaviorSubject<string> = new BehaviorSubject<string>(this.defaultData.sortExpression);
+  sorting$: BehaviorSubject<{field:string,direction:string}>= new BehaviorSubject<{field:string,direction:string}>({field:this.defaultData.OrderBy,direction:this.defaultData.sortExpression});
   totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
 
@@ -55,7 +55,8 @@ export class AgentListComponent {
           this.defaultData.searchText = search;
           this.defaultData.pageSize = pageRelated.pageSize;
           this.defaultData.currentPage = pageRelated.pageIndex;
-          this.defaultData.sortExpression = sort;
+          this.defaultData.sortExpression = sort.direction;
+          this.defaultData.OrderBy = sort.field
           return this.agents = this.getAgents(this.defaultData)
       })).subscribe(res => {
         if (res.length) {
@@ -80,13 +81,10 @@ export class AgentListComponent {
       this.pagination$.next({pageSize:event.pageSize,pageIndex:event.pageIndex+1})
     }
   
-     // sort event
-     onSortChange(event: any) {
-      if (event.direction === '') {
-        event.direction = 'asc'
+      // sort event
+      onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
+        this.sorting$.next({field:field,direction:direction})
       }
-      this.sorting$.next(event.direction)
-    }
 
     addAgent(){
       this.router.navigate(["consultancy/register-agent"])

@@ -66,6 +66,14 @@ export class RegisterSessionComponent {
    
   }
 
+  // Filter function to allow today and future dates
+  futureDateFilter = (date: Date | null): boolean => {
+    const today = new Date();
+    // Set time to midnight to compare only dates
+    today.setHours(0, 0, 0, 0);
+    return date ? date >= today : false; // Allow today and future dates
+  };
+
 
   onSubmit(): void {
     const sessionDetails = this.registerSession.value;

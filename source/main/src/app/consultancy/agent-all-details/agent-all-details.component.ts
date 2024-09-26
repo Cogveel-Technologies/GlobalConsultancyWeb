@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AgentDetails } from '../consultancy-models/data.agent';
 
 @Component({
@@ -15,7 +15,7 @@ export class AgentAllDetailsComponent {
       active: 'Agent Details',
     },
   ];
-  constructor(private route:ActivatedRoute){}
+  constructor(private route:ActivatedRoute, private router:Router){}
   details:AgentDetails
   keys:any
   ngOnInit(){
@@ -24,5 +24,8 @@ export class AgentAllDetailsComponent {
 
      this.keys = Object.keys(this.details);
      console.log(this.keys)
+  }
+  backToList(){
+    this.router.navigate(["/consultancy/agent-list"]);
   }
 }

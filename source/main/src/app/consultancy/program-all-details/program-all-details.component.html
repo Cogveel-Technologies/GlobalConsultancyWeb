@@ -1,5 +1,4 @@
 <section class="content">
-  <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="backToList()">Back</button>
     <div class="container-fluid">
         <div class="block-header" *ngFor="let breadscrum of breadscrums">
             <!-- breadcrumb -->
@@ -55,7 +54,7 @@
                                                     </tr>
                                                     <tr>
                                                       <td><mat-icon color="primary">account_balance_wallet</mat-icon> Tuition Fee</td>
-                                                      <td>{{details.tuitionFee}}</td>
+                                                      <td>{{details.tutionFee}}</td>
                                                     </tr>
                                                     <tr>
                                                       <td><mat-icon color="primary">school</mat-icon> Level of Education</td>
@@ -99,7 +98,9 @@
                         </mat-tab>
                     </mat-tab-group>
                 </div>
+                <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="backToList()">Back</button>
             </div>
         </div>
+     
     </div>
 </section>

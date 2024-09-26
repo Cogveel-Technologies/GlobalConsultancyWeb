@@ -36,16 +36,49 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <div class="card">
             <div class="body table-responsive">
-              <table class="table table-hover table-responsive" matSort (matSortChange)="onSortChange($event)" >
+              <table class="table table-hover table-responsive" >
                 <thead>
                   <tr>
-                    <th mat-sort-header="agentCompany">Agent Company</th>
-                    <th mat-sort-header="agentFirstName">Agent Name</th>
-                    <th mat-sort-header="agentPhone">Phone</th>
-                    <th mat-sort-header="agentEmail">Email</th>
+                    <th>
+                      <app-sorting 
+                        [sortField]="defaultData.OrderBy" 
+                        [sortDirection]="defaultData.sortExpression" 
+                        [sortFields]="['agentCompany']" 
+                        [sortLabels]="['Agent Company']"
+                        (sortChange)="onSortChange($event)">
+                      </app-sorting>
+                    </th>
+                    <th>
+                      <app-sorting 
+                        [sortField]="defaultData.OrderBy" 
+                        [sortDirection]="defaultData.sortExpression" 
+                        [sortFields]="['agentFirstName']" 
+                        [sortLabels]="['Agent Name']"
+                        (sortChange)="onSortChange($event)">
+                      </app-sorting>
+                    </th>
+                    <th>
+                      <app-sorting 
+                        [sortField]="defaultData.OrderBy" 
+                        [sortDirection]="defaultData.sortExpression" 
+                        [sortFields]="['agentPhone']" 
+                        [sortLabels]="['Phone']"
+                        (sortChange)="onSortChange($event)">
+                      </app-sorting>
+                    </th>
+                    <th>
+                      <app-sorting 
+                        [sortField]="defaultData.OrderBy" 
+                        [sortDirection]="defaultData.sortExpression" 
+                        [sortFields]="['agentEmail']" 
+                        [sortLabels]="['Email']"
+                        (sortChange)="onSortChange($event)">
+                      </app-sorting>
+                    </th>
                     <th>Actions</th>
                   </tr>
                 </thead>
+                
                 <tbody>
                   <tr *ngFor="let agent of (agents | async)">
                     <td data-label="Consultancy Name">{{ agent.agentCompany }}</td>
@@ -53,13 +86,13 @@
                     <td data-label="State">{{ agent.agentPhone }}</td>
                     <td data-label="Registration No">{{ agent.agentEmail }}</td>
                     <td data-label="Actions">
-                      <button mat-icon-button [routerLink]="['/consultancy/agent-details', agent.id]">
+                      <button mat-icon-button [routerLink]="['/consultancy/agent-details', agent.id]" matTooltip="View">
                         <mat-icon>visibility</mat-icon>
                       </button>
-                      <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-agent', agent.id]">
+                      <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-agent', agent.id]" matTooltip="Edit">
                         <mat-icon>edit</mat-icon>
                       </button>
-                      <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)">
+                      <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)" matTooltip="Delete">
                         <mat-icon>delete</mat-icon>
                       </button>
                     </td>
