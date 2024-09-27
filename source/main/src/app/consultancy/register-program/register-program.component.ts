@@ -79,14 +79,13 @@ export class RegisterProgramComponent {
         .pipe(
           switchMap(([instituteId, sessionId, intakeId]) => {
             console.log(instituteId, sessionId, intakeId)
+            console.log(this.previousInstituteState)
 
             // When the institute changes (or is reselected), reset session and intake
             if (instituteId && instituteId !== this.previousInstituteState) {
-
               // Store the last selected institute
               this.previousInstituteState = instituteId;
-
-              console.log(this.previousInstituteState)
+              console.log("drrrr")
 
               // Reset session form control and BehaviorSubject to ensure no default value
               this.registerProgram.get("sessionId").reset();
@@ -98,13 +97,7 @@ export class RegisterProgramComponent {
 
               // Make API call for sessions based on the selected institute
               this.defaultData.InstituteId = String(instituteId);
-              this.sessionOptions = this.consultancyApiService.getSpecificSessions(this.defaultData).pipe(
-                tap(() => {
-                  // After getting the new sessions, clear the session selection to avoid default
-                  this.registerProgram.get("sessionId").reset();
-                  this.session$.next(null);
-                })
-              );
+              this.sessionOptions = this.consultancyApiService.getSpecificSessions(this.defaultData)
 
               return of([]);  // Return empty observable
             }
@@ -115,12 +108,14 @@ export class RegisterProgramComponent {
               if (sessionId !== this.previousSessionState) {
                 this.previousSessionState = sessionId;
                 this.defaultData.SessionId = String(sessionId);
+                console.log(sessionId)
 
                 // Make API call for intakes based on session
                 this.intakeOptions = this.consultancyApiService.getSpecificIntakes(this.defaultData);
                 return of([]);
               }else{
                 // Make API call for intakes based on session
+                console.log("oppp")
                 this.intakeOptions = this.consultancyApiService.getSpecificIntakes(this.defaultData);
                 return of([]);
              }
@@ -132,6 +127,7 @@ export class RegisterProgramComponent {
                 this.intake$.next(null)
                 this.previousSessionState = sessionId;
               }
+              console.log(sessionId)
             }
 
             // Default case: return an empty observable
@@ -145,7 +141,7 @@ export class RegisterProgramComponent {
     if (details) {
       console.log(details)
       this.editId = +this.route.snapshot.paramMap.get('id');
-      this.editMode = true
+      this.editMode = true;
       this.institute$.next(details.instituteId);
       this.session$.next(details.sessionId);
       this.intake$.next(details.intakeId)

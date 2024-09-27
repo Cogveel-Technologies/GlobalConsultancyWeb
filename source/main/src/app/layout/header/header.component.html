@@ -24,13 +24,13 @@
       <ul class="nav navbar-nav navbar-right">
       
         <!-- Full Screen Button -->
-        <li class="fullscreen">
+        <!-- <li class="fullscreen">
           <button mat-button class="nav-notification-icons" (click)="callFullscreen()">
             <app-feather-icons [icon]="'maximize'" [class]="'header-icon'"></app-feather-icons>
           </button>
-        </li>
+        </li> -->
         <!-- #END# Full Screen Button -->
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <button mat-button [matMenuTriggerFor]="languagemenu" class="lang-dropdown nav-notification-icons"> <img
               *ngIf="flagvalue !== undefined" src="{{flagvalue}}" height="16">
             <img *ngIf="flagvalue === undefined" src="{{defaultFlag}}" height="16"></button>
@@ -43,9 +43,9 @@
               </button>
             </div>
           </mat-menu>
-        </li>
+        </li> -->
         <!-- #START# Notifications-->
-        <li class="nav-item" ngbDropdown>
+        <!-- <li class="nav-item" ngbDropdown>
           <button mat-button [matMenuTriggerFor]="notificationMenu" class="nav-notification-icons">
             <app-feather-icons [icon]="'bell'" [class]="'header-icon'"></app-feather-icons>
             <span class="label-count bg-orange"></span>
@@ -86,7 +86,7 @@
                 All Notifications</a>
             </div>
           </mat-menu>
-        </li>
+        </li> -->
         <!-- #END# Notifications-->
         <li class="nav-item user_profile">
           <button mat-button [matMenuTriggerFor]="profilemenu">

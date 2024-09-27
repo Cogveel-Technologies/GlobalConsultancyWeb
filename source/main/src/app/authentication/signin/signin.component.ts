@@ -6,7 +6,7 @@ import {
  
 } from '@angular/forms';
 import { loginService } from 'app/login.service';
-import { catchError, map, tap, throwError } from 'rxjs';
+import {  map } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
