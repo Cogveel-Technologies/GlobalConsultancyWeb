@@ -18,7 +18,7 @@ export class AdminusersComponent implements OnInit, OnDestroy {
     {
       title: 'Add Users',
       items: ['Admin'],
-      active: 'Users',
+      active: 'Add Users',
     },
   ];
   user: any;
