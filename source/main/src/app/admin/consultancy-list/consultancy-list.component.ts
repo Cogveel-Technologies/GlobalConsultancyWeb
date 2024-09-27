@@ -20,7 +20,7 @@ export class ConsultancyListComponent implements OnInit {
     {
       title: 'Consultancy List',
       items: ['Admin'],
-      active: 'Consultancy',
+      active: 'Consultancy List',
     },
   ];
   consultancies$: Observable<Consultancy[]>;
