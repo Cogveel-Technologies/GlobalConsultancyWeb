@@ -58,13 +58,13 @@
                                 <tr>
                                   <th>
                                     <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression" 
-                                                 [sortFields]="['noOfIntake']" [sortLabels]="['Intakes']"
+                                                 [sortFields]="['noOfIntake']" [sortLabels]="['Name']"
                                                  (sortChange)="onSortChange($event)">
                                     </app-sorting>
                                   </th>
                                   <th>
                                     <app-sorting [sortField]="defaultData.OrderBy"  [sortDirection]="defaultData.sortExpression" 
-                                                 [sortFields]="['year']" [sortLabels]="['Year']"
+                                                 [sortFields]="['year']" [sortLabels]="['Date']"
                                                  (sortChange)="onSortChange($event)">
                                     </app-sorting>
                                   </th>
