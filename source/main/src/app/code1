@@ -216,6 +216,15 @@
 //         groupTitle: false,
 //         submenu: []
 //       },
+
+    //   {
+    //     path: 'admin/consultancy',
+    //     title: 'MENUITEMS.ADMIN.LIST.REGISTER_CONSULTANCY',
+    //     icon: '',
+    //     class: 'ml-menu',
+    //     groupTitle: false,
+    //     submenu: []
+    //   },
      
 //       {
 //         path: 'admin/consultancy-list',

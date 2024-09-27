@@ -1,4 +1,6 @@
-
+.bg-white{
+  background-color: #fff;
+}
 
 .profile-img-edit
 {
@@ -15,4 +17,13 @@
   height: 110px !important;
   object-fit: cover !important;
   background: #fff;
+}
+
+/* Ensure active menus are always visible */
+.active > ul {
+  display: block !important;
+}
+
+.sidebar .menu ul li .sidebarIcon {
+  margin-right: 10px;
 }
