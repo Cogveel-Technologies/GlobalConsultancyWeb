@@ -126,4 +126,5 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
     return paths;
   }
+
 }

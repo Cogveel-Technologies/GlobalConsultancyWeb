@@ -6,49 +6,52 @@
       <ng-scrollbar [style.height]="listMaxHeight + 'px'" visibility="hover">
         <ul id="sidebarnav" class="list">
           <li class="sidebar-user-panel">
-            <div class="profile-usertitle ">
-              <div class="sidebar-userpic-name ">{{roleName}}</div>
+            <div class="profile-usertitle">
+              <div class="sidebar-userpic-name">{{roleName}}</div>
             </div>
           </li>
-          
+
           <!-- Top Most level menu -->
-          <li *ngFor="let sidebarItem of sidebarItems" 
-              [routerLinkActive]="sidebarItem.submenu.length !== 0 ? 'active' : 'active-top'" 
+          <li *ngFor="let sidebarItem of sidebarItems"
+              [routerLinkActive]="sidebarItem.submenu.length !== 0 ? 'active' : 'active-top'"
               class="active"> <!-- Always add the active class here -->
 
             <div class="header" *ngIf="sidebarItem.groupTitle">{{sidebarItem.title | translate}}</div>
 
             <a [routerLink]="sidebarItem.class === '' ? [sidebarItem.path] : null" *ngIf="!sidebarItem.groupTitle"
-              [ngClass]="[sidebarItem.class]" class="menu-top  bg-white">
-              <i-feather [name]="sidebarItem.icon" class="sidebarIcon "></i-feather>
-              <span class="hide-menu ">{{sidebarItem.title | translate}}</span>
+              [ngClass]="[sidebarItem.class]" class="menu-top bg-white">
+              <i-feather [name]="sidebarItem.icon" class="sidebarIcon"></i-feather>
+              <span class="hide-menu">{{sidebarItem.title | translate}}</span>
             </a>
 
             <!-- First level menu -->
             <ul class="ml-menu" *ngIf="sidebarItem.submenu.length > 0" class="active"> <!-- Add the active class -->
-              <li *ngFor="let sidebarSubItem1 of sidebarItem.submenu" [routerLinkActive]="sidebarSubItem1.submenu.length > 0 ? '' : 'active'"
-                  class="active"> <!-- Always add the active class -->
-
-                <a [routerLink]="[sidebarSubItem1.path]" [ngClass]="[sidebarSubItem1.class]">
-                  {{sidebarSubItem1.title | translate}}
-                </a>
+              <li *ngFor="let sidebarSubItem1 of sidebarItem.submenu"
+                  [routerLinkActive]="sidebarSubItem1.submenu.length > 0 ? '' : 'active'"
+                  class=""> <!-- Always add the active class -->
+                  
+                  <a [routerLink]="[sidebarSubItem1.path]" [ngClass]="[sidebarSubItem1.class]">
+                    <span class="arrow">->  {{sidebarSubItem1.title | translate}}</span> <!-- Add an arrow for visibility -->
+                  </a>
 
                 <!-- Second level menu -->
                 <ul class="ml-menu-2" *ngIf="sidebarSubItem1.submenu.length > 0" class="active"> <!-- Add the active class -->
-                  <li *ngFor="let sidebarSubItem2 of sidebarSubItem1.submenu" [routerLinkActive]="sidebarSubItem2.submenu.length > 0 ? '' : 'active'"
+                  <li *ngFor="let sidebarSubItem2 of sidebarSubItem1.submenu"
+                      [routerLinkActive]="sidebarSubItem2.submenu.length > 0 ? '' : 'active'"
                       class="active"> <!-- Always add the active class -->
 
                     <a [routerLink]="[sidebarSubItem2.path]" [ngClass]="[sidebarSubItem2.class]">
-                      {{sidebarSubItem2.title | translate}}
+                      <span class="arrow">-></span> {{sidebarSubItem2.title | translate}} <!-- Add an arrow for visibility -->
                     </a>
 
                     <!-- Third level menu -->
                     <ul class="ml-menu-3" *ngIf="sidebarSubItem2.submenu.length > 0" class="active"> <!-- Add the active class -->
-                      <li *ngFor="let sidebarSubItem3 of sidebarSubItem2.submenu" [routerLinkActive]="sidebarSubItem3.submenu.length > 0 ? '' : 'active'"
+                      <li *ngFor="let sidebarSubItem3 of sidebarSubItem2.submenu"
+                          [routerLinkActive]="sidebarSubItem3.submenu.length > 0 ? '' : 'active'"
                           class="active"> <!-- Always add the active class -->
 
                         <a [routerLink]="[sidebarSubItem3.path]" [ngClass]="[sidebarSubItem3.class]">
-                          {{sidebarSubItem3.title | translate}}
+                          <span class="arrow">-></span> {{sidebarSubItem3.title | translate}} <!-- Add an arrow for visibility -->
                         </a>
                       </li>
                     </ul>
