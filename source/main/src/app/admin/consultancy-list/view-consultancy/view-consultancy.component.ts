@@ -10,9 +10,9 @@ import { Consultancy } from '../consultancy.model';
 export class ViewConsultancyComponent implements OnInit {
   breadscrums = [
     {
-      title: 'Consultancy Profile',
-      items: ['Consultancies'],
-      active: 'Profile',
+      title: 'Consultancy Details',
+      items: ['Consultancy List'],
+      active: 'Consultancy Details',
     },
   ];
   consultancy: Consultancy | null = null;

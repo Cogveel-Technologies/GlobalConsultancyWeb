@@ -21,8 +21,8 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
   breadscrums = [
     {
       title: 'Register Consultancy',
-      items: ['Admin'],
-      active: 'Consultancy',
+      items: ['Consultancy List'],
+      active: 'Register Consultancy',
     },
   ];
 
