@@ -29,8 +29,8 @@
         "LIST_ROLES": "Roles",
         "LIST_LOGIN": "Login",
         "DOCUMENT_TYPE": "Document Type",
-         "CONSULTANCY": "-> Consultancy List",
-        "REGISTER_CONSULTANCY": "-> Register Consultancy"
+         "CONSULTANCY": "Consultancy List",
+        "REGISTER_CONSULTANCY": "Register Consultancy"
        
       
       }
