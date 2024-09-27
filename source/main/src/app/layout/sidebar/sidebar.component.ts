@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router, NavigationEnd } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import {
@@ -23,38 +22,42 @@ export class SidebarComponent implements OnInit, OnDestroy {
   public sidebarItems!: RouteInfo[];
   public innerHeight?: number;
   public bodyTag!: HTMLElement;
-  public roleName:string;
+  public roleName: string;
   listMaxHeight?: string;
   listMaxWidth?: string;
   headerHeight = 60;
   routerObj;
-  menu:any;
+  menu: any;
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     public elementRef: ElementRef,
     private authService: AuthService,
     private router: Router,
-    private loginService:loginService
+    private loginService: loginService
   ) {
     this.routerObj = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        // close sidebar on mobile screen after menu select
+        // Close sidebar on mobile screen after menu select
         this.renderer.removeClass(this.document.body, 'overlay-open');
       }
     });
   }
+
   @HostListener('window:resize', ['$event'])
   windowResizecall() {
     this.setMenuHeight();
     this.checkStatuForResize(false);
   }
+
   @HostListener('document:mousedown', ['$event'])
   onGlobalClick(event: Event): void {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.renderer.removeClass(this.document.body, 'overlay-open');
     }
   }
+
   callToggleMenu(event: Event, length: number) {
     if (length > 0) {
       const parentElement = (event.target as HTMLInputElement).closest('li');
@@ -67,62 +70,53 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     }
   }
-  ngOnInit() { 
-    this.menu = JSON.parse(localStorage.getItem("menu"))
-    const accessiblePaths =  this.extractPaths(this.menu);
+
+  ngOnInit() {
+    this.menu = JSON.parse(localStorage.getItem('menu'));
+    const accessiblePaths = this.extractPaths(this.menu);
     localStorage.setItem('accessiblePaths', JSON.stringify(accessiblePaths));
-    console.log(this.menu)
+    console.log(this.menu);
+
     this.sidebarItems = this.menu.filter((sidebarItem) => {
-      return sidebarItem
+      return sidebarItem;
     });
-    
-  
-    this.initLeftSidebar();
+
     this.bodyTag = this.document.body;
+    this.setMenuHeight(); // Set the height for the sidebar
   }
+
   ngOnDestroy() {
     this.routerObj.unsubscribe();
   }
-  initLeftSidebar() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const _this = this;
-    // Set menu height
-    _this.setMenuHeight();
-    _this.checkStatuForResize(true);
-  }
+
   setMenuHeight() {
     this.innerHeight = window.innerHeight;
     const height = this.innerHeight - this.headerHeight;
     this.listMaxHeight = height + '';
     this.listMaxWidth = '500px';
   }
-  isOpen() {
-    return this.bodyTag.classList.contains('overlay-open');
-  }
+
   checkStatuForResize(firstTime: boolean) {
     if (window.innerWidth < 1170) {
+      // Collapse the sidebar on smaller screens
       this.renderer.addClass(this.document.body, 'ls-closed');
     } else {
+      // Keep the sidebar expanded on larger screens
       this.renderer.removeClass(this.document.body, 'ls-closed');
     }
   }
+
   mouseHover() {
-    const body = this.elementRef.nativeElement.closest('body');
-    if (body.classList.contains('submenu-closed')) {
-      this.renderer.addClass(this.document.body, 'side-closed-hover');
-      this.renderer.removeClass(this.document.body, 'submenu-closed');
-    }
+    // Remove this logic to prevent the sidebar from collapsing on hover
   }
+
   mouseOut() {
-    const body = this.elementRef.nativeElement.closest('body');
-    if (body.classList.contains('side-closed-hover')) {
-      this.renderer.removeClass(this.document.body, 'side-closed-hover');
-      this.renderer.addClass(this.document.body, 'submenu-closed');
-    }
+    // Remove this logic to prevent the sidebar from collapsing on mouse out
   }
-   extractPaths(menu: any[]): string[] {
+
+  extractPaths(menu: any[]): string[] {
     let paths: string[] = [];
-    menu.forEach(item => {
+    menu.forEach((item) => {
       if (item.path) {
         paths.push(item.path);
       }
