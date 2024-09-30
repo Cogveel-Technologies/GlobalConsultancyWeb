@@ -96,6 +96,7 @@ export class ConsultancyListComponent implements OnInit {
   }
 
   addConsultancy() {
+    this.adminService.isEditMode.next(false);
     this.router.navigate(['/admin/consultancy']);
   }
 

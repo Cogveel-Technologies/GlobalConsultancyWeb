@@ -16,8 +16,8 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
   student: Student | null = null;
   breadscrums = [
     {
-      title: 'Profile',
-      items: ['Admin'],
+      title: 'Student Profile',
+      items: ['Student'],
       active: 'Student Profile',
     },
   ];

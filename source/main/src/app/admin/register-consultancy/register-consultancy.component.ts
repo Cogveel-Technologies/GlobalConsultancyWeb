@@ -17,11 +17,12 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
   errorMessage: string = '';
   hide3 = true;
   private subscriptions: Subscription[] = [];
+  isThroughIcon:boolean;
 
   breadscrums = [
     {
       title: 'Register Consultancy',
-      items: ['Consultancy List'],
+      items: ['Admin'],
       active: 'Register Consultancy',
     },
   ];
@@ -37,6 +38,10 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.adminService.isEditMode.subscribe(val=>{
+      this.isThroughIcon = val;
+      console.log(this.isThroughIcon)
+    })
     const routeSub = this.route.queryParams.subscribe(params => {
       const consultancyId = params['id'];
       if (consultancyId) {
@@ -44,6 +49,7 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
       }
     });
     this.subscriptions.push(routeSub);
+
   }
 
   initConsultancyForm() {
@@ -146,6 +152,7 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.adminService.isEditMode.next(true)
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

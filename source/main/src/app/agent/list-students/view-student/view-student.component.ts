@@ -17,8 +17,8 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   breadscrums = [
     {
       title: 'View Student',
-      items: ['Agent'],
-      active: 'List Students',
+      items: ['Student List'],
+      active: 'View Student',
     },
   ];
 

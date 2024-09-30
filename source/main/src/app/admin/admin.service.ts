@@ -31,6 +31,7 @@ export class AdminService {
     return `${this.apiUrl}/${path}`;
   }
 
+  isEditMode:BehaviorSubject<boolean| null> = new BehaviorSubject(null);
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {
