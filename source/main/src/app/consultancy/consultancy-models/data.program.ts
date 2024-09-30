@@ -12,5 +12,10 @@ export interface ProgramData {
     programCategoryId: number,
     programIntake: number,
     intakeId: number,
-    instituteId: number,   
+    instituteId: number,
+    noOfIntake?:string,
+    programCategoryName?:string,
+    courseTypeName?:string,
+    instituteName?:string,
+    sessionName?:string  
 }
