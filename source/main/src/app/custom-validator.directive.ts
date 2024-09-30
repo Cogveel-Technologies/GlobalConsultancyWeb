@@ -306,16 +306,16 @@ export class CustomValidatorDirective implements Validator, OnInit {
       return 'Invalid Last Name';
     }
     if (error['invalidAgentFirstName']) {
-      return 'Invalid Agent First Name';
+      return 'Invalid First Name';
     }
     if (error['invalidAgentLastName']) {
-      return 'Invalid Agent Last Name';
+      return 'Invalid Last Name';
     }
     if (error['invalidPhoneNumber']) {
       return 'Invalid Phone Number';
     }
     if (error['invalidAgentCompany']) {
-      return 'Invalid Agent Company';
+      return 'Invalid Company Name';
     }
     if (error['invalidPassword']) {
       return 'Password must be atleast 8 characters long & must contain atleast one number and one special character e.g ($&#)';
@@ -336,7 +336,7 @@ export class CustomValidatorDirective implements Validator, OnInit {
       return 'Invalid Company Website';
     }
     if (error['invalidAgentMiddleName']) {
-      return 'Invalid Agent Middle Name';
+      return 'Invalid Middle Name';
     }
     if (error['invalidAdminRole']) {
       return 'Invalid Admin Role';

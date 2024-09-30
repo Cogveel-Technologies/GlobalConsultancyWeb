@@ -190,11 +190,12 @@ import * as CryptoJS from 'crypto-js';
 export class StudentRegisterComponent implements OnInit {
   thirdForm: FormGroup;
   hide3 = true;
+  editMode:boolean = false;
   breadscrums = [
     {
       title: 'Register Student',
-      items: ['Admin'],
-      active: 'Students',
+      items: ['Student List'],
+      active: 'Register Student',
     },
   ];
   user: any;
@@ -284,6 +285,7 @@ export class StudentRegisterComponent implements OnInit {
   fetchStudentById(studentId: string) {
     this.agentService.getStudentById(+studentId).subscribe(
       student => {
+        this.editMode = true
         this.user = student;
         this.patchForm();
       },

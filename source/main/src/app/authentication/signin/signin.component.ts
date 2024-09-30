@@ -32,13 +32,9 @@ export class SigninComponent{
           return res['data'];
         })).subscribe({
         next: res => {
-          console.log(res)
           localStorage.setItem("token", res.jwtToken);
-          localStorage.setItem("modulesAccess", res.moduleAccessName);
           localStorage.setItem("id",res.id);
           localStorage.setItem("menu",JSON.stringify(res.menuItems));
-          localStorage.setItem("role",res.roleName)
-          console.log(res.roleName);
           this.router.navigate(['dashboard']);
         }
       });

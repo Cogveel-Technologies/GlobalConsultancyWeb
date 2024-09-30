@@ -11,4 +11,5 @@ export interface InstituteData {
     website: string,
     linkedInUrl: string,
     fbUrl: string,
+    countryName?:string
 }

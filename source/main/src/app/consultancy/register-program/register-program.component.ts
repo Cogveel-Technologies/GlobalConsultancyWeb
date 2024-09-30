@@ -144,7 +144,7 @@ export class RegisterProgramComponent {
       this.editMode = true;
       this.institute$.next(details.instituteId);
       this.session$.next(details.sessionId);
-      this.intake$.next(details.intakeId)
+      this.intake$.next(details.intakeId);
       this.registerProgram.patchValue(details)
     }
   }
