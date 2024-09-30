@@ -49,6 +49,18 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.add(routeSubscription);
 
+    // Check for the origin and modify breadcrumb accordingly
+    const origin = this.route.snapshot.queryParams['origin'];
+    if (origin === 'studentProfile') {
+      this.breadscrums = [
+        {
+          title: 'Add Document',
+          items: ['Student Profile'],
+          active: 'Add Document',
+        },
+      ];
+    }
+
     this.loadDocumentTypes();
   }
 
@@ -157,6 +169,7 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
   viewDocument(documentUrl: string) {
     window.open(documentUrl, '_blank');
   }
+  
   deleteDocument(documentId: number) {
     const deleteSubscription = this.agentService.deleteStudentDocument(documentId).subscribe(
       response => {
