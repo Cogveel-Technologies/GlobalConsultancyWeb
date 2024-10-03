@@ -1,118 +1,118 @@
 <section class="content">
-    <div class="container-fluid">
-      <div class="block-header" *ngFor="let breadscrum of breadscrums">
-        <!-- breadcrumb -->
-        <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active"></app-breadcrumb>
-      </div>
-  
-      <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-          <div class="card">
-            <div class="materialTableHeader">
-              <div class="left">
-                <ul class="header-buttons-left ms-0">
-                  
-                  <li class="tbl-search-box">
-                    <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                    <input placeholder="Search" type="text" [formControl]="searchControl" class="browser-default search-field" aria-label="Search box">
-                  </li>
-                </ul>
-              </div>
-              <div class="right">
-                <ul class="tbl-export-btn">
-                  <li class="tbl-header-btn">
-                    <div class="m-l-10" matTooltip="ADD">
-                      <button mat-mini-fab color="primary" (click)="addRole()">
-                        <mat-icon class="col-white">add</mat-icon>
-                      </button>
-                    </div>
-                  </li>
-                  <li class="tbl-header-btn">
-                    <div class="m-l-10" matTooltip="REFRESH">
-                      <button mat-mini-fab color="primary" (click)="refreshPage()">
-                        <mat-icon class="col-white">refresh</mat-icon>
-                      </button>
-                    </div>
-                  </li>
-                  <li class="tbl-header-btn">
-                    <div class="export-button m-l-10" matTooltip="XLSX">
-                      <img src="assets/images/icons/xlsx.png" alt="" />
-                    </div>
-                  </li>
-                </ul>
-              </div>
+  <div class="container-fluid">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items"
+        [active_item]="breadscrum.active"></app-breadcrumb>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="materialTableHeader">
+            <div class="left">
+              <ul class="header-buttons-left ms-0">
+
+                <li class="tbl-search-box">
+                  <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                  <input placeholder="Search" type="text" [formControl]="searchControl"
+                    class="browser-default search-field" aria-label="Search box">
+                </li>
+              </ul>
             </div>
-          </div>
-        </div>
-      </div>
-  
-      <div class="row clearfix">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-          <div class="card">
-           
-            <div class="body table-responsive">
-                <table class="table table-hover table-responsive">
-                    <thead>
-                      <tr>
-                        
-                        <th>
-                          <app-sorting 
-                            [sortField]="sortField" 
-                            [sortDirection]="sortDirection" 
-                            [sortFields]="['RoleName']" 
-                            [sortLabels]="['Role Name']"
-                            (sortChange)="onSortChange($event)">
-                          </app-sorting>
-                        </th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    
-                    <tbody>
-                      <tr *ngFor="let role of roles$ | async; let i = index">
-                       
-                        <td data-label="Role Name">
-                          <div *ngIf="editingRoleId !== role.id; else editMode">
-                            {{ role.roleName }}
-                          </div>
-                          <ng-template #editMode>
-                            <div class="edit-input-container">
-                              <input [(ngModel)]="editingRoleName" placeholder="Edit role name" class="form-control edit-input">
-                            </div>
-                          </ng-template>
-                        </td>
-                        
-                        <td data-label="Actions">
-                          <div *ngIf="editingRoleId !== role.id; else editActions">
-                            <button mat-icon-button color="primary" (click)="editRole(role.id, role.roleName)" matTooltip="Edit">
-                              <mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button color="warn" (click)="deleteRole(role.id)" matTooltip="Delete">
-                              <mat-icon>delete</mat-icon>
-                            </button>
-                          </div>
-                          <ng-template #editActions>
-                            <button mat-icon-button color="primary" (click)="updateRole(role.id)" matTooltip="Update">
-                              <mat-icon>check</mat-icon>
-                            </button>
-                            <button mat-icon-button color="warn" (click)="cancelEdit()" matTooltip="Cancel">
-                              <mat-icon>close</mat-icon>
-                            </button>
-                          </ng-template>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  
-              <app-pagination
-                [length]="totalRoles"
-                [pageSize]="pageSize"
-                (pageChange)="onPageChange($event)">
-              </app-pagination>
+            <div class="right">
+              <ul class="tbl-export-btn">
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="ADD">
+                    <button mat-mini-fab color="primary" (click)="addRole()">
+                      <mat-icon class="col-white">add</mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="REFRESH">
+                    <button mat-mini-fab color="primary" (click)="refreshPage()">
+                      <mat-icon class="col-white">refresh</mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li class="tbl-header-btn">
+                  <div class="export-button m-l-10" matTooltip="XLSX">
+                    <img src="assets/images/icons/xlsx.png" alt="" />
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-  
+
+    <div class="row clearfix">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+
+          <div class="body table-responsive">
+            <table class="table table-hover table-responsive">
+              <thead>
+                <tr>
+
+                  <th>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection" [sortFields]="['RoleName']"
+                      [sortLabels]="['Role Name']" (sortChange)="onSortChange($event)">
+                    </app-sorting>
+                  </th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let role of roles$ | async; let i = index">
+
+                  <td data-label="Role Name">
+                    <div *ngIf="editingRoleId !== role.id; else editMode">
+                      {{ role.roleName }}
+                    </div>
+                    <ng-template #editMode>
+                      <div class="edit-input-container">
+                        <input [(ngModel)]="editingRoleName" placeholder="Edit role name"
+                          class="form-control edit-input">
+                      </div>
+                    </ng-template>
+                  </td>
+
+                  <td data-label="Actions">
+                    <div *ngIf="editingRoleId !== role.id; else editActions">
+                      <button mat-icon-button color="primary" (click)="editRole(role.id, role.roleName)"
+                        matTooltip="Edit">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-icon-button color="warn" (click)="deleteRole(role.id)" matTooltip="Delete">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                    <ng-template #editActions>
+                      <button mat-icon-button color="primary" (click)="updateRole(role.id)" matTooltip="Update">
+                        <mat-icon>check</mat-icon>
+                      </button>
+                      <button mat-icon-button color="warn" (click)="cancelEdit()" matTooltip="Cancel">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </ng-template>
+                  </td>
+                </tr>
+                <!-- Show a message when there are no roles found -->
+                <tr *ngIf="(roles$ | async)?.length === 0">
+                  <td colspan="7" class="text-center">No Roles found.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <app-pagination [length]="totalRoles" [pageSize]="pageSize" (pageChange)="onPageChange($event)">
+            </app-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

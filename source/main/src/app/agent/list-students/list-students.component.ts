@@ -54,7 +54,7 @@ export class ListstudentsComponent implements OnInit {
     this.students$ = combineLatest([
       this.searchControl.valueChanges.pipe(
         startWith(''),
-        throttleTime(100),
+        throttleTime(70),
         distinctUntilChanged(),
         tap(term => this.searchTermSubject.next(term))
       ),
@@ -75,11 +75,17 @@ export class ListstudentsComponent implements OnInit {
       }),
       tap(response => {
         console.log('Refreshed service response:', response);
-        this.totalStudents = response.pageInfo.totalRecords || 0;
-        this.totalPages = response.pageInfo.totalPages || 1;
-        this.currentPage = response.pageInfo.currentPage || 1;
+        this.totalStudents = response.pageInfo?.totalRecords || 0;
+        this.totalPages = response.pageInfo?.totalPages || 1;
+        this.currentPage = response.pageInfo?.currentPage || 1;
+
+          // Check if no data is found, and handle accordingly
+          if (this.totalStudents === 0) {
+            console.log('No students  found.');
+          }
       }),
-      map(response => response.data)
+      map(response => response.data || [] )
+
     );
 
     // Trigger initial load

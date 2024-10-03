@@ -76,10 +76,13 @@ export class ListusersComponent implements OnInit {
       }),
       tap(response => {
         console.log('Refreshed service response:', response);
-        this.totalUsers = response.pageInfo.totalRecords || 0;
-        this.totalPages = response.pageInfo.totalPages || 1;
-        this.currentPage = response.pageInfo.currentPage || 1;
-        
+        this.totalUsers = response.pageInfo?.totalRecords || 0;
+        this.totalPages = response.pageInfo?.totalPages || 1;
+        this.currentPage = response.pageInfo?.currentPage || 1;
+         // Check if no data is found, and handle accordingly
+         if (this.totalUsers === 0) {
+          console.log('No Users found.');
+        }
       }),
       map(response => response.data)
     );

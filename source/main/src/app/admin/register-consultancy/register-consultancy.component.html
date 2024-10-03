@@ -2,7 +2,8 @@
   <div class="content-block">
     <div class="block-header" *ngFor="let breadscrum of breadscrums">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="editMode ? 'Edit Consultancy' : breadscrum.title" [items]="!isThroughIcon ? ['Consultancy List'] : breadscrum.items"
+      <app-breadcrumb [title]="editMode ? 'Edit Consultancy' : breadscrum.title"
+        [items]="!isThroughIcon ? ['Consultancy List'] : breadscrum.items"
         [active_item]="editMode ? 'Edit Consultancy' : breadscrum.active">
       </app-breadcrumb>
     </div>
@@ -10,142 +11,164 @@
     <div class="row clearfix">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
         <div class="card">
-          
+
           <div class="body">
             <form class="m-4" [formGroup]="registerConsultancy" (ngSubmit)="onSubmit()">
 
               <!-- Consultancy Name -->
               <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Consultancy Name</mat-label>
                     <input matInput formControlName="consultancyName" required appCustomValidator="consultancyName">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>business</mat-icon>
                   </mat-form-field>
                 </div>
-                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-3">
+
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-3 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Registration Number</mat-label>
-                    <input matInput formControlName="registrationNo" required appCustomValidator="registrationNo" type="number">
+                    <input matInput formControlName="registrationNo" required appCustomValidator="registrationNo"
+                      type="number">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>assignment</mat-icon>
                   </mat-form-field>
                 </div>
-                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-3">
+                <div class="col-xl-6 col-lg-3 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Year Established</mat-label>
-                    <input matInput formControlName="yearEstablished" required appCustomValidator="yearEstablished" type="number">
+                    <input matInput formControlName="yearEstablished" required appCustomValidator="yearEstablished"
+                      type="number">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>calendar_today</mat-icon>
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-6 col-lg-3 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Year Established</mat-label>
+                    <input 
+                      matInput 
+                      [matDatepicker]="yearPicker" 
+                      formControlName="yearEstablished" 
+                      required 
+                       
+                      readonly>
+                    <mat-datepicker-toggle matSuffix [for]="yearPicker"></mat-datepicker-toggle>
+                    <mat-datepicker 
+                      #yearPicker 
+                      startView="multi-year" 
+                      (yearSelected)="chosenYearHandler($event)" 
+                      panelClass="year-picker">
+                    </mat-datepicker>
+                  </mat-form-field>
+                </div> -->
+              </div>
+              <!-- Contact Information -->
+              <div class="row">
+                <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Phone</mat-label>
+                    <input matInput formControlName="phone1" required appCustomValidator="phoneNumber" type="tel"
+                      maxlength="12" pattern="[0-9]*">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Alternate Phone</mat-label>
+                    <input matInput formControlName="phone2" required appCustomValidator="phoneNumber" type="tel"
+                      maxlength="12" pattern="[0-9]*">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
                   </mat-form-field>
                 </div>
               </div>
 
-              <!-- Contact Information -->
               <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Phone</mat-label>
-                    <input 
-                      matInput 
-                      formControlName="phone1"
-                      required 
-                      appCustomValidator="phoneNumber" 
-                      type="tel" 
-                      maxlength="12"
-                      pattern="[0-9]*">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Phone</mat-label>
-                    <input 
-                      matInput 
-                      formControlName="phone2"
-                      required 
-                      appCustomValidator="phoneNumber" 
-                      type="tel" 
-                      maxlength="12"
-                      pattern="[0-9]*">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Password</mat-label>
-                    <input matInput formControlName="password" required [type]="hide3 ? 'password' : 'text'" appCustomValidator="password">
+                    <input matInput formControlName="password" required [type]="hide3 ? 'password' : 'text'"
+                      appCustomValidator="password">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix (click)="hide3 = !hide3">
                       {{hide3 ? 'visibility_off' : 'visibility'}}
                     </mat-icon>
                   </mat-form-field>
                 </div>
-              </div>
 
-              <!-- Address Information -->
-              <div class="row">
-                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Country</mat-label>
-                    <input matInput formControlName="country" required appCustomValidator="country">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>public</mat-icon>
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>State</mat-label>
-                    <input matInput formControlName="state" required appCustomValidator="state">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>City</mat-label>
-                    <input matInput formControlName="city" required appCustomValidator="city">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Pin Code</mat-label>
-                    <input matInput formControlName="pincode" required appCustomValidator="pincode" type="number">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>pin_drop</mat-icon>
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Address</mat-label>
-                    <input matInput formControlName="address" required appCustomValidator="address">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>home</mat-icon>
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Street</mat-label>
-                    <input matInput formControlName="street" required appCustomValidator="street">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>home</mat-icon>
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <!-- Online Presence -->
-              <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Email 1</mat-label>
                     <input matInput formControlName="email1" required appCustomValidator="email">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
                   </mat-form-field>
                 </div>
+              </div>
+
+              <!-- Address Information -->
+              <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Email 2</mat-label>
-                    <input matInput type="email" formControlName="email2" appCustomValidator="email">
+                    <input matInput type="email" formControlName="email2" required appCustomValidator="email">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
                   </mat-form-field>
                 </div>
+
+                <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Address</mat-label>
+                    <input matInput formControlName="address" required appCustomValidator="address">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>home</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Street</mat-label>
+                    <input matInput formControlName="street" required appCustomValidator="street">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix> streetview</mat-icon>
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+              <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Country</mat-label>
+                    <input matInput formControlName="country" required appCustomValidator="country">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>public</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>State</mat-label>
+                    <input matInput formControlName="state" required appCustomValidator="state">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>City</mat-label>
+                    <input matInput formControlName="city" required appCustomValidator="city">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
+                  </mat-form-field>
+                </div>
+              
+              </div>
+
+
+
+              <!-- Online Presence -->
+              <div class="row">
+
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Pin Code</mat-label>
+                    <input matInput formControlName="pincode" required appCustomValidator="pincode" type="number">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>pin_drop</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-8 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Website</mat-label>
                     <input matInput formControlName="website" required appCustomValidator="companyWebsite">
@@ -155,14 +178,14 @@
               </div>
 
               <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>LinkedIn</mat-label>
                     <input matInput formControlName="linkedInUrl" required appCustomValidator="linkedInUrl">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>linkedin</mat-icon>
                   </mat-form-field>
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Facebook URL</mat-label>
                     <input matInput formControlName="fbUrl" required appCustomValidator="fbUrl">
@@ -174,10 +197,12 @@
               <!-- Form Actions -->
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                  <button type="submit" class="btn-space" mat-raised-button color="primary" [disabled]="!registerConsultancy.valid">
+                  <button type="submit" class="btn-space" mat-raised-button color="primary"
+                    [disabled]="!registerConsultancy.valid">
                     {{ editMode ? 'Update' : 'Register' }}
                   </button>
-                  <button type="button" mat-raised-button color="warn" [routerLink]="['/admin/consultancy-list']">Cancel</button>
+                  <button type="button" mat-raised-button color="warn"
+                    [routerLink]="['/admin/consultancy-list']">Cancel</button>
                 </div>
               </div>
 

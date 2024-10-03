@@ -78,9 +78,15 @@ export class ListRolesComponent implements OnInit {
       }),
       tap(response => {
         console.log('Refreshed service response:', response);
-        this.totalRoles = response.pageInfo.totalRecords || 0;
-        this.totalPages = response.pageInfo.totalPages || 1;
-        this.currentPage = response.pageInfo.currentPage || 1;
+        this.totalRoles = response.pageInfo?.totalRecords || 0;
+        this.totalPages = response.pageInfo?.totalPages || 1;
+        this.currentPage = response.pageInfo?.currentPage || 1;
+        
+        // Check if no data is found, and handle accordingly
+        if (this.totalRoles === 0) {
+          console.log('No roles  found.');
+        }
+
       }),
       map(response => response.data)
     );

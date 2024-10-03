@@ -54,9 +54,9 @@ export class ConsultancyListComponent implements OnInit {
     this.consultancies$ = combineLatest([
       this.searchControl.valueChanges.pipe(
         startWith(''),
-        throttleTime(100),
+        throttleTime(90),
         distinctUntilChanged(),
-        tap(term => this.searchTermSubject.next(term))
+        tap(term => this.searchTermSubject.next(term))  // Capture the search term
       ),
       this.pageSizeSubject,
       this.currentPageSubject,
@@ -75,28 +75,35 @@ export class ConsultancyListComponent implements OnInit {
       }),
       tap(response => {
         console.log('Refreshed service response:', response);
-        this.totalConsultancies = response.pageInfo.totalRecords || 0;
-        this.totalPages = response.pageInfo.totalPages || 1;
-        this.currentPage = response.pageInfo.currentPage || 1;
+        this.totalConsultancies = response.pageInfo?.totalRecords || 0;
+        this.totalPages = response.pageInfo?.totalPages || 1;
+        this.currentPage = response.pageInfo?.currentPage || 1;
+        
+        // Check if no data is found, and handle accordingly
+        if (this.totalConsultancies === 0) {
+          console.log('No consultancies found.');
+        }
       }),
-      map(response => response.data)
+      map(response => response.data || [])  // Ensure an empty array is returned if no data
     );
-
+  
     // Trigger initial load
     this.refreshConsultancies();
   }
+  
 
+ 
   refreshConsultancies() {
     // Trigger refresh by updating subjects
-    this.searchTermSubject.next(this.searchControl.value);
+    this.searchTermSubject.next(this.searchControl.value || '');  // Ensure empty string is passed
     this.sortFieldSubject.next(this.sortField);
     this.sortDirectionSubject.next(this.sortDirection);
     this.pageSizeSubject.next(this.pageSize);
     this.currentPageSubject.next(this.currentPage);
   }
+  
 
   addConsultancy() {
-    this.adminService.isEditMode.next(false);
     this.router.navigate(['/admin/consultancy']);
   }
 

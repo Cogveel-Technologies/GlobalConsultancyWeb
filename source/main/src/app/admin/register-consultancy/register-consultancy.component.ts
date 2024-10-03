@@ -4,6 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { AdminService } from '../admin.service'; // Using AdminService as in the user component
+import { Moment } from 'moment';
+import { MatDatepicker } from '@angular/material/datepicker';
+
 
 @Component({
   selector: 'app-register-consultancy',
@@ -150,6 +153,17 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
       duration: 4000,
     });
   }
+
+
+  chosenYearHandler(normalizedYear: Date) {
+    // Get the selected year from the normalized date
+    const year = normalizedYear.getFullYear();
+    
+    // Update the form control with the selected year
+    this.registerConsultancy.get('yearEstablished').setValue(year);
+  }
+  
+  
 
   ngOnDestroy() {
     this.adminService.isEditMode.next(true)

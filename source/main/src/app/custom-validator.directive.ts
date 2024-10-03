@@ -248,7 +248,7 @@ export class CustomValidatorDirective implements Validator, OnInit {
 
   validateAddress(value: string): boolean {
     // Example validation logic for address: must be at least 10 characters
-    return value && value.length >= 10;
+    return value && value.length >= 5;
   }
   
   validateDOB(value: string): boolean {
