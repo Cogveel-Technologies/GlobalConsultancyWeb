@@ -32,6 +32,7 @@ import { AgentResolver } from './consultancy-resolvers/edit-agent.resolver';
 import { AgentAllDetailsComponent } from './agent-all-details/agent-all-details.component';
 import { allAgentDetails } from './consultancy-resolvers/allDetails-agent.resolver';
 import { AuthGuard } from '@core/guard/auth.guard';
+import { NoDataFoundComponent } from '@shared/components/no-data-found/no-data-found.component';
 
 
 
@@ -143,6 +144,10 @@ const routes: Routes = [
     path: 'agent-details/:id',
     component: AgentAllDetailsComponent,
     resolve: { agentDetails: allAgentDetails },
+  },
+  {
+    path: 'no-data-found',
+    component: NoDataFoundComponent,
   },
 
 

@@ -17,7 +17,7 @@ export class ResponseInterceptor implements HttpInterceptor {
 
             if(body && body.status >= 400){
                 this.toastr.error(body.message || "An Error Occured");
-            }else if(body && body.status >= 200 && body.status <= 299){
+            }else if(body && body.status > 200 && body.status <= 299){
                 this.toastr.success(body.message);
             }
         }

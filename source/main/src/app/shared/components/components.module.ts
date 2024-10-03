@@ -6,6 +6,7 @@ import { CustomSortComponent } from "./custom-sort/custom-sort.component";
 import { PaginationComponent } from "./pagination/pagination.component";
 import { SortingComponent } from "./sorting/sorting.component";
 import { SearchComponent } from "./search/search.component";
+import { NoDataFoundComponent } from './no-data-found/no-data-found.component';
 
 
 @NgModule({
@@ -15,9 +16,10 @@ import { SearchComponent } from "./search/search.component";
      PaginationComponent, 
      SortingComponent,
      CustomSortComponent,
-     SearchComponent
+     SearchComponent,
+     NoDataFoundComponent
     ],
   imports: [SharedModule],
-  exports: [FileUploadComponent, BreadcrumbComponent,CustomSortComponent, PaginationComponent, SortingComponent, SearchComponent],
+  exports: [FileUploadComponent, BreadcrumbComponent,CustomSortComponent, PaginationComponent, SortingComponent, SearchComponent, NoDataFoundComponent],
 })
 export class ComponentsModule {}

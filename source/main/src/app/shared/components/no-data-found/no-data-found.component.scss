@@ -1,0 +1,32 @@
+.no-data-text {
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    color: #555; 
+    text-transform: uppercase; 
+    letter-spacing: 1.5px; 
+    background: linear-gradient(90deg, #ff7e5f, #feb47b); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    animation: fadeIn 2s ease-in-out; 
+}
+
+.content{
+    height: 50vh;
+}
+
+@media (max-width: 768px) {
+    .no-data-text {
+        font-size: 1.2rem; 
+    }
+}
+
+@media (max-width: 480px) {
+    .no-data-text {
+        font-size: 1rem; 
+    }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}

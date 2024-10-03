@@ -3,7 +3,7 @@ import { Router, RouterStateSnapshot } from '@angular/router';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, startWith, Subscription, switchMap, throttleTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { Observable } from 'rxjs';
 import { InstituteData } from '../consultancy-models/data.institute';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -54,6 +54,10 @@ export class InstitutionListComponent {
       (map(res => {
         this.records = res['pageInfo']['totalRecords'];
         return res['data']
+      }),tap(res=>{
+        if(!res.length && params.searchText === ''){
+          this.router.navigate(["consultancy/no-data-found"])
+        }
       }));
   }
 

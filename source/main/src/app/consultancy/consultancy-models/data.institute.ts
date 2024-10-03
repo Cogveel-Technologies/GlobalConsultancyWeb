@@ -5,7 +5,7 @@ export interface InstituteData {
     aboutInstitute: string,
     province: string,
     countryId: number,
-    yearEstablished: number,
+    yearEstablished: string,
     email: string,
     phoneNo: string,
     website: string,
