@@ -9,16 +9,16 @@
           <form  [formGroup]="signInForm" (submit)="signIn()">
             <div class="form-floating mb-4">
               <input type="email" class="form-control" id="email" placeholder="name@example.com" formControlName="userName" required  appCustomValidator="email">
-              <label for="email"><i class="fas fa-envelope me-2"></i>Email address</label>
+              <label for="email"><i class="fas fa-envelope me-2"></i>Enter email</label>
             </div>
             <div class="form-floating mb-4">
-              <input type="password" class="form-control" id="password" placeholder="Password"  formControlName="password">
-              <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
+              <input type="password" class="form-control" id="password" placeholder="Password"  formControlName="password" required>
+              <label for="password"><i class="fas fa-lock me-2"></i>Enter password</label>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
               <!-- <a href="#" class="text-decoration-none">Forgot Password?</a> -->
             </div>
-            <button class="btn btn-primary w-100 py-2" type="submit">Login</button>
+            <button class="btn btn-primary w-100 py-2" type="submit" [disabled]="!signInForm.valid">Login</button>
           </form>
           <!-- <div class="mt-4 text-center">
             <ul class="list-inline mt-3">

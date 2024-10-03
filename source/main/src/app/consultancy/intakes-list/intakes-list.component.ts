@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, startWith, Subscription, switchMap, throttleTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { IntakeData } from '../consultancy-models/data.intake';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -47,6 +47,10 @@ export class IntakesListComponent {
       (map(res => {
         this.records = res['pageInfo']['totalRecords'];
         return res['data']
+      }),tap(res=>{
+        if(!res.length && params.searchText === ''){
+          this.router.navigate(["consultancy/no-data-found"])
+        }
       }))
   }
 

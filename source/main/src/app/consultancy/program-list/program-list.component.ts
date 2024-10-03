@@ -63,6 +63,10 @@ export class ProgramListComponent {
       (map(res => {
         this.records = res['pageInfo']['totalRecords'];
         return res['data']
+      }), tap(res=>{
+        if(!res.length && params.searchText === ''){
+          this.router.navigate(["consultancy/no-data-found"])
+        }
       }))
   }
 
@@ -71,12 +75,13 @@ export class ProgramListComponent {
       this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
     }
 
-    this.consultancyService.showList.subscribe(state=>{
+    this.subscription.add(this.consultancyService.showList.subscribe(state=>{
       this.selectedOptions = state;
-    })
+    }));
 
     // if we click on view or edit pencil, and then navigate back
     if(this.selectedOptions){
+      console.log("hello")
       const instituteId = localStorage.getItem("instituteId")
       const sessionId =  localStorage.getItem("sessionId")
       const intakeId = localStorage.getItem("intakeId")

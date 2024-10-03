@@ -71,6 +71,11 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
     this.countryId = event.value;
   }
 
+     // Filter function to allow all dates (past, today, and future)
+date = (date: Date | null): boolean => {
+  return true; // Allow all dates without restriction
+};
+
   // navigate to institute list page
   navigateToInstituteList() {
     if(this.editMode){

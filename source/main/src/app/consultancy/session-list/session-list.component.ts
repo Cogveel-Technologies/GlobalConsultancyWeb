@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SessionData } from '../consultancy-models/data.session';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, startWith, Subscription, switchMap, throttleTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
@@ -47,6 +47,10 @@ export class SessionListComponent {
     return this.consultancyApiService.getSession(this.defaultData).pipe(map(response => {
       this.records = response['pageInfo']['totalRecords'];
       return response['data']
+    }),tap(res=>{
+      if(!res.length && data.searchText === ''){
+        this.router.navigate(["consultancy/no-data-found"])
+      }
     }))
   }
 
@@ -71,7 +75,7 @@ export class SessionListComponent {
         const instituteId = localStorage.getItem("instituteId");
         this.institute$.next(+instituteId);
         this.defaultData.InstituteId = instituteId;
-        this.institutes = this.getSessions(this.defaultData);
+        this.sessions = this.getSessions(this.defaultData);
       }
 
     this.subscription.add(combineLatest([this.institute$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(

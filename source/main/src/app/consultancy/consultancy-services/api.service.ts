@@ -114,7 +114,7 @@ export class ConsultancyApi {
     }
     // ------------------- display-intakes ----------------
     getIntakes(data: ConsultancyDetailsOptions): Observable<IntakeData[]> {
-        return this.http.get<IntakeData[]>(`${this.baseUrl}/Intake?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
+        return this.http.get<IntakeData[]>(`${this.baseUrl}/Intake?SessionId=${data.SessionId}&ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
     }
     // ------------- delete-Intake -----------------
     deleteIntake(id: number) {

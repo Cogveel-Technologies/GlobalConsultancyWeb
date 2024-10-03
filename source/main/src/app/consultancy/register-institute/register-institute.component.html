@@ -58,8 +58,9 @@
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Year Established</mat-label>
-                    <input matInput formControlName="yearEstablished" type="number" required appCustomValidator="yearEstablished">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>calendar_today</mat-icon>
+                    <input matInput [matDatepicker]="picker" [matDatepickerFilter]="date" placeholder="YYYY-MM-DD" formControlName="yearEstablished" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6 mb-1">

@@ -2,7 +2,7 @@
   <div class="content-block">
     <div class="block-header" *ngFor="let breadscrum of breadscrums">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="editMode ? 'Edit Intake' : breadscrum.title" [items]="editMode ? ['Intake List'] : breadscrum.items"
+      <app-breadcrumb [title]="editMode ? 'Edit Intake' : breadscrum.title" [items]="editMode ? ['Consultancy List','Intake List'] : breadscrum.items"
         [active_item]="editMode ? 'Edit Intake' : breadscrum.active">
       </app-breadcrumb>
     </div>
@@ -28,7 +28,7 @@
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Select Date</mat-label>
-                    <input matInput [matDatepicker]="picker" [matDatepickerFilter]="date" formControlName="date" placeholder="YYYY-MM-DD" formControlName="year" required>
+                    <input matInput [matDatepicker]="picker" [matDatepickerFilter]="date" placeholder="YYYY-MM-DD" formControlName="year" required>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
