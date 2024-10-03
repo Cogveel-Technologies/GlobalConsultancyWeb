@@ -20,8 +20,8 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
   breadscrums = [
     {
       title: 'Add Document',
-      items: ['Agent'],
-      active: 'Students',
+      items: ['Students List'],
+      active: 'Add Document',
     },
   ];
   student: Student | null = null;
