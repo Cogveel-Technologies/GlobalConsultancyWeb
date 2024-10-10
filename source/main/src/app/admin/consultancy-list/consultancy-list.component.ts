@@ -54,7 +54,7 @@ export class ConsultancyListComponent implements OnInit {
     this.consultancies$ = combineLatest([
       this.searchControl.valueChanges.pipe(
         startWith(''),
-        throttleTime(90),
+        throttleTime(60),
         distinctUntilChanged(),
         tap(term => this.searchTermSubject.next(term))  // Capture the search term
       ),

@@ -20,6 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ListstudentsComponent } from './list-students/list-students.component';
 import { ViewStudentComponent } from './list-students/view-student/view-student.component';
 import { SharedModule } from '@shared/shared.module';
+import { SearchComponent } from './search/search.component';
 // import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 // import { SortingComponent } from '@shared/components/sorting/sorting.component';
 
@@ -32,6 +33,7 @@ import { SharedModule } from '@shared/shared.module';
    
     ListstudentsComponent,
     ViewStudentComponent,
+    SearchComponent,
     // PaginationComponent,
     // SortingComponent
   

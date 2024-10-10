@@ -8,6 +8,7 @@ import { ListstudentsComponent } from './list-students/list-students.component';
 import { StudentResolver } from './agent-resolvers/student-resolver';
 import { ViewStudentComponent } from './list-students/view-student/view-student.component';
 import { AuthGuard } from '@core/guard/auth.guard';
+import { SearchComponent } from './search/search.component';
 // import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 // import { SortingComponent } from '@shared/components/sorting/sorting.component';
 
@@ -39,6 +40,11 @@ const routes: Routes = [
     {
       path: 'student-application',
       component: StudentApplicationComponent,
+      canActivate:[AuthGuard]
+    },
+    {
+      path: 'search.',
+      component: SearchComponent,
       canActivate:[AuthGuard]
     },
     {

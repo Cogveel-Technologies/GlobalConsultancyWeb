@@ -212,6 +212,7 @@ getConsultancyList(params: { limit: number, orderBy: string, sortExpression: str
 getConsultancyById(id: number): Observable<Consultancy> {
   return this.http.get<Observable<Consultancy>>(`${this.apiUrl}/Consultancy/byId?Id=${id}`).pipe(map(res => res['data']))
 }
+
 updateConsultancy(consultancyId: number, consultancyData: any): Observable<any> {
   return this.http.put(`${this.apiUrl}/Consultancy/${consultancyId}`, consultancyData);
 }

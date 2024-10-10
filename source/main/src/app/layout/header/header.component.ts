@@ -11,6 +11,10 @@ import { Router } from '@angular/router';
 import { ConfigService } from '@config';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { InConfiguration, AuthService, WINDOW, LanguageService } from '@core';
+import { AgentService } from 'app/agent/agent.service';
+import { AdminService } from 'app/admin/admin.service';
+import { ConsultancyApi } from 'app/consultancy/consultancy-services/api.service';
+import { StudentService } from 'app/student/student.service';
 
 interface Notifications {
   message: string;
@@ -39,6 +43,7 @@ export class HeaderComponent
   isOpenSidebar?: boolean;
   docElement: HTMLElement | undefined;
   isFullScreen = false;
+  user: any;
   constructor(
     @Inject(DOCUMENT) private document: Document,
     @Inject(WINDOW) private window: Window,
@@ -47,7 +52,11 @@ export class HeaderComponent
     private configService: ConfigService,
     private authService: AuthService,
     private router: Router,
-    public languageService: LanguageService
+    public languageService: LanguageService,
+    private adminService: AdminService,
+    private agentService: AgentService,
+    private studentService: StudentService,
+    private consultancyApi: ConsultancyApi 
   ) {
     super();
   }
@@ -120,6 +129,9 @@ export class HeaderComponent
     // }
   }
   ngOnInit() {
+    const loginId = localStorage.getItem('id');
+    const roleName = localStorage.getItem('roleName');
+
     this.config = this.configService.configData;
 
     this.langStoreValue = localStorage.getItem('lang') as string;
@@ -132,7 +144,105 @@ export class HeaderComponent
     } else {
       this.flagvalue = val.map((element) => element.flag);
     }
+     // Role-based API calls with id
+     switch (roleName) {
+      case 'Admin':
+        this.fetchUserById(loginId);
+        break;
+
+      case 'Student':
+        this.fetchStudentData(loginId);
+        break;
+
+      case 'Agent':
+        this.fetchAgentDetails(loginId);
+        break;
+
+      case 'Consultancy':
+        this.fetchConsultancyDetails(loginId);
+        break;
+
+      default:
+        console.error('Role not recognized');
+        break;
+    }
   }
+
+  fetchUserById(userId: string) {
+    // Ensure that the userId is converted to a number using parseInt
+    const numericUserId = parseInt(userId, 10);
+  
+    if (!isNaN(numericUserId)) {
+      this.adminService.getUserById(numericUserId).subscribe(
+        user => {
+          this.user = user;  // Assign the user data to the user variable
+          console.log(user);  // Log the user data for debugging
+        },
+        error => {
+          console.error('Error fetching user data:', error);  // Handle the error
+        }
+      );
+    } else {
+      console.error('Invalid user ID:', userId);  // Handle invalid user ID case
+    }
+  }
+
+  fetchStudentData(userId: string) {
+    const numericUserId = parseInt(userId, 10);
+  
+    if (!isNaN(numericUserId)) {
+      this.agentService.getStudentById(numericUserId).subscribe(
+         user => {
+          this.user = user;
+          console.log('Fetched student:', this.user);
+         
+        },
+        (error) => {
+          console.error('Error fetching student data:', error);
+        }
+      );
+    } else {
+      console.error('No valid student ID found in localStorage');
+    }
+  }
+  
+  fetchAgentDetails(userId: string) {
+    const numericUserId = parseInt(userId, 10);
+  
+    if (!isNaN(numericUserId)) {
+      this.consultancyApi.getAgentDetails(numericUserId).subscribe(
+        user => {
+          this.user = user;
+          console.log('Fetched agent:', this.user);
+        },
+        (error) => {
+          console.error('Error fetching agent details:', error);
+        }
+      );
+    } else {
+      console.error('No valid agent ID found');
+    }
+  }
+  
+  fetchConsultancyDetails(userId: string) {
+    const numericUserId = parseInt(userId, 10);
+  
+    if (!isNaN(numericUserId)) {
+      this.adminService.getConsultancyById(numericUserId).subscribe(
+        user => {
+          this.user = user;
+          console.log('Fetched consultancy details:', this.user);
+        },
+        (error) => {
+          console.error('Error fetching consultancy details:', error);
+        }
+      );
+    } else {
+      console.error('No valid consultancy ID found');
+    }
+  }
+  
+  
 
   callFullscreen() {
     if (!this.isFullScreen) {

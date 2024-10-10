@@ -94,11 +94,11 @@
               <img src="assets/images/user.jpg" class="rounded-circle" width="32" height="32" alt="User">
             </div>
           </button>
-          <mat-menu #profilemenu="matMenu" class="profile-menu">
+          <!-- <mat-menu #profilemenu="matMenu" class="profile-menu">
             <div class="noti-list">
               <div class="menu ">
                 <div class="user_dw_menu">
-                  <!-- <button mat-menu-item>
+                  <button mat-menu-item>
                     <app-feather-icons [icon]="'user'" [class]="'user-menu-icons'"></app-feather-icons>Account
                   </button>
                   <button mat-menu-item>
@@ -106,17 +106,53 @@
                   </button>
                   <button mat-menu-item>
                     <app-feather-icons [icon]="'settings'" [class]="'user-menu-icons'"></app-feather-icons>Settings
-                  </button> -->
+                  </button>
                   <button mat-menu-item (click)="logout()">
                     <app-feather-icons [icon]="'log-out'" [class]="'user-menu-icons'"></app-feather-icons>Logout
                   </button>
                 </div>
               </div>
             </div>
+          </mat-menu> -->
+
+
+          <mat-menu #profilemenu="matMenu" class="profile-menu">
+            <div class="noti-list">
+              <div class="menu">
+          
+                <!-- User Info Section -->
+                <div class="user-info-container">
+                  <div class="user-info">
+                    <img src="assets/images/user/user.png" class="profile-pic" alt="Profile Picture" />
+                    <div class="user-details">
+                      <p class="user-name">{{user.firstName || user.studentName || user.agentFirstName
+                        || user.consultancyName}}</p>
+                      <p class="user-email">{{user.email || user.emailAddress || user.agentEmail
+                        || user.email1}}</p>
+                      <button mat-button class="manage-account-btn">Manage your Account</button>
+                    </div>
+                  </div>
+                </div>
+          
+                <hr class="divider" />
+          
+                <!-- Menu Section -->
+                <div class="user_dw_menu">
+                  <!-- <button mat-menu-item>
+                    <app-feather-icons [icon]="'user'" class="user-menu-icons"></app-feather-icons>Account
+                  </button>
+                  <button mat-menu-item>
+                    <app-feather-icons [icon]="'mail'" class="user-menu-icons"></app-feather-icons>Inbox
+                  </button>
+                  <button mat-menu-item>
+                    <app-feather-icons [icon]="'settings'" class="user-menu-icons"></app-feather-icons>Settings
+                  </button> -->
+                  <button class="ps-3" mat-menu-item (click)="logout()">
+                    <app-feather-icons [icon]="'log-out'" class="user-menu-icons"></app-feather-icons>Logout
+                  </button>
+                </div>
+          
+              </div>
+            </div>
           </mat-menu>
-        </li>
-        <!-- #END# Tasks -->
-      </ul>
-    </div>
-  </div>
-</nav>
+          

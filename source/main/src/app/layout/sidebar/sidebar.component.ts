@@ -76,6 +76,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const accessiblePaths = this.extractPaths(this.menu);
     localStorage.setItem('accessiblePaths', JSON.stringify(accessiblePaths));
     console.log(this.menu);
+    console.log(localStorage.getItem("roleName"))
 
     this.sidebarItems = this.menu.filter((sidebarItem) => {
       return sidebarItem;
