@@ -18,6 +18,7 @@ import { fakeBackendProvider } from './core/interceptor/fake-backend';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AdminModule } from './admin/admin.module';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
@@ -32,6 +33,11 @@ import { checkToken } from './general-interceptors/token.interceptors';
 import { ToastrModule } from 'ngx-toastr';
 import { ResponseInterceptor } from './general-interceptors/response.interceptor';
 import { GlobalErrorHandler } from './global-error-handler/global-error-handler';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MY_FORMATS } from './date-formats';
+import { DatePickerComponent } from './date-picker/date-picker.component';
 
 
 
@@ -49,7 +55,8 @@ export function createTranslateLoader(http: HttpClient) {
     RightSidebarComponent,
     AuthLayoutComponent,
     MainLayoutComponent,
-    LoGinComponent,  ],
+    LoGinComponent,
+    ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -59,6 +66,7 @@ export function createTranslateLoader(http: HttpClient) {
     AgentModule,
     LoadingBarRouterModule,
     NgScrollbarModule,
+    BsDatepickerModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -80,6 +88,15 @@ export function createTranslateLoader(http: HttpClient) {
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     fakeBackendProvider,
     WINDOW_PROVIDERS,
+    {
+      provide: DateAdapter,
+      useClass: MatMomentDateModule,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: MY_FORMATS
+    }
   ],
   bootstrap: [AppComponent],
 })

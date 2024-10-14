@@ -32,6 +32,7 @@ export class SigninComponent{
           return res['data'];
         })).subscribe({
         next: res => {
+          console.log(res.jwtToken)
           localStorage.setItem("token", res.jwtToken);
           localStorage.setItem("id",res.id);
           localStorage.setItem("menu",JSON.stringify(res.menuItems));

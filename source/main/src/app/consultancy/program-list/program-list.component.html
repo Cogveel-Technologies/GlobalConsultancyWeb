@@ -6,61 +6,42 @@
             </app-breadcrumb>
         </div>
 
-        <div class="card p-4" *ngIf="!selectedOptions">
+        <div class="card p-4">
             <div class="row g-3">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Select Institute</mat-label>
+                        <mat-label>Institute</mat-label>
                         <mat-icon matPrefix>school</mat-icon>
-                        <mat-select required (selectionChange)="onInstituteChange($event)">
+                        <mat-select required (selectionChange)="onInstituteChange($event)" [formControl]="instituteControl">
                             <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
                                 {{ institute.name }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Select Session</mat-label>
+                        <mat-label>Is Public</mat-label>
                         <mat-icon matPrefix>school</mat-icon>
-                        <mat-select required [formControl]="sessionFormControl" (selectionChange)="onSessionChange($event)">
-                            <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
-                                {{ session.name }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                    <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Select Intake</mat-label>
-                        <mat-icon matPrefix>home</mat-icon>
-                        <mat-select required [formControl]="intakeFormControl" (selectionChange)="onIntakeChange($event)">
-                            <mat-option *ngFor="let intake of (intakes | async)" [value]="intake.id">
-                                {{ intake.name }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                    <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>is Public</mat-label>
-                        <mat-icon matPrefix>home</mat-icon>
                         <mat-select required (selectionChange)="isPublic($event)">
-                            <mat-option *ngFor="let status of courseStatus" [value]="status">
-                                {{ status }}
+                            <mat-option *ngFor="let option of publicOptions" [value]="option">
+                                {{ option }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearchData()">Search</button>
                 </div>
             </div>
         </div>
 
-        <div class="row" *ngIf="selectedOptions">
+        <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="materialTableHeader">
                         <div class="left">
-                            <ul class="header-buttons-left ms-0">
+                            <ul class="header-buttons-left ms-0" *ngIf="(programs | async)?.length > 0">
                                 <app-search [searchText]="search"></app-search>
                             </ul>
                         </div>
@@ -80,67 +61,66 @@
             </div>
         </div>
 
-        <div class="row clearfix" *ngIf="selectedOptions">
+        <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="body table-responsive">
                         <table class="table table-hover table-responsive">
-                            <thead>
+                            <thead *ngIf="(programs | async)?.length > 0">
                                 <tr>
-                                  <th>
-                                    <app-sorting 
-                                      [sortField]="defaultData.OrderBy" 
-                                      [sortDirection]="defaultData.sortExpression" 
-                                      [sortFields]="['programName']" 
-                                      [sortLabels]="['Name']"
-                                      (sortChange)="onSortChange($event)">
-                                    </app-sorting>
-                                  </th>
-                                  <th>
-                                    <app-sorting 
-                                      [sortField]="defaultData.OrderBy" 
-                                      [sortDirection]="defaultData.sortExpression" 
-                                      [sortFields]="['duration']" 
-                                      [sortLabels]="['Duration']"
-                                      (sortChange)="onSortChange($event)">
-                                    </app-sorting>
-                                  </th>
-                                  <th>
-                                    <app-sorting 
-                                      [sortField]="defaultData.OrderBy" 
-                                      [sortDirection]="defaultData.sortExpression" 
-                                      [sortFields]="['levelOfEducation']" 
-                                      [sortLabels]="['Level Of Education']"
-                                      (sortChange)="onSortChange($event)">
-                                    </app-sorting>
-                                  </th>
-                                  <th>
-                                    <app-sorting 
-                                      [sortField]="defaultData.OrderBy" 
-                                      [sortDirection]="defaultData.sortExpression" 
-                                      [sortFields]="['status']" 
-                                      [sortLabels]="['Status']"
-                                      (sortChange)="onSortChange($event)">
-                                    </app-sorting>
-                                  </th>
-                                  <th>Actions</th>
+                                    <th>
+                                        <app-sorting 
+                                            [sortField]="defaultData.OrderBy" 
+                                            [sortDirection]="defaultData.sortExpression" 
+                                            [sortFields]="['programName']" 
+                                            [sortLabels]="['Name']"
+                                            (sortChange)="onSortChange($event)">
+                                        </app-sorting>
+                                    </th>
+                                    <th>
+                                        <app-sorting 
+                                            [sortField]="defaultData.OrderBy" 
+                                            [sortDirection]="defaultData.sortExpression" 
+                                            [sortFields]="['duration']" 
+                                            [sortLabels]="['Duration']"
+                                            (sortChange)="onSortChange($event)">
+                                        </app-sorting>
+                                    </th>
+                                    <th>
+                                        <app-sorting 
+                                            [sortField]="defaultData.OrderBy" 
+                                            [sortDirection]="defaultData.sortExpression" 
+                                            [sortFields]="['levelOfEducation']" 
+                                            [sortLabels]="['Level of Education']"
+                                            (sortChange)="onSortChange($event)">
+                                        </app-sorting>
+                                    </th>
+                                    <th>
+                                        <app-sorting 
+                                            [sortField]="defaultData.OrderBy" 
+                                            [sortDirection]="defaultData.sortExpression" 
+                                            [sortFields]="['status']" 
+                                            [sortLabels]="['Status']"
+                                            (sortChange)="onSortChange($event)">
+                                        </app-sorting>
+                                    </th>
+                                    <th>Actions</th>
                                 </tr>
-                              </thead>
-                              
+                            </thead>
                             <tbody>
+                                <tr *ngIf="(programs | async)?.length === 0">
+                                    <td colspan="5" class="text-center">No Data Found</td>
+                                </tr>
                                 <tr *ngFor="let program of (programs | async)">
                                     <td data-label="Program Name">{{ program.programName }}</td>
                                     <td data-label="Duration">{{ program.duration }}</td>
                                     <td data-label="Level of Education">{{ program.levelOfEducation }}</td>
                                     <td data-label="Status">{{ program.status }}</td>
                                     <td data-label="Actions">
-
-                                        <button mat-icon-button
-                                            [routerLink]="['/consultancy/program-details', program.id]" matTooltip="View">
+                                        <button mat-icon-button [routerLink]="['/consultancy/program-details', program.id]" matTooltip="View">
                                             <mat-icon>visibility</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="primary"
-                                            [routerLink]="['/consultancy/edit-program', program.id]" matTooltip="Edit">
+                                        <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-program', program.id]" matTooltip="Edit">
                                             <mat-icon>edit</mat-icon>
                                         </button>
                                         <button mat-icon-button color="warn" (click)="deleteProgram(program.id)" matTooltip="Delete">
@@ -150,11 +130,13 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <app-pagination [pageSize]="defaultData.pageSize"
-                            (pageChange)="onPageChange($event)"
-                            [length]="records">
-                        </app-pagination>
-
+                        <app-pagination 
+                        [pageSize]="defaultData.pageSize" 
+                        (pageChange)="onPageChange($event)" 
+                        [length]="records"
+                        [pageIndex]="currentPageIndex"
+                        >
+                      </app-pagination>
                     </div>
                 </div>
             </div>

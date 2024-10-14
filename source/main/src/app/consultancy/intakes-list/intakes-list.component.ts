@@ -17,9 +17,9 @@ import { Router } from '@angular/router';
 export class IntakesListComponent {
   breadscrums = [
     {
-      title: 'Intake List',
+      title: 'Intakes',
       items: ['Consultancy'],
-      active: 'Intake List',
+      active: 'Intakes',
     },
   ];
   constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router:Router) { }
@@ -28,6 +28,7 @@ export class IntakesListComponent {
   consultancyId: string = localStorage.getItem("id");
   sessionListForm: FormGroup;
   sessions: Observable<SpecificConsultancyRelated[]>
+  institutes: Observable<SpecificConsultancyRelated[]>
   session$: BehaviorSubject<null | number> = new BehaviorSubject<null | number>(null);
   subscription: Subscription = new Subscription();
   defaultData:ConsultancyDetailsOptions = this.consultancyService.defaultRenderData();
@@ -36,9 +37,9 @@ export class IntakesListComponent {
   records: number;
   pagination$: BehaviorSubject<{pageSize:number,pageIndex:number}> = new BehaviorSubject<{pageSize:number,pageIndex:number}>({pageSize:this.defaultData.pageSize, pageIndex:this.defaultData.currentPage});
   sorting$: BehaviorSubject<{field:string,direction:string}>= new BehaviorSubject<{field:string,direction:string}>({field:this.defaultData.OrderBy,direction:this.defaultData.sortExpression});
-
   totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
+  currentPageIndex:number;
   
   
 
@@ -47,10 +48,6 @@ export class IntakesListComponent {
       (map(res => {
         this.records = res['pageInfo']['totalRecords'];
         return res['data']
-      }),tap(res=>{
-        if(!res.length && params.searchText === ''){
-          this.router.navigate(["consultancy/no-data-found"])
-        }
       }))
   }
 
@@ -75,7 +72,9 @@ export class IntakesListComponent {
     }
 
    if(!this.sessionSelected)  {
-    this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData)
+    // this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData)
+    this.institutes = this.consultancyApiService.getSpecificInstitutes(String(69))
+    console.log("session not selected")
    }
   
     this.subscription.add(combineLatest([this.session$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
@@ -105,9 +104,13 @@ export class IntakesListComponent {
     localStorage.setItem("sessionId", event.value)
   }
 
+  onInstituteChange(event:any){
+    console.log(event)
+  }
+
     // page event
     onPageChange(event: PageEvent) {
-      console.log(event)
+      this.currentPageIndex = event.pageIndex
       this.pagination$.next({pageSize:event.pageSize,pageIndex:event.pageIndex+1})
     }
   

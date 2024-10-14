@@ -20,9 +20,9 @@ export class RegisterIntakesComponent {
   constructor(private route:ActivatedRoute, private consultancyApiService:ConsultancyApi, private router:Router, private consultancyService:ConsultancyService) {}
   breadscrums = [
     {
-      title: 'Add Intake',
-      items: ['Consultancy'],
-      active: 'Add Intake',
+      title: 'Add',
+      items: ['Intakes'],
+      active: 'Add',
     },
   ];
 

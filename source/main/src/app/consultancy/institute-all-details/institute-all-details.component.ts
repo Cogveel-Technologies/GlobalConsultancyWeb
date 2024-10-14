@@ -22,6 +22,7 @@ export class InstituteAllDetailsComponent {
   constructor(private route:ActivatedRoute, private router:Router, private consultancyApi:ConsultancyApi, private consultancyService:ConsultancyService){};
   details:InstituteData;
   keys:any;
+  countryId:number
   defaultData:ConsultancyDetailsOptions;
     ngOnInit(){
     this.defaultData = this.consultancyService.defaultRenderData()
@@ -29,12 +30,17 @@ export class InstituteAllDetailsComponent {
      this.details = this.route.snapshot.data['instituteDetails']
 
      this.keys = Object.keys(this.details);
+     this.consultancyService.countrySelected.subscribe(res=> {
+      this.countryId = res
+      console.log(res)
+     })
      console.log(this.keys)
   }
 
   backToList(){
-    this.consultancyService.showList.next(true)
+    this.consultancyService.showList.next(true);
+    this.consultancyService.countrySelected.next(this.countryId)
+    this.consultancyService.editOrViewPage.next(true)
     this.router.navigate(["/consultancy/institution-list"]);
-
   }
 }

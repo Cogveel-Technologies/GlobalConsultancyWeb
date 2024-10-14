@@ -18,9 +18,9 @@ export class AgentListComponent {
 
   breadscrums = [
     {
-      title: 'Agent List',
+      title: 'Agents',
       items: ['Consultancy'],
-      active: 'Agent List',
+      active: 'Agents',
     },
   ];
 
@@ -28,13 +28,8 @@ export class AgentListComponent {
   getAgents(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getAgents(params).pipe
       (map(res => {
-        console.log(res)
         this.records = res['pageInfo']['totalRecords'];
         return res['data']
-      }),tap(res=>{
-        if(!res.length && params.searchText === ''){
-          this.router.navigate(["consultancy/no-data-found"])
-        }
       }));
   }
   agents: Observable<AgentDetails[]>;
@@ -47,6 +42,7 @@ export class AgentListComponent {
   sorting$: BehaviorSubject<{field:string,direction:string}>= new BehaviorSubject<{field:string,direction:string}>({field:this.defaultData.OrderBy,direction:this.defaultData.sortExpression});
   totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
+  currentPageIndex:number;
 
 
   ngOnInit() {
@@ -61,6 +57,7 @@ export class AgentListComponent {
           this.defaultData.currentPage = pageRelated.pageIndex;
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field
+          console.log(this.defaultData)
           return this.agents = this.getAgents(this.defaultData)
       })).subscribe())
   }
@@ -77,7 +74,7 @@ export class AgentListComponent {
   
     // page event
     onPageChange(event: PageEvent) {
-      console.log(event)
+      this.currentPageIndex = event.pageIndex;
       this.pagination$.next({pageSize:event.pageSize,pageIndex:event.pageIndex+1})
     }
   

@@ -18,12 +18,9 @@
                 <img src="assets/images/user/success.webp" class="profile-img user-img" alt="">
                 <mat-icon matSuffix class="profile-img-edit" matTooltip="Edit">edit</mat-icon>
               </div>
-              <p>
-                <mat-icon>location_on</mat-icon> {{details.province}}
-              </p>
               <div>
-                <span class="phone">
-                  <mat-icon>phone</mat-icon>{{details.phoneNo}}
+                <span  class="phone">
+                  <i class="material-icons">phone</i>{{details.phoneNo}}
                 </span>
               </div>
             </div>
@@ -41,49 +38,49 @@
                       <table class="table table-bordered table-hover mt-2">
                         <thead>
                           <tr>
-                            <th>Field</th>
-                            <th>Details</th>
+                            <th class="col-md-6">Field</th>
+                            <th class="col-md-6">Details</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td><mat-icon color="primary">school</mat-icon> Institute Name</td>
+                            <td class="custom_icons"><mat-icon color="primary" class="small_icon">school</mat-icon> Institute Name</td>
                             <td>{{details.instituteName}}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">info</mat-icon> About Institute</td>
+                            <td class="custom_icons"><mat-icon color="primary" class="small_icon">info</mat-icon> About Institute</td>
                             <td>{{details.aboutInstitute}}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">public</mat-icon> Country</td>
+                            <td class="custom_icons"><mat-icon class="small_icon" color="primary">public</mat-icon> Country</td>
                             <td>{{details.countryName}}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">place</mat-icon> Province</td>
+                            <td class="custom_icons"><mat-icon class="small_icon" color="primary">place</mat-icon> Province</td>
                             <td>{{details.province}}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">event</mat-icon> Year Established</td>
-                            <td>{{details.yearEstablished}}</td>
+                            <td class="custom_icons"><mat-icon class="small_icon" color="primary">event</mat-icon> Year Established</td>
+                            <td>{{details.yearEstablished | date: 'dd-MM-yyyy'}}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">email</mat-icon> Email</td>
+                            <td class="custom_icons"><mat-icon class="small_icon" color="primary">email</mat-icon> Email</td>
                             <td>{{details.email}}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">phone</mat-icon> Phone Number</td>
+                            <td class="custom_icons"><mat-icon class="small_icon" color="primary">phone</mat-icon> Phone Number</td>
                             <td>{{details.phoneNo}}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">language</mat-icon> Website</td>
+                            <td class="custom_icons"><mat-icon class="small_icon" color="primary">language</mat-icon> Website</td>
                             <td>{{details.website}}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">linkedin</mat-icon> LinkedIn URL</td>
+                            <td class="custom_icons"><mat-icon class="small_icon" color="primary">linkedin</mat-icon> LinkedIn URL</td>
                             <td>{{details.linkedInUrl}}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">facebook</mat-icon> Facebook URL</td>
+                            <td class="custom_icons"><mat-icon class="small_icon" color="primary">facebook</mat-icon> Facebook URL</td>
                             <td>{{details.fbUrl}}</td>
                           </tr>
                         </tbody>

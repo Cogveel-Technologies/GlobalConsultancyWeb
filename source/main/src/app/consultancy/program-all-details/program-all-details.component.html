@@ -1,117 +1,138 @@
 <section class="content">
-    <div class="container-fluid">
-        <div class="block-header" *ngFor="let breadscrum of breadscrums">
-            <!-- breadcrumb -->
-            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
-            </app-breadcrumb>
-        </div>
-        <!-- Your content goes here  -->
-        <div class="row clearfix">
-            <div class="col-lg-3 col-md-12">
-                <div class="card">
-                    <div class="m-b-20">
-                        <div class="contact-grid">
-                            <div class="profile-header bg-dark">
-                                <div class="user-name">{{details.programName}}</div>
-                                <!-- <div class="name-center">{{details.middleName}}</div> -->
-                            </div>
-                            <div class="position-relative">
-                                <img src="assets/images/user/success.webp" class="profile-img user-img" alt="">
-                                <mat-icon matSuffix class="profile-img-edit" matTooltip="Edit">edit</mat-icon>
-                            </div>
-    
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-9 col-md-12">
-                <div class="card">
-                    <mat-tab-group>
-                        <mat-tab label="Basic Details">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-hover mt-2">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Field</th>
-                                                        <th>Details</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">school</mat-icon> Program Name</td>
-                                                    <td>{{details.programName}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">timer</mat-icon> Duration</td>
-                                                    <td>{{details.duration}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">attach_money</mat-icon> Application Fee</td>
-                                                    <td>{{details.applicationFee}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">account_balance_wallet</mat-icon> Tuition Fee</td>
-                                                    <td>{{details.tutionFee}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">school</mat-icon> Level of Education</td>
-                                                    <td>{{details.levelOfEducation}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">check_circle</mat-icon> Status</td>
-                                                    <td>{{details.status}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">location_city</mat-icon> Institute</td> <!-- Updated icon -->
-                                                    <td>{{details.instituteName}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">category</mat-icon> Program Category</td>
-                                                    <td>{{details.programCategoryName}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">event</mat-icon> Program Intake</td>
-                                                    <td>{{details.programIntake}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">note_add</mat-icon> Subject Requirements</td>
-                                                    <td>{{details.subjectRequirements}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">menu_book</mat-icon> Academic Requirements</td> <!-- Updated icon -->
-                                                    <td>{{details.academicRequirements}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">book</mat-icon> Course Type</td>
-                                                    <td>{{details.courseTypeName}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">event</mat-icon> Program Intake</td>
-                                                    <td>{{details.programIntake}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">calendar_today</mat-icon> Session</td> <!-- Updated icon -->
-                                                    <td>{{details.sessionName}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <td><mat-icon color="primary">calendar_view_month</mat-icon> Intake</td>
-                                                    <td>{{details.noOfIntake}}</td>
-                                                  </tr>
-                                                </tbody>                                                  
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </mat-tab>
-                    </mat-tab-group>
-                </div>
-                <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="backToList()">Back</button>
-            </div>
-        </div>
-     
+  <div class="container-fluid">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
     </div>
+    <!-- Your content goes here  -->
+    <div class="card p-4">
+      <div class="row g-3">
+        <div class="col-md-5">
+          <mat-form-field appearance="fill" class="w-100 mb-0">
+            <mat-label>Session</mat-label>
+            <mat-icon matPrefix>school</mat-icon>
+            <mat-select required (selectionChange)="onSessionSelected($event)"  [formControl]="sessionOptions">
+              <mat-option *ngFor="let session of (sessions | async)" [value]="session.sessionId" >
+                {{ session.sessionName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="row clearfix">
+    <div class="col-lg-3 col-md-12">
+      <div class="card">
+        <div class="m-b-20">
+          <div class="contact-grid">
+            <div class="profile-header bg-dark">
+              <div class="user-name">{{details.programName}}</div>
+
+            </div>
+          </div>
+          <div class="position-relative">
+            <img src="assets/images/user/success.webp" class="profile-img user-img" alt="">
+            <mat-icon matSuffix class="profile-img-edit" matTooltip="Edit">edit</mat-icon>
+          </div>
+          <div>
+            <span class="phone">
+              <i class="material-icons">timer</i>{{details.duration}}
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-9 col-md-12">
+    <div class="card">
+      <mat-tab-group>
+        <mat-tab label="Basic Details">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-hover mt-2">
+                    <thead>
+                      <tr>
+                        <th>Field</th>
+                        <th>Details</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary">school</mat-icon> Program Name</td>
+                        <td>{{details.programName}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary">timer</mat-icon> Duration</td>
+                        <td>{{details.duration}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">attach_money</mat-icon>
+                          Application Fee</td>
+                        <td>{{details.applicationFee}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary"
+                            class="small_icon">account_balance_wallet</mat-icon> Tuition Fee</td>
+                        <td>{{details.tutionFee}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">school</mat-icon>
+                          Level of Education</td>
+                        <td>{{details.levelOfEducation}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">check_circle</mat-icon>
+                          Status</td>
+                        <td>{{details.status}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">location_city</mat-icon>
+                          Institute</td>
+                        <td>{{details.instituteName}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">category</mat-icon>
+                          Program Category</td>
+                        <td>{{details.programCategoryName}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">note_add</mat-icon>
+                          Subject Requirements</td>
+                        <td>{{details.subjectRequirements}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">menu_book</mat-icon>
+                          Academic Requirements</td>
+                        <td>{{details.academicRequirements}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">book</mat-icon> Course
+                          Type</td>
+                        <td>{{details.courseTypeName}}</td>
+                      </tr>
+                      <tr>
+                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">calendar_today</mat-icon>
+                          Session</td>
+                        <td>{{details.sessionName}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+  <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="backToList()">Back</button>
 </section>

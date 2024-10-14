@@ -2,8 +2,8 @@
   <div class="content-block">
     <div class="block-header" *ngFor="let breadscrum of breadscrums">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="editMode ? 'Edit Institute' : breadscrum.title" [items]="editMode ? ['Institute List']:breadscrum.items"
-        [active_item]="editMode? 'Edit Institute':breadscrum.active">
+      <app-breadcrumb [title]="editMode ? 'Edit' : breadscrum.title" [items]="editMode ? ['Institutes']:breadscrum.items"
+        [active_item]="editMode? 'Edit':breadscrum.active">
       </app-breadcrumb>
     </div>
 
@@ -18,8 +18,8 @@
                 <div class="col-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Institute Name</mat-label>
-                    <input matInput formControlName="instituteName" required appCustomValidator="instituteName">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>school</mat-icon>
+                    <input matInput formControlName="instituteName" required appCustomValidator="instituteName" maxlength="50">
+                    <mat-icon matSuffix>school</mat-icon>
                   </mat-form-field>
                 </div>
               </div>
@@ -28,22 +28,22 @@
               <div class="row mb-1">
                 <div class="col-md-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
-                    <mat-label>About Institute</mat-label>
-                    <textarea matInput formControlName="aboutInstitute" class="col-12" appCustomValidator="aboutInstitute" required appCustomValidator="description"></textarea>
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>info</mat-icon>
+                    <mat-label>About Institute (Max : 50 characters)</mat-label>
+                    <textarea matInput formControlName="aboutInstitute" class="col-12" appCustomValidator="aboutInstitute" required maxlength="50"></textarea>
+                    <mat-icon matSuffix>info</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Province</mat-label>
                     <input matInput formControlName="province" required appCustomValidator="province">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>location_city</mat-icon>
+                    <mat-icon matSuffix>location_city</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="w-100 mb-0">
                     <mat-label>Select Country</mat-label>
-                    <mat-icon matPrefix>home</mat-icon>
+                    <mat-icon matPrefix>public</mat-icon>
                     <mat-select formControlName="countryId" (selectionChange)="onCountryChange($event)" required>
                       <mat-option *ngFor="let country of (countries | async)" [value]="country.id" required>
                         {{ country.countryName }}
@@ -58,16 +58,17 @@
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Year Established</mat-label>
-                    <input matInput [matDatepicker]="picker" [matDatepickerFilter]="date" placeholder="YYYY-MM-DD" formControlName="yearEstablished" required>
+                    <input matInput [matDatepicker]="picker" [matDatepickerFilter]="date" placeholder="YYYY-MM-DD" formControlName="yearEstablished" required readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
                 </div>
+                
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Website</mat-label>
                     <input matInput formControlName="website" required appCustomValidator="companyWebsite">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>language</mat-icon>
+                    <mat-icon matSuffix>language</mat-icon>
                   </mat-form-field>
                 </div>
               </div>
@@ -78,14 +79,14 @@
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" required appCustomValidator="email">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
+                    <mat-icon matSuffix>email</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-6 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Phone</mat-label>
                     <input matInput formControlName="phoneNo" required maxlength="10" appCustomValidator="phoneNumber">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>phone</mat-icon>
+                    <mat-icon matSuffix>phone</mat-icon>
                   </mat-form-field>
                 </div>
               </div>
@@ -95,15 +96,15 @@
                 <div class="col-md-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Fb URL</mat-label>
-                    <input matInput formControlName="fbUrl"  required appCustomValidator="fbUrl">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>facebook</mat-icon>
+                    <input matInput formControlName="fbUrl" required appCustomValidator="fbUrl">
+                    <mat-icon matSuffix>facebook</mat-icon>
                   </mat-form-field>
                 </div>
                 <div class="col-md-12 mb-1">
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>LinkedIn URL</mat-label>
                     <input matInput formControlName="linkedInUrl" required appCustomValidator="linkedInUrl">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>linkedin</mat-icon>
+                    <mat-icon matSuffix>linkedin</mat-icon>
                   </mat-form-field>
                 </div>
               </div>
@@ -111,8 +112,7 @@
               <!-- Submit/Update and Cancel Buttons -->
               <div class="row mb-1">
                 <div class="col-auto">
-                  <button type="submit" class="btn-space" mat-raised-button color="primary" [disabled]="!registerInstitute.valid">{{editMode ? 'Update' :
-                    'Register'}}</button>
+                  <button type="submit" class="btn-space" mat-raised-button color="primary" [disabled]="!registerInstitute.valid">{{editMode ? 'Update' : 'Submit'}}</button>
                   <button type="button" mat-raised-button color="warn" (click)="navigateToInstituteList()">Cancel</button>
                 </div>
               </div>

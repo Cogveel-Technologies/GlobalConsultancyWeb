@@ -3,8 +3,7 @@ import { ConsultancyData } from "../consultancy-models/data.consultancy";
 import { ConsultancyDetailsOptions } from "../consultancy-models/data.consultancy-get-options";
 import { BehaviorSubject, startWith } from "rxjs";
 import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
-import { FormControl } from "@angular/forms";
-import { PageEvent } from "@angular/material/paginator";
+
 
 
 
@@ -25,7 +24,7 @@ export class ConsultancyService {
       sortExpression: 'asc',
       pageSize: this.pageSize,
       currentPage:1,
-      totalElements:0,
+      totalElements:'',
       searchText:'',
       InstituteId:'',
       ProgramId:'',
@@ -37,30 +36,8 @@ export class ConsultancyService {
     }
     return defaultData
   }
-
-  defaultData:ConsultancyDetailsOptions = {...this.defaultRenderData()};
-
-
-  search = new FormControl();
-  searchTerm$ = this.search.valueChanges.pipe(startWith(''));
-  records: number;
-  pagination$: BehaviorSubject<{pageSize:number,pageIndex:number}> = new BehaviorSubject<{pageSize:number,pageIndex:number}>({pageSize:this.defaultData.pageSize, pageIndex:this.defaultData.currentPage});
-  sorting$: BehaviorSubject<string> = new BehaviorSubject<string>(this.defaultData.sortExpression);
-  totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
-
-
-  // page event
-  onPageChange(event: PageEvent) {
-    console.log(event)
-    this.pagination$.next({pageSize:event.pageSize,pageIndex:event.pageIndex+1})
-  }
-
-   // sort event
-   onSortChange(event: any) {
-    if (event.direction === '') {
-      event.direction = 'asc'
-    }
-    this.sorting$.next(event.direction)
-  }
+  
+  countrySelected: BehaviorSubject<number|null> = new BehaviorSubject(null); 
+  editOrViewPage:BehaviorSubject<boolean> = new BehaviorSubject(false);
+  sendSessionId:BehaviorSubject<number|null> = new BehaviorSubject(null);
 }

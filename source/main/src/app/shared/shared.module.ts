@@ -1,21 +1,29 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
 import { MaterialModule } from './material.module';
 import { FeatherIconsModule } from './components/feather-icons/feather-icons.module';
 import { CustomValidatorDirective } from 'app/custom-validator.directive';
-// import { PaginationComponent } from 'app/pagination/pagination.component';
-// import { SortingComponent } from 'app/sorting/sorting.component';
+import { DatePickerComponent } from 'app/date-picker/date-picker.component';
+
+
+
 @NgModule({
   declarations: [
     CustomValidatorDirective,
-    // PaginationComponent,
-    // SortingComponent
+    // Other directives or components
   ],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, MaterialModule, FeatherIconsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MaterialModule,
+    FeatherIconsModule,
+    DatePickerComponent
+ 
+  ],
   exports: [
     CommonModule,
     FormsModule,
@@ -23,8 +31,10 @@ import { CustomValidatorDirective } from 'app/custom-validator.directive';
     RouterModule,
     MaterialModule,
     FeatherIconsModule,
-    CustomValidatorDirective
+    CustomValidatorDirective,
+    DatePickerComponent
+
   ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA] // Allow custom elements
 })
-export class SharedModule {}
+export class SharedModule { }
