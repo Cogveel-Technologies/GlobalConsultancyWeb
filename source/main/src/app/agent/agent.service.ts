@@ -167,4 +167,41 @@ export class AgentService {
       })
     );
   }
+   
+  getPrograms(): Observable<any> {
+    const url = `${this.apiUrl}/Program/All?IsDeleted=false`;
+    const response = this.http.get<any>(url);
+
+    response.subscribe(
+      (data) => {
+        console.log('Service Response:', data); // Log the response here
+      },
+      (error) => {
+        console.error('Error fetching programs:', error); // Log any errors
+      }
+    );
+
+    return response;
+}
+
+getSessions(): Observable<any> {
+  const url = `${this.apiUrl}/Session/All?IsDeleted=false`;
+  return this.http.get<any>(url);
+}
+
+getIntakeYears(): Observable<any> {
+  const url = `${this.apiUrl}/Intake/All?Isdeleted=false`;
+  return this.http.get<any>(url);
+}
+
+getCountries(): Observable<any> {
+  const url = `${this.apiUrl}/Country/All`;
+  return this.http.get<any>(url);
+}
+
+getCategory(filterBy: string): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/DropDown/All?DropDownListName=${filterBy}`)
+    .pipe(map(response => response['data']));
+}
+
 }

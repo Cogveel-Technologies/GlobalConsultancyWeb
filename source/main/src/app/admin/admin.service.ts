@@ -220,5 +220,14 @@ updateConsultancy(consultancyId: number, consultancyData: any): Observable<any> 
 //    updateConsultancy(data: ConsultancyData) {
 //     return this.http.put(`${this.baseUrl}/Consultancy/${data.id}`, data)
 // }
-
+getSuperAdminById(id: number): Observable<any> {
+  // Return a dummy object for superadmin
+  const superAdmin = {
+    sname: 'Superadmin',
+    semail: 'superadmin@gmail.com'
+  };
+  
+  // Simulating an observable that returns the dummy superadmin data
+  return of(superAdmin);
+}
 }

@@ -154,3 +154,84 @@
             </div>
           </mat-menu>
            */}
+
+
+
+
+
+
+
+
+
+
+// <section class="content">
+//     <div class="content-block">
+//         <div class="block-header" *ngFor="let breadscrum of breadscrums">
+//             <!-- breadcrumb -->
+//             <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active"></app-breadcrumb>
+//         </div>
+
+//         <div class="row clearfix">
+//             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+//                 <div class="card">
+//                     <div class="body">
+//                         <form class="m-4" [formGroup]="dropdownForm" (ngSubmit)="onSubmit()">
+//                             <div class="row">
+//                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+//                                     <mat-form-field class="example-full-width">
+//                                         <mat-label>Dropdown List Name</mat-label>
+//                                         <input matInput formControlName="dropDownListName" type="text" required>
+//                                     </mat-form-field>
+//                                 </div>
+
+//                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+//                                     <mat-form-field class="example-full-width">
+//                                         <mat-label>Dropdown Values</mat-label>
+//                                         <input matInput formControlName="dropDownValue" type="text" placeholder="Enter a value">
+//                                     </mat-form-field>
+//                                     <button type="button" mat-raised-button color="primary" (click)="addValue()">Add</button>
+//                                     <mat-hint>Click 'Add' to add values one by one</mat-hint>
+//                                 </div>
+//                                 <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+//                                     <mat-form-field class="example-full-width">
+//                                         <mat-label>Dropdown Values</mat-label>
+//                                         <input matInput formControlName="dropDownValue" type="text" placeholder="Enter a value">
+//                                         <button mat-icon-button matSuffix color="primary" (click)="addValue()" aria-label="Add Value">
+//                                             <mat-icon>add</mat-icon>
+//                                         </button>
+//                                     </mat-form-field>
+//                                     <mat-hint>Click 'Add' button to add values one by one</mat-hint>
+//                                 </div>
+//                              -->
+//                             </div>
+
+//                             <!-- Display added values in a box or list -->
+//                             <div class="row">
+//                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+//                                     <div *ngIf="addedValues.length > 0" class="added-values-box">
+//                                         <h5>Added Values:</h5>
+//                                         <ul>
+//                                             <li *ngFor="let value of addedValues; let i = index">
+//                                                 {{ value }}
+//                                                 <button type="button" (click)="removeValue(i)" class="remove-btn">Remove</button>
+//                                             </li>
+//                                         </ul>
+//                                     </div>
+//                                 </div>
+//                             </div>
+
+//                             <div class="row">
+//                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+//                                     <button class="btn-space" mat-raised-button color="primary" [disabled]="addedValues.length === 0 || !dropdownForm.get('dropDownListName')?.valid" type="submit">Submit</button>
+//                                     <button type="button" mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+//                                 </div>
+//                             </div>
+//                         </form>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+// </section>
+
+

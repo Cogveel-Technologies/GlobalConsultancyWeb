@@ -1,0 +1,108 @@
+<section class="content">
+    <div class="content-block">
+        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items"
+                [active_item]="breadscrum.active"></app-breadcrumb>
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="body">
+                        <form class="m-4" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <!-- Program ID Dropdown -->
+                                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Program</mat-label>
+                                        <mat-select formControlName="programId">
+                                            <mat-option *ngFor="let program of programOptions" [value]="program.id">
+                                                {{ program.name }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                </div>
+                                <!-- Session ID Dropdown -->
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Session</mat-label>
+                                        <mat-select formControlName="sessionId">
+                                            <mat-option *ngFor="let session of sessionOptions" [value]="session.id">
+                                                {{ session.name }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Intake Year Dropdown -->
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Intake Year</mat-label>
+                                        <mat-select formControlName="intakeYear">
+                                            <mat-option *ngFor="let intake of intakeYearOptions" [value]="intake.id">
+                                                {{ intake.name }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <!-- Country Dropdown -->
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Country</mat-label>
+                                        <mat-select formControlName="countryId">
+                                            <mat-option *ngFor="let country of countryOptions" [value]="country.id">
+                                                {{ country.countryName }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <!-- Program Category Dropdown -->
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Program Category</mat-label>
+                                        <mat-select formControlName="programCategoryId">
+                                            <mat-option *ngFor="let category of programCategoryOptions"
+                                                [value]="category.id">
+                                                {{ category.name }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <!-- Course Type Dropdown -->
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-label>Course Type</mat-label>
+                                        <mat-select formControlName="courseTypeId">
+                                            <mat-option *ngFor="let type of courseTypeOptions" [value]="type.id">
+                                                {{ type.name }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                                    <button class="btn-space" mat-raised-button color="primary"
+                                        [disabled]="!searchForm.valid" type="submit">Search</button>
+                                    <button type="button" mat-raised-button color="warn"
+                                        (click)="onCancel()">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

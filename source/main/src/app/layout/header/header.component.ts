@@ -15,6 +15,7 @@ import { AgentService } from 'app/agent/agent.service';
 import { AdminService } from 'app/admin/admin.service';
 import { ConsultancyApi } from 'app/consultancy/consultancy-services/api.service';
 import { StudentService } from 'app/student/student.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 interface Notifications {
   message: string;
@@ -44,6 +45,7 @@ export class HeaderComponent
   docElement: HTMLElement | undefined;
   isFullScreen = false;
   user: any;
+  user1: any;
   constructor(
     @Inject(DOCUMENT) private document: Document,
     @Inject(WINDOW) private window: Window,
@@ -56,7 +58,8 @@ export class HeaderComponent
     private adminService: AdminService,
     private agentService: AgentService,
     private studentService: StudentService,
-    private consultancyApi: ConsultancyApi 
+    private consultancyApi: ConsultancyApi,
+    private cdr: ChangeDetectorRef
   ) {
     super();
   }
@@ -161,6 +164,11 @@ export class HeaderComponent
       case 'Consultancy':
         this.fetchConsultancyDetails(loginId);
         break;
+       
+        case 'superadmin':
+          this.fetchSuperAdminDetails(loginId);
+
+          break;
 
       default:
         console.error('Role not recognized');
@@ -242,7 +250,24 @@ export class HeaderComponent
     }
   }
   
-  
+  fetchSuperAdminDetails(userId: string) {
+    const numericUserId = parseInt(userId, 10);
+
+    if (!isNaN(numericUserId)) {
+        this.adminService.getSuperAdminById(numericUserId).subscribe(
+            user => {
+                this.user = user; // Assign the user object
+                console.log('Fetched superadmin details:', this.user);
+            },
+            (error) => {
+                console.error('Error fetching superadmin details:', error);
+            }
+        );
+    } else {
+        console.error('No valid superadmin ID found');
+    }
+}
+
 
   callFullscreen() {
     if (!this.isFullScreen) {

@@ -123,16 +123,18 @@
                 <!-- User Info Section -->
                 <div class="user-info-container">
                   <div class="user-info">
+                  
                     <img src="assets/images/user/user.png" class="profile-pic" alt="Profile Picture" />
                     <div class="user-details">
                       <p class="user-name">{{user.firstName || user.studentName || user.agentFirstName
-                        || user.consultancyName}}</p>
+                        || user.consultancyName || user.sname}}</p>
                       <p class="user-email">{{user.email || user.emailAddress || user.agentEmail
-                        || user.email1}}</p>
+                        || user.email1 || user.semail}}</p>
                       <button mat-button class="manage-account-btn">Manage your Account</button>
                     </div>
                   </div>
                 </div>
+                
           
                 <hr class="divider" />
           
