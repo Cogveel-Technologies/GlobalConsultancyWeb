@@ -168,21 +168,7 @@ export class AgentService {
     );
   }
    
-  getPrograms(): Observable<any> {
-    const url = `${this.apiUrl}/Program/All?IsDeleted=false`;
-    const response = this.http.get<any>(url);
 
-    response.subscribe(
-      (data) => {
-        console.log('Service Response:', data); // Log the response here
-      },
-      (error) => {
-        console.error('Error fetching programs:', error); // Log any errors
-      }
-    );
-
-    return response;
-}
 
 getSessions(): Observable<any> {
   const url = `${this.apiUrl}/Session/All?IsDeleted=false`;
@@ -204,4 +190,17 @@ getCategory(filterBy: string): Observable<any[]> {
     .pipe(map(response => response['data']));
 }
 
+
+getInstitutesByCountry(countryId: number): Observable<any[]> {
+  const url = `${this.apiUrl}/Institute/All?CountryId=${countryId}&IsDeleted=false`;
+  return this.http.get<any[]>(url)
+    .pipe(map(response => response['data']));
+}
+
+
+getProgramsByInstitute(instituteId: number): Observable<any[]> { // Add 'instituteId' parameter
+  const url = `${this.apiUrl}/Program/All?InstituteId=${instituteId}&IsDeleted=false`; // Include institute ID in the URL
+  return this.http.get<any[]>(url)
+    .pipe(map(response => response['data'])); // Use similar response handling as above
+}
 }

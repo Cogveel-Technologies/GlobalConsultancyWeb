@@ -22,8 +22,7 @@ import { ViewStudentComponent } from './list-students/view-student/view-student.
 import { SharedModule } from '@shared/shared.module';
 
 import { AdmissionComponent } from './admission/admission.component';
-// import { PaginationComponent } from '@shared/components/pagination/pagination.component';
-// import { SortingComponent } from '@shared/components/sorting/sorting.component';
+
 
 
 @NgModule({
@@ -36,8 +35,8 @@ import { AdmissionComponent } from './admission/admission.component';
     ViewStudentComponent,
    
     AdmissionComponent,
-    // PaginationComponent,
-    // SortingComponent
+      
+    
   
   ],
   imports: [

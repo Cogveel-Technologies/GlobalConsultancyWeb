@@ -12,6 +12,7 @@ import { AdmissionComponent } from './admission/admission.component';
 
 
 
+
 const routes: Routes = [
   // {
   //   path: 'pagination',
@@ -21,47 +22,48 @@ const routes: Routes = [
   //   path: 'sorting',
   //   component: SortingComponent,
   // },
-  
-    {
-      path: 'register-student',
-      component: StudentRegisterComponent,
-      resolve: {
-        student: StudentResolver
-      },
-      // canActivate:[AuthGuard]
+
+  {
+    path: 'register-student',
+    component: StudentRegisterComponent,
+    resolve: {
+      student: StudentResolver
     },
-    {
-      path: 'list-students',
-      component: ListstudentsComponent,
-      canActivate:[AuthGuard]
-     
+    // canActivate:[AuthGuard]
+  },
+  {
+    path: 'list-students',
+    component: ListstudentsComponent,
+    canActivate: [AuthGuard]
+
+  },
+  {
+    path: 'student-application',
+    component: StudentApplicationComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'admission',
+    component: AdmissionComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'student-document',
+    component: StudentDocumentComponent,
+    resolve: {
+      student: StudentResolver
     },
-    {
-      path: 'student-application',
-      component: StudentApplicationComponent,
-      canActivate:[AuthGuard]
-    },
-    {
-      path: 'admission',
-      component: AdmissionComponent,
-      canActivate:[AuthGuard]
-    },
-    {
-      path: 'student-document',
-      component: StudentDocumentComponent,
-      resolve: {
-        student: StudentResolver
-      },
-      // canActivate:[AuthGuard]
-    },
-    {
-      path: 'view-student',
-      component: ViewStudentComponent,
-      resolve: {
-        student: StudentResolver
-      }
-    },
-    
+    // canActivate:[AuthGuard]
+  },
+ 
+  {
+    path: 'view-student',
+    component: ViewStudentComponent,
+    resolve: {
+      student: StudentResolver
+    }
+  },
+
 
 ];
 
