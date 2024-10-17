@@ -71,13 +71,15 @@ export class CustomValidatorDirective implements Validator, OnInit {
         error = this.validateCompanyName(control.value) ? null : { 'invalidAlternateCompanyName': true };
         break;
       case 'companyWebsite':
-        error = this.validateWebsiteUrl(control.value) ? null : { 'invalidCompanyWebsite': true };
+
+        error = this.validateUrl(control.value) ? null : { 'invalidCompanyWebsite': true };
+
         break;
       case 'linkedInUrl':
-        error = this.validateCompanyName(control.value) ? null : { 'invalidLinkedInUrl': true };
+        error = this.validateUrl(control.value) ? null : { 'invalidLinkedInUrl': true };
         break;
       case 'fbUrl':
-        error = this.validateCompanyName(control.value) ? null : { 'invalidFacebookUrl': true };
+        error = this.validateUrl(control.value) ? null : { 'invalidFacebookUrl': true };
         break;
       case 'agentMiddleName':
         error = this.validateName(control.value) ? null : { 'invalidAgentMiddleName': true };
@@ -209,19 +211,20 @@ export class CustomValidatorDirective implements Validator, OnInit {
     const regex = /^(?=.*[a-zA-Z])[a-zA-Z\s.,()\-]*\.?([a-zA-Z\s.,()\-]*\.?)*$/;
     return regex.test(value);
 }
+validateWithNumberAndAlpha(value: string): boolean {
+  const regex = /^(?=.*[a-zA-Z0-9])[a-zA-Z0-9\s.,()\-]*\.?([a-zA-Z0-9\s.,()\-]*\.?)*$/;
+
+  // Check if value exceeds 50 characters and matches the regex pattern
+  return value.length <= 50 && regex.test(value);
+}
 
 
+validatePhoneNumber(value: string): boolean {
+  const phoneRegex = /^\+?[0-9]{10,13}$/;
+  return phoneRegex.test(value);
+}
 
 
-  validateWithNumberAndAlpha(value: string): boolean {
-    const regex = /^(?=.*[a-zA-Z0-9])[a-zA-Z0-9\s.,()\-]*\.?([a-zA-Z0-9\s.,()\-]*\.?)*$/;
-    return regex.test(value);
-  }
-
-  validatePhoneNumber(value: string): boolean {
-    const phoneRegex = /^\+?[0-9]\d{1,12}$/;
-    return phoneRegex.test(value);
-  }
   validateNumber(value: string): boolean {
     // Regex to allow numbers up to 100 digits long
     const phoneRegex = /^\+?\d{1,200}$/;
@@ -231,8 +234,24 @@ export class CustomValidatorDirective implements Validator, OnInit {
 
   validateCompanyName(value: string): boolean {
     // Example validation logic for company name, can be adjusted as per requirements
-    return value && value.length > 2;
+    return value && value.length > 3;
   }
+
+  validateUrl(value: string): boolean {
+    // Regular expression for validating company website URL
+    const urlPattern = new RegExp(
+      '^(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{2,6}(\\/[a-zA-Z0-9()@:%_+.~#?&//=]*)?$'
+    );
+  
+    // Ensure the value exists, is of valid length, matches the URL pattern, and has no spaces
+    return value &&
+           value.length >= 5 && value.length <= 255 &&  // Minimum and maximum length
+           !/\s/.test(value) &&                         // No spaces allowed
+           urlPattern.test(value);                      // Matches valid URL structure
+  }
+  
+  
+  
 
   validatePassword(value: string): boolean {
     // Example validation logic for password: minimum 8 characters, at least one uppercase, one lowercase, one number, and one special character

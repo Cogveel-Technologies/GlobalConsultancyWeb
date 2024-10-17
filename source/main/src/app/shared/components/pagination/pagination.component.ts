@@ -12,6 +12,7 @@ export class PaginationComponent {
   @Input() length: number;
   @Input() pageSize: number = 5; // Default to the first value in pageSizeOptions
   @Output() pageChange = new EventEmitter<PageEvent>();
+  @Input() pageIndex: number;
 
   pageSizeOptions = PAGE_SIZE_OPTIONS; // Use the exported array
 

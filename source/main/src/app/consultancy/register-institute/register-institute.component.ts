@@ -6,11 +6,15 @@ import { ConsultancyApi } from '../consultancy-services/api.service';
 import { Observable } from 'rxjs';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
+import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
+
+
 
 @Component({
   selector: 'app-register-consultancy',
   templateUrl: './register-institute.component.html',
-  styleUrls: ['./register-institute.component.scss']
+  styleUrls: ['./register-institute.component.scss'],
+
 })
 export class RegisterInstituteComponent implements OnInit, OnDestroy {
   constructor(
@@ -23,9 +27,9 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   subscriptions: Subscription = new Subscription();
   breadscrums = [
     {
-      title: 'Add Institute',
-      items: ['Consultancy'],
-      active: 'Add Institute',
+      title: 'Add',
+      items: ['Institutes'],
+      active: 'Add',
     },
   ];
   registerInstitute: FormGroup;
@@ -69,19 +73,20 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   // on country selection
   onCountryChange(event: any) {
     this.countryId = event.value;
+    localStorage.setItem("countryId", event.value)
   }
 
-     // Filter function to allow all dates (past, today, and future)
-date = (date: Date | null): boolean => {
-  return true; // Allow all dates without restriction
-};
+  // Filter function to allow all dates (past, today, and future)
+  date = (date: Date | null): boolean => {
+    return true; // Allow all dates without restriction
+  };
 
   // navigate to institute list page
   navigateToInstituteList() {
-    if(this.editMode){
+    if (this.editMode) {
       this.consultancyService.showList.next(true)
       this.router.navigate(['consultancy', 'institution-list']);
-    }else{
+    } else {
       this.router.navigate(['consultancy', 'institution-list']);
     }
   }
@@ -112,7 +117,7 @@ date = (date: Date | null): boolean => {
 
   }
 
- 
+
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

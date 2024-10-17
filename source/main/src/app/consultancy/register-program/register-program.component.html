@@ -2,10 +2,29 @@
     <div class="content-block">
         <div class="block-header" *ngFor="let breadscrum of breadscrums">
             <!-- breadcrumb -->
-            <app-breadcrumb [title]="editMode ? 'Edit Program' : breadscrum.title" [items]="editMode ? ['Program List']:breadscrum.items"
-                [active_item]="editMode ? 'Edit Program' : breadscrum.active">
+            <app-breadcrumb [title]="editMode ? 'Edit' : breadscrum.title"
+                [items]="editMode ? ['Programs']:breadscrum.items"
+                [active_item]="editMode ? 'Edit' : breadscrum.active">
             </app-breadcrumb>
         </div>
+<!-- 
+        <div class="card p-4" *ngIf="editMode">
+            <div class="row g-3">
+              <div class="col-md-5">
+                <mat-form-field appearance="fill" class="w-100 mb-0">
+                  <mat-label>Session</mat-label>
+                  <mat-icon matPrefix>school</mat-icon>
+                  <mat-select required (selectionChange)="onSessionSelected($event)"  [formControl]="sessions">
+                    <mat-option *ngFor="let session of (sessionOptions | async)" [value]="session.id" >
+                      {{ session.sessionName }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div> -->
+
+          
 
         <div class="row">
             <div class="col-xl-12">
@@ -19,7 +38,7 @@
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Program Name</mat-label>
                                         <input matInput formControlName="programName" required
-                                            appCustomValidator="programName">
+                                            appCustomValidator="programName" maxlength="50">
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>school</mat-icon>
                                     </mat-form-field>
@@ -30,9 +49,9 @@
                             <div class="row mb-1">
                                 <div class="col-md-12 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
-                                        <mat-label>Program Description</mat-label>
+                                        <mat-label>Program Description (Max : 50 characters)</mat-label>
                                         <textarea matInput formControlName="programDescription" required
-                                            appCustomValidator="description"></textarea>
+                                            appCustomValidator="description" maxlength="50"></textarea>
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>description</mat-icon>
                                     </mat-form-field>
@@ -52,9 +71,10 @@
                                         <input matInput formControlName="applicationFee" type="number" required
                                             appCustomValidator="applicationFee">
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
-                                            matSuffix>attach_money</mat-icon>
+                                            matSuffix>account_balance_wallet</mat-icon>
                                     </mat-form-field>
                                 </div>
+
                             </div>
 
                             <!-- Fees and Level of Education -->
@@ -70,7 +90,7 @@
                                 </div>
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
-                                        <mat-label>Level Of Education</mat-label>
+                                        <mat-label>Level of Education</mat-label>
                                         <input matInput formControlName="levelOfEducation" required
                                             appCustomValidator="levelOfEducation">
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
@@ -102,14 +122,15 @@
                                 </mat-form-field>
                             </div>
 
-                            
+
                             <!-- Intake ID and session ID -->
                             <div class="row mb-1">
-                                
+
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Institute</mat-label>
-                                        <mat-select formControlName="instituteId" required (selectionChange)="onInstituteChange($event)">
+                                        <mat-select formControlName="instituteId" required
+                                            (selectionChange)="onInstituteChange($event)">
                                             <mat-option *ngFor="let institute of (instituteOptions | async)"
                                                 [value]="institute.id">{{
                                                 institute.name }}</mat-option>
@@ -118,32 +139,7 @@
                                             matSuffix>business</mat-icon>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-md-6 mb-1">
-                                    <mat-form-field appearance="fill" class="example-full-width">
-                                        <mat-label>Session</mat-label>
-                                        <mat-select formControlName="sessionId" required (selectionChange)="onSessionChange($event)">
-                                            <mat-option *ngFor="let session of (sessionOptions|async)" [value]="session.id">{{ session.name
-                                                }}</mat-option>
-                                        </mat-select>
-                                        <mat-icon class="material-icons-two-tone color-icon p-3"
-                                            matSuffix>event</mat-icon>
-                                    </mat-form-field>
-                                </div>
-                            </div>
 
-                            <div class="col-md-12 mb-1">
-                                <mat-form-field appearance="fill" class="example-full-width">
-                                    <mat-label>Intakes</mat-label>
-                                    <mat-select formControlName="intakeId" required (selectionChange)="onIntakeChange($event)">
-                                        <mat-option *ngFor="let intake of (intakeOptions|async)" [value]="intake.id">{{ intake.name
-                                            }}</mat-option>
-                                    </mat-select>
-                                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>group</mat-icon>
-                                </mat-form-field>
-                            </div>
-
-                            <!-- Academic Requirements and Program Category ID -->
-                            <div class="row mb-1">
                                 <div class="col-md-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Program Category</mat-label>
@@ -155,16 +151,9 @@
                                             matSuffix>category</mat-icon>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-md-6 mb-1">
-                                    <mat-form-field appearance="fill" class="example-full-width">
-                                        <mat-label>Program Intake</mat-label>
-                                        <input matInput formControlName="programIntake" type="number" required
-                                            appCustomValidator="programintake">
-                                        <mat-icon class="material-icons-two-tone color-icon p-3"
-                                            matSuffix>person</mat-icon>
-                                    </mat-form-field>
-                                </div>
                             </div>
+
+                            <!-- Academic Requirements  -->
 
                             <div class="row mb-1">
                                 <div class="col-md-6 mb-1">
@@ -182,8 +171,8 @@
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Is Public</mat-label>
                                         <mat-select formControlName="isPublic" required>
-                                            <mat-option *ngFor="let category of isPublic"
-                                                [value]="category">{{ category }}</mat-option>
+                                            <mat-option *ngFor="let category of isPublic" [value]="category">{{ category
+                                                }}</mat-option>
                                         </mat-select>
                                         <mat-icon class="material-icons-two-tone color-icon p-3"
                                             matSuffix>category</mat-icon>
@@ -213,8 +202,9 @@
                                 <div class="col-auto">
                                     <button type="submit" class="btn-space" mat-raised-button color="primary"
                                         [disabled]="!registerProgram.valid">{{editMode
-                                        ? 'Update' : 'Register'}}</button>
-                                    <button type="button" mat-raised-button color="warn" (click)="navigateToProgramList()">Cancel</button>
+                                        ? 'Update' : 'Submit'}}</button>
+                                    <button type="button" mat-raised-button color="warn"
+                                        (click)="navigateToProgramList()">Cancel</button>
                                 </div>
                             </div>
                         </form>

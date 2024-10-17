@@ -18,6 +18,7 @@ import { fakeBackendProvider } from './core/interceptor/fake-backend';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AdminModule } from './admin/admin.module';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
@@ -28,10 +29,15 @@ import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { LoGinComponent } from './lo-gin/lo-gin.component';
 import { AgentModule } from './agent/agent.module';
-import { checkToken } from './general-interceptors/token.interceptors';
+import { CheckToken } from './general-interceptors/token.interceptors';
 import { ToastrModule } from 'ngx-toastr';
 import { ResponseInterceptor } from './general-interceptors/response.interceptor';
 import { GlobalErrorHandler } from './global-error-handler/global-error-handler';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MY_FORMATS } from './date-formats';
+import { DatePickerComponent } from './date-picker/date-picker.component';
 
 
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -49,7 +55,8 @@ export function createTranslateLoader(http: HttpClient) {
     RightSidebarComponent,
     AuthLayoutComponent,
     MainLayoutComponent,
-    LoGinComponent,  ],
+    LoGinComponent,
+    ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -60,6 +67,7 @@ export function createTranslateLoader(http: HttpClient) {
     NgxMatSelectSearchModule,
     LoadingBarRouterModule,
     NgScrollbarModule,
+    BsDatepickerModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -76,11 +84,20 @@ export function createTranslateLoader(http: HttpClient) {
     })
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS,useClass: checkToken,multi: true},
+    {provide: HTTP_INTERCEPTORS,useClass: CheckToken,multi: true},
     {provide: HTTP_INTERCEPTORS,useClass: ResponseInterceptor,multi: true},
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     fakeBackendProvider,
     WINDOW_PROVIDERS,
+    {
+      provide: DateAdapter,
+      useClass: MatMomentDateModule,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: MY_FORMATS
+    }
   ],
   bootstrap: [AppComponent],
 })

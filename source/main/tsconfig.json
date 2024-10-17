@@ -31,6 +31,8 @@
       "@config": ["app/config"],
       "@config/*": ["app/config/*"],
     },
+    "allowSyntheticDefaultImports": true,
+    
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

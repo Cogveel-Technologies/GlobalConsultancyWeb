@@ -16,6 +16,6 @@ export class InstituteResolver implements Resolve<any>{
         // call the api here when available
         const id = route.params['id'];
         return this.consultancyApiService.getInstituteDetails(id);
-        
+
     }
 }

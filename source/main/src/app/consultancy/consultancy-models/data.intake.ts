@@ -4,5 +4,8 @@ export interface IntakeData{
     instituteId:number,
     sessionId:number,
     noOfIntake:number,
-    year:string
+    year:string,
+    instituteName:string,
+    programName:string,
+    sessionName:string
 }

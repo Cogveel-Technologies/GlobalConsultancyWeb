@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, RouterStateSnapshot } from '@angular/router';
+import { Router } from '@angular/router';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
@@ -22,9 +22,9 @@ export class InstitutionListComponent {
 
   breadscrums = [
     {
-      title: 'Institution List',
+      title: 'Institutes',
       items: ['Consultancy'],
-      active: 'Institution List',
+      active: 'Institutes',
     },
   ];
 
@@ -36,9 +36,8 @@ export class InstitutionListComponent {
   countrySelected: boolean = false;
   countryListForm: FormGroup;
   countries: Observable<{ countryName: string, id: number }[]>;
-  country$: BehaviorSubject<string|null> = new BehaviorSubject<string | null>(null);
-  currentUrl:string;
-  countryId: string;
+  country$: BehaviorSubject<number|null> = new BehaviorSubject<number | null>(null);
+  countryId: number;
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
@@ -47,17 +46,15 @@ export class InstitutionListComponent {
   totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
   sorting$: BehaviorSubject<{field:string,direction:string}>= new BehaviorSubject<{field:string,direction:string}>({field:this.defaultData.OrderBy,direction:this.defaultData.sortExpression});
+  currentPageIndex:number;
 
 
   getInstitutes(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getInstitutes(params).pipe
       (map(res => {
+        console.log(res)
         this.records = res['pageInfo']['totalRecords'];
         return res['data']
-      }),tap(res=>{
-        if(!res.length && params.searchText === ''){
-          this.router.navigate(["consultancy/no-data-found"])
-        }
       }));
   }
 
@@ -66,48 +63,50 @@ export class InstitutionListComponent {
       countryList: new FormControl(),
     })
 
-    this.subscriptions.add(this.consultancyService.showList.subscribe(state=>{
-      this.countrySelected = state;
-    }))
-
-    if(this.countrySelected){
-      const countryId = localStorage.getItem("countryId")
-      this.country$.next(countryId)
-      this.defaultData.CountryId = countryId
-      this.universities = this.getInstitutes(this.defaultData)
-    }
-
+    
     // fetching all countries for the dropdown
-    this.countries = this.consultancyApiService.getAllCountries();
+    this.countries = this.consultancyApiService.getAllCountries().pipe(tap(res => {
+      // this.search$.next(true);
+      this.country$.next(res[0]['id']);
+      this.countryListForm.get('countryList').setValue(res[0]['id']);
+    }));
+  
 
+    
+    
 
-    // implementing filter on the basis of country
-    this.subscriptions.add(combineLatest([this.country$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
+  // Implementing filter on the basis of country
+  this.subscriptions.add(
+    combineLatest([this.country$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
-      distinctUntilChanged(), switchMap(([id, search, pageRelated, sort]) => {
+      distinctUntilChanged(),
+      switchMap(([id, search, pageRelated, sort]) => {
         if (id) {
+          this.countryId = id
           this.defaultData.CountryId = String(id);
           this.defaultData.searchText = search;
           this.defaultData.pageSize = pageRelated.pageSize;
           this.defaultData.currentPage = pageRelated.pageIndex;
           this.defaultData.sortExpression = sort.direction;
-          this.defaultData.OrderBy = sort.field
-          return this.universities = this.getInstitutes(this.defaultData)
+          this.defaultData.OrderBy = sort.field;
+          console.log(this.defaultData)
+          this.universities = this.getInstitutes(this.defaultData);
+
+          // Set the FormControl value for countryList
+          this.countryListForm.get('countryList').setValue(id); // Set the value of the dropdown
+          return of(id);
         } else {
-          return of([])
+          return of([]);
         }
-      })).subscribe(res => {
-        if (res.length) {
-          this.countrySelected = true;
-        }
-      }))
+      })
+    ).subscribe()
+  );
 
   }
 
   // selection event (selection of country)
   onCountryChange(value: any) {
-    this.country$.next(value.id);
-    localStorage.setItem("countryId",value.id)
+    this.country$.next(value);
   }
 
 
@@ -126,7 +125,7 @@ export class InstitutionListComponent {
 
   // page event
   onPageChange(event: PageEvent) {
-    console.log("hello")
+    this.currentPageIndex = event.pageIndex;
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
   }
 
@@ -136,9 +135,13 @@ export class InstitutionListComponent {
       this.sorting$.next({field:field,direction:direction})
     }
 
+    onView(){
+      this.consultancyService.countrySelected.next(this.countryId)
+    }
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false)
+    this.consultancyService.editOrViewPage.next(false)
     this.subscriptions.unsubscribe();
   }
 

@@ -1,109 +1,122 @@
 <section class="content">
-    <div class="container-fluid">
-        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+  <div class="container-fluid">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
 
-            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
-            </app-breadcrumb>
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+    <!-- show when country is not selected -->
+
+      <div class="card p-4">
+        <div class="row g-3">
+          <div class="col-md-5">
+            <mat-form-field appearance="fill" class="w-100 mb-0">
+              <mat-label>Institute</mat-label>
+              <mat-icon matPrefix>home</mat-icon>
+              <mat-select [formControl]="instituteList" required (selectionChange)="onInstituteChange($event)">
+                <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
+                  {{ institute.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-5">
+            <mat-form-field appearance="fill" class="w-100 mb-0">
+              <mat-label>Program</mat-label>
+              <mat-icon matPrefix>home</mat-icon>
+              <mat-select [formControl]="programList" required (selectionChange)="onProgramChange($event)">
+                <mat-option *ngFor="let program of (programs | async)" [value]="program.id">
+                  {{ program.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
+          </div>
         </div>
-         <!-- show when country is not selected -->
+      </div>
 
-    <form [formGroup]="instituteListForm"  *ngIf="!instituteSelected">
-        <div class="card p-4" >
-          <div class="row g-3">
-            <div class="col-md-9">
-              <mat-form-field appearance="fill" class="w-100 mb-0">
-                <mat-label>Select an institute</mat-label>
-                <mat-icon matPrefix>home</mat-icon>
-                <mat-select formControlName="instituteList" required (selectionChange)="onInstituteChange($event)">
-                  <mat-option *ngFor="let institute of (institutes | async)" [value]="institute">
-                    {{ institute.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+
+
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="materialTableHeader">
+            <div class="left">
+              <ul class="header-buttons-left ms-0">
+                <app-search [searchText]="search"></app-search>
+              </ul>
+            </div>
+            <div class="right">
+              <ul class="tbl-export-btn">
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="ADD">
+                    <button mat-mini-fab color="primary" (click)="addSession()">
+                      <mat-icon class="col-white">add</mat-icon>
+                    </button>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-      </form>
-  
-  
-
-        <div class="row" *ngIf="instituteSelected">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="materialTableHeader">
-                        <div class="left">
-                            <ul class="header-buttons-left ms-0">
-                                <app-search [searchText]="search"></app-search>
-                            </ul>
-                        </div>
-                        <div class="right">
-                            <ul class="tbl-export-btn">
-                                <li class="tbl-header-btn">
-                                    <div class="m-l-10" matTooltip="ADD">
-                                        <button mat-mini-fab color="primary" (click)="addSession()">
-                                            <mat-icon class="col-white">add</mat-icon>
-                                        </button>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row clearfix" *ngIf="instituteSelected">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="body table-responsive">
-                        <table class="table table-hover table-responsive">
-                            <thead>
-                                <tr>
-                                  <th>
-                                    <app-sorting 
-                                      [sortField]="defaultData.OrderBy" 
-                                      [sortDirection]="defaultData.sortExpression" 
-                                      [sortFields]="['sessionName']" 
-                                      [sortLabels]="['Name']"
-                                      (sortChange)="onSortChange($event)">
-                                    </app-sorting>
-                                  </th>
-                                  <th>
-                                    <app-sorting 
-                                      [sortField]="defaultData.OrderBy" 
-                                      [sortDirection]="defaultData.sortExpression" 
-                                      [sortFields]="['year']" 
-                                      [sortLabels]="['Date']"
-                                      (sortChange)="onSortChange($event)">
-                                    </app-sorting>
-                                  </th>
-                                  <th>Actions</th>
-                                </tr>
-                              </thead>
-                              
-                            <tbody>
-                                <tr *ngFor="let session of (sessions | async)">
-                                    <td data-label="Session Name">{{ session.sessionName }}</td>
-                                    <td data-label="Year">{{ session.year | date:'yyyy-MM-dd' }}</td>
-                                    <td data-label="Actions">
-                                        <button mat-icon-button color="primary"
-                                            [routerLink]="['/consultancy/edit-session', session.id]" matTooltip="Edit">
-                                            <mat-icon>edit</mat-icon>
-                                        </button>
-                                        <button mat-icon-button color="warn" (click)=onDeleteSession(session.id) matTooltip="Delete">
-                                            <mat-icon>delete</mat-icon>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <app-pagination [pageSize]="defaultData.pageSize" (pageChange)="onPageChange($event)" [length]="records">
-                        </app-pagination>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="row clearfix">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body table-responsive">
+            <table class="table table-hover table-responsive">
+              <!-- Use sessions observable with async pipe -->
+              <thead *ngIf="(sessions | async)?.length > 0">
+                <tr>
+                  <th>
+                    <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                      [sortFields]="['sessionName']" [sortLabels]="['Program']" (sortChange)="onSortChange($event)">
+                    </app-sorting>
+                  </th>
+                  <th>
+                    <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                      [sortFields]="['sessionName']" [sortLabels]="['Session']" (sortChange)="onSortChange($event)">
+                    </app-sorting>
+                  </th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <!-- Handle no sessions case -->
+                <tr *ngIf="(sessions | async)?.length === 0">
+                  <td colspan="3" class="text-center">No Data Found</td>
+                </tr>
+
+                <!-- Loop through sessions when data exists -->
+                <tr *ngFor="let session of (sessions | async)">
+                  <td data-label="Program Name">{{ session.programName }}</td>
+                  <td data-label="Session Name">{{ session.sessionName }}</td>
+                  <!-- <td data-label="Year">{{ session.year | date:'yyyy-MM-dd' }}</td> -->
+                  <td data-label="Actions">
+                    <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-session', session.id]"
+                      matTooltip="Edit">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="onDeleteSession(session.id)" matTooltip="Delete">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Conditionally show pagination -->
+            <app-pagination *ngIf="(sessions | async)?.length > 0" [pageSize]="defaultData.pageSize"
+              (pageChange)="onPageChange($event)" [length]="records"  [pageIndex]="currentPageIndex">
+            </app-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
-
-

@@ -94,7 +94,7 @@ const routes: Routes = [
   {
     path: 'edit-program/:id',
     component: RegisterProgramComponent,
-    resolve: { editResponse: ProgramResolver },
+    resolve: { programDetails: allProgramDetails },
   }, {
     path: 'register-intake',
     component: RegisterIntakesComponent,

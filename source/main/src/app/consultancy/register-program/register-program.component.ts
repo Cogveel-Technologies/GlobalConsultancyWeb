@@ -18,9 +18,9 @@ export class RegisterProgramComponent {
 
   breadscrums = [
     {
-      title: 'Add Program',
-      items: ['Consultancy'],
-      active: 'Add Program',
+      title: 'Add',
+      items: ['Programs'],
+      active: 'Add',
     },
   ];
   registerProgram: FormGroup;
@@ -34,14 +34,14 @@ export class RegisterProgramComponent {
   consultancyId: string = localStorage.getItem("id");
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   instituteOptions: Observable<SpecificConsultancyRelated[]>;
-  sessionOptions: Observable<SpecificConsultancyRelated[]>;
-  intakeOptions: Observable<SpecificConsultancyRelated[]>;
+  sessionOptions: Observable<{id:number,sessionName:string}[]>;
   institute$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   session$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   intake$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   previousSessionState: (number | null) = null;
   previousIntakeState: (number | null) = null;
   previousInstituteState: (number | null) = null
+  sessions = new FormControl('')
 
 
 
@@ -52,14 +52,11 @@ export class RegisterProgramComponent {
       duration: new FormControl(''),
       applicationFee: new FormControl(''),
       tutionFee: new FormControl(''),
-      sessionId: new FormControl('', Validators.required),
       levelOfEducation: new FormControl(''),
       status: new FormControl(''),
       subjectRequirements: new FormControl(''),
       academicRequirements: new FormControl(''),
       programCategoryId: new FormControl(''),
-      programIntake: new FormControl(''),
-      intakeId: new FormControl('', Validators.required),
       instituteId: new FormControl('', Validators.required),
       courseTypeId: new FormControl(''),
       isPublic: new FormControl('')
@@ -70,77 +67,17 @@ export class RegisterProgramComponent {
     this.courseTypeOptions = this.consultancyApiService.getCategory("courseType");
 
 
-    this.subscriptions.add(
-      combineLatest([
-        this.institute$.pipe(distinctUntilChanged()),
-        this.session$.pipe(distinctUntilChanged()),
-        this.intake$.pipe(distinctUntilChanged()),
-      ])
-        .pipe(
-          switchMap(([instituteId, sessionId, intakeId]) => {
-            console.log(instituteId, sessionId, intakeId)
-            console.log(this.previousInstituteState)
 
-            // When the institute changes (or is reselected), reset session and intake
-            if (instituteId && instituteId !== this.previousInstituteState) {
-              // Store the last selected institute
-              this.previousInstituteState = instituteId;
-              console.log("drrrr")
-
-              // Reset session form control and BehaviorSubject to ensure no default value
-              this.registerProgram.get("sessionId").reset();
-              this.registerProgram.get("intakeId").reset();
-              this.session$.next(null);
-              this.intake$.next(null);
-              this.sessionOptions = null;
-              this.intakeOptions = null
-
-              // Make API call for sessions based on the selected institute
-              this.defaultData.InstituteId = String(instituteId);
-              this.sessionOptions = this.consultancyApiService.getSpecificSessions(this.defaultData)
-
-              return of([]);  // Return empty observable
-            }
-
-            // When institute and session are selected, but intake is not
-            if (instituteId && sessionId && !intakeId) {
-
-              if (sessionId !== this.previousSessionState) {
-                this.previousSessionState = sessionId;
-                this.defaultData.SessionId = String(sessionId);
-                console.log(sessionId)
-
-                // Make API call for intakes based on session
-                this.intakeOptions = this.consultancyApiService.getSpecificIntakes(this.defaultData);
-                return of([]);
-              }else{
-                // Make API call for intakes based on session
-                console.log("oppp")
-                this.intakeOptions = this.consultancyApiService.getSpecificIntakes(this.defaultData);
-                return of([]);
-             }
-            }
-
-            if (instituteId && sessionId && intakeId) {
-              console.log("helllooooo")
-              if (sessionId !== this.previousSessionState) {
-                this.intake$.next(null)
-                this.previousSessionState = sessionId;
-              }
-              console.log(sessionId)
-            }
-
-            // Default case: return an empty observable
-            return of([]);
-          })
-        ).subscribe()
-    );
-
-    const details = this.route.snapshot.data['editResponse']
+    const details = this.route.snapshot.data['programDetails']
+    console.log(details)
 
     if (details) {
       console.log(details)
       this.editId = +this.route.snapshot.paramMap.get('id');
+      this.defaultData.ProgramId = String(this.editId)
+      this.sessionOptions = this.consultancyApiService.getProgramSessions(this.defaultData).pipe(tap(res=>{
+        this.sessions.setValue(res[0].id)
+      }))
       this.editMode = true;
       this.institute$.next(details.instituteId);
       this.session$.next(details.sessionId);
@@ -153,7 +90,7 @@ export class RegisterProgramComponent {
     console.log(event.value)
     this.institute$.next(event.value)
   }
-  onSessionChange(event: any) {
+  onSessionSelected(event: any) {
     console.log(event.value)
     this.session$.next(event.value)
   }
@@ -173,7 +110,7 @@ export class RegisterProgramComponent {
 
   onSubmit() {
     let newDetails = this.registerProgram.value;
-    newDetails.consultancyId = +this.consultancyId;
+    // newDetails.consultancyId = +this.consultancyId;
     console.log(newDetails)
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateProgram(this.editId, newDetails).subscribe(res => {

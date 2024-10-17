@@ -3,7 +3,7 @@ export interface ConsultancyDetailsOptions{
     sortExpression:string,
     pageSize:number,
     currentPage:number,
-    totalElements?:number,
+    totalElements?:string,
     searchText?:string,
     isDeleted?:boolean,
     InstituteId?:string,
@@ -12,5 +12,5 @@ export interface ConsultancyDetailsOptions{
     ConsultancyId?:string,
     CountryId?:string,
     IntakeId?:string,
-    IsPublic?:string
+    IsPublic?:string,
 }
