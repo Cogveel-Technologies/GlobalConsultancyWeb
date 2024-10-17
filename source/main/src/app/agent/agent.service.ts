@@ -167,4 +167,40 @@ export class AgentService {
       })
     );
   }
+   
+
+
+getSessions(): Observable<any> {
+  const url = `${this.apiUrl}/Session/All?IsDeleted=false`;
+  return this.http.get<any>(url);
+}
+
+getIntakeYears(): Observable<any> {
+  const url = `${this.apiUrl}/Intake/All?Isdeleted=false`;
+  return this.http.get<any>(url);
+}
+
+getCountries(): Observable<any> {
+  const url = `${this.apiUrl}/Country/All`;
+  return this.http.get<any>(url);
+}
+
+getCategory(filterBy: string): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/DropDown/All?DropDownListName=${filterBy}`)
+    .pipe(map(response => response['data']));
+}
+
+
+getInstitutesByCountry(countryId: number): Observable<any[]> {
+  const url = `${this.apiUrl}/Institute/All?CountryId=${countryId}&IsDeleted=false`;
+  return this.http.get<any[]>(url)
+    .pipe(map(response => response['data']));
+}
+
+
+getProgramsByInstitute(instituteId: number): Observable<any[]> { // Add 'instituteId' parameter
+  const url = `${this.apiUrl}/Program/All?InstituteId=${instituteId}&IsDeleted=false`; // Include institute ID in the URL
+  return this.http.get<any[]>(url)
+    .pipe(map(response => response['data'])); // Use similar response handling as above
+}
 }

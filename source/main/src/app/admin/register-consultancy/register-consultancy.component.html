@@ -84,7 +84,28 @@
               </div>
 
               <div class="row">
+              
+
                 <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Email 1</mat-label>
+                    <input matInput formControlName="email1" required appCustomValidator="email">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Email 2</mat-label>
+                    <input matInput type="email" formControlName="email2" required appCustomValidator="email">
+                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Address Information -->
+              <div class="row">
+               
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Password</mat-label>
                     <input matInput formControlName="password" required [type]="hide3 ? 'password' : 'text'"
@@ -94,26 +115,6 @@
                     </mat-icon>
                   </mat-form-field>
                 </div>
-
-                <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Email 1</mat-label>
-                    <input matInput formControlName="email1" required appCustomValidator="email">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <!-- Address Information -->
-              <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Email 2</mat-label>
-                    <input matInput type="email" formControlName="email2" required appCustomValidator="email">
-                    <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>email</mat-icon>
-                  </mat-form-field>
-                </div>
-
                 <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
                     <mat-label>Address</mat-label>

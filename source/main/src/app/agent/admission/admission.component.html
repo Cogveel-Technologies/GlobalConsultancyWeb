@@ -1,0 +1,135 @@
+<section class="content">
+    <div class="content-block">
+        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+            </app-breadcrumb>
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="body">
+                        <form class="m-4" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <!-- Country Autocomplete -->
+                                <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Country" aria-label="Country"
+                                            [matAutocomplete]="countryAuto" [formControl]="countryCtrl" required />
+                                        <mat-autocomplete #countryAuto="matAutocomplete">
+                                            <mat-option *ngFor="let country of filteredCountryOptions | async"
+                                                [value]="country.countryName">
+                                                <span>{{ country.countryName }} </span>
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+                                <!-- Institutes Autocomplete -->
+                                <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Institutes" aria-label="Institutes"
+                                            [matAutocomplete]="instituteAuto" [formControl]="instituteCtrl" required />
+                                        <mat-autocomplete #instituteAuto="matAutocomplete">
+                                            <mat-option *ngFor="let institute of filteredInstituteOptions | async"
+                                                [value]="institute.name">
+                                                {{ institute.name }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+                                 <!-- Program ID Autocomplete -->
+                                 <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Program" aria-label="Program"
+                                            [matAutocomplete]="programAuto" [formControl]="programCtrl" required />
+                                        <mat-autocomplete #programAuto="matAutocomplete">
+                                            <mat-option *ngFor="let program of filteredProgramOptions | async"
+                                                [value]="program.name">
+                                                {{ program.name }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                               
+
+                                <!-- Session ID Autocomplete -->
+                                <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Session" aria-label="Session"
+                                            [matAutocomplete]="sessionAuto" [formControl]="sessionCtrl" required />
+                                        <mat-autocomplete #sessionAuto="matAutocomplete">
+                                            <mat-option *ngFor="let session of filteredSessionOptions | async"
+                                                [value]="session.name">
+                                                {{ session.name }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+
+                                <!-- Intake Year Autocomplete -->
+                                <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Intake Year" aria-label="Intake Year"
+                                            [matAutocomplete]="intakeYearAuto" [formControl]="intakeYearCtrl"
+                                            required />
+                                        <mat-autocomplete #intakeYearAuto="matAutocomplete">
+                                            <mat-option *ngFor="let intake of filteredIntakeYearOptions | async"
+                                                [value]="intake.name">
+                                                {{ intake.name }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+
+
+
+                                <!-- Program Category Autocomplete -->
+                                <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Program Category" aria-label="Program Category"
+                                            [matAutocomplete]="programCategoryAuto" [formControl]="programCategoryCtrl"
+                                            required />
+                                        <mat-autocomplete #programCategoryAuto="matAutocomplete">
+                                            <mat-option *ngFor="let category of filteredProgramCategoryOptions | async"
+                                                [value]="category.name">
+                                                {{ category.name }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+
+                                <!-- Course Type Autocomplete -->
+                                <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Course Type" aria-label="Course Type"
+                                            [matAutocomplete]="courseTypeAuto" [formControl]="courseTypeCtrl"
+                                            required />
+                                        <mat-autocomplete #courseTypeAuto="matAutocomplete">
+                                            <mat-option *ngFor="let type of filteredCourseTypeOptions | async"
+                                                [value]="type.name">
+                                                {{ type.name }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                                    <button class="btn-space" mat-raised-button color="primary"
+                                        [disabled]="!searchForm.valid" type="submit">
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

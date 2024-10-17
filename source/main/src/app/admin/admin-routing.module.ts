@@ -16,6 +16,7 @@ import { ConsultancyListComponent } from './consultancy-list/consultancy-list.co
 import { ConsultancyResolver } from './consultancy-list/consultancy.resolver';
 import { ViewConsultancyComponent } from './consultancy-list/view-consultancy/view-consultancy.component';
 import { AuthGuard } from '@core/guard/auth.guard';
+import { DropdownComponent } from './dropdown/dropdown.component';
 const routes: Routes = [
   {
     path: 'adminusers',
@@ -93,7 +94,12 @@ const routes: Routes = [
       consultancy: ConsultancyResolver,
     }
     // No AuthGuard here
-  }
+  },
+  {
+    path: 'dropdown',
+    component: DropdownComponent,
+    canActivate: [AuthGuard]   // Apply AuthGuard
+  },
 ];
 
 

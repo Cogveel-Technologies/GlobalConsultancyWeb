@@ -26,6 +26,7 @@ import { ListRolesComponent } from './list-roles/list-roles.component';
 import { RegisterConsultancyComponent } from './register-consultancy/register-consultancy.component';
 import { ConsultancyListComponent } from './consultancy-list/consultancy-list.component';
 import { ViewConsultancyComponent } from './consultancy-list/view-consultancy/view-consultancy.component';
+import { DropdownComponent } from './dropdown/dropdown.component';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { ViewConsultancyComponent } from './consultancy-list/view-consultancy/vi
     RegisterConsultancyComponent,
     ConsultancyListComponent,
     ViewConsultancyComponent,
+    DropdownComponent,
 
   ],
   imports: [

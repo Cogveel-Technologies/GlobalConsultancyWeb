@@ -19,6 +19,24 @@
         "DASHBOARD3": "Dashboard 3"
       }
     },
+        
+    "SUPERADMIN": {
+      "TEXT": "superadmin",
+      "LIST": {
+        "ADD_USERS": "Add Users",
+        "LIST_USERS": "Users",
+        "ADD_AGENTS": "Add Agents",
+        "LIST_AGENTS": "List Agents",
+        "LIST_ROLES": "Roles",
+        "LIST_LOGIN": "Login",
+        "DOCUMENT_TYPE": "Document Type",
+         "CONSULTANCY": "Consultancy List",
+        "REGISTER_CONSULTANCY": "Register Consultancy",
+        "DROPDOWN": "Dropdown",
+         "DROPDOWN_LIST": "Dropdown List"
+         }
+        },
+    
     "ADMIN": {
       "TEXT": "Admin",
       "LIST": {
@@ -30,11 +48,12 @@
         "LIST_LOGIN": "Login",
         "DOCUMENT_TYPE": "Document Type",
          "CONSULTANCY": "Consultancy List",
-        "REGISTER_CONSULTANCY": "Register Consultancy"
-       
-      
-      }
-    },
+        "REGISTER_CONSULTANCY": "Register Consultancy",
+        "DROPDOWN": "Dropdown",
+         "DROPDOWN_LIST": "Dropdown List"
+         }
+        },
+
     "AGENT": {
       "TEXT": "Agent",
       "LIST": {
@@ -43,7 +62,8 @@
         "STUDENT_APPLICATION": "Student Application",
         "STUDENT_APPLICATION_LIST": "Student Application List",
         "STUDENT_DOCUMENT": "Student Document",
-        "STUDENT_DOCUMENT_LIST": "Student Document List"
+        "STUDENT_DOCUMENT_LIST": "Student Document List",
+        "SEARCH": "Search"
       }
     },
     "CONSULTANCY": {

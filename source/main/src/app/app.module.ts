@@ -34,7 +34,7 @@ import { ResponseInterceptor } from './general-interceptors/response.interceptor
 import { GlobalErrorHandler } from './global-error-handler/global-error-handler';
 
 
-
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -57,6 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     AdminModule,
     AgentModule,
+    NgxMatSelectSearchModule,
     LoadingBarRouterModule,
     NgScrollbarModule,
     TranslateModule.forRoot({
