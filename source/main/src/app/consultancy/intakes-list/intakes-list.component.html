@@ -11,7 +11,7 @@
                     <mat-form-field appearance="fill" class="w-100 mb-0">
                         <mat-label>Institute</mat-label>
                         <mat-icon matPrefix>calendar_today</mat-icon>
-                        <mat-select formControlName="session" (selectionChange)="onInstituteChange($event)" required>
+                        <mat-select [formControl]="institute" (selectionChange)="onInstituteChange($event)" required>
                             <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
                                 {{ institute.name }}
                             </mat-option>
@@ -22,9 +22,9 @@
                     <mat-form-field appearance="fill" class="w-100 mb-0">
                         <mat-label>Program</mat-label>
                         <mat-icon matPrefix>calendar_today</mat-icon>
-                        <mat-select formControlName="session" (selectionChange)="onSessionChange($event)" required>
-                            <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
-                                {{ session.name }}
+                        <mat-select [formControl]="program" (selectionChange)="onProgramChange($event)" required>
+                            <mat-option *ngFor="let program of (programs | async)" [value]="program.id">
+                                {{ program.name }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -33,15 +33,15 @@
                     <mat-form-field appearance="fill" class="w-100 mb-0">
                         <mat-label>Session</mat-label>
                         <mat-icon matPrefix>calendar_today</mat-icon>
-                        <mat-select formControlName="session" (selectionChange)="onSessionChange($event)" required>
+                        <mat-select [formControl]="session" (selectionChange)="onSessionChange($event)" required>
                             <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
-                                {{ session.name }}
+                                {{ session.sessionName }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-md-4">
-                  <button type="submit" class="btn-space" mat-raised-button color="primary">Search</button>
+                  <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
                 </div>
             </div>
         </div>

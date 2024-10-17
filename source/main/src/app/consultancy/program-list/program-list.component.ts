@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProgramData } from '../consultancy-models/data.program';
 import { ConsultancyApi } from '../consultancy-services/api.service';
-import { BehaviorSubject, combineLatest, map, Observable, of, startWith, Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
@@ -53,13 +53,13 @@ export class ProgramListComponent {
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
   previousSessionState: (number | null) = null;
   previousIntakeState: (number | null) = null;
-  previousInstituteState: (number | null) = null;
+  previousInstituteState: number = 0;
   sessionFormControl = new FormControl();
   intakeFormControl = new FormControl();
   currentPageIndex: number;
   publicOptions: boolean[];
   search$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  instituteControl:FormControl = new FormControl();
+  instituteControl: FormControl = new FormControl();
 
 
 
@@ -84,26 +84,25 @@ export class ProgramListComponent {
       this.selectedOptions = state;
     }));
 
-    combineLatest([this.institute$, this.search$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(switchMap(([instituteId, search, searchTerm, pageRelated, sorting]) => {
-      if (instituteId) {
+    combineLatest([this.institute$, this.search$, this.searchTerm$, this.pagination$, this.sorting$]).pipe( throttleTime(1000, undefined, { leading: true, trailing: true }),
+    distinctUntilChanged(),
+    switchMap(([instituteId, search, searchTerm, pageRelated, sorting]) => {
+      if (instituteId && this.previousInstituteState !== instituteId) {
         console.log(instituteId)
+        this.previousInstituteState = instituteId
         this.defaultData.InstituteId = String(instituteId);
         this.publicOptions = [true, false];
-        if (search) {
-          console.log(this.defaultData)
-          this.defaultData.searchText = searchTerm;
-          this.defaultData.pageSize = pageRelated.pageSize;
-          this.defaultData.currentPage = pageRelated.pageIndex
-          this.programs = this.getPrograms(this.defaultData)
-          this.search$.next(false)
-          return of([])
-        } else {
-          return of([])
-        }
-      } else {
-        return of([])
-      }
-
+      } 
+      if (search) {
+        console.log(this.defaultData)
+        this.defaultData.searchText = searchTerm;
+        this.defaultData.pageSize = pageRelated.pageSize;
+        this.defaultData.currentPage = pageRelated.pageIndex;
+        this.defaultData.sortExpression = sorting.direction;
+        this.defaultData.OrderBy = sorting.field;
+        return this.programs = this.getPrograms(this.defaultData)
+      } 
+      return of([])
     })).subscribe(res => console.log(res))
 
     // if we click on view or edit pencil, and then navigate back
@@ -142,12 +141,12 @@ export class ProgramListComponent {
   onPageChange(event: PageEvent) {
     this.currentPageIndex = event.pageIndex;
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
-    this.search$.next(true)
+    // this.search$.next(true)
   }
   // sort event
   onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
     this.sorting$.next({ field: field, direction: direction })
-    this.search$.next(true)
+    // this.search$.next(true)
   }
 
   deleteProgram(id: number) {
@@ -159,9 +158,9 @@ export class ProgramListComponent {
     }
   }
 
-  onSearchData() {
-    this.search$.next(true)
-  }
+  // onSearchData() {
+  //   this.search$.next(true)
+  // }
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false)

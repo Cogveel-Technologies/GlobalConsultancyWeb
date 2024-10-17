@@ -39,11 +39,13 @@ export class SessionListComponent {
   sorting$: BehaviorSubject<{field:string,direction:string}>= new BehaviorSubject<{field:string,direction:string}>({field:this.defaultData.OrderBy,direction:this.defaultData.sortExpression});
   totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
-  currentPageIndex:number
-  instituteList = new FormControl()
-  programList = new FormControl()
-  search$ = new BehaviorSubject<boolean>(false)
+  currentPageIndex:number;
+  instituteList = new FormControl();
+  programList = new FormControl();
+  search$ = new BehaviorSubject<boolean>(false);
   programs:Observable<SpecificConsultancyRelated[]>;
+  previousInstituteId:number = 0;
+  previousProgramId:number = 0;
 
 
 
@@ -84,11 +86,18 @@ export class SessionListComponent {
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(),
       switchMap(([instituteId, searchTerm, pageRelated, sort, search, programId]) => {
-        if(instituteId){
+        if(instituteId && this.previousInstituteId !== instituteId){
+          console.log("institute")
+          this.previousInstituteId = instituteId
           this.defaultData.InstituteId = String(instituteId)
           this.programs = this.consultancyApiService.getAllPrograms(this.defaultData)
         }
-        if (search) {
+        if(programId && this.previousProgramId !== programId){
+          console.log("program")
+          this.previousProgramId = +programId;
+          this.defaultData.ProgramId = String(programId)
+        }
+        if (search || searchTerm) {
           console.log(search)
           this.defaultData.InstituteId = String(instituteId);
           this.defaultData.ProgramId = String(programId);
@@ -138,12 +147,14 @@ export class SessionListComponent {
   onPageChange(event: PageEvent) {
     this.currentPageIndex = event.pageIndex;
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
+    this.search$.next(true)
   }
 
-      // sort event
-      onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
+   // sort event
+   onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
         this.sorting$.next({field:field,direction:direction})
-      }
+        this.search$.next(true)
+    }
 
   addSession() { 
     this.router.navigate(["consultancy/register-session"])

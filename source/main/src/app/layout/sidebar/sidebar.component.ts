@@ -72,7 +72,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.menu = JSON.parse(localStorage.getItem('menu'));
+    this.menu = JSON.parse(localStorage.getItem('menu'))
+   
+
+    console.log(this.menu)
     const accessiblePaths = this.extractPaths(this.menu);
     localStorage.setItem('accessiblePaths', JSON.stringify(accessiblePaths));
     console.log(this.menu);

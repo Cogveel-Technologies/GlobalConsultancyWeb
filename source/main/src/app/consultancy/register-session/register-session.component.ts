@@ -66,8 +66,6 @@ export class RegisterSessionComponent {
       editSession.fromDate = fromDate;
       editSession.toDate = toDate;
       console.log(editSession)
-      this.editId = +this.route.snapshot.paramMap.get('id');
-      this.instituteId = editSession.instituteId;
       this.registerSession.patchValue(editSession);
       this.editMode = true;
     }
@@ -82,9 +80,10 @@ export class RegisterSessionComponent {
   }
 
   onProgramChange(event:any){
-    console.log(event.value)
    this.programId = event.value;
   }
+
+  status:boolean[] = [true, false]
 
   routeToSessionList() {
     if(this.editMode){
@@ -109,8 +108,9 @@ export class RegisterSessionComponent {
   onToDateSelected(data:any){
     const year = data['_i'].year;
     const month = data['_i'].month + 1;
-    const fromDate = `${month}/${year}`;
-    this.registerSession.get('toDate')?.setValue(fromDate);
+    const toDate = `${month}/${year}`;
+    console.log(toDate)
+    this.registerSession.get('toDate')?.setValue(toDate);
     console.log(this.registerSession.value)
   }
 

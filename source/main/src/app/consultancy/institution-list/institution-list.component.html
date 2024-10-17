@@ -114,7 +114,7 @@
                         <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.id]" matTooltip="View" (click)="onView()">
                           <mat-icon>visibility</mat-icon>
                         </button>
-                        <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit" (onEdit)="onEditClicked()">
+                        <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit">
                           <mat-icon>edit</mat-icon>
                         </button>
                         <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)" matTooltip="Delete">

@@ -65,19 +65,14 @@ export class InstitutionListComponent {
 
     
     // fetching all countries for the dropdown
-    this.countries = this.consultancyApiService.getAllCountries();
+    this.countries = this.consultancyApiService.getAllCountries().pipe(tap(res => {
+      // this.search$.next(true);
+      this.country$.next(res[0]['id']);
+      this.countryListForm.get('countryList').setValue(res[0]['id']);
+    }));
+  
 
-    // check if user is navigating back from view or edit page
-    this.subscriptions.add(this.consultancyService.editOrViewPage.subscribe(res=>{
-      if(!res){
-        this.country$.next(1)
-      }else{
-        this.subscriptions.add(this.consultancyService.countrySelected.subscribe(res=>{
-          this.country$.next(res)
-          console.log(res)
-        }))
-      }
-    }))
+    
     
 
   // Implementing filter on the basis of country
@@ -143,11 +138,6 @@ export class InstitutionListComponent {
     onView(){
       this.consultancyService.countrySelected.next(this.countryId)
     }
-
-    onEditClicked(){
-      console.log("kjlkjkljklj")
-    }
-
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false)

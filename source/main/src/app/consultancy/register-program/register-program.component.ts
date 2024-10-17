@@ -34,14 +34,14 @@ export class RegisterProgramComponent {
   consultancyId: string = localStorage.getItem("id");
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   instituteOptions: Observable<SpecificConsultancyRelated[]>;
-  sessionOptions: Observable<SpecificConsultancyRelated[]>;
-  intakeOptions: Observable<SpecificConsultancyRelated[]>;
+  sessionOptions: Observable<{id:number,sessionName:string}[]>;
   institute$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   session$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   intake$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   previousSessionState: (number | null) = null;
   previousIntakeState: (number | null) = null;
   previousInstituteState: (number | null) = null
+  sessions = new FormControl('')
 
 
 
@@ -68,11 +68,16 @@ export class RegisterProgramComponent {
 
 
 
-    const details = this.route.snapshot.data['editResponse']
+    const details = this.route.snapshot.data['programDetails']
+    console.log(details)
 
     if (details) {
       console.log(details)
       this.editId = +this.route.snapshot.paramMap.get('id');
+      this.defaultData.ProgramId = String(this.editId)
+      this.sessionOptions = this.consultancyApiService.getProgramSessions(this.defaultData).pipe(tap(res=>{
+        this.sessions.setValue(res[0].id)
+      }))
       this.editMode = true;
       this.institute$.next(details.instituteId);
       this.session$.next(details.sessionId);
@@ -85,7 +90,7 @@ export class RegisterProgramComponent {
     console.log(event.value)
     this.institute$.next(event.value)
   }
-  onSessionChange(event: any) {
+  onSessionSelected(event: any) {
     console.log(event.value)
     this.session$.next(event.value)
   }
@@ -105,7 +110,7 @@ export class RegisterProgramComponent {
 
   onSubmit() {
     let newDetails = this.registerProgram.value;
-    newDetails.consultancyId = +this.consultancyId;
+    // newDetails.consultancyId = +this.consultancyId;
     console.log(newDetails)
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateProgram(this.editId, newDetails).subscribe(res => {

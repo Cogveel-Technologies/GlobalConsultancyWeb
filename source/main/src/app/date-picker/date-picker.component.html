@@ -7,7 +7,8 @@
     [formControl]="dateControl" 
     [matDatepickerFilter]="dateFilter" 
     readonly 
-    class="date-box">
+    class="date-box"
+    required>
   <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
   <mat-datepicker #dp
                   startView="multi-year"

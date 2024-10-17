@@ -31,7 +31,7 @@
                     </mat-form-field>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearchData()">Search</button>
+                    <button type="submit" class="btn-space" mat-raised-button color="primary">Search</button>
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
                 <div class="card">
                     <div class="materialTableHeader">
                         <div class="left">
-                            <ul class="header-buttons-left ms-0" *ngIf="(programs | async)?.length > 0">
+                            <ul class="header-buttons-left ms-0">
                                 <app-search [searchText]="search"></app-search>
                             </ul>
                         </div>

@@ -23,7 +23,7 @@
                 <!-- To Date Picker -->
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-1">
                   <label for="from-date" class="form-label">To</label>
-                  <app-date-picker class="picker" (sendToDate)="onToDateSelected($event)"></app-date-picker>
+                  <app-date-picker class="picker" (sendToDate)="onToDateSelected($event)" [toDateValue]="registerSession.get('toDate')?.value" ></app-date-picker>
                 </div>
 
               </div>
@@ -39,17 +39,17 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                   <mat-form-field appearance="fill" class="w-100 mb-0">
-                    <mat-label>Select Program</mat-label>
-                    <mat-icon matPrefix>menu_book</mat-icon>
+                    <mat-label>Status</mat-label>
+                    <mat-icon matPrefix>check_circle</mat-icon>
                     <mat-select formControlName="programId" (selectionChange)="onProgramChange($event)" required>
-                      <mat-option *ngFor="let program of (programs | async)" [value]="program.id">
-                        {{ program.name }}
+                      <mat-option *ngFor="let result of status" [value]="result">
+                        {{ result }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                </div>
+                </div>                 -->
               </div>
 
               <div class="row">

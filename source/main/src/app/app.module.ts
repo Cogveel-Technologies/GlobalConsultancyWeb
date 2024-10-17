@@ -29,7 +29,7 @@ import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { LoGinComponent } from './lo-gin/lo-gin.component';
 import { AgentModule } from './agent/agent.module';
-import { checkToken } from './general-interceptors/token.interceptors';
+import { CheckToken } from './general-interceptors/token.interceptors';
 import { ToastrModule } from 'ngx-toastr';
 import { ResponseInterceptor } from './general-interceptors/response.interceptor';
 import { GlobalErrorHandler } from './global-error-handler/global-error-handler';
@@ -83,7 +83,7 @@ export function createTranslateLoader(http: HttpClient) {
     })
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS,useClass: checkToken,multi: true},
+    {provide: HTTP_INTERCEPTORS,useClass: CheckToken,multi: true},
     {provide: HTTP_INTERCEPTORS,useClass: ResponseInterceptor,multi: true},
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     fakeBackendProvider,

@@ -43,6 +43,7 @@ export const MY_FORMATS = {
 export class DatePickerComponent {
   readonly date = new FormControl(null);
   @Input() fromDateValue: string | null = null;
+  @Input() toDateValue: string | null = null;
   @Output() sendFromDate = new EventEmitter<Moment>
   @Output() sendToDate = new EventEmitter<Moment>
 
@@ -61,25 +62,52 @@ export class DatePickerComponent {
       console.log('Initial fromDateValue:', this.fromDateValue);
     }
 
+    if (this.toDateValue) {
+      const dateParts = this.toDateValue.split('/');
+      const year = parseInt(dateParts[1], 10);
+      const month = parseInt(dateParts[0], 10) - 1; // Month is 0-indexed in JavaScript
+      const date = new Date(year, month); // Create a new Date object
+      this.dateControl.setValue(date);
+      // this.dateControl.setValue(this.fromDateValue);
+      console.log('Initial fromDateValue:', this.fromDateValue);
+    }
+
     
   }
-
   ngOnChanges(changes: SimpleChanges) {
+    // Handle changes for fromDateValue
     if (changes['fromDateValue'] && changes['fromDateValue'].currentValue) {
       const dateString = changes['fromDateValue'].currentValue;
-      console.log('Received date:', dateString);
+      console.log('Received fromDateValue:', dateString);
   
-      // Parse the date string to a Date object (adjust the format as per your input)
-      const parsedDate = moment(dateString, 'MM/YYYY').toDate(); // Adjust the format if needed
+      // Parse the date string to a Date object
+      const parsedDate = moment(dateString, 'MM/YYYY').toDate();
   
       // Check if the parsed date is valid and update the date control
       if (moment(parsedDate).isValid()) {
         this.dateControl.setValue(parsedDate);
       } else {
-        console.warn('Invalid date:', dateString);
+        console.warn('Invalid fromDateValue:', dateString);
+      }
+    }
+  
+    // Handle changes for toDateValue
+    if (changes['toDateValue'] && changes['toDateValue'].currentValue) {
+      const dateString = changes['toDateValue'].currentValue;
+      console.log('Received toDateValue:', dateString);
+  
+      // Parse the date string to a Date object
+      const parsedDate = moment(dateString, 'MM/YYYY').toDate();
+  
+      // Check if the parsed date is valid and update the date control
+      if (moment(parsedDate).isValid()) {
+        this.dateControl.setValue(parsedDate);
+      } else {
+        console.warn('Invalid toDateValue:', dateString);
       }
     }
   }
+  
   
 
   
