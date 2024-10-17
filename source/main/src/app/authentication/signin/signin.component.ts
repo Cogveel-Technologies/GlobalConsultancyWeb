@@ -36,6 +36,7 @@ export class SigninComponent{
           localStorage.setItem("token", res.jwtToken);
           localStorage.setItem("id",res.id);
           localStorage.setItem("menu",JSON.stringify(res.menuItems));
+          localStorage.setItem("roleName", res.roleName);
           this.router.navigate(['dashboard']);
         }
       });

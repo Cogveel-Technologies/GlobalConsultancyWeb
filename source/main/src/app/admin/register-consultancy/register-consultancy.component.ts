@@ -155,13 +155,13 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
   }
 
 
-  chosenYearHandler(normalizedYear: Date) {
-    // Get the selected year from the normalized date
-    const year = normalizedYear.getFullYear();
+  // chosenYearHandler(normalizedYear: Date) {
+  //   // Get the selected year from the normalized date
+  //   const year = normalizedYear.getFullYear();
     
-    // Update the form control with the selected year
-    this.registerConsultancy.get('yearEstablished').setValue(year);
-  }
+  //   // Update the form control with the selected year
+  //   this.registerConsultancy.get('yearEstablished').setValue(year);
+  // }
   
   
 

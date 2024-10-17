@@ -40,7 +40,7 @@ import { MY_FORMATS } from './date-formats';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 
 
-
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -64,6 +64,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     AdminModule,
     AgentModule,
+    NgxMatSelectSearchModule,
     LoadingBarRouterModule,
     NgScrollbarModule,
     BsDatepickerModule.forRoot(),

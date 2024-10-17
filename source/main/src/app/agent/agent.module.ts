@@ -20,8 +20,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { ListstudentsComponent } from './list-students/list-students.component';
 import { ViewStudentComponent } from './list-students/view-student/view-student.component';
 import { SharedModule } from '@shared/shared.module';
-// import { PaginationComponent } from '@shared/components/pagination/pagination.component';
-// import { SortingComponent } from '@shared/components/sorting/sorting.component';
+
+import { AdmissionComponent } from './admission/admission.component';
+
 
 
 @NgModule({
@@ -32,8 +33,10 @@ import { SharedModule } from '@shared/shared.module';
    
     ListstudentsComponent,
     ViewStudentComponent,
-    // PaginationComponent,
-    // SortingComponent
+   
+    AdmissionComponent,
+      
+    
   
   ],
   imports: [

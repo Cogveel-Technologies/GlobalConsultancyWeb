@@ -71,7 +71,9 @@ export class CustomValidatorDirective implements Validator, OnInit {
         error = this.validateCompanyName(control.value) ? null : { 'invalidAlternateCompanyName': true };
         break;
       case 'companyWebsite':
+
         error = this.validateUrl(control.value) ? null : { 'invalidCompanyWebsite': true };
+
         break;
       case 'linkedInUrl':
         error = this.validateUrl(control.value) ? null : { 'invalidLinkedInUrl': true };
@@ -117,10 +119,10 @@ export class CustomValidatorDirective implements Validator, OnInit {
         error = this.validateNumber(control.value) ? null : { 'invalidRegistrationNumber': true };
         break;
       case 'linkedInUrl':
-        error = this.validateName(control.value) ? null : { 'invalidLinkedInUrl': true };
+        error = this.validateLinkedInUrl(control.value) ? null : { 'invalidLinkedInUrl': true };
         break;
       case 'fbUrl':
-        error = this.validateName(control.value) ? null : { 'invalidFacebookUrl': true };
+        error = this.validateFacebookUrl(control.value) ? null : { 'invalidFacebookUrl': true };
         break;
       case 'yearEstablished':
         error = this.validateNumber(control.value) ? null : { 'invalidYearEstablished': true };
@@ -282,6 +284,25 @@ validatePhoneNumber(value: string): boolean {
     // Passport expiry date must be in the future
     return expiryDate > today;
   }
+
+  validateWebsiteUrl(value: string): boolean {
+    // Regex to validate general website URLs
+    const websiteRegex = /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]{1,63}\.[a-zA-Z]{2,6}(\/[a-zA-Z0-9#?&=_-]*)?\/?$/;
+    return websiteRegex.test(value);
+  }
+  
+  validateFacebookUrl(value: string): boolean {
+    // Regex to validate Facebook profile URLs
+    const facebookRegex = /^(https?:\/\/)?(www\.)?facebook\.com\/[a-zA-Z0-9(.?)?]+\/?$/;
+    return facebookRegex.test(value);
+  }
+
+  validateLinkedInUrl(value: string): boolean {
+    // Regex to validate LinkedIn profile URLs
+    const linkedInRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/(in|pub|company|school)\/[a-zA-Z0-9_-]+\/?$/;
+    return linkedInRegex.test(value);
+  }
+  
     
   setError(error: ValidationErrors | null) {
     this.removeError();

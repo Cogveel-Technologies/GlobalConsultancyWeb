@@ -8,8 +8,9 @@ import { ListstudentsComponent } from './list-students/list-students.component';
 import { StudentResolver } from './agent-resolvers/student-resolver';
 import { ViewStudentComponent } from './list-students/view-student/view-student.component';
 import { AuthGuard } from '@core/guard/auth.guard';
-// import { PaginationComponent } from '@shared/components/pagination/pagination.component';
-// import { SortingComponent } from '@shared/components/sorting/sorting.component';
+import { AdmissionComponent } from './admission/admission.component';
+
+
 
 
 const routes: Routes = [
@@ -21,42 +22,48 @@ const routes: Routes = [
   //   path: 'sorting',
   //   component: SortingComponent,
   // },
-  
-    {
-      path: 'register-student',
-      component: StudentRegisterComponent,
-      resolve: {
-        student: StudentResolver
-      },
-      // canActivate:[AuthGuard]
+
+  {
+    path: 'register-student',
+    component: StudentRegisterComponent,
+    resolve: {
+      student: StudentResolver
     },
-    {
-      path: 'list-students',
-      component: ListstudentsComponent,
-      canActivate:[AuthGuard]
-     
+    // canActivate:[AuthGuard]
+  },
+  {
+    path: 'list-students',
+    component: ListstudentsComponent,
+    canActivate: [AuthGuard]
+
+  },
+  {
+    path: 'student-application',
+    component: StudentApplicationComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'admission',
+    component: AdmissionComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'student-document',
+    component: StudentDocumentComponent,
+    resolve: {
+      student: StudentResolver
     },
-    {
-      path: 'student-application',
-      component: StudentApplicationComponent,
-      canActivate:[AuthGuard]
-    },
-    {
-      path: 'student-document',
-      component: StudentDocumentComponent,
-      resolve: {
-        student: StudentResolver
-      },
-      // canActivate:[AuthGuard]
-    },
-    {
-      path: 'view-student',
-      component: ViewStudentComponent,
-      resolve: {
-        student: StudentResolver
-      }
-    },
-    
+    // canActivate:[AuthGuard]
+  },
+ 
+  {
+    path: 'view-student',
+    component: ViewStudentComponent,
+    resolve: {
+      student: StudentResolver
+    }
+  },
+
 
 ];
 
