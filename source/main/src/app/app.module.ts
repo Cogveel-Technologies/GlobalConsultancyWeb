@@ -18,7 +18,7 @@ import { fakeBackendProvider } from './core/interceptor/fake-backend';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AdminModule } from './admin/admin.module';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+// import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
@@ -67,7 +67,7 @@ export function createTranslateLoader(http: HttpClient) {
     NgxMatSelectSearchModule,
     LoadingBarRouterModule,
     NgScrollbarModule,
-    BsDatepickerModule.forRoot(),
+    // BsDatepickerModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
