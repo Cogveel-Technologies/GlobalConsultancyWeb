@@ -123,9 +123,10 @@
                     </thead>
                     <tbody>
                       <!-- If there are no intakes, show "No Data Found" -->
-                      <tr *ngIf="(intakes | async)?.length === 0">
+                      <tr *ngIf="!(institutes | async)?.length || !(programs | async)?.length || !(intakes | async)?.length">
                         <td colspan="3" class="text-center">No Data Found</td>
-                      </tr>
+                    </tr>
+                    
           
                       <!-- Loop through intakes when intakes exist -->
                       <tr *ngFor="let intake of (intakes | async)">
@@ -136,10 +137,12 @@
                         <td data-label="Actions">
                           <button mat-icon-button color="primary"
                                   [routerLink]="['/consultancy/edit-intake', intake.id]" matTooltip="Edit">
-                            <mat-icon>edit</mat-icon>
+                            <!-- <mat-icon>edit</mat-icon> -->
+                            <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                           </button>
                           <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)" matTooltip="Delete">
-                            <mat-icon>delete</mat-icon>
+                            <!-- <mat-icon>delete</mat-icon> -->
+                            <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                           </button>
                         </td>
                       </tr>

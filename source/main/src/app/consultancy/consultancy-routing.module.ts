@@ -61,7 +61,7 @@ const routes: Routes = [
   {
     path: 'register-institute',
     component: RegisterInstituteComponent,
-    canActivate:[AuthGuard]
+    // canActivate:[AuthGuard]
 
   },
   {
@@ -81,7 +81,7 @@ const routes: Routes = [
   {
     path: 'register-program',
     component: RegisterProgramComponent,
-    canActivate:[AuthGuard]
+    // canActivate:[AuthGuard]
   }, {
     path: 'program-details/:id',
     component: ProgramAllDetailsComponent,
@@ -98,7 +98,7 @@ const routes: Routes = [
   }, {
     path: 'register-intake',
     component: RegisterIntakesComponent,
-    canActivate:[AuthGuard]
+    // canActivate:[AuthGuard]
   },
   {
     path: 'edit-intake/:id',
@@ -113,7 +113,7 @@ const routes: Routes = [
   }, {
     path: 'register-session',
     component: RegisterSessionComponent,
-    canActivate:[AuthGuard]
+    // canActivate:[AuthGuard]
   },
   {
     path: 'edit-session/:id',
@@ -128,7 +128,7 @@ const routes: Routes = [
   {
     path: 'register-agent',
     component: RegisterAgentComponent,
-    canActivate:[AuthGuard]
+    // canActivate:[AuthGuard]
   },
   {
     path: 'agent-list',
