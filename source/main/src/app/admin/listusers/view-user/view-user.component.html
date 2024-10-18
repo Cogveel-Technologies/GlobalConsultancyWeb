@@ -20,11 +20,11 @@
                 <mat-icon matSuffix class="profile-img-edit" matTooltip="Edit">edit</mat-icon>
               </div>
               <p>
-                <mat-icon>location_on</mat-icon> {{user.address}}
+                 {{user.address}}
               </p>
               <div>
                 <span class="phone">
-                  <mat-icon>phone</mat-icon>{{user.phoneNumber}}
+                  <i class="material-icons">phone</i>{{user.phoneNumber}}
                 </span>
               </div>
             </div>
@@ -48,31 +48,31 @@
                         </thead>
                         <tbody>
                           <tr>
-                            <td><mat-icon color="primary">person</mat-icon> First Name</td>
+                            <td class="custom_icons"><mat-icon color="primary" class="small_icon">person</mat-icon> First Name</td>
                             <td>{{ user.firstName }}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">person</mat-icon> Middle Name</td>
+                            <td class="custom_icons"><mat-icon color="primary" class="small_icon">person</mat-icon> Middle Name</td>
                             <td>{{ user.middleName }}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">person</mat-icon> Last Name</td>
+                            <td class="custom_icons"><mat-icon color="primary" class="small_icon">person</mat-icon> Last Name</td>
                             <td>{{ user.lastName }}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">phone</mat-icon> Phone</td>
+                            <td class="custom_icons"><mat-icon color="primary" class="small_icon">phone</mat-icon> Phone</td>
                             <td>{{ user.phoneNumber }}</td>
                           </tr>
-                          <tr>
-                            <td><mat-icon color="primary">email</mat-icon> Email</td>
+                          <tr >
+                            <td class="custom_icons"><mat-icon color="primary" class="small_icon">email</mat-icon> Email</td>
                             <td>{{ user.email }}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">wc</mat-icon> Gender</td>
+                            <td class="custom_icons"><mat-icon color="primary" class="small_icon">wc</mat-icon> Gender</td>
                             <td>{{ user.gender }}</td>
                           </tr>
                           <tr>
-                            <td><mat-icon color="primary">location_on</mat-icon> Address</td>
+                            <td class="custom_icons"><mat-icon color="primary" class="small_icon">location_on</mat-icon> Address</td>
                             <td>{{ user.address }}</td>
                           </tr>
                         </tbody>
