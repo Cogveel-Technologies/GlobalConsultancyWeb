@@ -70,17 +70,17 @@
       "TEXT": "Consultancy",
       "LIST": {
         "REGISTER_CONSULTANCY": "Add Consultancy",
-        "CONSULTANCY_LIST": "Consultancy List",
+        "CONSULTANCY_LIST": "Consultancy",
         "REGISTER_INSTITUTE": "Add Institute",
-        "INSTITUTION-LIST": "Institution List",
+        "INSTITUTION-LIST": "Institutes",
         "REGISTER-PROGRAM":"Add Program",
-        "PROGRAM-LIST":"Program List",
+        "PROGRAM-LIST":"Programs",
         "REGISTER-INTAKE":"Add Intake",
-        "INTAKE-LIST":"Intake List",
+        "INTAKE-LIST":"Intakes",
         "REGISTER-SESSION":"Add Session",
-        "SESSION-LIST":"Session List",
+        "SESSION-LIST":"Sessions",
         "REGISTER-AGENT":"Add Agent",
-        "AGENT-LIST":"Agent List"
+        "AGENT-LIST":"Agents"
       }
     },
     "STUDENT": {

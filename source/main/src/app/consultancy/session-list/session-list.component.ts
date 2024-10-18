@@ -145,15 +145,13 @@ export class SessionListComponent {
 
   // page event
   onPageChange(event: PageEvent) {
-    this.currentPageIndex = event.pageIndex;
-    this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
-    this.search$.next(true)
+    this.currentPageIndex = event.pageIndex
+    this.pagination$.next({pageSize:event.pageSize,pageIndex:event.pageIndex+1})
   }
 
    // sort event
    onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
         this.sorting$.next({field:field,direction:direction})
-        this.search$.next(true)
     }
 
   addSession() { 

@@ -91,7 +91,7 @@
                             (sortChange)="onSortChange($event)">
                           </app-sorting>
                         </th>
-                        <th>
+                        <!-- <th>
                           <app-sorting 
                             [sortField]="defaultData.OrderBy"  
                             [sortDirection]="defaultData.sortExpression" 
@@ -99,8 +99,8 @@
                             [sortLabels]="['Session']"
                             (sortChange)="onSortChange($event)">
                           </app-sorting>
-                        </th>
-                        <th>
+                        </th> -->
+                        <!-- <th>
                           <app-sorting 
                             [sortField]="defaultData.OrderBy"  
                             [sortDirection]="defaultData.sortExpression" 
@@ -108,8 +108,8 @@
                             [sortLabels]="['Program']"
                             (sortChange)="onSortChange($event)">
                           </app-sorting>
-                        </th>
-                        <th>
+                        </th> -->
+                        <!-- <th>
                           <app-sorting 
                             [sortField]="defaultData.OrderBy"  
                             [sortDirection]="defaultData.sortExpression" 
@@ -117,7 +117,7 @@
                             [sortLabels]="['Institute']"
                             (sortChange)="onSortChange($event)">
                           </app-sorting>
-                        </th>
+                        </th> -->
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -130,9 +130,9 @@
                       <!-- Loop through intakes when intakes exist -->
                       <tr *ngFor="let intake of (intakes | async)">
                         <td data-label="Number of Intakes">{{ intake.noOfIntake }}</td>
-                        <td data-label="Session Name">{{ intake.sessionName }}</td>
-                        <td data-label="Program Name">{{ intake.programName }}</td>
-                        <td data-label="Institute Name">{{ intake.instituteName }}</td>
+                        <!-- <td data-label="Session Name">{{ intake.sessionName }}</td> -->
+                        <!-- <td data-label="Program Name">{{ intake.programName }}</td> -->
+                        <!-- <td data-label="Institute Name">{{ intake.instituteName }}</td> -->
                         <td data-label="Actions">
                           <button mat-icon-button color="primary"
                                   [routerLink]="['/consultancy/edit-intake', intake.id]" matTooltip="Edit">

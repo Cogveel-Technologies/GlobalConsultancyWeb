@@ -72,11 +72,11 @@
               <!-- Use sessions observable with async pipe -->
               <thead *ngIf="(sessions | async)?.length > 0">
                 <tr>
-                  <th>
+                  <!-- <th>
                     <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
                       [sortFields]="['sessionName']" [sortLabels]="['Program']" (sortChange)="onSortChange($event)">
                     </app-sorting>
-                  </th>
+                  </th> -->
                   <th>
                     <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
                       [sortFields]="['sessionName']" [sortLabels]="['Session']" (sortChange)="onSortChange($event)">
@@ -94,7 +94,7 @@
 
                 <!-- Loop through sessions when data exists -->
                 <tr *ngFor="let session of (sessions | async)">
-                  <td data-label="Program Name">{{ session.programName }}</td>
+                  <!-- <td data-label="Program Name">{{ session.programName }}</td> -->
                   <td data-label="Session Name">{{ session.sessionName }}</td>
                   <!-- <td data-label="Year">{{ session.year | date:'yyyy-MM-dd' }}</td> -->
                   <td data-label="Actions">

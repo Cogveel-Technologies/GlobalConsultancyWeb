@@ -93,20 +93,28 @@ export class IntakesListComponent {
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(),
       switchMap(([instituteId,programId,sessionId,searchTerm, pageRelated, sort,search]) => {
-        if(instituteId && this.previousInstituteId !== instituteId && !programId){
+        if(instituteId && this.previousInstituteId !== instituteId){
           console.log("only institute id")
           this.previousInstituteId = +instituteId;
           this.defaultData.InstituteId = String(instituteId);
+          this.defaultData.ProgramId = '';
+          this.defaultData.SessionId = '';
           this.programs = this.consultancyApiService.getAllPrograms(this.defaultData);
+          this.sessions = of([]);
         }
         if(programId && this.previousProgramId !== programId){
           console.log("only program id")
           this.previousProgramId = Number(programId)
           this.defaultData.ProgramId = String(programId);
+          this.defaultData.SessionId = '';
           this.sessions = this.consultancyApiService.getProgramSessions(this.defaultData)
+          
         }
         if(sessionId && this.previousSessionId !== sessionId){
+          console.log(sessionId)
           this.previousSessionId = Number(sessionId);
+          this.defaultData.InstituteId = '';
+          this.defaultData.ProgramId = '';
           this.defaultData.SessionId = String(sessionId)
         }
         if (search) {
