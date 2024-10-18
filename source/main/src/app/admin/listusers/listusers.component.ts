@@ -19,8 +19,8 @@ import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.comp
 export class ListusersComponent implements OnInit {
   breadscrums = [
     {
-      title: 'Users List',
-      items: ['Admin'],
+      title: 'Users',
+      items: ['Superadmin'],
       active: 'Users',
     },
   ];

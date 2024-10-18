@@ -100,10 +100,12 @@
                   <td data-label="Actions">
                   
                     <button mat-icon-button color="primary" (click)="editStudent(student.id)" matTooltip="Edit">
-                      <mat-icon>edit</mat-icon>
+                      <!-- <mat-icon>edit</mat-icon> -->
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>
                     <button mat-icon-button color="warn" (click)="deleteStudent(student.id)" matTooltip="Delete">
-                      <mat-icon>delete</mat-icon>
+                      <!-- <mat-icon>delete</mat-icon> -->
+                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                     </button>
                     <button mat-icon-button color="success" (click)="viewStudent(student.id)" matTooltip="View">
                       <mat-icon>visibility</mat-icon>

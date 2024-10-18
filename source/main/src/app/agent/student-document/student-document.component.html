@@ -104,7 +104,8 @@
                             <mat-icon>visibility</mat-icon>
                           </button>
                           <button mat-icon-button color="warn" (click)="deleteDocument(document.id)">
-                            <mat-icon>delete</mat-icon>
+                            <!-- <mat-icon>delete</mat-icon> -->
+                            <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                           </button>
                         </td>
                       </tr>
