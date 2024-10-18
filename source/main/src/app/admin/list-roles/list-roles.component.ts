@@ -18,7 +18,7 @@ export class ListRolesComponent implements OnInit {
   breadscrums = [
     {
       title: 'Roles',
-      items: ['Admin'],
+      items: ['Superadmin'],
       active: 'Roles',
     },
   ];

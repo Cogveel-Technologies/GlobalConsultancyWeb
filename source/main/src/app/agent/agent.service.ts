@@ -169,12 +169,6 @@ export class AgentService {
   }
    
 
-
-getSessions(): Observable<any> {
-  const url = `${this.apiUrl}/Session/All?IsDeleted=false`;
-  return this.http.get<any>(url);
-}
-
 getIntakeYears(): Observable<any> {
   const url = `${this.apiUrl}/Intake/All?Isdeleted=false`;
   return this.http.get<any>(url);
@@ -203,4 +197,18 @@ getProgramsByInstitute(instituteId: number): Observable<any[]> { // Add 'institu
   return this.http.get<any[]>(url)
     .pipe(map(response => response['data'])); // Use similar response handling as above
 }
+
+// Add this method to AgentService
+getSessionsByProgram(programId: number): Observable<any[]> {
+  const url = `${this.apiUrl}/Program/Session?ProgramId=${programId}`;
+  return this.http.get<any[]>(url)
+    .pipe(map(response => response['data'])); // Adjust response handling as needed
+}
+
+
+getSessions(): Observable<any> {
+  const url = `${this.apiUrl}/Session/All?IsDeleted=false`;
+  return this.http.get<any>(url);
+}
+
 }

@@ -17,11 +17,13 @@ export class AdminusersComponent implements OnInit, OnDestroy {
   breadscrums = [
     {
       title: 'Add Users',
-      items: ['Admin'],
+      items: ['List Users'],
       active: 'Add Users',
     },
   ];
   user: any;
+  // filteredFirstNameOptions: any;
+  filteredFirstNameOptions: any[] = []; // Array for autocomplete options
   errorMessage: string = '';
   genders: string[] = ['Male', 'Female', 'Other'];
 
@@ -38,6 +40,7 @@ export class AdminusersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this. fetchAllRoles();
     const routeSub = this.route.queryParams.subscribe(params => {
       const userId = params['id'];
       if (userId) {
@@ -46,6 +49,7 @@ export class AdminusersComponent implements OnInit, OnDestroy {
       }
     });
     this.subscriptions.push(routeSub);
+    
   }
 
   initThirdForm() {
@@ -136,6 +140,19 @@ export class AdminusersComponent implements OnInit, OnDestroy {
       duration: 4000,
     });
   }
+
+  fetchAllRoles() {
+    const fetchRolesSub = this.adminService.getAllRoles().subscribe(
+      roles => {
+        this.filteredFirstNameOptions = roles; // Now this will be the array of role objects
+      },
+      error => {
+        console.error('Error fetching roles:', error);
+      }
+    );
+    this.subscriptions.push(fetchRolesSub);
+  }
+  
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());

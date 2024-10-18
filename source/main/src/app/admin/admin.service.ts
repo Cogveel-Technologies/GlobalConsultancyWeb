@@ -102,6 +102,19 @@ export class AdminService {
       })
     );
   }
+    // // Add a method to get all users
+    // getAllUsers(): Observable<any[]> {
+    //   return this.http.get<any[]>(`${this.apiUrl}/all`);
+    // }
+    
+
+ // Method to get all roles
+getAllRoles(): Observable<any[]> {
+  return this.http.get<any>(`${this.apiUrl}/Role/all`).pipe(
+    map(response => response.data) // Extracting the data array from the response
+  );
+}
+
 
   updateUserData(userId: number, userData: User): Observable<any> {
     console.log("Updating user data");

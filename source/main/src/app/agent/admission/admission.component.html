@@ -15,8 +15,10 @@
                                 <!-- Country Autocomplete -->
                                 <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
+                                        <mat-icon matPrefix>public</mat-icon> <!-- Added Material icon for Country -->
                                         <input matInput placeholder="Country" aria-label="Country"
-                                            [matAutocomplete]="countryAuto" [formControl]="countryCtrl" required />
+                                            [matAutocomplete]="countryAuto" [formControl]="countryCtrl" required
+                                            style="font-weight: bold; color: black;" />
                                         <mat-autocomplete #countryAuto="matAutocomplete">
                                             <mat-option *ngFor="let country of filteredCountryOptions | async"
                                                 [value]="country.countryName">
@@ -28,8 +30,10 @@
                                 <!-- Institutes Autocomplete -->
                                 <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
+                                        <mat-icon matPrefix>school</mat-icon> <!-- Added Material icon for Institutes -->
                                         <input matInput placeholder="Institutes" aria-label="Institutes"
-                                            [matAutocomplete]="instituteAuto" [formControl]="instituteCtrl" required />
+                                            [matAutocomplete]="instituteAuto" [formControl]="instituteCtrl" required
+                                            style="font-weight: bold; color: black;" />
                                         <mat-autocomplete #instituteAuto="matAutocomplete">
                                             <mat-option *ngFor="let institute of filteredInstituteOptions | async"
                                                 [value]="institute.name">
@@ -38,11 +42,13 @@
                                         </mat-autocomplete>
                                     </mat-form-field>
                                 </div>
-                                 <!-- Program ID Autocomplete -->
-                                 <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                <!-- Program ID Autocomplete -->
+                                <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
+                                        <mat-icon matPrefix>menu_book</mat-icon> <!-- Added Material icon for Program -->
                                         <input matInput placeholder="Program" aria-label="Program"
-                                            [matAutocomplete]="programAuto" [formControl]="programCtrl" required />
+                                            [matAutocomplete]="programAuto" [formControl]="programCtrl" required
+                                            style="font-weight: bold; color: black;" />
                                         <mat-autocomplete #programAuto="matAutocomplete">
                                             <mat-option *ngFor="let program of filteredProgramOptions | async"
                                                 [value]="program.name">
@@ -51,48 +57,28 @@
                                         </mat-autocomplete>
                                     </mat-form-field>
                                 </div>
-
-                            </div>
-                            <div class="row">
-                               
-
                                 <!-- Session ID Autocomplete -->
                                 <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
+                                        <mat-icon matPrefix>schedule</mat-icon> <!-- Added Material icon for Session -->
                                         <input matInput placeholder="Session" aria-label="Session"
-                                            [matAutocomplete]="sessionAuto" [formControl]="sessionCtrl" required />
+                                            [matAutocomplete]="sessionAuto" [formControl]="sessionCtrl" required
+                                            style="font-weight: bold; color: black;" />
                                         <mat-autocomplete #sessionAuto="matAutocomplete">
                                             <mat-option *ngFor="let session of filteredSessionOptions | async"
-                                                [value]="session.name">
-                                                {{ session.name }}
+                                                [value]="session.sessionName">
+                                                {{ session.sessionName }}
                                             </mat-option>
                                         </mat-autocomplete>
                                     </mat-form-field>
                                 </div>
-
-                                <!-- Intake Year Autocomplete -->
-                                <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Intake Year" aria-label="Intake Year"
-                                            [matAutocomplete]="intakeYearAuto" [formControl]="intakeYearCtrl"
-                                            required />
-                                        <mat-autocomplete #intakeYearAuto="matAutocomplete">
-                                            <mat-option *ngFor="let intake of filteredIntakeYearOptions | async"
-                                                [value]="intake.name">
-                                                {{ intake.name }}
-                                            </mat-option>
-                                        </mat-autocomplete>
-                                    </mat-form-field>
-                                </div>
-
-
-
                                 <!-- Program Category Autocomplete -->
                                 <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
+                                        <mat-icon matPrefix>category</mat-icon> <!-- Added Material icon for Program Category -->
                                         <input matInput placeholder="Program Category" aria-label="Program Category"
                                             [matAutocomplete]="programCategoryAuto" [formControl]="programCategoryCtrl"
-                                            required />
+                                            required style="font-weight: bold; color: black;" />
                                         <mat-autocomplete #programCategoryAuto="matAutocomplete">
                                             <mat-option *ngFor="let category of filteredProgramCategoryOptions | async"
                                                 [value]="category.name">
@@ -105,9 +91,10 @@
                                 <!-- Course Type Autocomplete -->
                                 <div class="col-xl-2 col-lg-6 col-md-12 col-sm-12 mb-3">
                                     <mat-form-field class="example-full-width">
+                                        <mat-icon matPrefix>book</mat-icon> <!-- Added Material icon for Course Type -->
                                         <input matInput placeholder="Course Type" aria-label="Course Type"
                                             [matAutocomplete]="courseTypeAuto" [formControl]="courseTypeCtrl"
-                                            required />
+                                            required style="font-weight: bold; color: black;" />
                                         <mat-autocomplete #courseTypeAuto="matAutocomplete">
                                             <mat-option *ngFor="let type of filteredCourseTypeOptions | async"
                                                 [value]="type.name">
@@ -120,8 +107,7 @@
 
                             <div class="row">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                                    <button class="btn-space" mat-raised-button color="primary"
-                                        [disabled]="!searchForm.valid" type="submit">
+                                    <button class="btn-space" mat-raised-button color="primary" type="submit">
                                         Search
                                     </button>
                                 </div>

@@ -63,7 +63,6 @@ export class AdmissionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchSessions();
     this.fetchIntakeYears();
     this.fetchCountries();
     this.fetchProgramCategories();
@@ -92,6 +91,14 @@ export class AdmissionComponent implements OnInit {
         this.fetchPrograms(selectedInstituteObj.id);
       }
     });
+
+    // Subscribe to program control changes to fetch sessions based on selected program
+    this.programCtrl.valueChanges.subscribe(selectedProgram => {
+      const selectedProgramObj = this.programOptions.find(program => program.name === selectedProgram);
+      if (selectedProgramObj) {
+        this.fetchSessions(selectedProgramObj.id);
+      }
+    });
   }
 
   // Fetch functions to retrieve data from the API
@@ -103,22 +110,34 @@ export class AdmissionComponent implements OnInit {
       }
     });
   }
-   // New function to fetch institutes based on selected country ID
-   fetchInstitutes(countryId: number) {
+   
+  // New function to fetch institutes based on selected country ID
+  fetchInstitutes(countryId: number) {
     this.adminService.getInstitutesByCountry(countryId).subscribe((response) => {
       this.instituteOptions = response;
       this.filteredInstituteOptions = this.createFilter(this.instituteCtrl, this.instituteOptions);
     });
   }
 
-  fetchSessions() {
-    this.adminService.getSessions().subscribe((response) => {
-      if (response && response.data) {
-        this.sessionOptions = response.data;
+  // Updated to fetch sessions based on selected program ID
+  fetchSessions(programId: number) {
+    this.adminService.getSessionsByProgram(programId).subscribe((response) => {
+      if (response && response) {
+        this.sessionOptions = response;
+        console.log(this.sessionOptions,'sessionsssssssssssssss');
         this.filteredSessionOptions = this.createFilter(this.sessionCtrl, this.sessionOptions);
       }
     });
   }
+  // fetchSessions() {
+  //   this.adminService.getSessions().subscribe((response) => {
+  //     if (response && response.data) {
+  //       this.sessionOptions = response.data;
+  //       this.filteredSessionOptions = this.createFilter(this.sessionCtrl, this.sessionOptions);
+  //     }
+  //   });
+  // }
+
 
   fetchIntakeYears() {
     this.adminService.getIntakeYears().subscribe((response) => {
@@ -137,8 +156,6 @@ export class AdmissionComponent implements OnInit {
       }
     });
   }
-
- 
 
   fetchProgramCategories() {
     this.adminService.getCategory("programCategory").subscribe((data) => {
