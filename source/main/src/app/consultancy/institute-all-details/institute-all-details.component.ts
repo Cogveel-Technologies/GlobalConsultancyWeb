@@ -15,7 +15,7 @@ export class InstituteAllDetailsComponent {
   breadscrums = [
     {
       title: 'Institute Details',
-      items: ['Institute List'],
+      items: ['Institutes'],
       active: 'Institute Details',
     },
   ];

@@ -110,7 +110,7 @@ export class RegisterProgramComponent {
 
   onSubmit() {
     let newDetails = this.registerProgram.value;
-    // newDetails.consultancyId = +this.consultancyId;
+    newDetails.consultancyId = +this.consultancyId;
     console.log(newDetails)
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateProgram(this.editId, newDetails).subscribe(res => {

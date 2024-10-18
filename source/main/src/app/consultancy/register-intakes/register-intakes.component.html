@@ -29,7 +29,7 @@
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Program</mat-label>
                     <mat-select formControlName="programId" required (selectionChange)="onProgramChange($event)">
-                      <mat-option *ngFor="let program of (programs | async)" [value]="program.programId">
+                      <mat-option *ngFor="let program of (programs | async)" [value]="program.id">
                         {{program.name}}
                       </mat-option>
                     </mat-select>
@@ -41,7 +41,7 @@
                   <mat-form-field appearance="fill" class="example-full-width">
                     <mat-label>Session</mat-label>
                     <mat-select formControlName="sessionId" required (selectionChange)="onSessionChange($event)">
-                      <mat-option *ngFor="let session of (sessions | async)" [value]="session.sessionId">
+                      <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
                         {{session.name}}
                       </mat-option>
                     </mat-select>
@@ -58,12 +58,13 @@
                   </mat-form-field>
                 </div>
               </div>
-                <div class="col-auto col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-1">
-                  <button type="submit" class="btn-space" mat-raised-button color="primary"
-                    [disabled]="!registerIntake.valid">{{editMode ? 'Update' :
-                    'Submit'}}</button>
+                 <!-- Submit/Update and Cancel Buttons -->
+              <div class="row mb-1">
+                <div class="col-auto">
+                  <button type="submit" class="btn-space" mat-raised-button color="primary" [disabled]="!registerIntake.valid">{{editMode ? 'Update' : 'Submit'}}</button>
                   <button type="button" mat-raised-button color="warn" (click)="navigateToIntakeList()">Cancel</button>
                 </div>
+              </div>
             </form>
           </div>
         </div>

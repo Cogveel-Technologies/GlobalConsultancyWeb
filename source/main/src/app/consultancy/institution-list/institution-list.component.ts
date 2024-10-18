@@ -47,6 +47,8 @@ export class InstitutionListComponent {
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
   sorting$: BehaviorSubject<{field:string,direction:string}>= new BehaviorSubject<{field:string,direction:string}>({field:this.defaultData.OrderBy,direction:this.defaultData.sortExpression});
   currentPageIndex:number;
+  filteredCountries: any[] = [];
+  searchTerm: string = '';
 
 
   getInstitutes(params: ConsultancyDetailsOptions) {

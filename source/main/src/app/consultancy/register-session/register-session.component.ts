@@ -62,6 +62,7 @@ export class RegisterSessionComponent {
     // edit session
     const editSession = this.route.snapshot.data['editResponse'];
     if (editSession) {
+      this.editId = editSession.id;
       const [fromDate,toDate] = editSession.sessionName.split('-');
       editSession.fromDate = fromDate;
       editSession.toDate = toDate;

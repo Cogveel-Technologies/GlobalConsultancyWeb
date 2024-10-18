@@ -33,14 +33,12 @@ import { CheckToken } from './general-interceptors/token.interceptors';
 import { ToastrModule } from 'ngx-toastr';
 import { ResponseInterceptor } from './general-interceptors/response.interceptor';
 import { GlobalErrorHandler } from './global-error-handler/global-error-handler';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MY_FORMATS } from './date-formats';
-import { DatePickerComponent } from './date-picker/date-picker.component';
 
 
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+// import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -64,10 +62,8 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     AdminModule,
     AgentModule,
-    NgxMatSelectSearchModule,
     LoadingBarRouterModule,
     NgScrollbarModule,
-    BsDatepickerModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
