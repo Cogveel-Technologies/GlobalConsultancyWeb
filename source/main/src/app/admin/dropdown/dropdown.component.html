@@ -20,23 +20,37 @@
                                         <input matInput formControlName="dropDownListName" type="text" required>
                                     </mat-form-field>
 
-                                    <mat-form-field class="example-full-width">
+                                    <!-- <mat-form-field class="example-full-width">
                                         <mat-label>Dropdown Values</mat-label>
                                         <input matInput formControlName="dropDownValue" type="text" placeholder="Enter a value">
                                     </mat-form-field>
                                     
                                     <button type="button" mat-raised-button color="primary" (click)="addValue()">Add</button>
-                                    <mat-hint>Click 'Add' to add values one by one</mat-hint>
+                                    <mat-hint>Click 'Add' to add values one by one</mat-hint> -->
+
+                                     <mat-form-field class="example-full-width">
+                                        <mat-label>Dropdown Values</mat-label>
+                                        <input matInput formControlName="dropDownValue" type="text" placeholder="Enter a value">
+                                        <button type="button" mat-icon-button matSuffix color="primary" (click)="addValue()" matTooltip="Add Value">
+                                          <mat-icon>add</mat-icon>
+                                        </button>
+                                      </mat-form-field>
+                                      
+
                                 </div>
 
                                 <!-- Right Column: Display Added Values -->
-                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3 ">
                                     <div *ngIf="addedValues.length > 0" class="added-values-box">
                                         <h5>Added Values:</h5>
                                         <ul>
                                             <li *ngFor="let value of addedValues; let i = index">
                                                 {{ value }}
-                                                <button type="button" (click)="removeValue(i)" class="remove-btn">Remove</button>
+                                                <!-- <button type="button" (click)="removeValue(i)" class="remove-btn">Remove</button> -->
+                                                <button type="button" mat-icon-button matSuffix color="primary" class="remove-btn" (click)="removeValue(i)" matTooltip="Remove Value">
+                                                    <!-- <mat-icon>remove</mat-icon> -->
+                                                    <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                                                  </button>
                                             </li>
                                         </ul>
                                     </div>

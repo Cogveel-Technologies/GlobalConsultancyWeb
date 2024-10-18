@@ -23,6 +23,17 @@ td {
     background: #fff;
   }
   
+  .custom_icons
+  { 
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+  }
+  .small_icon
+  {
+    font-size: large;
+  }
   /* Media queries for responsiveness */
   @media (max-width: 767px) {
     .materialTableHeader {

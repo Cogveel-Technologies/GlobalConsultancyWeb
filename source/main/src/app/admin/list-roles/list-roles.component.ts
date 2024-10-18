@@ -57,7 +57,7 @@ export class ListRolesComponent implements OnInit {
     this.roles$ = combineLatest([
       this.searchControl.valueChanges.pipe(
         startWith(''),
-        throttleTime(100),
+        throttleTime(60),
         distinctUntilChanged(),
         tap(term => this.searchTermSubject.next(term))
       ),

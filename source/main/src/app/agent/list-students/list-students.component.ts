@@ -54,7 +54,7 @@ export class ListstudentsComponent implements OnInit {
     this.students$ = combineLatest([
       this.searchControl.valueChanges.pipe(
         startWith(''),
-        throttleTime(70),
+        throttleTime(60),
         distinctUntilChanged(),
         tap(term => this.searchTermSubject.next(term))
       ),
