@@ -56,7 +56,7 @@ export class ConsultancyApi {
     }
     // ------------- display-institutes based on country -------------
     getInstitutes(data: ConsultancyDetailsOptions): Observable<InstituteData[]> {
-        return this.http.get<InstituteData[]>(`${this.baseUrl}/Institute?CountryId=${data.CountryId}&ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
+        return this.http.get<InstituteData[]>(`${this.baseUrl}/Institute?CountryId=${data.CountryId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
 
     }
 
