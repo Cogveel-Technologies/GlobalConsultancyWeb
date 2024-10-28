@@ -62,6 +62,7 @@ export class AdminusersComponent implements OnInit, OnDestroy {
       address: [''],
       gender: ['', Validators.required],
       phoneNumber: ['', Validators.required],
+      roleId: ['', Validators.required],
       // phoneNumber: ['', [Validators.required, Validators.pattern(/^\d{12}$/)]],
     });
 
@@ -105,12 +106,15 @@ export class AdminusersComponent implements OnInit, OnDestroy {
         address: this.user.address || '',
         gender: this.user.gender || '',
         phoneNumber: this.user.phoneNumber || '',
+        roleId: this.user.roleId || '',
       });
     }
   }
 
   onThirdFormSubmit() {
+    
     if (this.thirdForm.valid) {
+      
       const submitSub = (this.isFormPrefilled() ?
         this.adminService.updateUserData(this.user.id, this.thirdForm.value) :
         this.adminService.submitUserData(this.thirdForm.value)
@@ -145,6 +149,7 @@ export class AdminusersComponent implements OnInit, OnDestroy {
     const fetchRolesSub = this.adminService.getAllRoles().subscribe(
       roles => {
         this.filteredFirstNameOptions = roles; // Now this will be the array of role objects
+        console.log(this.filteredFirstNameOptions,'rolessss');
       },
       error => {
         console.error('Error fetching roles:', error);
@@ -152,7 +157,14 @@ export class AdminusersComponent implements OnInit, OnDestroy {
     );
     this.subscriptions.push(fetchRolesSub);
   }
-  
+  onRoleSelected(event: any) {
+    console.log(event)
+  // console.log(event.option['_mostRecentViewValue'])
+  // const selectedRoleId = event.option['_mostRecentViewValue']
+  // console.log(event.option)
+  this.thirdForm.patchValue({ roleId: event.value });
+}
+
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());

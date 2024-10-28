@@ -15,32 +15,15 @@
             <form class="m-4" [formGroup]="thirdForm"
               (ngSubmit)="onThirdFormSubmit()">
               <div class="row">
-                <!-- <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
 
                   <mat-form-field class="example-full-width">
                     <mat-label>First Name</mat-label>
                     <input matInput formControlName="firstName" required appCustomValidator="firstName">
                     <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>face</mat-icon>
                   </mat-form-field>
-                </div> -->
-                <!-- First Name Autocomplete -->
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width">
-                    <mat-icon matPrefix>face</mat-icon>
-                    <!-- Added Material icon for First Name -->
-                    <input matInput placeholder="First Name"
-                      aria-label="First Name"
-                      [matAutocomplete]="firstNameAuto"
-                      formControlName="firstName" required
-                      style="font-weight: bold; color: black;" />
-                    <mat-autocomplete #firstNameAuto="matAutocomplete">
-                      <mat-option *ngFor="let role of filteredFirstNameOptions"
-                        [value]="role.roleName">
-                        {{ role.roleName }} <!-- Displaying roleName -->
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
                 </div>
+              
 
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width">
@@ -130,6 +113,33 @@
                   </mat-form-field>
                 </div>
               </div>
+              <div class="row">
+                <!-- First Name Autocomplete -->
+                <div class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Select Role</mat-label>
+                    <mat-icon matSuffix>face</mat-icon>
+                  
+                    <mat-select formControlName="roleId" required (selectionChange)="onRoleSelected($event)">
+                      <mat-option *ngFor="let role of filteredFirstNameOptions" [value]="role.id">
+                        {{ role.roleName }} <!-- Displaying roleName -->
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-1">
+                <mat-form-field appearance="fill" class="example-full-width">
+                  <mat-label>Institute</mat-label>
+                  <mat-select formControlName="instituteId" required (selectionChange)="onInstituteChange($event)">
+                    <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
+                      {{institute.name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>school</mat-icon>
+                </mat-form-field>
+              </div>
+               -->
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                   <button class="btn-space" [disabled]="!thirdForm.valid"
