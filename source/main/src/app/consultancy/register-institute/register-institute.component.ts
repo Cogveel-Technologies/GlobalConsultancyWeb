@@ -27,9 +27,9 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   subscriptions: Subscription = new Subscription();
   breadscrums = [
     {
-      title: 'Add',
+      title: 'Add Institute',
       items: ['Institutes'],
-      active: 'Add',
+      active: 'Add Institute',
     },
   ];
   registerInstitute: FormGroup;

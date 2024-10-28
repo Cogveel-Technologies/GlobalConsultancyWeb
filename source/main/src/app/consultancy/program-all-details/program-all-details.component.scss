@@ -33,6 +33,10 @@ td {
   {
     font-size: large;
   }
+
+  .sessions{
+    cursor: pointer;
+  }
   
   /* Media queries for responsiveness */
   @media (max-width: 767px) {

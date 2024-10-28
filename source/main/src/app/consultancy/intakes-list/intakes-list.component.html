@@ -1,166 +1,145 @@
 <section class="content">
-    <div class="container-fluid">
-        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+  <div class="container-fluid">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
 
-            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
-            </app-breadcrumb>
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+    <div class="card p-4">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <mat-form-field appearance="fill" class="w-100 mb-0">
+            <mat-label>Institute</mat-label>
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <mat-select [formControl]="institute" (selectionChange)="onInstituteChange($event)" required>
+              <mat-option [value]="0">All</mat-option>
+              <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
+                {{ institute.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-        <div class="card p-4">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Institute</mat-label>
-                        <mat-icon matPrefix>calendar_today</mat-icon>
-                        <mat-select [formControl]="institute" (selectionChange)="onInstituteChange($event)" required>
-                            <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
-                                {{ institute.name }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                    <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Program</mat-label>
-                        <mat-icon matPrefix>calendar_today</mat-icon>
-                        <mat-select [formControl]="program" (selectionChange)="onProgramChange($event)" required>
-                            <mat-option *ngFor="let program of (programs | async)" [value]="program.id">
-                                {{ program.name }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                    <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Session</mat-label>
-                        <mat-icon matPrefix>calendar_today</mat-icon>
-                        <mat-select [formControl]="session" (selectionChange)="onSessionChange($event)" required>
-                            <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
-                                {{ session.sessionName }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
-                </div>
-            </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="fill" class="w-100 mb-0">
+            <mat-label>Program</mat-label>
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <mat-select [formControl]="program" (selectionChange)="onProgramChange($event)">
+              <mat-option *ngFor="let program of (programs | async)" [value]="program.id">
+                {{ program.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-        
-
-
-
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="materialTableHeader">
-                        <div class="left">
-                            <ul class="header-buttons-left ms-0">
-                                <app-search [searchText]="search"></app-search>
-                            </ul>
-                        </div>
-                        <div class="right">
-                            <ul class="tbl-export-btn">
-                                <li class="tbl-header-btn">
-                                    <div class="m-l-10" matTooltip="ADD">
-                                        <button mat-mini-fab color="primary" (click)="addIntake()">
-                                            <mat-icon class="col-white">add</mat-icon>
-                                        </button>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="fill" class="w-100 mb-0">
+            <mat-label>Session</mat-label>
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <mat-select [formControl]="session" (selectionChange)="onSessionChange($event)" >
+              <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
+                {{ session.sessionName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
+        </div>
+      </div>
+    </div>
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-              <div class="card">
-                <div class="body table-responsive">
-                  <table class="table table-hover table-responsive">
-                    <!-- Directly use intakes observable with async pipe -->
-                    <thead *ngIf="(intakes | async)?.length > 0">
-                      <tr>
-                        <th>
-                          <app-sorting 
-                            [sortField]="defaultData.OrderBy" 
-                            [sortDirection]="defaultData.sortExpression" 
-                            [sortFields]="['noOfIntake']" 
-                            [sortLabels]="['Intakes']"
-                            (sortChange)="onSortChange($event)">
-                          </app-sorting>
-                        </th>
-                        <!-- <th>
-                          <app-sorting 
-                            [sortField]="defaultData.OrderBy"  
-                            [sortDirection]="defaultData.sortExpression" 
-                            [sortFields]="['sessionName']" 
-                            [sortLabels]="['Session']"
-                            (sortChange)="onSortChange($event)">
-                          </app-sorting>
-                        </th> -->
-                        <!-- <th>
-                          <app-sorting 
-                            [sortField]="defaultData.OrderBy"  
-                            [sortDirection]="defaultData.sortExpression" 
-                            [sortFields]="['programName']" 
-                            [sortLabels]="['Program']"
-                            (sortChange)="onSortChange($event)">
-                          </app-sorting>
-                        </th> -->
-                        <!-- <th>
-                          <app-sorting 
-                            [sortField]="defaultData.OrderBy"  
-                            [sortDirection]="defaultData.sortExpression" 
-                            [sortFields]="['instituteName']" 
-                            [sortLabels]="['Institute']"
-                            (sortChange)="onSortChange($event)">
-                          </app-sorting>
-                        </th> -->
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <!-- If there are no intakes, show "No Data Found" -->
-                      <tr *ngIf="!(institutes | async)?.length || !(programs | async)?.length || !(intakes | async)?.length">
-                        <td colspan="3" class="text-center">No Data Found</td>
-                    </tr>
-                    
-          
-                      <!-- Loop through intakes when intakes exist -->
-                      <tr *ngFor="let intake of (intakes | async)">
-                        <td data-label="Number of Intakes">{{ intake.noOfIntake }}</td>
-                        <!-- <td data-label="Session Name">{{ intake.sessionName }}</td> -->
-                        <!-- <td data-label="Program Name">{{ intake.programName }}</td> -->
-                        <!-- <td data-label="Institute Name">{{ intake.instituteName }}</td> -->
-                        <td data-label="Actions">
-                          <button mat-icon-button color="primary"
-                                  [routerLink]="['/consultancy/edit-intake', intake.id]" matTooltip="Edit">
-                            <!-- <mat-icon>edit</mat-icon> -->
-                            <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                          </button>
-                          <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)" matTooltip="Delete">
-                            <!-- <mat-icon>delete</mat-icon> -->
-                            <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-          
-                  <!-- Conditionally show pagination if intakes exist -->
-                  <ng-container *ngIf="(intakes | async)?.length > 0">
-                    <app-pagination 
-                      [pageSize]="defaultData.pageSize" 
-                      (pageChange)="onPageChange($event)" 
-                      [length]="records"
-                      [pageIndex]="currentPageIndex">
-                    </app-pagination>
-                  </ng-container>
-                </div>
-              </div>
+
+
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="materialTableHeader">
+            <div class="left">
+              <ul class="header-buttons-left ms-0">
+                <app-search [searchText]="search"></app-search>
+              </ul>
             </div>
-          </div>          
+            <div class="right">
+              <ul class="tbl-export-btn">
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="ADD">
+                    <button mat-mini-fab color="primary" (click)="addIntake()">
+                      <mat-icon class="col-white">add</mat-icon>
+                    </button>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row clearfix">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body table-responsive">
+            <table class="table table-hover table-responsive">
+              <!-- Directly use intakes observable with async pipe -->
+              <thead *ngIf="(intakes | async)?.length > 0">
+                <tr>
+                  <th>
+                    <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                      [sortFields]="['noOfIntake']" [sortLabels]="['Intakes']" (sortChange)="onSortChange($event)">
+                    </app-sorting>
+                  </th>
+                  <th>
+                    <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                      [sortFields]="['sessionName']" [sortLabels]="['Session']" (sortChange)="onSortChange($event)">
+                    </app-sorting>
+                  </th>
+                  <th>
+                    <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                      [sortFields]="['programName']" [sortLabels]="['Program']" (sortChange)="onSortChange($event)">
+                    </app-sorting>
+                  </th>
+                  <th>
+                    <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                      [sortFields]="['instituteName']" [sortLabels]="['Institute']" (sortChange)="onSortChange($event)">
+                    </app-sorting>
+                  </th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- If there are no intakes, show "No Data Found" -->
+                <tr *ngIf="(intakes | async)?.length === 0">
+                  <td colspan="3" class="text-center">No Data Found</td>
+                </tr>
+
+
+                <!-- Loop through intakes when intakes exist -->
+                <tr *ngFor="let intake of (intakes | async)">
+                  <td data-label="Number of Intakes">{{ intake.noOfIntake }}</td>
+                  <td data-label="Session Name">{{ intake.sessionName }}</td>
+                  <td data-label="Program Name">{{ intake.programName }}</td>
+                  <td data-label="Program Name">{{ intake.instituteName }}</td>
+                  <td data-label="Actions">
+                    <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-intake', intake.id]"
+                      matTooltip="Edit">
+                      <!-- <mat-icon>edit</mat-icon> -->
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)" matTooltip="Delete">
+                      <!-- <mat-icon>delete</mat-icon> -->
+                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <app-pagination *ngIf="(intakes | async)?.length > 0" [pageSize]="defaultData.pageSize"
+              (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
+            </app-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

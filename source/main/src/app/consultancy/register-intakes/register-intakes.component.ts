@@ -20,9 +20,9 @@ export class RegisterIntakesComponent {
   constructor(private route: ActivatedRoute, private consultancyApiService: ConsultancyApi, private router: Router, private consultancyService: ConsultancyService) { }
   breadscrums = [
     {
-      title: 'Add',
+      title: 'Add Intake',
       items: ['Intakes'],
-      active: 'Add',
+      active: 'Add Intake',
     },
   ];
 
@@ -55,7 +55,7 @@ export class RegisterIntakesComponent {
     });
 
     // this.defaultData.ConsultancyId = this.consultancyId
-    this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId)
+    this.institutes = this.consultancyApiService.getSpecificInstitutes()
 
     const editIntake = this.route.snapshot.data['editResponse'];
     if (editIntake) {

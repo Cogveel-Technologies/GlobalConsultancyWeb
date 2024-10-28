@@ -18,9 +18,9 @@ export class RegisterProgramComponent {
 
   breadscrums = [
     {
-      title: 'Add',
+      title: 'Add Program',
       items: ['Programs'],
-      active: 'Add',
+      active: 'Add Program',
     },
   ];
   registerProgram: FormGroup;
@@ -62,7 +62,7 @@ export class RegisterProgramComponent {
       isPublic: new FormControl('')
     });
 
-    this.instituteOptions = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
+    this.instituteOptions = this.consultancyApiService.getSpecificInstitutes();
     this.programCategoryOptions = this.consultancyApiService.getCategory("programCategory");
     this.courseTypeOptions = this.consultancyApiService.getCategory("courseType");
 

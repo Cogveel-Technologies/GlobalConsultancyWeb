@@ -7,23 +7,26 @@
     </div>
 
     <!-- Show when country is not selected -->
-    <form [formGroup]="countryListForm">
-      <div class="card p-4">
-        <div class="row g-3">
-          <div class="col-md-4">
-            <mat-form-field appearance="outline" class="w-100 mb-0">
-              <mat-label>Select a country</mat-label>
-              <mat-icon matPrefix>home</mat-icon>
-              <mat-select formControlName="countryList" required (selectionChange)="onCountryChange($event.value)">
-                <mat-option *ngFor="let country of (countries | async)" [value]="country.id">
-                  {{ country.countryName }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+    <div class="card p-4">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <mat-form-field class="w-100 mb-0">
+            <mat-label>Select a country</mat-label>
+            <mat-icon matPrefix>public</mat-icon>
+            <mat-select [formControl]="countryList" required (selectionChange)="onCountryChange($event.value)">
+              <!-- Option for "All" -->
+              <mat-option [value]="'all'">All</mat-option>
+              <!-- Loop through the list of countries -->
+              <mat-option *ngFor="let country of (countries | async)" [value]="country.id">
+                {{ country.countryName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
-    </form>
+    </div>
+    
+
 
     <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -50,6 +53,10 @@
       </div>
     </div>
 
+    <!-- <div>
+      <button type="submit" class="btn-space mb-3" mat-raised-button color="primary" (click)="allInstitutes()">All Institutes</button>
+    </div> -->
+    
     <div class="row clearfix">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
@@ -105,6 +112,10 @@
                         <!-- <mat-icon>delete</mat-icon> -->
                         <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                       </button>
+                      <button mat-icon-button color="warn"  matTooltip="Programs" (click)="seePrograms(institute.id)">
+                        <!-- <mat-icon>delete</mat-icon> -->
+                        <app-feather-icons [icon]="'book'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                      </button>
                     </td>
                   </tr>
                 </tbody>
@@ -120,10 +131,9 @@
 
             <!-- Show pagination only if institutesList data exists -->
             <app-pagination *ngIf="(universities | async)?.length > 0" [pageSize]="defaultData.pageSize"
-              (pageChange)="onPageChange($event)" [length]="(universities | async)?.length"
+              (pageChange)="onPageChange($event)" [length]="records"
               [pageIndex]="currentPageIndex">
             </app-pagination>
-
           </div>
         </div>
       </div>

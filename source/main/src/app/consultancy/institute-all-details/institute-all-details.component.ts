@@ -24,17 +24,18 @@ export class InstituteAllDetailsComponent {
   keys:any;
   countryId:number
   defaultData:ConsultancyDetailsOptions;
+  instituteId:{id:number,name:string};
     ngOnInit(){
     this.defaultData = this.consultancyService.defaultRenderData()
      // for all details (on view button)
      this.details = this.route.snapshot.data['instituteDetails']
-
+     console.log(this.details)
      this.keys = Object.keys(this.details);
-     this.consultancyService.countrySelected.subscribe(res=> {
-      this.countryId = res
-      console.log(res)
-     })
-     console.log(this.keys)
+     this.instituteId = {id:this.details.id, name:this.details.instituteName};
+  }
+
+  showProgams(){
+    this.router.navigate(["/consultancy/program-list"]);
   }
 
   backToList(){
