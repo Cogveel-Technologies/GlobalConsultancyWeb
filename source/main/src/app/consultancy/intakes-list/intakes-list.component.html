@@ -10,7 +10,7 @@
         <div class="col-md-4">
           <mat-form-field appearance="fill" class="w-100 mb-0">
             <mat-label>Institute</mat-label>
-            <mat-icon matPrefix>calendar_today</mat-icon>
+            <mat-icon matPrefix>business</mat-icon> <!-- Suitable for Institute -->
             <mat-select [formControl]="institute" (selectionChange)="onInstituteChange($event)" required>
               <mat-option [value]="0">All</mat-option>
               <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
@@ -19,10 +19,11 @@
             </mat-select>
           </mat-form-field>
         </div>
+        
         <div class="col-md-4">
           <mat-form-field appearance="fill" class="w-100 mb-0">
             <mat-label>Program</mat-label>
-            <mat-icon matPrefix>calendar_today</mat-icon>
+            <mat-icon matPrefix>school</mat-icon> <!-- Suitable for Program -->
             <mat-select [formControl]="program" (selectionChange)="onProgramChange($event)">
               <mat-option *ngFor="let program of (programs | async)" [value]="program.id">
                 {{ program.name }}
@@ -30,17 +31,19 @@
             </mat-select>
           </mat-form-field>
         </div>
+        
         <div class="col-md-4">
           <mat-form-field appearance="fill" class="w-100 mb-0">
             <mat-label>Session</mat-label>
-            <mat-icon matPrefix>calendar_today</mat-icon>
-            <mat-select [formControl]="session" (selectionChange)="onSessionChange($event)" >
+            <mat-icon matPrefix>event</mat-icon> <!-- Suitable for Session -->
+            <mat-select [formControl]="session" (selectionChange)="onSessionChange($event)">
               <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
                 {{ session.sessionName }}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
+        
         <div class="col-md-4">
           <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
         </div>
