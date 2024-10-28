@@ -53,7 +53,7 @@ export class MainComponent implements OnInit {
 
   breadscrums = [
     {
-      title: 'Dashboad',
+      title: 'Dashboard',
       items: ['Home'],
       active: 'Dashboard',
     },

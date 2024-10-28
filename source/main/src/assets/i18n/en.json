@@ -24,7 +24,10 @@
       "TEXT": "superadmin",
       "LIST": {
         "ADD_USERS": "Add Users",
-        "LIST_USERS": "Users",
+        "LIST_USERS": {
+          "TEXT": "Users",
+          "ICON": "bi-people"
+        },
         "ADD_AGENTS": "Add Agents",
         "LIST_AGENTS": "List Agents",
         "LIST_ROLES": "Roles",
