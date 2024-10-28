@@ -11,7 +11,8 @@
           <mat-form-field appearance="fill" class="w-100 mb-0">
             <mat-label>Institute</mat-label>
             <mat-icon matPrefix>home</mat-icon>
-            <mat-select [formControl]="instituteList" required (selectionChange)="onInstituteChange($event)">
+            <mat-select [formControl]="instituteList" (selectionChange)="onInstituteChange($event.value)">
+              <mat-option [value]="0">All</mat-option>
               <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
                 {{ institute.name }}
               </mat-option>
@@ -22,7 +23,7 @@
           <mat-form-field appearance="fill" class="w-100 mb-0">
             <mat-label>Program</mat-label>
             <mat-icon matPrefix>home</mat-icon>
-            <mat-select [formControl]="programList" required (selectionChange)="onProgramChange($event)">
+            <mat-select [formControl]="programList" (selectionChange)="onProgramChange($event)">
               <mat-option *ngFor="let program of (programs | async)" [value]="program.id">
                 {{ program.name }}
               </mat-option>
@@ -35,7 +36,7 @@
       </div>
     </div>
 
-    <div class="row">
+
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
           <div class="materialTableHeader">
@@ -78,7 +79,7 @@
 
               <tbody>
                 <!-- Display No Data Found if there are no institutes or programs -->
-                <tr *ngIf="(institutes | async)?.length === 0 || (programs | async)?.length === 0">
+                <tr *ngIf="(sessions | async)?.length === 0">
                   <td colspan="2" class="text-center">No Data Found</td>
                 </tr>
 
@@ -96,6 +97,10 @@
                       <!-- <mat-icon>delete</mat-icon> -->
                       <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                     </button>
+                    <button mat-icon-button color="primary" matTooltip="Intakes" (click)="onIntakes(session.id,session.instituteId)">
+                    <!-- <mat-icon>edit</mat-icon> -->
+                    <app-feather-icons [icon]="'users'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                  </button>
                   </td>
                 </tr>
               </tbody>
@@ -109,5 +114,4 @@
         </div>
       </div>
     </div>
-  </div>
 </section>

@@ -22,36 +22,38 @@ export class IntakesListComponent {
       active: 'Intakes',
     },
   ];
-  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router:Router) { }
+  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router: Router) { }
   intakes!: Observable<IntakeData[]>
   sessionSelected: boolean = false;
   consultancyId: string = localStorage.getItem("id");
   sessionListForm: FormGroup;
-  sessions: Observable<{id:number,sessionName:string}[]>
+  sessions: Observable<{ id: number, sessionName: string }[]>
   institutes: Observable<SpecificConsultancyRelated[]>
   programs: Observable<SpecificConsultancyRelated[]>
-  program$: BehaviorSubject <string|number> = new BehaviorSubject<string|number>('')
+  program$: BehaviorSubject<string | number> = new BehaviorSubject<string | number>('')
   institute$: BehaviorSubject<string | number> = new BehaviorSubject<string | number>('');
   session$: BehaviorSubject<string | number> = new BehaviorSubject<string | number>('');
   subscription: Subscription = new Subscription();
-  defaultData:ConsultancyDetailsOptions = this.consultancyService.defaultRenderData();
+  defaultData: ConsultancyDetailsOptions = this.consultancyService.defaultRenderData();
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
-  pagination$: BehaviorSubject<{pageSize:number,pageIndex:number}> = new BehaviorSubject<{pageSize:number,pageIndex:number}>({pageSize:this.defaultData.pageSize, pageIndex:this.defaultData.currentPage});
-  sorting$: BehaviorSubject<{field:string,direction:string}>= new BehaviorSubject<{field:string,direction:string}>({field:this.defaultData.OrderBy,direction:this.defaultData.sortExpression});
+  pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number }> = new BehaviorSubject<{ pageSize: number, pageIndex: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage });
+  sorting$: BehaviorSubject<{ field: string, direction: string }> = new BehaviorSubject<{ field: string, direction: string }>({ field: this.defaultData.OrderBy, direction: this.defaultData.sortExpression });
   totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
-  currentPageIndex:number;
-  institute = new FormControl();
+  currentPageIndex: number;
+  institute = new FormControl(0);
   program = new FormControl();
   session = new FormControl();
-  search$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  previousInstituteId:number = 0;
-  previousProgramId:number = 0;
-  previousSessionId:number = 0;
-  
-  
+  search$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  previousInstituteId: string = '';
+  previousProgramId: string = '';
+  previousSessionId: number = 0;
+  intakesFromSession: boolean = false;
+  isProgramId:boolean = false;
+
+
 
   getIntakes(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getIntakes(params).pipe
@@ -67,11 +69,23 @@ export class IntakesListComponent {
       session: new FormControl()
     })
 
-      // check if user is navigating from the edit form
-      this.consultancyService.showList.subscribe(state=>{
-        console.log(state)
-        this.sessionSelected = state;
-      })
+    // intakes from session list
+    this.consultancyService.getIntakesofSession.subscribe(res => {
+      if (res) {
+        this.intakesFromSession = true
+        console.log(res)
+        this.institute$.next(res.instituteId)
+        this.institute.setValue(+res.instituteId)
+        this.session$.next(res.sessionId)
+        this.session.setValue(res.sessionId)
+      }
+    })
+
+    // check if user is navigating from the edit form
+    // this.consultancyService.showList.subscribe(state=>{
+    //   console.log(state)
+    //   this.sessionSelected = state;
+    // })
 
     // check if user is on edit or view page (render back to list)
     // if(this.sessionSelected){
@@ -80,61 +94,66 @@ export class IntakesListComponent {
     //   this.defaultData.SessionId = sessionId;
     //   this.intakes = this.getIntakes(this.defaultData);
     // }
-    // this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData)
-    this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId).pipe(tap(res=>{
-      this.defaultData.ConsultancyId = this.consultancyId
-      this.institute$.next(res[0]['id']);
-      this.institute.setValue(res[0]['id']);
-      this.search$.next(true)
-    }))
-   
-  
-    this.subscription.add(combineLatest([this.institute$, this.program$,this.session$, this.searchTerm$, this.pagination$, this.sorting$, this.search$]).pipe(
+
+
+    this.institutes = this.consultancyApiService.getSpecificInstitutes()
+    this.intakes = this.getIntakes(this.defaultData)
+
+
+
+    this.subscription.add(combineLatest([this.institute$, this.program$, this.session$, this.searchTerm$, this.pagination$, this.sorting$, this.search$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(),
-      switchMap(([instituteId,programId,sessionId,searchTerm, pageRelated, sort,search]) => {
-        if(instituteId && this.previousInstituteId !== instituteId){
+      switchMap(([instituteId, programId, sessionId, searchTerm, pageRelated, sort, search]) => {
+        console.log(instituteId)
+        console.log(this.previousInstituteId)
+        if ((instituteId || instituteId === 0) && this.previousInstituteId !== String(instituteId)) {
           console.log("only institute id")
-          this.previousInstituteId = +instituteId;
-          this.defaultData.InstituteId = String(instituteId);
+          if(instituteId === 0){
+            console.log(this.defaultData)
+            this.defaultData.InstituteId = '';
+            this.programs = of([])
+            this.sessions = of([]);
+          }else{
+            this.defaultData.InstituteId = String(instituteId);
+            this.programs = this.consultancyApiService.getAllPrograms(this.defaultData);
+          }
+          this.previousInstituteId = String(instituteId);
           this.defaultData.ProgramId = '';
           this.defaultData.SessionId = '';
-          this.programs = this.consultancyApiService.getAllPrograms(this.defaultData);
-          this.sessions = of([]);
+          this.isProgramId = true;
+          this.program.setValue('')
         }
-        if(programId && this.previousProgramId !== programId){
+        if (programId && this.previousProgramId !== String(programId)) {
           console.log("only program id")
-          this.previousProgramId = Number(programId)
+          this.previousProgramId = String(programId)
           this.defaultData.ProgramId = String(programId);
           this.defaultData.SessionId = '';
+          this.defaultData.InstituteId = '';
+          this.session.setValue('');
+          this.isProgramId = true;
+          console.log(this.defaultData)
           this.sessions = this.consultancyApiService.getProgramSessions(this.defaultData)
-          
         }
-        if(sessionId && this.previousSessionId !== sessionId){
-          console.log(sessionId)
+        if (sessionId && this.previousSessionId !== sessionId) {
+          console.log("only session id")
           this.previousSessionId = Number(sessionId);
           this.defaultData.InstituteId = '';
           this.defaultData.ProgramId = '';
           this.defaultData.SessionId = String(sessionId)
+          console.log(this.defaultData)
         }
         if (search) {
-          console.log("search")
-          this.defaultData.InstituteId = String(instituteId);
-          this.defaultData.SessionId = String(sessionId);
-          this.defaultData.ProgramId = String(programId);
-          console.log(this.defaultData)
+          this.defaultData.currentPage = pageRelated.pageIndex
           this.defaultData.searchText = searchTerm;
           this.defaultData.pageSize = pageRelated.pageSize;
-          this.defaultData.currentPage = pageRelated.pageIndex;
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field;
           return this.intakes = this.getIntakes(this.defaultData);
         } else {
           return of([])
         }
-      })).subscribe(res => {
-
-      }))
+      })).subscribe())
   }
 
   onSessionChange(event: any) {
@@ -143,47 +162,51 @@ export class IntakesListComponent {
     localStorage.setItem("sessionId", event.value)
   }
 
-  onProgramChange(event:any){
+  onProgramChange(event: any) {
     this.search$.next(false)
     this.program$.next(event.value)
     console.log(event.value)
   }
 
-  onInstituteChange(event:any){
+  onInstituteChange(event: any) {
+    console.log(event)
     this.search$.next(false)
     this.institute$.next(event.value)
   }
 
-    // page event
-    onPageChange(event: PageEvent) {
-      this.currentPageIndex = event.pageIndex
-      this.pagination$.next({pageSize:event.pageSize,pageIndex:event.pageIndex+1})
-    }
-  
-     // sort event
-     onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
-      this.sorting$.next({field:field,direction:direction})
-    }
+  // page event
+  onPageChange(event: PageEvent) {
+    this.currentPageIndex = event.pageIndex
+    this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
+  }
 
-  addIntake() { 
+  // sort event
+  onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
+    this.sorting$.next({ field: field, direction: direction })
+  }
+
+  addIntake() {
     this.router.navigate(['/consultancy/register-intake'])
   }
 
   deleteIntake(id: number) {
     const con = confirm("Are you sure?")
     if (con) {
-     this.subscription.add(this.consultancyApiService.deleteIntake(id).subscribe(res => {
+      this.subscription.add(this.consultancyApiService.deleteIntake(id).subscribe(res => {
         this.intakes = this.getIntakes(this.defaultData);
       }));
     }
   }
 
-  onSearch(){
+  onSearch() {
+    this.currentPageIndex = 0;
+    this.pagination$.next({ pageSize:this.defaultData.pageSize, pageIndex:1})
     this.search$.next(true)
   }
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false);
+    this.consultancyService.getIntakesofSession.next({ instituteId: '', programId: '', sessionId: '' })
     this.subscription.unsubscribe()
   }
 }

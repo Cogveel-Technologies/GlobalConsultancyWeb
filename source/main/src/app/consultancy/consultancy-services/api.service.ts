@@ -61,8 +61,8 @@ export class ConsultancyApi {
     }
 
     // ------------- get specific institutes related to loggedin consultancy ------------- ----------
-    getSpecificInstitutes(consultancyId: string): Observable<SpecificConsultancyRelated[]> {
-        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Institute/All?ConsultancyId=${consultancyId}`).pipe(map(response => response['data']));
+    getSpecificInstitutes(): Observable<SpecificConsultancyRelated[]> {
+        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Institute/All`).pipe(map(response => response['data']));
     }
     // ------------- delete-institute -----------------
     deleteInstitute(id: number) {
@@ -97,7 +97,7 @@ export class ConsultancyApi {
 
     // --------- single-Program-details ------------------
     getProgramDetails(data: ConsultancyDetailsOptions): Observable<ProgramData> {
-        return this.http.get<Observable<ProgramData>>(`${this.baseUrl}/Program/byIdProgram?Id=${data.ProgramId}`).pipe(map(res => res['data']))
+        return this.http.get<Observable<ProgramData>>(`${this.baseUrl}/Program/byId?Id=${data.ProgramId}`).pipe(map(res => res['data']))
     }
 
     getProgramSessions(data:ConsultancyDetailsOptions){
@@ -113,7 +113,7 @@ export class ConsultancyApi {
     }
     // --------------------------- get all programs -----------------------------
     getAllPrograms(data:ConsultancyDetailsOptions){
-        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Program/All?InstituteId=${data.InstituteId}&ConsultancyId=${data.ConsultancyId}`).pipe(map(response => response['data']))
+        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Program/All?InstituteId=${data.InstituteId}`).pipe(map(response => response['data']))
     }
     ///////////////////////////////////////////// INTAKES /////////////////////////////////////////////////
     // --------- register-intake ------------------
@@ -137,8 +137,8 @@ export class ConsultancyApi {
         return this.http.get<Observable<IntakeData>>(`${this.baseUrl}/Intake/byId?Id=${id}`).pipe(map(res => res['data']))
     }
     // ------------- get specific sessions related to loggedin consultancy ------------- ----------
-    getSpecificIntakes(data: ConsultancyDetailsOptions): Observable<SpecificConsultancyRelated[]> {
-        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Intake/All?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=a${data.sortExpression}&CurrentPage=${data.currentPage}`).pipe(map(response => response['data']))
+    getSpecificIntakes(): Observable<SpecificConsultancyRelated[]> {
+        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Intake/All`).pipe(map(response => response['data']))
     }
 
     ///////////////////////////////////////////// Session /////////////////////////////////////////////////
@@ -148,8 +148,7 @@ export class ConsultancyApi {
     }
     // ------------------- display-session ----------------
     getSession(data: ConsultancyDetailsOptions): Observable<SessionData[]> {
-        return this.http.get<SessionData[]>(`${this.baseUrl}/Session?InstituteId=${data.InstituteId}&ProgramId=${data.ProgramId}&ConsultancyId${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
-
+        return this.http.get<SessionData[]>(`${this.baseUrl}/Session?InstituteId=${data.InstituteId}&ProgramId=${data.ProgramId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&CurrentPage=${data.currentPage}`)
     }
     // ------------- delete-session -----------------
     deleteSession(id: number) {

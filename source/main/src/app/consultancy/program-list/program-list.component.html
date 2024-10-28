@@ -8,30 +8,17 @@
 
         <div class="card p-4">
             <div class="row g-3">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <mat-form-field appearance="fill" class="w-100 mb-0">
                         <mat-label>Institute</mat-label>
                         <mat-icon matPrefix>school</mat-icon>
                         <mat-select required (selectionChange)="onInstituteChange($event)" [formControl]="instituteControl">
+                            <mat-option [value]="'all'">All</mat-option>
                             <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
                                 {{ institute.name }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                </div>
-                <div class="col-md-5">
-                    <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Is Public</mat-label>
-                        <mat-icon matPrefix>school</mat-icon>
-                        <mat-select required (selectionChange)="isPublic($event)">
-                            <mat-option *ngFor="let option of publicOptions" [value]="option">
-                                {{ option }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn-space" mat-raised-button color="primary">Search</button>
                 </div>
             </div>
         </div>
@@ -129,11 +116,16 @@
                                             <!-- <mat-icon>delete</mat-icon> -->
                                             <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                                         </button>
+                                        <button mat-icon-button color="warn"  matTooltip="Sessions" (click)="onSession(program.id, program.instituteId)">
+                                            <!-- <mat-icon>delete</mat-icon> -->
+                                            <app-feather-icons [icon]="'calendar'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                         <app-pagination 
+                        *ngIf="(programs | async)?.length > 0"
                         [pageSize]="defaultData.pageSize" 
                         (pageChange)="onPageChange($event)" 
                         [length]="records"

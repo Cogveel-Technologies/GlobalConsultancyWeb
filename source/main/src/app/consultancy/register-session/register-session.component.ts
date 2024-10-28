@@ -17,9 +17,9 @@ export class RegisterSessionComponent {
   constructor(private route: ActivatedRoute, private router: Router, private consultancyApiService: ConsultancyApi, private consultancyService:ConsultancyService) { }
   breadscrums = [
     {
-      title: 'Add',
+      title: 'Add Session',
       items: ['Sessions'],
-      active: 'Add',
+      active: 'Add Session',
     },
   ];
 
@@ -48,7 +48,7 @@ export class RegisterSessionComponent {
       })
 
     // get institutes
-    this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId);
+    this.institutes = this.consultancyApiService.getSpecificInstitutes();
     combineLatest([this.instituteSelected]).pipe(switchMap(([institute])=>{
       if(institute){
         console.log(this.instituteId)

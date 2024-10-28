@@ -31,24 +31,20 @@ export class InstitutionListComponent {
   constructor(private router: Router, public consultancyService: ConsultancyService, private consultancyApiService: ConsultancyApi) { }
   editMode: boolean;
   subscriptions: Subscription = new Subscription();
-  consultancyId: string = localStorage.getItem("id")
   universities!: Observable<InstituteData[]>;
-  countrySelected: boolean = false;
-  countryListForm: FormGroup;
   countries: Observable<{ countryName: string, id: number }[]>;
-  country$: BehaviorSubject<number|null> = new BehaviorSubject<number | null>(null);
+  country$: BehaviorSubject<number | string> = new BehaviorSubject<number | string>('');
   countryId: number;
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
-  pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number }> = new BehaviorSubject<{ pageSize: number, pageIndex: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage });
-  totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
-  sorting$: BehaviorSubject<{field:string,direction:string}>= new BehaviorSubject<{field:string,direction:string}>({field:this.defaultData.OrderBy,direction:this.defaultData.sortExpression});
-  currentPageIndex:number;
-  filteredCountries: any[] = [];
+  pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number, countryId?: number | string }> = new BehaviorSubject<{ pageSize: number, pageIndex: number, countryId?: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: +this.defaultData.CountryId });
+  currentPageIndex: number;
+  sorting$: BehaviorSubject<{ field: string, direction: string }> = new BehaviorSubject<{ field: string, direction: string }>({ field: this.defaultData.OrderBy, direction: this.defaultData.sortExpression });
   searchTerm: string = '';
+  countryList = new FormControl('all');
+  previousCountryId: string | number;
 
 
   getInstitutes(params: ConsultancyDetailsOptions) {
@@ -61,56 +57,44 @@ export class InstitutionListComponent {
   }
 
   ngOnInit() {
-    this.countryListForm = new FormGroup({
-      countryList: new FormControl(),
-    })
+    // fetching all countries for the dropdown and displaying
+    this.countries = this.consultancyApiService.getAllCountries()
 
-    
-    // fetching all countries for the dropdown
-    this.countries = this.consultancyApiService.getAllCountries().pipe(tap(res => {
-      // this.search$.next(true);
-      this.country$.next(res[0]['id']);
-      this.countryListForm.get('countryList').setValue(res[0]['id']);
-    }));
-  
-
-    
-    
-
-  // Implementing filter on the basis of country
-  this.subscriptions.add(
-    combineLatest([this.country$, this.searchTerm$, this.pagination$, this.sorting$]).pipe(
-      throttleTime(1000, undefined, { leading: true, trailing: true }),
-      distinctUntilChanged(),
-      switchMap(([id, search, pageRelated, sort]) => {
-        if (id) {
-          this.countryId = id
-          this.defaultData.CountryId = String(id);
-          this.defaultData.searchText = search;
-          this.defaultData.pageSize = pageRelated.pageSize;
-          this.defaultData.currentPage = pageRelated.pageIndex;
-          this.defaultData.sortExpression = sort.direction;
-          this.defaultData.OrderBy = sort.field;
-          console.log(this.defaultData)
-          this.universities = this.getInstitutes(this.defaultData);
-
-          // Set the FormControl value for countryList
-          this.countryListForm.get('countryList').setValue(id); // Set the value of the dropdown
-          return of(id);
-        } else {
-          return of([]);
-        }
-      })
-    ).subscribe()
-  );
-
+    // Implementing filter on the basis of country
+    this.subscriptions.add(
+      combineLatest([this.searchTerm$, this.pagination$, this.sorting$]).pipe(
+        throttleTime(1000, undefined, { leading: true, trailing: true }),
+        distinctUntilChanged(),
+        switchMap(([search, pageRelated, sort]) => {
+          console.log(this.currentPageIndex)
+          if (pageRelated) {
+            console.log(pageRelated)
+            if (pageRelated.countryId && typeof pageRelated.countryId === 'string') {
+              this.defaultData.CountryId = ''
+            } else if (pageRelated.countryId && typeof pageRelated.countryId === 'number') {
+              this.defaultData.CountryId = String(pageRelated.countryId);
+            }
+            this.defaultData.searchText = search;
+            this.defaultData.pageSize = pageRelated.pageSize;
+            this.defaultData.currentPage = pageRelated.pageIndex;
+            console.log(this.defaultData.currentPage)
+            this.defaultData.sortExpression = sort.direction;
+            this.defaultData.OrderBy = sort.field;
+            console.log(this.defaultData)
+            return this.universities = this.getInstitutes(this.defaultData).pipe(tap(res => console.log(res)));
+          } else {
+            return of([]);
+          }
+        })
+      ).subscribe()
+    );
   }
 
   // selection event (selection of country)
   onCountryChange(value: any) {
-    this.country$.next(value);
+    this.currentPageIndex = 0;
+    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: value })
   }
-
 
   addInstitute() {
     this.router.navigate(['/consultancy/register-institute'])
@@ -127,19 +111,25 @@ export class InstitutionListComponent {
 
   // page event
   onPageChange(event: PageEvent) {
+    console.log(event)
     this.currentPageIndex = event.pageIndex;
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
   }
 
 
-     // sort event
-     onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
-      this.sorting$.next({field:field,direction:direction})
-    }
+  // sort event
+  onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
+    this.sorting$.next({ field: field, direction: direction })
+  }
 
-    onView(){
-      this.consultancyService.countrySelected.next(this.countryId)
-    }
+  onView() {
+    this.consultancyService.countrySelected.next(this.countryId)
+  }
+
+  seePrograms(id: number) {
+    this.consultancyService.sendInstituteId.next(id);
+    this.router.navigate(['/consultancy/program-list'])
+  }
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false)

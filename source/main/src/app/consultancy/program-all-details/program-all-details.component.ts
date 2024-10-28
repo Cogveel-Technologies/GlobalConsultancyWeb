@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProgramData } from '../consultancy-models/data.program';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
-import { BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, switchMap } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { FormControl } from '@angular/forms';
 
@@ -60,6 +60,5 @@ export class ProgramAllDetailsComponent {
     this.consultancyService.showList.next(true)
     this.router.navigate(["/consultancy/program-list"]);
   }
-
   
 }

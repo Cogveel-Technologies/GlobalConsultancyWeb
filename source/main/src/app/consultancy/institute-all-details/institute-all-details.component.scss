@@ -33,7 +33,9 @@ td {
   {
     font-size: large;
   }
-  
+  .programs{
+    cursor: pointer;
+  }
   /* Media queries for responsiveness */
   @media (max-width: 767px) {
     .materialTableHeader {

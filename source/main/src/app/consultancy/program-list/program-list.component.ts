@@ -38,7 +38,7 @@ export class ProgramListComponent {
   sessions: Observable<SpecificConsultancyRelated[] | null>;
   intakes: Observable<SpecificConsultancyRelated[] | null>;
   instituteForm: FormGroup;
-  institute$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
+  institute$: BehaviorSubject<number | ''> = new BehaviorSubject<number | ''>('');
   session$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   intake$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
   subscription: Subscription = new Subscription();
@@ -47,7 +47,7 @@ export class ProgramListComponent {
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
-  pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number }> = new BehaviorSubject<{ pageSize: number, pageIndex: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage });
+  pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number, instituteId?:number }> = new BehaviorSubject<{ pageSize: number, pageIndex: number, instituteId?:number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, instituteId: +this.defaultData.InstituteId });
   sorting$: BehaviorSubject<{ field: string, direction: string }> = new BehaviorSubject<{ field: string, direction: string }>({ field: this.defaultData.OrderBy, direction: this.defaultData.sortExpression });
   totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
@@ -59,7 +59,8 @@ export class ProgramListComponent {
   currentPageIndex: number;
   publicOptions: boolean[];
   search$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  instituteControl: FormControl = new FormControl();
+  instituteControl: FormControl = new FormControl("all");
+  ProgramFromInstitute:number = 0;
 
 
 
@@ -72,38 +73,49 @@ export class ProgramListComponent {
   }
 
   ngOnInit() {
-    if (!this.selectedOptions) {
-      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.consultancyId).pipe(tap(res => {
-        this.search$.next(true);
-        this.institute$.next(res[0]['id']);
-        this.instituteControl.setValue(res[0]['id'])
-      }));
-    }
+    console.log(this.defaultData)
+    // get all program by default
+    this.programs = this.getPrograms(this.defaultData)
+    this.institutes = this.consultancyApiService.getSpecificInstitutes()
+    // show program from institute details
+    this.subscription.add(this.consultancyService.sendInstituteId.subscribe(id => {
+      if(id){
+        console.log(id)
+      this.search$.next(true);
+      this.institutes = this.consultancyApiService.getSpecificInstitutes()
+      this.ProgramFromInstitute = id;
+      this.pagination$.next({pageSize:this.defaultData.pageSize,pageIndex:this.defaultData.currentPage,instituteId:id})
+      this.instituteControl.setValue(id);
+      }
+    }))
 
     this.subscription.add(this.consultancyService.showList.subscribe(state => {
       this.selectedOptions = state;
     }));
 
-    combineLatest([this.institute$, this.search$, this.searchTerm$, this.pagination$, this.sorting$]).pipe( throttleTime(1000, undefined, { leading: true, trailing: true }),
-    distinctUntilChanged(),
-    switchMap(([instituteId, search, searchTerm, pageRelated, sorting]) => {
-      if (instituteId && this.previousInstituteState !== instituteId) {
+    this.subscription.add(combineLatest([this.institute$, this.searchTerm$, this.pagination$, this.sorting$])
+    .pipe(throttleTime(1000, undefined, { leading: true, trailing: true }),
+      distinctUntilChanged(),
+      switchMap(([instituteId, searchTerm, pageRelated, sorting]) => {
         console.log(instituteId)
-        this.previousInstituteState = instituteId
-        this.defaultData.InstituteId = String(instituteId);
-        this.publicOptions = [true, false];
-      } 
-      if (search) {
-        console.log(this.defaultData)
-        this.defaultData.searchText = searchTerm;
-        this.defaultData.pageSize = pageRelated.pageSize;
-        this.defaultData.currentPage = pageRelated.pageIndex;
-        this.defaultData.sortExpression = sorting.direction;
-        this.defaultData.OrderBy = sorting.field;
-        return this.programs = this.getPrograms(this.defaultData)
-      } 
-      return of([])
-    })).subscribe(res => console.log(res))
+        if (pageRelated.instituteId && this.previousInstituteState !== pageRelated.instituteId) {
+          console.log(pageRelated.instituteId)
+          this.previousInstituteState = pageRelated.instituteId
+          if(typeof pageRelated.instituteId !== "string"){
+            this.defaultData.InstituteId = String(pageRelated.instituteId);
+          }else{
+            console.log(this.defaultData)
+            this.defaultData.InstituteId = '';
+          }
+        }
+          console.log(this.defaultData)
+          this.defaultData.searchText = searchTerm;
+          this.defaultData.pageSize = pageRelated.pageSize;
+          this.defaultData.currentPage = pageRelated.pageIndex;
+          this.defaultData.sortExpression = sorting.direction;
+          this.defaultData.OrderBy = sorting.field;
+          return this.programs = this.getPrograms(this.defaultData)
+      })).subscribe(res => console.log()))
 
     // if we click on view or edit pencil, and then navigate back
     // if (this.selectedOptions) {
@@ -124,8 +136,9 @@ export class ProgramListComponent {
   }
 
   onInstituteChange(event: any) {
-    console.log(event)
-    this.institute$.next(event.value)
+    this.search$.next(false)
+    this.currentPageIndex = 0;
+    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, instituteId: event.value })
   }
 
   isPublic(event: any) {
@@ -158,12 +171,19 @@ export class ProgramListComponent {
     }
   }
 
-  // onSearchData() {
-  //   this.search$.next(true)
-  // }
+  onSearchData() {
+    this.search$.next(true)
+  }
 
+  onSession(id:number,instituteId:number){
+    console.log(id)
+    console.log(instituteId)
+    this.consultancyService.sendProgramId.next({programId:id,instituteId:instituteId})
+    this.router.navigate(['consultancy/session-list'])
+  }
   ngOnDestroy() {
-    this.consultancyService.showList.next(false)
+    this.institute$.next('');
+    this.consultancyService.sendInstituteId.next(null)
     this.subscription.unsubscribe();
   }
 
