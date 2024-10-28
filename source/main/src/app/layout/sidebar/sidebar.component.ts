@@ -12,7 +12,7 @@ import {
 import { AuthService } from '@core';
 import { RouteInfo } from './sidebar.metadata';
 import { loginService } from 'app/login.service';
-
+ 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -28,7 +28,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   headerHeight = 60;
   routerObj;
   menu: any;
-
+  loggedInRole = localStorage.getItem("roleName");
+ 
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
@@ -44,25 +45,25 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     });
   }
-
+ 
   @HostListener('window:resize', ['$event'])
   windowResizecall() {
     this.setMenuHeight();
     this.checkStatuForResize(false);
   }
-
+ 
   @HostListener('document:mousedown', ['$event'])
   onGlobalClick(event: Event): void {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.renderer.removeClass(this.document.body, 'overlay-open');
     }
   }
-
+ 
   callToggleMenu(event: Event, length: number) {
     if (length > 0) {
       const parentElement = (event.target as HTMLInputElement).closest('li');
       const activeClass = parentElement?.classList.contains('active');
-
+ 
       if (activeClass) {
         this.renderer.removeClass(parentElement, 'active');
       } else {
@@ -70,36 +71,38 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     }
   }
-
+ 
   ngOnInit() {
     this.menu = JSON.parse(localStorage.getItem('menu'))
    
-
+ 
     console.log(this.menu)
     const accessiblePaths = this.extractPaths(this.menu);
     localStorage.setItem('accessiblePaths', JSON.stringify(accessiblePaths));
     console.log(this.menu);
-    console.log(localStorage.getItem("roleName"))
-
+    console.log(localStorage.getItem("roleName"));
+   
+ 
+ 
     this.sidebarItems = this.menu.filter((sidebarItem) => {
       return sidebarItem;
     });
-
+ 
     this.bodyTag = this.document.body;
     this.setMenuHeight(); // Set the height for the sidebar
   }
-
+ 
   ngOnDestroy() {
     this.routerObj.unsubscribe();
   }
-
+ 
   setMenuHeight() {
     this.innerHeight = window.innerHeight;
     const height = this.innerHeight - this.headerHeight;
     this.listMaxHeight = height + '';
     this.listMaxWidth = '500px';
   }
-
+ 
   checkStatuForResize(firstTime: boolean) {
     if (window.innerWidth < 1170) {
       // Collapse the sidebar on smaller screens
@@ -109,15 +112,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.renderer.removeClass(this.document.body, 'ls-closed');
     }
   }
-
+ 
   mouseHover() {
     // Remove this logic to prevent the sidebar from collapsing on hover
   }
-
+ 
   mouseOut() {
     // Remove this logic to prevent the sidebar from collapsing on mouse out
   }
-
+ 
   extractPaths(menu: any[]): string[] {
     let paths: string[] = [];
     menu.forEach((item) => {
@@ -130,5 +133,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
     return paths;
   }
-
+ 
 }
+ 

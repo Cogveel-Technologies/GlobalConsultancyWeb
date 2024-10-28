@@ -57,7 +57,7 @@
                     <div *ngIf="error" class="alert alert-danger mb-3 mt-0">{{error}}</div>
                     <div class="form-group auth-form-group mb-4">
                       <mat-icon matSuffix class="auth-page-icon">email</mat-icon>
-                      <input type="email" formControlName="userName" class="form-control auth-control" id="email"
+                      <input type="email" appCustomValidator="email" formControlName="userName" class="form-control auth-control" id="email"
                         placeholder="Email" [ngClass]="{ 'is-invalid': submitted && form['email'].errors }">
                       <div *ngIf="submitted && form['email'].errors" class="invalid-feedback">
                         <div *ngIf="form['email'].errors['required']">Email is required</div>
