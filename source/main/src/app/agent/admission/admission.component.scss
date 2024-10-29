@@ -1,0 +1,117 @@
+
+
+.result-container {
+    display: flex;
+    flex-direction: column; // Stack cards vertically
+    margin: 20px 0;
+
+    .result-card {
+        margin-bottom: 15px; // Space between cards
+
+        mat-card {
+            width: 100%; // Ensure full width for each card
+            border-radius: 12px; // Rounded corners for a modern look
+            background: #ffffff; // Card background color
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); // Soft shadow for depth
+            transition: transform 0.2s, box-shadow 0.2s; // Smooth transition for hover effects
+
+            &:hover {
+                transform: translateY(-3px); // Slight lift on hover
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); // Enhanced shadow on hover
+            }
+
+            .header {
+                display: flex;
+                align-items: center; // Center items vertically
+                padding: 10px; // Padding for the header
+                // background-color: #e0f7fa; // Light background for header
+                background-color: rgb(85, 85, 92);
+                border-top-left-radius: 12px; // Rounded corners for header
+                border-top-right-radius: 12px; // Rounded corners for header
+
+                .icon {
+                    font-size: 36px; // Icon size
+                    margin-right: 10px; // Space between icon and text
+                    // color: #00796b; // Primary color for icon
+                    color: white;
+                }
+
+                .title {
+                    font-weight: bold; // Emphasize the title
+                    // color: #004d40; // Darker title color
+                    color: white;
+                    font-size: 1.25rem; // Slightly larger font size for title
+                }
+
+                .subtitle {
+                    // color: #00796b; // Subtitle color
+                    color: white;
+                    font-style: italic; // Italic style for subtitle
+                }
+                button {
+                    margin-left: auto; // Push button to the right
+                    font-weight: bold; // Bold text for button
+                    background-color: #00796b; // Primary color for button
+                    color: white; // Button text color
+                    border-radius: 20px; // Rounded button corners
+                    padding: 5px 15px; // Button padding
+                    transition: background-color 0.3s; // Smooth transition for hover effect
+            
+                    &:hover {
+                        background-color: #005b4f; // Darker shade on hover
+                    }
+                }
+            }
+            .content {
+                display: flex;
+                flex-direction: column; // Stack items vertically
+                gap: 10px; // Space between items
+                color: #333; // Set a dark color for better visibility
+            
+                .description-container {
+                    display: flex; // Align items in a row
+                    justify-content: space-between; // Space between description and duration
+                    align-items: center; // Center vertically
+                }
+            
+                .fees-container {
+                    display: flex; // Align items in a row
+                    justify-content: space-between; // Space between fees and intakes
+                    flex-wrap: wrap; // Allow wrapping for smaller screens
+            
+                    p {
+                        flex: 1; // Make paragraphs take equal space
+                        margin: 0; // Remove default margin
+                        color: #555; // Set a slightly lighter color for fees
+                        font-size: 14px; // Adjust font size
+                    }
+                }
+            }
+            
+            .description {
+                font-weight: bold; // Make the description bold
+                color: #333; // Dark color for the description
+            }
+            
+
+            .footer {
+                background-color: #e0f7fa; // Light background for footer
+                border-top: 1px solid #ddd; // Divider
+                padding: 10px; // Padding for footer
+                text-align: left; // Align footer text to the right
+
+                small {
+                    color: #444; // Footer text color
+                }
+              
+            }
+        }
+    }
+}
+
+// Optional: Adjust for mobile responsiveness
+@media (max-width: 600px) {
+    .result-container {
+        margin: 10px; // Adjust margins on smaller screens
+    }
+}

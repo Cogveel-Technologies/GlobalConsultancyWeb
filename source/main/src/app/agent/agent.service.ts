@@ -57,13 +57,7 @@ export class AgentService {
     );
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(error);
-      return of(result as T);
-    };
-  }
-
+ 
   getStudentById(id: number): Observable<Student> {
     console.log(id, "service iddddddddddddddddddddd");
     const url = this.buildUrl(`Student/byId?id=${id}`); // Correctly format the query parameter
@@ -211,4 +205,48 @@ getSessions(): Observable<any> {
   return this.http.get<any>(url);
 }
 
+
+genericSearch(params: {
+  CountryId?: number,
+  InstituteId?: number,
+  ProgramId?: number,
+  SessionId?: number,
+  limit: number,
+  OrderBy: string,
+  sortExpression: string,
+  CurrentPage: number,
+  isDeleted: boolean
+}): Observable<PaginatedResponse<Student>> {
+  const urlParams = new URLSearchParams({
+    limit: params.limit.toString(),
+    OrderBy: params.OrderBy,
+    sortExpression: params.sortExpression,
+    CurrentPage: params.CurrentPage.toString(),
+    isDeleted: params.isDeleted.toString(),
+  });
+
+  if (params.CountryId) urlParams.append('CountryId', params.CountryId.toString());
+  if (params.InstituteId) urlParams.append('InstituteId', params.InstituteId.toString());
+  if (params.ProgramId) urlParams.append('ProgramId', params.ProgramId.toString());
+  if (params.SessionId) urlParams.append('SessionId', params.SessionId.toString());
+
+  const url = `${this.apiUrl}/GenericSearch?${urlParams.toString()}`;
+
+  return this.http.get<PaginatedResponse<Student>>(url).pipe(
+    tap(response => console.log('Fetched students from GenericSearch:', response)),
+    catchError(this.handleError<PaginatedResponse<Student>>('genericSearch', {
+      data: [],
+      pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+      status: 0,
+      message: ''
+    }))
+  );
+}
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error); // Log the error for debugging
+      return of(result as T); // Return a safe result
+    };
+  }
 }

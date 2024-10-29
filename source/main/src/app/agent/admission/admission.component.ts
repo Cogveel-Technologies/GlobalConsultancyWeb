@@ -18,13 +18,14 @@ export class AdmissionComponent implements OnInit {
     },
   ];
   searchForm: FormGroup;
+  data: any[] = [];  // Array to hold the search results
 
   // Form controls for autocomplete inputs
   programCtrl = new FormControl();
   sessionCtrl = new FormControl();
   intakeYearCtrl = new FormControl();
   countryCtrl = new FormControl();
-  instituteCtrl = new FormControl(); // New control for institutes
+  instituteCtrl = new FormControl(); 
   courseTypeCtrl = new FormControl();
   programCategoryCtrl = new FormControl();
 
@@ -41,8 +42,8 @@ export class AdmissionComponent implements OnInit {
   countryOptions = [];
   filteredCountryOptions: Observable<any[]>;
 
-  instituteOptions = []; // New array for institute options
-  filteredInstituteOptions: Observable<any[]>; // New observable for filtered institutes
+  instituteOptions = [];
+  filteredInstituteOptions: Observable<any[]>;
 
   courseTypeOptions = [];
   filteredCourseTypeOptions: Observable<any[]>;
@@ -56,7 +57,7 @@ export class AdmissionComponent implements OnInit {
       sessionId: this.sessionCtrl,
       intakeYear: this.intakeYearCtrl,
       countryId: this.countryCtrl,
-      instituteId: this.instituteCtrl, // Add institute control to the form
+      instituteId: this.instituteCtrl,
       courseTypeId: this.courseTypeCtrl,
       programCategoryId: this.programCategoryCtrl,
     });
@@ -102,16 +103,16 @@ export class AdmissionComponent implements OnInit {
   }
 
   // Fetch functions to retrieve data from the API
-  fetchPrograms(instituteId: number) { // Updated to fetch programs by institute ID
+  fetchPrograms(instituteId: number) { 
     this.adminService.getProgramsByInstitute(instituteId).subscribe((response) => {
-      if (response && response) {
+      if (response) {
         this.programOptions = response;
         this.filteredProgramOptions = this.createFilter(this.programCtrl, this.programOptions);
       }
     });
   }
-   
-  // New function to fetch institutes based on selected country ID
+
+  // Fetch institutes based on selected country ID
   fetchInstitutes(countryId: number) {
     this.adminService.getInstitutesByCountry(countryId).subscribe((response) => {
       this.instituteOptions = response;
@@ -119,25 +120,15 @@ export class AdmissionComponent implements OnInit {
     });
   }
 
-  // Updated to fetch sessions based on selected program ID
+  // Fetch sessions based on selected program ID
   fetchSessions(programId: number) {
     this.adminService.getSessionsByProgram(programId).subscribe((response) => {
-      if (response && response) {
+      if (response) {
         this.sessionOptions = response;
-        console.log(this.sessionOptions,'sessionsssssssssssssss');
         this.filteredSessionOptions = this.createFilter(this.sessionCtrl, this.sessionOptions);
       }
     });
   }
-  // fetchSessions() {
-  //   this.adminService.getSessions().subscribe((response) => {
-  //     if (response && response.data) {
-  //       this.sessionOptions = response.data;
-  //       this.filteredSessionOptions = this.createFilter(this.sessionCtrl, this.sessionOptions);
-  //     }
-  //   });
-  // }
-
 
   fetchIntakeYears() {
     this.adminService.getIntakeYears().subscribe((response) => {
@@ -181,18 +172,68 @@ export class AdmissionComponent implements OnInit {
 
   private filterOptions(value: string, options: any[]): any[] {
     const filterValue = value.toLowerCase();
-    return options.filter(option => 
+    return options.filter(option =>
       (option.name && option.name.toLowerCase().includes(filterValue)) ||
       (option.countryName && option.countryName.toLowerCase().includes(filterValue))
     );
   }
 
+  // onSubmit() {
+  //   if (this.searchForm.valid) {
+  //     const params: any = {
+  //       limit: 10,
+  //       OrderBy: 'Id',
+  //       sortExpression: 'desc',
+  //       CurrentPage: 1,
+  //       isDeleted: false
+  //     };
+
+  //     if (this.searchForm.value.countryId) params.CountryId = this.searchForm.value.countryId;
+  //     if (this.searchForm.value.instituteId) params.InstituteId = this.searchForm.value.instituteId;
+  //     if (this.searchForm.value.programId) params.ProgramId = this.searchForm.value.programId;
+  //     if (this.searchForm.value.sessionId) params.SessionId = this.searchForm.value.sessionId;
+  //     console.log(params,'resultsssssssssssssssssssssss');
+  //     this.adminService.genericSearch(params).subscribe(
+        
+  //       response => console.log('Search results:', response),
+  //       error => console.error('Search error:', error)
+  //     );
+  //   }
+  // }
   onSubmit() {
-    if (this.searchForm.valid) {
-      console.log(this.searchForm.value);
-      // Submit logic here
-    }
-  }
+    const selectedCountryObj = this.countryOptions.find(country => country.countryName === this.countryCtrl.value);
+    const selectedInstituteObj = this.instituteOptions.find(institute => institute.name === this.instituteCtrl.value);
+    const selectedProgramObj = this.programOptions.find(program => program.name === this.programCtrl.value);
+    const selectedSessionObj = this.sessionOptions.find(session => session.name === this.sessionCtrl.value);
+
+    // Constructing the search parameters
+    const searchParams = {
+        CountryId: selectedCountryObj ? selectedCountryObj.id : null,  // Access the ID
+        InstituteId: selectedInstituteObj ? selectedInstituteObj.id : null,  // Access the ID
+        ProgramId: selectedProgramObj ? selectedProgramObj.id : null,  // Access the ID
+        SessionId: selectedSessionObj ? selectedSessionObj.id : null,  // Access the ID
+        limit: 10,
+        OrderBy: 'Id',
+        sortExpression: 'desc',
+        CurrentPage: 1,
+        isDeleted: false
+    };
+
+    // Log the parameters for debugging
+    console.log('Submitting with parameters:', searchParams);
+
+    // Call the generic search API
+    this.adminService.genericSearch(searchParams).subscribe(
+      (response) => {
+          console.log("Search results: ", response.data);
+          this.data = response.data;  // Store the API response in the data array
+      },
+      (error) => {
+          console.error("API Error: ", error);
+      }
+  );
+  }  
+
 
   onCancel() {
     this.searchForm.reset();
