@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AgentService } from '../agent.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-admission',
@@ -18,13 +19,20 @@ export class AdmissionComponent implements OnInit {
     },
   ];
   searchForm: FormGroup;
+  data: any[] = [];  // Array to hold the search results
+
+  // Pagination variables
+  totalItems: number = 0;
+  currentPage: number = 1;
+  pageSizeOptions: number[] = [5, 10, 15, 20];
+  itemsPerPage: number = this.pageSizeOptions[0];
 
   // Form controls for autocomplete inputs
   programCtrl = new FormControl();
   sessionCtrl = new FormControl();
   intakeYearCtrl = new FormControl();
   countryCtrl = new FormControl();
-  instituteCtrl = new FormControl(); // New control for institutes
+  instituteCtrl = new FormControl();
   courseTypeCtrl = new FormControl();
   programCategoryCtrl = new FormControl();
 
@@ -41,8 +49,8 @@ export class AdmissionComponent implements OnInit {
   countryOptions = [];
   filteredCountryOptions: Observable<any[]>;
 
-  instituteOptions = []; // New array for institute options
-  filteredInstituteOptions: Observable<any[]>; // New observable for filtered institutes
+  instituteOptions = [];
+  filteredInstituteOptions: Observable<any[]>;
 
   courseTypeOptions = [];
   filteredCourseTypeOptions: Observable<any[]>;
@@ -56,7 +64,7 @@ export class AdmissionComponent implements OnInit {
       sessionId: this.sessionCtrl,
       intakeYear: this.intakeYearCtrl,
       countryId: this.countryCtrl,
-      instituteId: this.instituteCtrl, // Add institute control to the form
+      instituteId: this.instituteCtrl,
       courseTypeId: this.courseTypeCtrl,
       programCategoryId: this.programCategoryCtrl,
     });
@@ -102,16 +110,15 @@ export class AdmissionComponent implements OnInit {
   }
 
   // Fetch functions to retrieve data from the API
-  fetchPrograms(instituteId: number) { // Updated to fetch programs by institute ID
+  fetchPrograms(instituteId: number) {
     this.adminService.getProgramsByInstitute(instituteId).subscribe((response) => {
-      if (response && response) {
+      if (response) {
         this.programOptions = response;
         this.filteredProgramOptions = this.createFilter(this.programCtrl, this.programOptions);
       }
     });
   }
-   
-  // New function to fetch institutes based on selected country ID
+
   fetchInstitutes(countryId: number) {
     this.adminService.getInstitutesByCountry(countryId).subscribe((response) => {
       this.instituteOptions = response;
@@ -119,25 +126,14 @@ export class AdmissionComponent implements OnInit {
     });
   }
 
-  // Updated to fetch sessions based on selected program ID
   fetchSessions(programId: number) {
     this.adminService.getSessionsByProgram(programId).subscribe((response) => {
-      if (response && response) {
+      if (response) {
         this.sessionOptions = response;
-        console.log(this.sessionOptions,'sessionsssssssssssssss');
         this.filteredSessionOptions = this.createFilter(this.sessionCtrl, this.sessionOptions);
       }
     });
   }
-  // fetchSessions() {
-  //   this.adminService.getSessions().subscribe((response) => {
-  //     if (response && response.data) {
-  //       this.sessionOptions = response.data;
-  //       this.filteredSessionOptions = this.createFilter(this.sessionCtrl, this.sessionOptions);
-  //     }
-  //   });
-  // }
-
 
   fetchIntakeYears() {
     this.adminService.getIntakeYears().subscribe((response) => {
@@ -181,17 +177,53 @@ export class AdmissionComponent implements OnInit {
 
   private filterOptions(value: string, options: any[]): any[] {
     const filterValue = value.toLowerCase();
-    return options.filter(option => 
+    return options.filter(option =>
       (option.name && option.name.toLowerCase().includes(filterValue)) ||
       (option.countryName && option.countryName.toLowerCase().includes(filterValue))
     );
   }
 
+  // Submit form to search with pagination
   onSubmit() {
-    if (this.searchForm.valid) {
-      console.log(this.searchForm.value);
-      // Submit logic here
-    }
+    this.currentPage = 1; // Reset to the first page on new search
+    this.getSearchResults();
+  }
+
+  // Pagination event handler
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex + 1;
+    this.itemsPerPage = event.pageSize;
+    this.getSearchResults();
+  }
+
+  // Fetch paginated results based on search parameters
+  private getSearchResults() {
+    const selectedCountryObj = this.countryOptions.find(country => country.countryName === this.countryCtrl.value);
+    const selectedInstituteObj = this.instituteOptions.find(institute => institute.name === this.instituteCtrl.value);
+    const selectedProgramObj = this.programOptions.find(program => program.name === this.programCtrl.value);
+    const selectedSessionObj = this.sessionOptions.find(session => session.name === this.sessionCtrl.value);
+
+    const searchParams = {
+      CountryId: selectedCountryObj ? selectedCountryObj.id : null,
+      InstituteId: selectedInstituteObj ? selectedInstituteObj.id : null,
+      ProgramId: selectedProgramObj ? selectedProgramObj.id : null,
+      SessionId: selectedSessionObj ? selectedSessionObj.id : null,
+      limit: this.itemsPerPage,
+      OrderBy: 'Id',
+      sortExpression: 'desc',
+      CurrentPage: this.currentPage,
+      isDeleted: false
+    };
+
+    this.adminService.genericSearch(searchParams).subscribe(
+      (response) => {
+        this.data = response.data;
+        this.totalItems = response.pageInfo?.totalRecords || 0;  // Assuming backend response contains totalRecords in pageInfo
+      },
+      (error) => {
+        console.error("API Error: ", error);
+      }
+    );
   }
 
   onCancel() {
