@@ -60,7 +60,7 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
       consultancyName: ['', Validators.required],
       phone1: ['', Validators.required],
       phone2: [''],
-      email1: ['', [Validators.required, Validators.email]],
+      userName: ['', [Validators.required]],
       email2: ['', [Validators.email]],
       country: ['', Validators.required],
       state: ['', Validators.required],
@@ -124,6 +124,7 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.registerConsultancy.valid) {
+      console.log(this.registerConsultancy.value)
       const submitSub = (this.isFormPrefilled() ?
         this.adminService.updateConsultancy(this.consultancy.id, this.registerConsultancy.value) :
         this.adminService.registerConsultancy(this.registerConsultancy.value)

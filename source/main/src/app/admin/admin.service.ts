@@ -5,6 +5,7 @@ import { User } from './listusers/user.model';
 import { tap, map, catchError } from 'rxjs/operators';
 import { Role } from './list-roles/role.model';
 import { Consultancy } from './consultancy-list/consultancy.model';
+import { ConsultancyDetailsOptions } from 'app/consultancy/consultancy-models/data.consultancy-get-options';
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -31,7 +32,8 @@ export class AdminService {
     return `${this.apiUrl}/${path}`;
   }
 
-  isEditMode:BehaviorSubject<boolean| null> = new BehaviorSubject(null);
+  isEditMode: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
+  sendConsultancyId: BehaviorSubject<number | string> = new BehaviorSubject<number | string>('')
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {
@@ -102,18 +104,26 @@ export class AdminService {
       })
     );
   }
-    // // Add a method to get all users
-    // getAllUsers(): Observable<any[]> {
-    //   return this.http.get<any[]>(`${this.apiUrl}/all`);
-    // }
-    
 
- // Method to get all roles
-getAllRoles(): Observable<any[]> {
-  return this.http.get<any>(`${this.apiUrl}/Role/all`).pipe(
-    map(response => response.data) // Extracting the data array from the response
-  );
-}
+  // Method to get all users
+  getAllUsers(): Observable<{ id: number; firstName: string }[]> {
+    return this.http.get<any>(`${this.apiUrl}/User/all`).pipe(
+      map(response => response.data.map((user: any) => ({
+        id: user.id,
+        firstName: user.firstName
+      }))),
+      tap(data => console.log('Filtered Users:', data))
+    );
+  }
+
+
+
+  // Method to get all roles
+  getAllRoles(): Observable<any[]> {
+    return this.http.get<any>(`${this.apiUrl}/Role/all`).pipe(
+      map(response => response.data) // Extracting the data array from the response
+    );
+  }
 
 
   updateUserData(userId: number, userData: User): Observable<any> {
@@ -186,61 +196,69 @@ getAllRoles(): Observable<any[]> {
   updateRole(id: number, roleName: string): Observable<any> {
     const url = `${this.apiUrl}/Role/${id}`;  // Assuming the API endpoint uses the ID in the URL path
     const body = { roleName };  // The body should be an object with the roleName property
-  
+
     return this.http.put<any>(url, body);  // Send the PUT request with the URL and body
   }
 
- //methods for consultancy
- registerConsultancy(consultancyData: any): Observable<any> {
+  //methods for consultancy
+  registerConsultancy(consultancyData: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/Consultancy`, consultancyData);
   }
- 
+
   deleteConsultancy(consultancyId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/Consultancy/byId?id=${consultancyId}`);
   }
- 
-  
+
+
   // methods for list-consultancy
   // Get a list of consultancies with pagination, sorting, and searching
-getConsultancyList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean }): Observable<PaginatedResponse<Consultancy>> {
-  let url = `${this.apiUrl}/Consultancy?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
-  if (params.searchTerm) {
-    url += `&searchText=${params.searchTerm}`;
+  getConsultancyList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean }): Observable<PaginatedResponse<Consultancy>> {
+    let url = `${this.apiUrl}/Consultancy?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
+    if (params.searchTerm) {
+      url += `&searchText=${params.searchTerm}`;
+    }
+    if (params.isDeleted !== undefined) {
+      url += `&isDeleted=${params.isDeleted}`;
+    }
+
+    return this.http.get<PaginatedResponse<Consultancy>>(url).pipe(
+      tap(response => console.log('Fetched consultancies:', response)),  // Log the full response
+      catchError(this.handleError<PaginatedResponse<Consultancy>>('getConsultancyList', {
+        data: [],
+        pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+        status: 0,
+        message: ''
+      }))
+    );
   }
-  if (params.isDeleted !== undefined) {
-    url += `&isDeleted=${params.isDeleted}`;
+
+  getConsultancyById(id: number): Observable<Consultancy> {
+    return this.http.get<Observable<Consultancy>>(`${this.apiUrl}/Consultancy/byId?Id=${id}`).pipe(map(res => res['data']))
   }
 
-  return this.http.get<PaginatedResponse<Consultancy>>(url).pipe(
-    tap(response => console.log('Fetched consultancies:', response)),  // Log the full response
-    catchError(this.handleError<PaginatedResponse<Consultancy>>('getConsultancyList', {
-      data: [],
-      pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
-      status: 0,
-      message: ''
-    }))
-  );
-}
+  updateConsultancy(consultancyId: number, consultancyData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/Consultancy/${consultancyId}`, consultancyData);
+  }
+  // --------- update-consutancy ----------------
+  //    updateConsultancy(data: ConsultancyData) {
+  //     return this.http.put(`${this.baseUrl}/Consultancy/${data.id}`, data)
+  // }
+  getSuperAdminById(id: number): Observable<any> {
+    // Return a dummy object for superadmin
+    const superAdmin = {
+      sname: 'Superadmin',
+      semail: 'superadmin@gmail.com'
+    };
 
-getConsultancyById(id: number): Observable<Consultancy> {
-  return this.http.get<Observable<Consultancy>>(`${this.apiUrl}/Consultancy/byId?Id=${id}`).pipe(map(res => res['data']))
-}
+    // Simulating an observable that returns the dummy superadmin data
+    return of(superAdmin);
+  }
 
-updateConsultancy(consultancyId: number, consultancyData: any): Observable<any> {
-  return this.http.put(`${this.apiUrl}/Consultancy/${consultancyId}`, consultancyData);
-}
-   // --------- update-consutancy ----------------
-//    updateConsultancy(data: ConsultancyData) {
-//     return this.http.put(`${this.baseUrl}/Consultancy/${data.id}`, data)
-// }
-getSuperAdminById(id: number): Observable<any> {
-  // Return a dummy object for superadmin
-  const superAdmin = {
-    sname: 'Superadmin',
-    semail: 'superadmin@gmail.com'
-  };
-  
-  // Simulating an observable that returns the dummy superadmin data
-  return of(superAdmin);
-}
+  getAllConsultancies() {
+    return this.http.get(`${this.apiUrl}/Consultancy/all`).pipe(map(res => res['data']));
+  }
+
+  getConsultanciesOfAdmin(data:ConsultancyDetailsOptions){
+    return this.http.get(`${this.apiUrl}/Consultancy/byUserId?UserId=${data.UserId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`).pipe(map(res => res['data']))
+  }
 }

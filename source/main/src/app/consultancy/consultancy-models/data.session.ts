@@ -3,5 +3,6 @@ export interface SessionData {
     sessionName:string,
     instituteId:number,
     instituteName:string,
-    programName:string
+    programName:string,
+    programId?:number
 }

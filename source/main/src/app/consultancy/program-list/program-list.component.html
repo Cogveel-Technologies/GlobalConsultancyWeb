@@ -10,9 +10,24 @@
             <div class="row g-3">
                 <div class="col-md-4">
                     <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Institute</mat-label>
+                        <mat-label>Select a consultancy</mat-label>
                         <mat-icon matPrefix>school</mat-icon>
-                        <mat-select required (selectionChange)="onInstituteChange($event)" [formControl]="instituteControl">
+                        <mat-select required (selectionChange)="onConsultancyChange($event)"
+                            [formControl]="instituteControl">
+                            <mat-option [value]="'all'">All</mat-option>
+                            <mat-option *ngFor="let consultancy of (consultancies | async)" [value]="consultancy.id">
+                                {{ consultancy.consultancyName }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-4">
+                    <mat-form-field appearance="fill" class="w-100 mb-0">
+                        <mat-label>Select an institute</mat-label>
+                        <mat-icon matPrefix>school</mat-icon>
+                        <mat-select required (selectionChange)="onInstituteChange($event)"
+                            [formControl]="instituteControl">
                             <mat-option [value]="'all'">All</mat-option>
                             <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
                                 {{ institute.name }}
@@ -20,6 +35,10 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
+
+                <div class="col-md-2">
+                    <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
+                  </div>
             </div>
         </div>
 
@@ -56,39 +75,28 @@
                             <thead *ngIf="(programs | async)?.length > 0">
                                 <tr>
                                     <th>
-                                        <app-sorting 
-                                            [sortField]="defaultData.OrderBy" 
-                                            [sortDirection]="defaultData.sortExpression" 
-                                            [sortFields]="['programName']" 
-                                            [sortLabels]="['Name']"
+                                        <app-sorting [sortField]="defaultData.OrderBy"
+                                            [sortDirection]="defaultData.sortExpression" [sortFields]="['programName']"
+                                            [sortLabels]="['Name']" (sortChange)="onSortChange($event)">
+                                        </app-sorting>
+                                    </th>
+                                    <th>
+                                        <app-sorting [sortField]="defaultData.OrderBy"
+                                            [sortDirection]="defaultData.sortExpression" [sortFields]="['duration']"
+                                            [sortLabels]="['Duration']" (sortChange)="onSortChange($event)">
+                                        </app-sorting>
+                                    </th>
+                                    <th>
+                                        <app-sorting [sortField]="defaultData.OrderBy"
+                                            [sortDirection]="defaultData.sortExpression"
+                                            [sortFields]="['levelOfEducation']" [sortLabels]="['Level of Education']"
                                             (sortChange)="onSortChange($event)">
                                         </app-sorting>
                                     </th>
                                     <th>
-                                        <app-sorting 
-                                            [sortField]="defaultData.OrderBy" 
-                                            [sortDirection]="defaultData.sortExpression" 
-                                            [sortFields]="['duration']" 
-                                            [sortLabels]="['Duration']"
-                                            (sortChange)="onSortChange($event)">
-                                        </app-sorting>
-                                    </th>
-                                    <th>
-                                        <app-sorting 
-                                            [sortField]="defaultData.OrderBy" 
-                                            [sortDirection]="defaultData.sortExpression" 
-                                            [sortFields]="['levelOfEducation']" 
-                                            [sortLabels]="['Level of Education']"
-                                            (sortChange)="onSortChange($event)">
-                                        </app-sorting>
-                                    </th>
-                                    <th>
-                                        <app-sorting 
-                                            [sortField]="defaultData.OrderBy" 
-                                            [sortDirection]="defaultData.sortExpression" 
-                                            [sortFields]="['status']" 
-                                            [sortLabels]="['Status']"
-                                            (sortChange)="onSortChange($event)">
+                                        <app-sorting [sortField]="defaultData.OrderBy"
+                                            [sortDirection]="defaultData.sortExpression" [sortFields]="['status']"
+                                            [sortLabels]="['Status']" (sortChange)="onSortChange($event)">
                                         </app-sorting>
                                     </th>
                                     <th>Actions</th>
@@ -104,34 +112,37 @@
                                     <td data-label="Level of Education">{{ program.levelOfEducation }}</td>
                                     <td data-label="Status">{{ program.status }}</td>
                                     <td data-label="Actions">
-                                        <button mat-icon-button [routerLink]="['/consultancy/program-details', program.id]" matTooltip="View">
+                                        <button mat-icon-button
+                                            [routerLink]="['/consultancy/program-details', program.id]"
+                                            matTooltip="View">
                                             <mat-icon>visibility</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-program', program.id]" matTooltip="Edit">
+                                        <button mat-icon-button color="primary"
+                                            [routerLink]="['/consultancy/edit-program', program.id]" matTooltip="Edit">
                                             <!-- <mat-icon>edit</mat-icon> -->
-                                            <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                                            
+                                            <app-feather-icons [icon]="'edit'"
+                                                [class]="'tbl-fav-edit'"></app-feather-icons>
+
                                         </button>
-                                        <button mat-icon-button color="warn" (click)="deleteProgram(program.id)" matTooltip="Delete">
+                                        <button mat-icon-button color="warn" (click)="deleteProgram(program.id)"
+                                            matTooltip="Delete">
                                             <!-- <mat-icon>delete</mat-icon> -->
-                                            <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                                            <app-feather-icons [icon]="'trash-2'"
+                                                [class]="'tbl-fav-delete'"></app-feather-icons>
                                         </button>
-                                        <button mat-icon-button color="warn"  matTooltip="Sessions" (click)="onSession(program.id, program.instituteId)">
+                                        <button mat-icon-button color="warn" matTooltip="Sessions"
+                                            (click)="onSession(program.id, program.instituteId)">
                                             <!-- <mat-icon>delete</mat-icon> -->
-                                            <app-feather-icons [icon]="'calendar'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                                            <app-feather-icons [icon]="'calendar'"
+                                                [class]="'tbl-fav-edit'"></app-feather-icons>
                                         </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <app-pagination 
-                        *ngIf="(programs | async)?.length > 0"
-                        [pageSize]="defaultData.pageSize" 
-                        (pageChange)="onPageChange($event)" 
-                        [length]="records"
-                        [pageIndex]="currentPageIndex"
-                        >
-                      </app-pagination>
+                        <app-pagination *ngIf="(programs | async)?.length > 0" [pageSize]="defaultData.pageSize"
+                            (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
+                        </app-pagination>
                     </div>
                 </div>
             </div>

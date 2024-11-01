@@ -73,11 +73,10 @@ export class IntakesListComponent {
     this.consultancyService.getIntakesofSession.subscribe(res => {
       if (res) {
         this.intakesFromSession = true
-        console.log(res)
         this.institute$.next(res.instituteId)
         this.institute.setValue(+res.instituteId)
+        this.program$.next(res.programId)
         this.session$.next(res.sessionId)
-        this.session.setValue(res.sessionId)
       }
     })
 
@@ -130,6 +129,7 @@ export class IntakesListComponent {
           this.defaultData.ProgramId = String(programId);
           this.defaultData.SessionId = '';
           this.defaultData.InstituteId = '';
+          this.program.setValue(programId)
           this.session.setValue('');
           this.isProgramId = true;
           console.log(this.defaultData)
@@ -141,6 +141,7 @@ export class IntakesListComponent {
           this.defaultData.InstituteId = '';
           this.defaultData.ProgramId = '';
           this.defaultData.SessionId = String(sessionId)
+          this.session.setValue(sessionId)
           console.log(this.defaultData)
         }
         if (search) {

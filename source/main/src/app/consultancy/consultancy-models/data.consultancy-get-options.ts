@@ -13,4 +13,5 @@ export interface ConsultancyDetailsOptions{
     CountryId?:string,
     IntakeId?:string,
     IsPublic?:string,
+    UserId?:string
 }

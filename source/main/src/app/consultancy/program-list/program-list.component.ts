@@ -9,6 +9,7 @@ import { SpecificConsultancyRelated } from '../consultancy-models/data.specificI
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { PageEvent } from '@angular/material/paginator';
 import { distinctUntilChanged } from 'rxjs';
+import { AdminService } from 'app/admin/admin.service';
 
 
 
@@ -27,7 +28,7 @@ export class ProgramListComponent {
     },
   ];
 
-  constructor(private router: Router, private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService) { }
+  constructor(private router: Router, private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService,private adminService: AdminService) { }
   editMode: boolean;
   programs!: Observable<ProgramData[]>;
   programsOnInstitutes: Observable<SpecificConsultancyRelated[]>;
@@ -47,8 +48,8 @@ export class ProgramListComponent {
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
-  pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number, instituteId?:number }> = new BehaviorSubject<{ pageSize: number, pageIndex: number, instituteId?:number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, instituteId: +this.defaultData.InstituteId });
-  sorting$: BehaviorSubject<{ field: string, direction: string }> = new BehaviorSubject<{ field: string, direction: string }>({ field: this.defaultData.OrderBy, direction: this.defaultData.sortExpression });
+  pagination$: BehaviorSubject<{ pageSize?: number, pageIndex?: number, instituteId?:number,consultancyId?:number|string, search?:boolean }> = new BehaviorSubject<{ pageSize?: number, pageIndex?: number, instituteId?:number,consultancyId?:number|string, search?:boolean}>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, instituteId: +this.defaultData.InstituteId, consultancyId:this.defaultData.ConsultancyId, search:true });
+  sorting$: BehaviorSubject<{ field: string, direction: string }> = new BehaviorSubject<{ field: string, direction: string }>({ field: this.defaultData.OrderBy, direction: this.defaultData.sortExpression ,});
   totalRecords$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
   previousSessionState: (number | null) = null;
@@ -61,6 +62,8 @@ export class ProgramListComponent {
   search$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   instituteControl: FormControl = new FormControl("all");
   ProgramFromInstitute:number = 0;
+  roleName: string = localStorage.getItem('roleName');
+  consultancies: Observable<[{ id: number, consultancyName: string }]>;
 
 
 
@@ -74,13 +77,16 @@ export class ProgramListComponent {
 
   ngOnInit() {
     console.log(this.defaultData)
+     // if superadmin has logged in
+    //  if(this.roleName === 'superadmin'){
+      this.consultancies = this.adminService.getAllConsultancies();
+      // }
     // get all program by default
     this.programs = this.getPrograms(this.defaultData)
     this.institutes = this.consultancyApiService.getSpecificInstitutes()
     // show program from institute details
     this.subscription.add(this.consultancyService.sendInstituteId.subscribe(id => {
       if(id){
-        console.log(id)
       this.search$.next(true);
       this.institutes = this.consultancyApiService.getSpecificInstitutes()
       this.ProgramFromInstitute = id;
@@ -103,11 +109,14 @@ export class ProgramListComponent {
           this.previousInstituteState = pageRelated.instituteId
           if(typeof pageRelated.instituteId !== "string"){
             this.defaultData.InstituteId = String(pageRelated.instituteId);
-          }else{
-            console.log(this.defaultData)
-            this.defaultData.InstituteId = '';
           }
         }
+        if (pageRelated.consultancyId && typeof pageRelated.consultancyId === 'number') {
+          console.log(pageRelated.consultancyId)
+          this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
+          console.log(this.defaultData)
+        }
+        if(pageRelated.search){
           console.log(this.defaultData)
           this.defaultData.searchText = searchTerm;
           this.defaultData.pageSize = pageRelated.pageSize;
@@ -115,6 +124,8 @@ export class ProgramListComponent {
           this.defaultData.sortExpression = sorting.direction;
           this.defaultData.OrderBy = sorting.field;
           return this.programs = this.getPrograms(this.defaultData)
+        }
+        return of([])
       })).subscribe(res => console.log()))
 
     // if we click on view or edit pencil, and then navigate back
@@ -171,8 +182,8 @@ export class ProgramListComponent {
     }
   }
 
-  onSearchData() {
-    this.search$.next(true)
+  onSearch() {
+    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search:true, })
   }
 
   onSession(id:number,instituteId:number){
@@ -181,6 +192,11 @@ export class ProgramListComponent {
     this.consultancyService.sendProgramId.next({programId:id,instituteId:instituteId})
     this.router.navigate(['consultancy/session-list'])
   }
+
+  onConsultancyChange(event: any) {
+    this.pagination$.next({consultancyId:event.value})
+  }
+
   ngOnDestroy() {
     this.institute$.next('');
     this.consultancyService.sendInstituteId.next(null)

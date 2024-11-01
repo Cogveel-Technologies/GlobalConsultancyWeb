@@ -104,6 +104,7 @@ export class SigninComponent
       })).subscribe({
       next: res => {
         console.log(res.menu)
+        console.log(res.roleName)
         localStorage.setItem("token", res.jwtToken);
         localStorage.setItem("id",res.id);
         localStorage.setItem("menu",JSON.stringify(res.menuItems));
