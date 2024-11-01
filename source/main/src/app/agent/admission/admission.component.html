@@ -235,8 +235,26 @@
                    
                 </mat-card-footer>
             </mat-card>
-        </div>
-    </div>
+            
+        </div>     
+
+      
+      <mat-paginator [length]="totalItems"
+              [pageSize]="itemsPerPage"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              (page)="onPageChange($event)">
+              aria-label="Select page">
+</mat-paginator>
+
     
+    <div *ngIf="data.length === 0" class="text-center mt-4">
+      <p>No results found.</p>
+    </div>
+
+
+
+
+    </div>
+     
     </div>
 </section>

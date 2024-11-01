@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AgentService } from '../agent.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-admission',
@@ -20,12 +21,18 @@ export class AdmissionComponent implements OnInit {
   searchForm: FormGroup;
   data: any[] = [];  // Array to hold the search results
 
+  // Pagination variables
+  totalItems: number = 0;
+  currentPage: number = 1;
+  pageSizeOptions: number[] = [5, 10, 15, 20];
+  itemsPerPage: number = this.pageSizeOptions[0];
+
   // Form controls for autocomplete inputs
   programCtrl = new FormControl();
   sessionCtrl = new FormControl();
   intakeYearCtrl = new FormControl();
   countryCtrl = new FormControl();
-  instituteCtrl = new FormControl(); 
+  instituteCtrl = new FormControl();
   courseTypeCtrl = new FormControl();
   programCategoryCtrl = new FormControl();
 
@@ -103,7 +110,7 @@ export class AdmissionComponent implements OnInit {
   }
 
   // Fetch functions to retrieve data from the API
-  fetchPrograms(instituteId: number) { 
+  fetchPrograms(instituteId: number) {
     this.adminService.getProgramsByInstitute(instituteId).subscribe((response) => {
       if (response) {
         this.programOptions = response;
@@ -112,7 +119,6 @@ export class AdmissionComponent implements OnInit {
     });
   }
 
-  // Fetch institutes based on selected country ID
   fetchInstitutes(countryId: number) {
     this.adminService.getInstitutesByCountry(countryId).subscribe((response) => {
       this.instituteOptions = response;
@@ -120,7 +126,6 @@ export class AdmissionComponent implements OnInit {
     });
   }
 
-  // Fetch sessions based on selected program ID
   fetchSessions(programId: number) {
     this.adminService.getSessionsByProgram(programId).subscribe((response) => {
       if (response) {
@@ -178,62 +183,48 @@ export class AdmissionComponent implements OnInit {
     );
   }
 
-  // onSubmit() {
-  //   if (this.searchForm.valid) {
-  //     const params: any = {
-  //       limit: 10,
-  //       OrderBy: 'Id',
-  //       sortExpression: 'desc',
-  //       CurrentPage: 1,
-  //       isDeleted: false
-  //     };
-
-  //     if (this.searchForm.value.countryId) params.CountryId = this.searchForm.value.countryId;
-  //     if (this.searchForm.value.instituteId) params.InstituteId = this.searchForm.value.instituteId;
-  //     if (this.searchForm.value.programId) params.ProgramId = this.searchForm.value.programId;
-  //     if (this.searchForm.value.sessionId) params.SessionId = this.searchForm.value.sessionId;
-  //     console.log(params,'resultsssssssssssssssssssssss');
-  //     this.adminService.genericSearch(params).subscribe(
-        
-  //       response => console.log('Search results:', response),
-  //       error => console.error('Search error:', error)
-  //     );
-  //   }
-  // }
+  // Submit form to search with pagination
   onSubmit() {
+    this.currentPage = 1; // Reset to the first page on new search
+    this.getSearchResults();
+  }
+
+  // Pagination event handler
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex + 1;
+    this.itemsPerPage = event.pageSize;
+    this.getSearchResults();
+  }
+
+  // Fetch paginated results based on search parameters
+  private getSearchResults() {
     const selectedCountryObj = this.countryOptions.find(country => country.countryName === this.countryCtrl.value);
     const selectedInstituteObj = this.instituteOptions.find(institute => institute.name === this.instituteCtrl.value);
     const selectedProgramObj = this.programOptions.find(program => program.name === this.programCtrl.value);
     const selectedSessionObj = this.sessionOptions.find(session => session.name === this.sessionCtrl.value);
 
-    // Constructing the search parameters
     const searchParams = {
-        CountryId: selectedCountryObj ? selectedCountryObj.id : null,  // Access the ID
-        InstituteId: selectedInstituteObj ? selectedInstituteObj.id : null,  // Access the ID
-        ProgramId: selectedProgramObj ? selectedProgramObj.id : null,  // Access the ID
-        SessionId: selectedSessionObj ? selectedSessionObj.id : null,  // Access the ID
-        limit: 10,
-        OrderBy: 'Id',
-        sortExpression: 'desc',
-        CurrentPage: 1,
-        isDeleted: false
+      CountryId: selectedCountryObj ? selectedCountryObj.id : null,
+      InstituteId: selectedInstituteObj ? selectedInstituteObj.id : null,
+      ProgramId: selectedProgramObj ? selectedProgramObj.id : null,
+      SessionId: selectedSessionObj ? selectedSessionObj.id : null,
+      limit: this.itemsPerPage,
+      OrderBy: 'Id',
+      sortExpression: 'desc',
+      CurrentPage: this.currentPage,
+      isDeleted: false
     };
 
-    // Log the parameters for debugging
-    console.log('Submitting with parameters:', searchParams);
-
-    // Call the generic search API
     this.adminService.genericSearch(searchParams).subscribe(
       (response) => {
-          console.log("Search results: ", response.data);
-          this.data = response.data;  // Store the API response in the data array
+        this.data = response.data;
+        this.totalItems = response.pageInfo?.totalRecords || 0;  // Assuming backend response contains totalRecords in pageInfo
       },
       (error) => {
-          console.error("API Error: ", error);
+        console.error("API Error: ", error);
       }
-  );
-  }  
-
+    );
+  }
 
   onCancel() {
     this.searchForm.reset();
