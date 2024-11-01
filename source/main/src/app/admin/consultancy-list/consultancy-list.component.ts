@@ -9,6 +9,8 @@ import { Consultancy } from './consultancy.model';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';  // Ensure this is the correct import for your pagination options
+import { ConsultancyDetailsOptions } from 'app/consultancy/consultancy-models/data.consultancy-get-options';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 
 @Component({
   selector: 'app-consultancy-list',
@@ -25,13 +27,17 @@ export class ConsultancyListComponent implements OnInit {
   ];
   consultancies$: Observable<Consultancy[]>;
   totalConsultancies: number = 0;
-
+  // users:Observable<[{firstName:string,id:number}]>;
+  users:any
+  roleName = localStorage.getItem("roleName")
+  userList = new FormControl(0);
   searchControl: FormControl = new FormControl('');
   sortField: string = 'id'; // Default sort field
   sortDirection: 'asc' | 'desc' = 'desc'; // Default sort direction
   pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
   currentPage: number = 1; // Default current page
   totalPages: number = 1; // Total number of pages
+  defaultData:ConsultancyDetailsOptions = this.consultancyService.defaultRenderData()
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -39,17 +45,25 @@ export class ConsultancyListComponent implements OnInit {
   private sortFieldSubject = new BehaviorSubject<string>(this.sortField);
   private sortDirectionSubject = new BehaviorSubject<'asc' | 'desc'>(this.sortDirection);
   private searchTermSubject = new BehaviorSubject<string>('');
+  private admin:BehaviorSubject<string|number> =new BehaviorSubject<string|number>('');
 
   constructor(
     private router: Router,
     private adminService: AdminService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private consultancyService:ConsultancyService
   ) {
     this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
     this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize); // Then use it here
   }
 
   ngOnInit() {
+    // if super admin logs in
+    if(this.roleName === 'superadmin'){
+      console.log(this.roleName)
+      this.users = this.adminService.getAllUsers()
+    }
+
     // Combine search, pagination, and sorting
     this.consultancies$ = combineLatest([
       this.searchControl.valueChanges.pipe(
@@ -61,9 +75,16 @@ export class ConsultancyListComponent implements OnInit {
       this.pageSizeSubject,
       this.currentPageSubject,
       this.sortFieldSubject,
-      this.sortDirectionSubject
+      this.sortDirectionSubject,
+      this.admin
     ]).pipe(
-      switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
+      switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection,adminId]) => {
+        console.log(adminId)
+        if(adminId){
+          console.log(adminId)
+          this.defaultData.UserId = String(adminId)
+          return this.consultancies$ = this.adminService.getConsultanciesOfAdmin(this.defaultData)
+        }
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
         return this.adminService.getConsultancyList({
           limit: pageSize,
@@ -147,9 +168,20 @@ export class ConsultancyListComponent implements OnInit {
     this.currentPageSubject.next(this.currentPage);
   }
 
+  getInstitutes(consultancyId:number){
+    console.log(consultancyId)
+    this.adminService.sendConsultancyId.next(consultancyId)
+    this.router.navigate([`/consultancy/institution-list`])
+  }
+
   onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' }) {
     this.sortField = field;
     this.sortDirection = direction;
     this.refreshConsultancies();
+  }
+
+  selectAdmin(event:any){
+    console.log(event.value)
+    this.admin.next(event.value)
   }
 }

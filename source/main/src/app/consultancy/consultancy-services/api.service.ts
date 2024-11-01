@@ -193,6 +193,9 @@ export class ConsultancyApi {
     getAgentDetails(id: number): Observable<AgentDetails> {
         return this.http.get<Observable<AgentDetails>>(`${this.baseUrl}/Agent/byId?Id=${id}`).pipe(map(res => res['data']))
     }
-
+    // ------------------ get institutes of consultancy -------------------------
+    getInstitutesOfConsultancy(data:ConsultancyDetailsOptions): Observable<any> {
+        return this.http.get(`${this.baseUrl}/Institute/ConsultancyId?CountryId=${data.CountryId}&ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&CurrentPage=${data.currentPage}`)
+    }
 
 }

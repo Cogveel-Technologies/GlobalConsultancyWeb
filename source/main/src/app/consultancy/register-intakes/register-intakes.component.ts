@@ -10,6 +10,7 @@ import { ConsultancyService } from '../consultancy-services/consultancy.service'
 import { Moment } from 'moment';
 
 
+
 @Component({
   selector: 'app-register-intakes',
   templateUrl: './register-intakes.component.html',
@@ -45,7 +46,7 @@ export class RegisterIntakesComponent {
 
 
   ngOnInit(): void {
-    // Initialize data for programs, institutes, sessions
+    // Initialize data for programs, institutes, session
     this.registerIntake = new FormGroup({
       instituteId: new FormControl(''),
       sessionId: new FormControl(''),

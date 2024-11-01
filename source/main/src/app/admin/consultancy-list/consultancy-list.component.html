@@ -5,6 +5,26 @@
       <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active"></app-breadcrumb>
     </div>
 
+    <div class="card p-4" *ngIf="roleName === 'superadmin'">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <mat-form-field class="w-100 mb-0">
+            <mat-label>Select a User</mat-label>
+            <mat-icon matPrefix>account_circle</mat-icon>
+            <mat-select required [formControl]="userList" (selectionChange)="selectAdmin($event)">
+              <!-- Option for "All" -->
+              <mat-option [value]="0">All</mat-option>
+              <!-- Loop through the list of users -->
+              <mat-option *ngFor="let user of (users | async)" [value]="user.id">
+                {{ user.firstName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    
+
     <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
@@ -66,7 +86,7 @@
                   </th>
                   <th>
                     <app-sorting [sortField]="sortField" [sortDirection]="sortDirection"
-                     [sortFields]="['Email1']" [sortLabels]="['Email']"
+                     [sortFields]="['userName']" [sortLabels]="['User Name']"
                      (sortChange)="onSortChange($event)">
                     </app-sorting>
                   </th>
@@ -91,7 +111,7 @@
                 <tr *ngFor="let consultancy of consultancies$ | async; let i = index">
                   <td data-label="Consultancy Name">{{ consultancy.consultancyName }}</td>
                   <td data-label="Phone">{{ consultancy.phone1 }}</td>
-                  <td data-label="Email">{{ consultancy.email1 }}</td>
+                  <td data-label="Email">{{ consultancy.userName }}</td>
                   <td data-label="Country">{{ consultancy.country }}</td>
                   <td data-label="State">{{ consultancy.state }}</td>
                  
@@ -106,6 +126,9 @@
                     </button>
                     <button mat-icon-button color="success" (click)="viewConsultancy(consultancy.id)" matTooltip="View">
                       <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button mat-icon-button color="success" (click)="getInstitutes(consultancy.id)" matTooltip="Institutes">
+                      <app-feather-icons [icon]="'layers'" [class]="'tbl-institute-icon'"></app-feather-icons>
                     </button>
                   </td>
                 </tr>

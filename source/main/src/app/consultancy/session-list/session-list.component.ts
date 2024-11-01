@@ -113,7 +113,7 @@ export class SessionListComponent {
           this.defaultData.ProgramId = '';
           this.programs = of([]);
           this.programList.setValue(0);
-          this.programs = this.consultancyApiService.getAllPrograms(this.defaultData).pipe(tap(res => console.log(res)))
+          this.programs = this.consultancyApiService.getAllPrograms(this.defaultData)
         }
 
         if (programId && this.previousProgramId !== programId) {
@@ -180,8 +180,9 @@ export class SessionListComponent {
     this.router.navigate(["consultancy/register-session"])
   }
 
-  onIntakes(sessionId: number, instituteId: number) {
-    this.consultancyService.getIntakesofSession.next({ instituteId: instituteId, programId: 1, sessionId: sessionId })
+  onIntakes(sessionId: number, instituteId: number, programId:number) {
+    console.log(programId)
+    this.consultancyService.getIntakesofSession.next({ instituteId: instituteId, programId: programId, sessionId: sessionId })
     this.router.navigate(["consultancy/intake-list"])
   }
 

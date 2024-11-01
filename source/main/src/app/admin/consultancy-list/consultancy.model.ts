@@ -3,7 +3,7 @@ export interface Consultancy {
     consultancyName:string,
     phone1:string,
     phone2:string,
-    email1:string,
+    userName:string,
     email2:string,
     country:string,
     state:string,

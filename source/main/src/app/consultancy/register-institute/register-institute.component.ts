@@ -10,6 +10,7 @@ import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 
 
 
+
 @Component({
   selector: 'app-register-consultancy',
   templateUrl: './register-institute.component.html',
@@ -21,7 +22,7 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private consultancyApiService: ConsultancyApi,
-    private consultancyService: ConsultancyService
+    private consultancyService: ConsultancyService,
   ) { }
 
   subscriptions: Subscription = new Subscription();
@@ -45,6 +46,7 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   countryName: string;
 
   ngOnInit() {
+     
     this.registerInstitute = new FormGroup({
       instituteName: new FormControl(''),
       aboutInstitute: new FormControl(''),
