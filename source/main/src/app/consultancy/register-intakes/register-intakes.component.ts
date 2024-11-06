@@ -41,8 +41,9 @@ export class RegisterIntakesComponent {
   institute$: BehaviorSubject<string | number> = new BehaviorSubject('');
   session$: BehaviorSubject<string | number> = new BehaviorSubject('');
   program$: BehaviorSubject<string | number> = new BehaviorSubject('');
-  previousInstituteId:number = 0;
-  previousProgramid:number = 0;
+  previousInstituteId: number = 0;
+  previousProgramid: number = 0;
+  roleName = localStorage.getItem("roleName");
 
 
   ngOnInit(): void {
@@ -56,7 +57,12 @@ export class RegisterIntakesComponent {
     });
 
     // this.defaultData.ConsultancyId = this.consultancyId
-    this.institutes = this.consultancyApiService.getSpecificInstitutes()
+    if(this.roleName !=='superadmin'){
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData);
+    }else{
+      this.defaultData.IsAdmin = true;
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData);
+    }
 
     const editIntake = this.route.snapshot.data['editResponse'];
     if (editIntake) {
@@ -68,15 +74,15 @@ export class RegisterIntakesComponent {
       this.editMode = true;
     }
 
-    combineLatest([this.institute$, this.session$, this.program$]).pipe(switchMap(([instituteId,sessionId,programId]) => {
+    combineLatest([this.institute$, this.session$, this.program$]).pipe(switchMap(([instituteId, sessionId, programId]) => {
       if (instituteId && this.previousInstituteId !== instituteId) {
         this.previousInstituteId = +instituteId
         this.defaultData.InstituteId = String(instituteId);
         this.sessions = this.consultancyApiService.getSpecificSessions(this.defaultData);
         return this.programs = this.consultancyApiService.getAllPrograms(this.defaultData)
       }
-        return of([])
-      
+      return of([])
+
     })).subscribe()
   }
 

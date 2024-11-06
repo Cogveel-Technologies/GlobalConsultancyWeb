@@ -56,14 +56,15 @@ export class ConsultancyApi {
     }
     // ------------- display-institutes based on country -------------
     getInstitutes(data: ConsultancyDetailsOptions): Observable<InstituteData[]> {
-        return this.http.get<InstituteData[]>(`${this.baseUrl}/Institute?CountryId=${data.CountryId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
+        return this.http.get<InstituteData[]>(`${this.baseUrl}/Institute?CountryId=${data.CountryId}&IsAdmin=${data.IsAdmin}&ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}&isDeleted=${data.IsDeleted}`)
 
     }
 
     // ------------- get specific institutes related to loggedin consultancy ------------- ----------
-    getSpecificInstitutes(): Observable<SpecificConsultancyRelated[]> {
-        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Institute/All`).pipe(map(response => response['data']));
+    getSpecificInstitutes(data?:ConsultancyDetailsOptions): Observable<SpecificConsultancyRelated[]> {
+        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Institute/All?CountryId=${data.CountryId}&ConsultancyId=${data.ConsultancyId}&IsDeleted=${data.IsDeleted}&IsAdmin=${data.IsAdmin}`).pipe(map(response => response['data']));
     }
+  
     // ------------- delete-institute -----------------
     deleteInstitute(id: number) {
         return this.http.delete(`${this.baseUrl}/Institute/byId?Id=${id}`)
@@ -84,7 +85,7 @@ export class ConsultancyApi {
     }
     // ------------- display-programs -------------
     getPrograms(data: ConsultancyDetailsOptions): Observable<ProgramData[]> {
-        return this.http.get<ProgramData[]>(`${this.baseUrl}/Program?InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
+        return this.http.get<ProgramData[]>(`${this.baseUrl}/Program?InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&ConsultancyId=${data.ConsultancyId}&IsAdmin=${data.IsAdmin}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}&isDeleted=${data.IsDeleted}`)
     }
     // ------------- delete-Program -----------------
     deleteProgram(id: number) {
@@ -105,7 +106,7 @@ export class ConsultancyApi {
     }
     // ------------- get specific institutes related to loggedin consultancy ------------- ----------
     getSpecificPrograms(data:ConsultancyDetailsOptions): Observable<SpecificConsultancyRelated[]> {
-        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Progam/All?InstituteId=${data.InstituteId}&ConsultancyId=${data.ConsultancyId}`).pipe(map(response => response['data']))
+        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Progam/All?InstituteId=${data.InstituteId}&ConsultancyId=${data.ConsultancyId}&IsDeleted=${data.IsDeleted}`).pipe(map(response => response['data']))
     }
     // ------------------------ get program category ----------------------------
     getCategory(filterBy: string): Observable<SpecificConsultancyRelated[]> {
@@ -113,7 +114,7 @@ export class ConsultancyApi {
     }
     // --------------------------- get all programs -----------------------------
     getAllPrograms(data:ConsultancyDetailsOptions){
-        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Program/All?InstituteId=${data.InstituteId}`).pipe(map(response => response['data']))
+        return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Program/All?InstituteId=${data.InstituteId}&ConsultancyId=${data.ConsultancyId}&IsDeleted=${data.IsDeleted}`).pipe(map(response => response['data']))
     }
     ///////////////////////////////////////////// INTAKES /////////////////////////////////////////////////
     // --------- register-intake ------------------
@@ -122,7 +123,7 @@ export class ConsultancyApi {
     }
     // ------------------- display-intakes ----------------
     getIntakes(data: ConsultancyDetailsOptions): Observable<IntakeData[]> {
-        return this.http.get<IntakeData[]>(`${this.baseUrl}/Intake?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
+        return this.http.get<IntakeData[]>(`${this.baseUrl}/Intake?ProgramId=${data.ProgramId}&InstituteId=${data.InstituteId}&SessionId=${data.SessionId}&ConsultancyId=${data.ConsultancyId}&IsAdmin=${data.IsAdmin}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}&isDeleted=${data.IsDeleted}`)
     }
     // ------------- delete-Intake -----------------
     deleteIntake(id: number) {
@@ -179,7 +180,7 @@ export class ConsultancyApi {
     }
     // ------------------- display-agent ----------------
     getAgents(data: ConsultancyDetailsOptions): Observable<AgentDetails[]> {
-        return this.http.get<AgentDetails[]>(`${this.baseUrl}/Agent?ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`)
+        return this.http.get<AgentDetails[]>(`${this.baseUrl}/Agent?ConsultancyId=${data.ConsultancyId}&IsAdmin=${data.IsAdmin}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}&isDeleted=${data.IsDeleted}`)
     }
     // ------------- delete-agent -----------------
     deleteAgent(id: number) {

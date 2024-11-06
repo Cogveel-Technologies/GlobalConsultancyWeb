@@ -25,7 +25,6 @@ export class IntakesListComponent {
   constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router: Router) { }
   intakes!: Observable<IntakeData[]>
   sessionSelected: boolean = false;
-  consultancyId: string = localStorage.getItem("id");
   sessionListForm: FormGroup;
   sessions: Observable<{ id: number, sessionName: string }[]>
   institutes: Observable<SpecificConsultancyRelated[]>
@@ -51,7 +50,8 @@ export class IntakesListComponent {
   previousProgramId: string = '';
   previousSessionId: number = 0;
   intakesFromSession: boolean = false;
-  isProgramId:boolean = false;
+  isProgramId: boolean = false;
+  roleName:string = localStorage.getItem("roleName");
 
 
 
@@ -95,8 +95,13 @@ export class IntakesListComponent {
     // }
 
 
-    this.institutes = this.consultancyApiService.getSpecificInstitutes()
-    this.intakes = this.getIntakes(this.defaultData)
+    if(this.roleName !== "superadmin"){
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData)
+    }else{
+      this.defaultData.IsAdmin = true;
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData)
+    }
+  
 
 
 
@@ -107,14 +112,14 @@ export class IntakesListComponent {
         console.log(instituteId)
         console.log(this.previousInstituteId)
         if ((instituteId || instituteId === 0) && this.previousInstituteId !== String(instituteId)) {
-          console.log("only institute id")
-          if(instituteId === 0){
+          this.programs = of([])
+          this.sessions = of([]);
+          if (instituteId === 0) {
             console.log(this.defaultData)
             this.defaultData.InstituteId = '';
-            this.programs = of([])
-            this.sessions = of([]);
-          }else{
+          } else {
             this.defaultData.InstituteId = String(instituteId);
+            console.log(this.defaultData)
             this.programs = this.consultancyApiService.getAllPrograms(this.defaultData);
           }
           this.previousInstituteId = String(instituteId);
@@ -145,7 +150,13 @@ export class IntakesListComponent {
           console.log(this.defaultData)
         }
         if (search) {
-          this.defaultData.currentPage = pageRelated.pageIndex
+          if(searchTerm){
+            this.defaultData.currentPage = 1;
+            this.currentPageIndex = 0;
+          }else{
+            this.defaultData.currentPage = pageRelated.pageIndex;
+            this.currentPageIndex = pageRelated.pageIndex - 1;
+          }
           this.defaultData.searchText = searchTerm;
           this.defaultData.pageSize = pageRelated.pageSize;
           this.defaultData.sortExpression = sort.direction;
@@ -201,7 +212,7 @@ export class IntakesListComponent {
 
   onSearch() {
     this.currentPageIndex = 0;
-    this.pagination$.next({ pageSize:this.defaultData.pageSize, pageIndex:1})
+    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1 })
     this.search$.next(true)
   }
 

@@ -254,11 +254,11 @@ export class AdminService {
     return of(superAdmin);
   }
 
-  getAllConsultancies() {
-    return this.http.get(`${this.apiUrl}/Consultancy/all`).pipe(map(res => res['data']));
+  getAllConsultancies(data:ConsultancyDetailsOptions) {
+    return this.http.get(`${this.apiUrl}/Consultancy/All?CountryId=${data.CountryId}&Isdeleted=true`).pipe(map(res => res['data']));
   }
 
   getConsultanciesOfAdmin(data:ConsultancyDetailsOptions){
-    return this.http.get(`${this.apiUrl}/Consultancy/byUserId?UserId=${data.UserId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`).pipe(map(res => res['data']))
+    return this.http.get(`${this.apiUrl}/Consultancy?UserId=${data.UserId}&IsAdmin=${data.IsAdmin}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}&isDeleted=${data.IsDeleted}`).pipe(map(res => res['data']))
   }
 }

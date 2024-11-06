@@ -38,6 +38,7 @@ export class ConsultancyListComponent implements OnInit {
   currentPage: number = 1; // Default current page
   totalPages: number = 1; // Total number of pages
   defaultData:ConsultancyDetailsOptions = this.consultancyService.defaultRenderData()
+  previousAdminId:number;
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -80,9 +81,12 @@ export class ConsultancyListComponent implements OnInit {
     ]).pipe(
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection,adminId]) => {
         console.log(adminId)
-        if(adminId){
+        if(adminId && this.previousAdminId !== adminId){
+          this.previousAdminId = +adminId;
           console.log(adminId)
-          this.defaultData.UserId = String(adminId)
+          this.defaultData.IsAdmin = true;
+          this.defaultData.UserId = String(adminId);
+          console.log(this.defaultData)
           return this.consultancies$ = this.adminService.getConsultanciesOfAdmin(this.defaultData)
         }
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
@@ -181,6 +185,7 @@ export class ConsultancyListComponent implements OnInit {
   }
 
   selectAdmin(event:any){
+    console.log(event)
     console.log(event.value)
     this.admin.next(event.value)
   }

@@ -34,7 +34,8 @@ export class RegisterSessionComponent {
   subscription: Subscription = new Subscription();
   instituteSelected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   programSelected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  defaultData = this.consultancyService.defaultRenderData()
+  defaultData = this.consultancyService.defaultRenderData();
+  roleName = localStorage.getItem("roleName")
   
 
 
@@ -48,7 +49,12 @@ export class RegisterSessionComponent {
       })
 
     // get institutes
-    this.institutes = this.consultancyApiService.getSpecificInstitutes();
+    if(this.roleName !== 'superadmin'){
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData);
+    }else{
+      this.defaultData.IsAdmin = true
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData);
+    }
     combineLatest([this.instituteSelected]).pipe(switchMap(([institute])=>{
       if(institute){
         console.log(this.instituteId)

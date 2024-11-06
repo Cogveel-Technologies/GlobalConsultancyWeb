@@ -41,17 +41,18 @@ export class InstitutionListComponent {
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
-  pagination$: BehaviorSubject<{ pageSize?: number, pageIndex?: number, countryId?: number | string, consultancyId?: number | string, search?: boolean }> = new BehaviorSubject<{ pageSize?: number, pageIndex?: number, countryId?: number|string, consultancyId?: number|string, search?: boolean }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: String(this.defaultData.CountryId), consultancyId: this.defaultData.ConsultancyId, search:true});
+  pagination$: BehaviorSubject<{ pageSize?: number, pageIndex?: number, countryId?: number | string, consultancyId?: number | string, search?: boolean }> = new BehaviorSubject<{ pageSize?: number, pageIndex?: number, countryId?: number | string, consultancyId?: number | string, search?: boolean }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: String(this.defaultData.CountryId), consultancyId: this.defaultData.ConsultancyId, search: true });
   currentPageIndex: number;
   sorting$: BehaviorSubject<{ field: string, direction: string }> = new BehaviorSubject<{ field: string, direction: string }>({ field: this.defaultData.OrderBy, direction: this.defaultData.sortExpression });
   searchTerm: string = '';
   countryList = new FormControl('all');
-  consultancyList = new FormControl(0)
+  consultancyList = new FormControl()
   previousCountryId: string | number;
   institutesFromConsultancy: boolean = false;
   roleName: string = localStorage.getItem('roleName');
-  consultancies: Observable<[{ id: number, consultancyName: string }]>;
- 
+  consultancies: Observable<[{ id: number, consultancyName: string }] | []>;
+
+
 
 
 
@@ -65,18 +66,11 @@ export class InstitutionListComponent {
   }
 
   ngOnInit() {
-    // if superadmin has logged in
-     if(this.roleName === 'superadmin'){
-    this.consultancies = this.adminService.getAllConsultancies();
-    }
     // if showing of institute comes from consultancy list
     this.adminService.sendConsultancyId.subscribe(res => {
       if (res) {
-        console.log(res)
-        // make api call 
-        this.pagination$.next({consultancyId:res, search:true, pageSize:this.defaultData.pageSize, pageIndex:1})
-        this.institutesFromConsultancy = true;
-        this.consultancyList.setValue(+res);
+        this.institutesFromConsultancy = true
+        this.pagination$.next({ consultancyId: res, search: true, pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: '' })
       }
     })
     // fetching all countries for the dropdown and displaying
@@ -88,30 +82,53 @@ export class InstitutionListComponent {
         throttleTime(1000, undefined, { leading: true, trailing: true }),
         distinctUntilChanged(),
         switchMap(([search, pageRelated, sort]) => {
-          console.log(pageRelated)
           if (pageRelated) {
-            if(pageRelated.consultancyId){
+            if (pageRelated.countryId !== this.previousCountryId) {
+              this.defaultData.ConsultancyId = '';
+              this.previousCountryId = pageRelated.countryId;
+              this.consultancies = of([]);
+              this.consultancyList.setValue('');
+              if (pageRelated.countryId === 'all'|| pageRelated.countryId === '') {
+                console.log("if country block")
+                this.defaultData.CountryId = '';
+                if (this.institutesFromConsultancy) {
+                  if (this.roleName === 'superadmin') {
+                    this.consultancies = this.adminService.getAllConsultancies(this.defaultData);
+                  }
+                }
+              } else {
+                console.log("else country block")
+                this.defaultData.CountryId = String(pageRelated.countryId);
+                this.consultancies = this.adminService.getAllConsultancies(this.defaultData);
+              }
+            }
+            if (pageRelated.consultancyId) {
+              console.log("if consultancy block")
+              console.log(pageRelated.consultancyId)
               this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
-            } 
-            if (+pageRelated.countryId && typeof +pageRelated.countryId === 'number') {
-              this.defaultData.CountryId = String(pageRelated.countryId);
+              this.consultancyList.setValue(+pageRelated.consultancyId)
             }
             if (pageRelated.search) {
+              if (this.roleName === 'superadmin') {
+                this.defaultData.IsAdmin = true
+              }
+              if(search){
+                console.log("AAAAAA")
+                this.defaultData.currentPage = 1;
+                this.currentPageIndex = 0;
+              }else{
+                this.defaultData.currentPage = pageRelated.pageIndex;
+                console.log("TTTTTTT")
+                this.currentPageIndex = pageRelated.pageIndex - 1;
+              }
+
               console.log(this.defaultData)
               this.defaultData.searchText = search;
               this.defaultData.pageSize = pageRelated.pageSize;
-              this.defaultData.currentPage = pageRelated.pageIndex;
               this.defaultData.sortExpression = sort.direction;
               this.defaultData.OrderBy = sort.field;
               // institutes of consultancy
-              if(this.defaultData.ConsultancyId){
-                console.log(this.defaultData)
-                return this.universities = this.consultancyApiService.getInstitutesOfConsultancy(this.defaultData).pipe(map(res=> {
-                  console.log(res)
-                  this.records = res['pageInfo']['totalRecords'];
-                  return res['data']
-                }))
-              }
+              return this.universities = this.getInstitutes(this.defaultData);
             }
           }
           return of([]);
@@ -124,7 +141,7 @@ export class InstitutionListComponent {
   onCountryChange(value: any) {
     console.log(value)
     this.currentPageIndex = 0;
-    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: value})
+    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: value })
   }
 
   addInstitute() {
@@ -144,7 +161,7 @@ export class InstitutionListComponent {
   onPageChange(event: PageEvent) {
     console.log(event)
     this.currentPageIndex = event.pageIndex;
-    this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1, search:true })
+    this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1, countryId: this.defaultData.CountryId, search: true })
   }
 
 
@@ -157,17 +174,17 @@ export class InstitutionListComponent {
     this.consultancyService.countrySelected.next(this.countryId)
   }
 
-  seePrograms(id: number) {
-    this.consultancyService.sendInstituteId.next(id);
+  seePrograms(id: number, consultancyId:number) {
+    this.consultancyService.sendInstituteId.next({id:id,consultancyId:consultancyId});
     this.router.navigate(['/consultancy/program-list'])
   }
 
   onConsultancyChange(event: any) {
-    this.pagination$.next({consultancyId:event})
+    this.pagination$.next({ countryId: this.defaultData.CountryId, consultancyId: event })
   }
 
   onSearch() {
-    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search:true, countryId:this.defaultData.CountryId })
+    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true, countryId: this.defaultData.CountryId })
   }
 
   ngOnDestroy() {
@@ -175,6 +192,7 @@ export class InstitutionListComponent {
     this.consultancyService.editOrViewPage.next(false);
     this.adminService.sendConsultancyId.next('');
     this.subscriptions.unsubscribe();
+    this.institutesFromConsultancy = false;
   }
 
 }

@@ -28,9 +28,9 @@
           <mat-form-field class="w-100 mb-0">
             <mat-label>Select a consultancy</mat-label>
             <mat-icon matPrefix>work</mat-icon>
-            <mat-select [formControl]="consultancyList" required (selectionChange)="onConsultancyChange($event.value)">
+            <mat-select [formControl]="consultancyList" (selectionChange)="onConsultancyChange($event.value)">
               <!-- Option for "All" -->
-              <mat-option [value]="0">All</mat-option>
+              <!-- <mat-option [value]="0">All</mat-option> -->
               <!-- Loop through the list of countries -->
               <mat-option *ngFor="let consultancy of (consultancies | async)" [value]="consultancy.id">
                 {{ consultancy.consultancyName }}
@@ -131,7 +131,7 @@
                         <!-- <mat-icon>delete</mat-icon> -->
                         <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                       </button>
-                      <button mat-icon-button color="warn" matTooltip="Programs" (click)="seePrograms(institute.id)">
+                      <button mat-icon-button color="warn" matTooltip="Programs" (click)="seePrograms(institute.id, institute.consultancyId)">
                         <!-- <mat-icon>delete</mat-icon> -->
                         <app-feather-icons [icon]="'book'" [class]="'tbl-fav-edit'"></app-feather-icons>
                       </button>
