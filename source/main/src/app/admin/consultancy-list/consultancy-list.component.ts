@@ -38,7 +38,6 @@ export class ConsultancyListComponent implements OnInit {
   currentPage: number = 1; // Default current page
   totalPages: number = 1; // Total number of pages
   defaultData:ConsultancyDetailsOptions = this.consultancyService.defaultRenderData()
-  previousAdminId:number;
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -46,7 +45,7 @@ export class ConsultancyListComponent implements OnInit {
   private sortFieldSubject = new BehaviorSubject<string>(this.sortField);
   private sortDirectionSubject = new BehaviorSubject<'asc' | 'desc'>(this.sortDirection);
   private searchTermSubject = new BehaviorSubject<string>('');
-  private admin:BehaviorSubject<string|number> =new BehaviorSubject<string|number>('');
+  private userSubject:BehaviorSubject<string|number> =new BehaviorSubject<string|number>('');
 
   constructor(
     private router: Router,
@@ -77,25 +76,18 @@ export class ConsultancyListComponent implements OnInit {
       this.currentPageSubject,
       this.sortFieldSubject,
       this.sortDirectionSubject,
-      this.admin
+      this.userSubject
     ]).pipe(
-      switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection,adminId]) => {
-        console.log(adminId)
-        if(adminId && this.previousAdminId !== adminId){
-          this.previousAdminId = +adminId;
-          console.log(adminId)
-          this.defaultData.IsAdmin = true;
-          this.defaultData.UserId = String(adminId);
-          console.log(this.defaultData)
-          return this.consultancies$ = this.adminService.getConsultanciesOfAdmin(this.defaultData)
-        }
-        console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
+      switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection,userId]) => {
+        console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection, userId });
         return this.adminService.getConsultancyList({
           limit: pageSize,
           orderBy: sortField,
           sortExpression: sortDirection,
           currentPage: currentPage,
-          searchTerm: searchTerm
+          searchTerm: searchTerm,
+          userId:+userId,
+          isAdmin: this.roleName === 'superadmin' ? true:false
         });
       }),
       tap(response => {
@@ -185,8 +177,6 @@ export class ConsultancyListComponent implements OnInit {
   }
 
   selectAdmin(event:any){
-    console.log(event)
-    console.log(event.value)
-    this.admin.next(event.value)
+    this.userSubject.next(event.value)
   }
 }
