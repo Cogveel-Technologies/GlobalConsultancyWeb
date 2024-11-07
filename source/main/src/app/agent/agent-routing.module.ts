@@ -9,6 +9,7 @@ import { StudentResolver } from './agent-resolvers/student-resolver';
 import { ViewStudentComponent } from './list-students/view-student/view-student.component';
 import { AuthGuard } from '@core/guard/auth.guard';
 import { AdmissionComponent } from './admission/admission.component';
+import { ApplicationsComponent } from './applications/applications.component';
 
 
 
@@ -36,6 +37,11 @@ const routes: Routes = [
     component: ListstudentsComponent,
     canActivate: [AuthGuard]
 
+  },
+  {
+    path: 'applications',
+    component: ApplicationsComponent,
+    // canActivate: [AuthGuard]
   },
   {
     path: 'student-application',

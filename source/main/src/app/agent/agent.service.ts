@@ -29,6 +29,28 @@ export class AgentService {
   private buildUrl(path: string): string {
     return `${this.apiUrl}/${path}`;
   }
+  
+  private selectedRecord: any;
+  private showOnlyApplyButton = false;
+
+  //storing particular record when pressing on apply button in admission component
+  storeSelectedRecord(record: any) {
+    this.selectedRecord = record;
+  }
+
+  getSelectedRecord() {
+    return this.selectedRecord;
+  }
+  
+  //when navigating from admission to list student component ....hiding the other buttons ..setting flag 
+  // for that
+  setShowOnlyApplyButton(value: boolean) {
+    this.showOnlyApplyButton = value;
+  }
+
+  getShowOnlyApplyButton() {
+    return this.showOnlyApplyButton;
+  }
 
   submitStudentData(studentData: Student) {
     const url = this.buildUrl('Student');
@@ -131,7 +153,7 @@ export class AgentService {
   // }
   
   getUploadedDocuments(params: { studentId: number, limit: number, orderBy: string, sortExpression: string, currentPage: number, isDeleted: boolean }): Observable<PaginatedResponse<StudentDocument>> {
-    let url = `${this.apiUrl}/StudentDocument?StudentId=${params.studentId}&limit=${params.limit}&OrderBy=${params.orderBy}&sortExpression=${params.sortExpression}&CurrentPage=${params.currentPage}&isDeleted=${params.isDeleted}`;
+    const url = `${this.apiUrl}/StudentDocument?StudentId=${params.studentId}&limit=${params.limit}&OrderBy=${params.orderBy}&sortExpression=${params.sortExpression}&CurrentPage=${params.currentPage}&isDeleted=${params.isDeleted}`;
   
     return this.http.get<PaginatedResponse<StudentDocument>>(url).pipe(
       tap(response => console.log('Fetched documents:', response)),  // Log the full response

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-dropdown',
@@ -18,7 +19,7 @@ export class DropdownComponent implements OnInit {
   dropdownForm: FormGroup;
   addedValues: string[] = []; // Array to store added dropdown values
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private adminService: AdminService) {}
 
   ngOnInit(): void {
     // Initialize the form with controls for dropdown name and a temporary value input
@@ -44,25 +45,31 @@ export class DropdownComponent implements OnInit {
     }
   }
 
-  // Method to handle form submission
   onSubmit(): void {
     if (this.dropdownForm.get('dropDownListName').valid && this.addedValues.length > 0) {
-      // Log or send the form data to backend
       const dropdownData = {
+        dropDownListId: 0,  // Assuming this is 0 for new entries
         dropDownListName: this.dropdownForm.value.dropDownListName,
-        dropDownValues: this.addedValues // Send array of added values
+        dropDownValues: this.addedValues.join(','),  // Convert array to comma-separated string
+        createdBy: 0,  // Set the createdBy ID (update this as needed)
+        updatedBy: 0   // Set the updatedBy ID (update this as needed)
       };
-
-      // Process the data or call a service to send to backend
-      console.log('Form Submitted:', dropdownData);
-
-      // Reset the form and added values after submission
-      this.dropdownForm.reset();
-      this.addedValues = [];
+  
+      this.adminService.submitDropdownData(dropdownData).subscribe(
+        response => {
+          console.log('Data submitted successfully:', response);
+          // this.dropdownForm.reset();
+          this.addedValues = [];
+        },
+        error => {
+          console.error('Error submitting data:', error);
+        }
+      );
     } else {
       console.log('Form is invalid or no values added');
     }
   }
+  
 
   // Method to reset the form or handle cancel action
   onCancel(): void {

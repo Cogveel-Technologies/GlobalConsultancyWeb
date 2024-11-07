@@ -1,0 +1,111 @@
+<section class="content">
+    <div class="content-block">
+      <div class="block-header" *ngFor="let breadscrum of breadscrums">
+        <!-- breadcrumb -->
+        <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+        </app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <!-- <div class="header">
+              <h2>
+                <strong>Student Wizard</strong>
+              </h2>
+            </div> -->
+            <div class="body">
+              <mat-horizontal-stepper [linear]="isLinear" #stepper>
+                <mat-step [stepControl]="HFormGroup1!">
+                  <form [formGroup]="HFormGroup1!">
+                    <ng-template matStepLabel>Programme Description</ng-template>
+                    <div class="program-info-container">
+                      <h2>Program Information</h2>
+                    
+                      <div class="program-info">
+                        <div class="info-field">
+                          <label>Institution</label>
+                          <p>{{selectedRecord?.instituteName}}</p>
+                        </div>
+                        <div class="info-field">
+                          <label>Program</label>
+                          <p>{{selectedRecord?.programName}}</p>
+                        </div>
+                       
+                        <div class="info-field">
+                          <label>Province</label>
+                          <p>{{selectedRecord?.province}}</p>
+                        </div>
+                        <div class="info-field">
+                          <label>Applocation Fee</label>
+                          <p>{{selectedRecord?.applicationFee}}</p>
+                        </div>
+                        <div class="info-field">
+                          <label>Year Established</label>
+                          <p>{{ selectedRecord?.yearEstablished | date: 'yyyy'  }}</p>
+                        </div>
+                        <div class="info-field full-width">
+                          <label>About Institute</label>
+                          <p>{{ selectedRecord?.aboutInstitute  }}</p>
+                        </div>
+                      </div>
+                    
+                      <div class="program-summary">
+                        <div class="program-title">
+                          <h3>Master in Business Administration - MBA</h3>
+                          <span class="duration-badge">24 Months</span>
+                        </div>
+                        <div class="program-details">
+                          <div>
+                            <label>Average Processing Time</label>
+                            <p>48 Hrs</p>
+                          </div>
+                          <div>
+                            <label>Tuition Fee</label>
+                            <p>USD 25860 per year</p>
+                          </div>
+                          <div>
+                            <label>SEVIS Fee</label>
+                            <p>USD 350 one-time</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="button-container">
+                        <button mat-raised-button matStepperNext color="primary">Next</button>
+                      </div>
+                    </div>
+                    
+                  </form>
+                </mat-step>
+                
+                <mat-step [stepControl]="HFormGroup2!">
+                  <form [formGroup]="HFormGroup2!">
+                    <ng-template matStepLabel>Fill out your address</ng-template>
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>Address</mat-label>
+                      <textarea matInput formControlName="address" placeholder="Ex. 1 Main St, New York, NY"
+                        required></textarea>
+                    </mat-form-field>
+                    <div>
+                      <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
+                      <button mat-raised-button matStepperNext color="primary"
+                        [disabled]="!HFormGroup2!.valid">Next</button>
+                    </div>
+                  </form>
+                </mat-step>
+                <mat-step>
+                  <ng-template matStepLabel>Done</ng-template>
+                  <p>You are now done.</p>
+                  <div>
+                    <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
+                    <button mat-raised-button color="primary" (click)="stepper.reset()">Reset</button>
+                  </div>
+                </mat-step>
+              </mat-horizontal-stepper>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+  

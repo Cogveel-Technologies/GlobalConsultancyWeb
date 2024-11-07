@@ -22,6 +22,7 @@ import { ViewStudentComponent } from './list-students/view-student/view-student.
 import { SharedModule } from '@shared/shared.module';
 
 import { AdmissionComponent } from './admission/admission.component';
+import { ApplicationsComponent } from './applications/applications.component';
 
 
 
@@ -35,6 +36,7 @@ import { AdmissionComponent } from './admission/admission.component';
     ViewStudentComponent,
    
     AdmissionComponent,
+        ApplicationsComponent,
       
     
   
