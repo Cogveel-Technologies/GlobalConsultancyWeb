@@ -22,10 +22,11 @@ export class allProgramDetails implements Resolve<ProgramData> {
       const id = +route.paramMap.get('id');
       const defaultData = this.consultancyService.defaultRenderData();
       defaultData.ProgramId = String(id);
+      console.log(defaultData)
   
       return this.consultancyApiService.getProgramDetails(defaultData).pipe(
         switchMap((res) => {
-          defaultData.SessionId = String(res.sessionId);
+          console.log(res)
           return this.consultancyApiService.getProgramDetails(defaultData);
         })
       );

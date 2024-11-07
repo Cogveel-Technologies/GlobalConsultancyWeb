@@ -8,6 +8,7 @@ import { SpecificConsultancyRelated } from '../consultancy-models/data.specificI
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
+import { AdminService } from 'app/admin/admin.service';
 
 @Component({
   selector: 'app-session-list',
@@ -15,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./session-list.component.scss']
 })
 export class SessionListComponent {
-  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router: Router) { }
+  constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router: Router, private adminService:AdminService) { }
   breadscrums = [
     {
       title: 'Sessions',
@@ -40,11 +41,15 @@ export class SessionListComponent {
   currentPageIndex: number;
   instituteList = new FormControl(0);
   programList = new FormControl(0);
+  consultancyList = new FormControl(0);
   search$ = new BehaviorSubject<boolean>(false);
   programs: Observable<SpecificConsultancyRelated[]>;
   previousInstituteId: number = 0;
   previousProgramId: number = 0;
   sessionFromProgram: number = 0;
+  roleName:string = localStorage.getItem("roleName")
+  consultancies: Observable<[{ id: number, consultancyName: string }]>;
+  
 
 
 
@@ -61,7 +66,14 @@ export class SessionListComponent {
 
 
   ngOnInit() {
-    this.institutes = this.consultancyApiService.getSpecificInstitutes();
+     // if superadmin has logged in
+     if(this.roleName === 'superadmin'){
+      this.defaultData.IsAdmin = true;
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData)
+      }else{
+        this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData)
+      }
+
     // get sessions from program details
     this.subscription.add(this.consultancyService.sendProgramId.subscribe(res => {
       if (res) {
@@ -106,13 +118,15 @@ export class SessionListComponent {
           this.previousInstituteId = +instituteId
           console.log(instituteId)
           if (instituteId) {
-            this.defaultData.InstituteId = String(instituteId);
+            this.defaultData.InstituteId = String(instituteId)
+            this.instituteList.setValue(+instituteId)
           } else {
             this.defaultData.InstituteId = '';
           }
           this.defaultData.ProgramId = '';
           this.programs = of([]);
           this.programList.setValue(0);
+          console.log(this.defaultData)
           this.programs = this.consultancyApiService.getAllPrograms(this.defaultData)
         }
 
@@ -127,9 +141,17 @@ export class SessionListComponent {
 
         if (search) {
           console.log(this.defaultData)
+          
+          if(searchTerm){
+            this.defaultData.currentPage = 1;
+            this.currentPageIndex = 0;
+          }else{
+            this.defaultData.currentPage = pageRelated.pageIndex;
+            this.currentPageIndex = pageRelated.pageIndex - 1;
+          }
+          
           this.defaultData.searchText = searchTerm;
           this.defaultData.pageSize = pageRelated.pageSize;
-          this.defaultData.currentPage = pageRelated.pageIndex;
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field;
           return this.sessions = this.getSessions(this.defaultData)
@@ -184,6 +206,10 @@ export class SessionListComponent {
     console.log(programId)
     this.consultancyService.getIntakesofSession.next({ instituteId: instituteId, programId: programId, sessionId: sessionId })
     this.router.navigate(["consultancy/intake-list"])
+  }
+
+  onConsultancyChange(event:any){
+
   }
 
   ngOnDestroy() {

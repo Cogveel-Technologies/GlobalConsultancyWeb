@@ -6,6 +6,27 @@
       </app-breadcrumb>
     </div>
 
+    <div class="card p-4" *ngIf="roleName === 'superadmin'">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <mat-form-field appearance="fill" class="w-100 mb-0">
+            <mat-label>Select a consultancy</mat-label>
+            <mat-icon matPrefix>school</mat-icon>
+            <mat-select (selectionChange)="onConsultancyChange($event)" [formControl]="consultancyControl">
+              <mat-option [value]="'all'">All</mat-option>
+              <mat-option *ngFor="let consultancy of (consultancies | async)" [value]="consultancy.id">
+                {{ consultancy.consultancyName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-2">
+          <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
@@ -94,7 +115,7 @@
 
             <!-- Show pagination only if agents data exists -->
             <app-pagination *ngIf="(agents | async)?.length > 0" [pageSize]="defaultData.pageSize"
-              (pageChange)="onPageChange($event)" [length]="records"  [pageIndex]="currentPageIndex">
+              (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
             </app-pagination>
           </div>
         </div>

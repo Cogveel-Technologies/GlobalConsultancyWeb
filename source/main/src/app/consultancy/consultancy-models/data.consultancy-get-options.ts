@@ -5,7 +5,6 @@ export interface ConsultancyDetailsOptions{
     currentPage:number,
     totalElements?:string,
     searchText?:string,
-    isDeleted?:boolean,
     InstituteId?:string,
     ProgramId?:string,
     SessionId?:string,
@@ -13,5 +12,7 @@ export interface ConsultancyDetailsOptions{
     CountryId?:string,
     IntakeId?:string,
     IsPublic?:string,
-    UserId?:string
+    UserId?:string,
+    IsDeleted?:boolean,
+    IsAdmin?:boolean|string
 }

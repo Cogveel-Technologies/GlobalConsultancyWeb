@@ -33,6 +33,8 @@ export class ConsultancyService {
       CountryId:'',
       IntakeId:'',
       IsPublic:'',
+      IsDeleted:false,
+      IsAdmin:''
     }
     return defaultData
   }
@@ -40,7 +42,7 @@ export class ConsultancyService {
   countrySelected: BehaviorSubject<number|null> = new BehaviorSubject(null); 
   editOrViewPage:BehaviorSubject<boolean> = new BehaviorSubject(false);
   sendSessionId:BehaviorSubject<number|null> = new BehaviorSubject(null);
-  sendInstituteId: BehaviorSubject<number|null> = new BehaviorSubject(null);
-  sendProgramId: BehaviorSubject<{programId:number|string,instituteId:number|string}|null> = new BehaviorSubject(null);
+  sendInstituteId: BehaviorSubject<{id:number,consultancyId:number}|null> = new BehaviorSubject(null);
+  sendProgramId: BehaviorSubject<{instituteId:number|string,programId:number|string}|null> = new BehaviorSubject(null);
   getIntakesofSession:BehaviorSubject<{instituteId:number|string,programId:number|string,sessionId:number|string}|null> = new BehaviorSubject(null)
 }

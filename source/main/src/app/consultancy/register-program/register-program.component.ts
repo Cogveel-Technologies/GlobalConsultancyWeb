@@ -41,7 +41,8 @@ export class RegisterProgramComponent {
   previousSessionState: (number | null) = null;
   previousIntakeState: (number | null) = null;
   previousInstituteState: (number | null) = null
-  sessions = new FormControl('')
+  sessions = new FormControl('');
+  roleName = localStorage.getItem("roleName");
 
 
 
@@ -62,9 +63,16 @@ export class RegisterProgramComponent {
       isPublic: new FormControl('')
     });
 
-    this.instituteOptions = this.consultancyApiService.getSpecificInstitutes();
-    this.programCategoryOptions = this.consultancyApiService.getCategory("programCategory");
-    this.courseTypeOptions = this.consultancyApiService.getCategory("courseType");
+    console.log(this.defaultData)
+    // get institutes
+    if(this.roleName !=='superadmin'){
+      this.instituteOptions = this.consultancyApiService.getSpecificInstitutes(this.defaultData);
+    }else{
+      this.defaultData.IsAdmin = true;
+      this.instituteOptions = this.consultancyApiService.getSpecificInstitutes(this.defaultData);
+    }
+    this.programCategoryOptions = this.consultancyApiService.getCategory("programCategory"); // get program category
+    this.courseTypeOptions = this.consultancyApiService.getCategory("courseType");// get course types
 
 
 
@@ -75,13 +83,7 @@ export class RegisterProgramComponent {
       console.log(details)
       this.editId = +this.route.snapshot.paramMap.get('id');
       this.defaultData.ProgramId = String(this.editId)
-      this.sessionOptions = this.consultancyApiService.getProgramSessions(this.defaultData).pipe(tap(res=>{
-        this.sessions.setValue(res[0].id)
-      }))
       this.editMode = true;
-      this.institute$.next(details.instituteId);
-      this.session$.next(details.sessionId);
-      this.intake$.next(details.intakeId);
       this.registerProgram.patchValue(details)
     }
   }

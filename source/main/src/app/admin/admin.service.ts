@@ -214,8 +214,8 @@ export class AdminService {
 
   // methods for list-consultancy
   // Get a list of consultancies with pagination, sorting, and searching
-  getConsultancyList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean }): Observable<PaginatedResponse<Consultancy>> {
-    let url = `${this.apiUrl}/Consultancy?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
+  getConsultancyList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean, userId?:number, isAdmin?:boolean }): Observable<PaginatedResponse<Consultancy>> {
+    let url = `${this.apiUrl}/Consultancy?UserId=${params.userId}&IsAdmin=${params.isAdmin}&limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
     if (params.searchTerm) {
       url += `&searchText=${params.searchTerm}`;
     }
@@ -256,9 +256,12 @@ export class AdminService {
     return of(superAdmin);
   }
 
-  getAllConsultancies() {
-    return this.http.get(`${this.apiUrl}/Consultancy/all`).pipe(map(res => res['data']));
+  getAllConsultancies(data:ConsultancyDetailsOptions) {
+    return this.http.get(`${this.apiUrl}/Consultancy/All?CountryId=${data.CountryId}&Isdeleted=true`).pipe(map(res => res['data']));
   }
+
+
+
 
   getConsultanciesOfAdmin(data:ConsultancyDetailsOptions){
     return this.http.get(`${this.apiUrl}/Consultancy/byUserId?UserId=${data.UserId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`).pipe(map(res => res['data']))
