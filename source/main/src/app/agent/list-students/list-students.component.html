@@ -98,22 +98,28 @@
                   <td data-label="Residential Address">{{ student.residentialAddress }}</td>
                   <!-- <td data-label="Agent">{{ student.agentId }}</td> -->
                   <td data-label="Actions">
+                    <button *ngIf="showOnlyApplyButton" mat-button color="" class="bg-green"  matTooltip="Apply Here" (click)="applyStudent(student.id)">
+                      Apply
+                    </button>
                   
-                    <button mat-icon-button color="primary" (click)="editStudent(student.id)" matTooltip="Edit">
-                      <!-- <mat-icon>edit</mat-icon> -->
-                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                    </button>
-                    <button mat-icon-button color="warn" (click)="deleteStudent(student.id)" matTooltip="Delete">
-                      <!-- <mat-icon>delete</mat-icon> -->
-                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                    </button>
-                    <button mat-icon-button color="success" (click)="viewStudent(student.id)" matTooltip="View">
-                      <mat-icon>visibility</mat-icon>
-                    </button>
-                    <button mat-icon-button color="success" (click)="addStudentDocument(student.id)" matTooltip="Add Docs">
-                      <mat-icon>add</mat-icon>
-                    </button>
+
+                    <!-- (click)="applyStudent(student.id) -->
+                    <ng-container *ngIf="!showOnlyApplyButton">
+                      <button mat-icon-button color="primary" (click)="editStudent(student.id)" matTooltip="Edit">
+                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                      </button>
+                      <button mat-icon-button color="warn" (click)="deleteStudent(student.id)" matTooltip="Delete">
+                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                      </button>
+                      <button mat-icon-button color="success" (click)="viewStudent(student.id)" matTooltip="View">
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+                      <button mat-icon-button color="success" (click)="addStudentDocument(student.id)" matTooltip="Add Docs">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </ng-container>
                   </td>
+                  
                 </tr>
                  <!-- Show a message when there are no students found -->
                  <tr *ngIf="(students$ | async)?.length === 0">
