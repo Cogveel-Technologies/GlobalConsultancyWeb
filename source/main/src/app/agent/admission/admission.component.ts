@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AgentService } from '../agent.service';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admission',
@@ -22,8 +23,8 @@ export class AdmissionComponent implements OnInit {
   data: any[] = [];  // Array to hold the search results
 
   // Pagination variables
-  totalItems: number = 0;
-  currentPage: number = 1;
+  totalItems = 0;
+  currentPage = 1;
   pageSizeOptions: number[] = [5, 10, 15, 20];
   itemsPerPage: number = this.pageSizeOptions[0];
 
@@ -58,7 +59,7 @@ export class AdmissionComponent implements OnInit {
   programCategoryOptions = [];
   filteredProgramCategoryOptions: Observable<any[]>;
 
-  constructor(private fb: FormBuilder, private adminService: AgentService) {
+  constructor(private fb: FormBuilder, private adminService: AgentService,  private router: Router) {
     this.searchForm = this.fb.group({
       programId: this.programCtrl,
       sessionId: this.sessionCtrl,
@@ -229,4 +230,15 @@ export class AdmissionComponent implements OnInit {
   onCancel() {
     this.searchForm.reset();
   }
+
+  onApply(record: any) {
+    this.adminService.storeSelectedRecord(record);
+    this.adminService.setShowOnlyApplyButton(true); // Set flag to show only "Apply" button
+    this.router.navigate(['/agent/list-students']);
+    console.log(record, 'record apply');
+}
+
+
+
+
 }

@@ -25,14 +25,14 @@ export class ListusersComponent implements OnInit {
     },
   ];
   users$: Observable<User[]>;
-  totalUsers: number = 0;
+  totalUsers = 0;
   
   searchControl: FormControl = new FormControl('');
-  sortField: string = 'id'; // Default sort field
+  sortField = 'id'; // Default sort field
   sortDirection: 'asc' | 'desc' = 'desc'; // Default sort direction
   pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
-  currentPage: number = 1; // Default current page
-  totalPages: number = 1; // Total number of pages
+  currentPage = 1; // Default current page
+  totalPages = 1; // Total number of pages
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);

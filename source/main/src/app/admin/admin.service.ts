@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { User } from './listusers/user.model';
 import { tap, map, catchError } from 'rxjs/operators';
@@ -259,4 +261,25 @@ export class AdminService {
   }
 
 
+
+
+  getConsultanciesOfAdmin(data:ConsultancyDetailsOptions){
+    return this.http.get(`${this.apiUrl}/Consultancy/byUserId?UserId=${data.UserId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`).pipe(map(res => res['data']))
+  }
+
+
+  //dropdown//
+  submitDropdownData(dropdownData: {
+    dropDownListId: number;
+    dropDownListName: string;
+    dropDownValues: string;
+    createdBy: number;
+    updatedBy: number;
+  }): Observable<any> {
+    const url = `${this.apiUrl}/DropDown`;
+    return this.http.post(url, dropdownData, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    });
+  }
+  
 }

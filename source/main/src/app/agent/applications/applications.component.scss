@@ -1,0 +1,105 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .program-info-container {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 800px;
+    margin: 20px auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .program-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+  }
+  
+  .info-field {
+    flex: 1 1 25%;
+  }
+  
+  .info-field label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: block;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  .info-field p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+    text-decoration: underline;
+  }
+  
+  .program-summary {
+    background-color: #e0f0ff;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .program-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .program-title h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+  
+  .duration-badge {
+    background-color: #3b82f6;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+  }
+  
+  .program-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .program-details div {
+    flex: 1;
+  }
+  
+  .program-details label {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .program-details p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+  }
+
+  
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
