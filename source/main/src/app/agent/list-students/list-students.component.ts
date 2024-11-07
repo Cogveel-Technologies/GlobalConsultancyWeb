@@ -8,6 +8,7 @@ import { AgentService } from '../agent.service';
 import { Student } from '../models/student.model';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+
 // import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
 @Component({
@@ -24,21 +25,24 @@ export class ListstudentsComponent implements OnInit {
     },
   ];
   students$: Observable<Student[]>;
-  totalStudents: number = 0;
+  totalStudents = 0;
 
   searchControl: FormControl = new FormControl('');
-  sortField: string = 'id'; // Default sort field
+  sortField = 'id'; // Default sort field
   sortDirection: 'asc' | 'desc' = 'desc'; // Default sort direction
-  currentPage: number = 1; // Default current page
-  totalPages: number = 1; // Total number of pages
+  currentPage = 1; // Default current page
+  totalPages = 1; // Total number of pages
   pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
- 
+   
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
   private currentPageSubject = new BehaviorSubject<number>(this.currentPage);
   private sortFieldSubject = new BehaviorSubject<string>(this.sortField);
   private sortDirectionSubject = new BehaviorSubject<'asc' | 'desc'>(this.sortDirection);
   private searchTermSubject = new BehaviorSubject<string>('');
+
+  // setting flag for hiding buttons
+  showOnlyApplyButton = false;
 
   constructor(
     private router: Router,
@@ -50,6 +54,7 @@ export class ListstudentsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.showOnlyApplyButton = this.agentService.getShowOnlyApplyButton();
     // Combine search, pagination, and sorting
     this.students$ = combineLatest([
       this.searchControl.valueChanges.pipe(
@@ -70,7 +75,8 @@ export class ListstudentsComponent implements OnInit {
           orderBy: sortField,
           sortExpression: sortDirection,
           currentPage: currentPage,
-          searchTerm: searchTerm
+          searchTerm: searchTerm,
+          isDeleted: true
         });
       }),
       tap(response => {
@@ -165,5 +171,13 @@ export class ListstudentsComponent implements OnInit {
     this.sortField = field;
     this.sortDirection = direction;
     this.refreshStudents();
+  }
+  applyStudent(id: any){
+    this.router.navigate(['/agent/applications']);
+  }
+
+  ngOnDestroy() {
+    // Reset the flag when navigating away from this component
+    this.agentService.setShowOnlyApplyButton(false);
   }
 }

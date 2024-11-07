@@ -163,44 +163,7 @@
         </div>
        
      <!-- Box-like structure to show results -->
-<!-- <div class="result-container">
-    <div class="result-card" *ngFor="let element of data">
-        <mat-card class="mat-elevation-z8 large-card">
-            <mat-card-header class="header">
-                <mat-icon class="icon">school</mat-icon>
-                <div>
-                    <mat-card-title class="title">{{ element.instituteName }}</mat-card-title>
-                    <mat-card-subtitle class="subtitle">{{ element.programName }}</mat-card-subtitle>
-                </div>
-            </mat-card-header>
-            <mat-card-content class="content">
-                <p class="description"><strong>Description:</strong> {{ element.programDescription }}</p>
 
-              
-                <div class="details-row">
-                    <div class="detail-item">
-                        <mat-icon>timer</mat-icon>
-                        <strong>Duration:</strong> <span>{{ element.duration }} months</span>
-                    </div>
-                    <div class="detail-item">
-                        <mat-icon>monetization_on</mat-icon>
-                        <strong>Application Fee:</strong> <span>${{ element.applicationFee }}</span>
-                    </div>
-                    <div class="detail-item">
-                        <mat-icon>payment</mat-icon>
-                        <strong>Tuition Fee:</strong> <span>${{ element.tutionFee }}</span>
-                    </div>
-                </div>
-
-                <p><strong>Intakes:</strong> {{ element.noOfIntake }}</p>
-            </mat-card-content>
-            <mat-card-footer class="footer">
-                <small><strong>About Institute:</strong> {{ element.aboutInstitute }}</small>
-            </mat-card-footer>
-        </mat-card>
-    </div>
-</div> -->
-     <!-- Box-like structure to show results -->
      <div class="result-container">
         <div class="result-card" *ngFor="let element of data">
             <mat-card class="mat-elevation-z8 full-width-card">
@@ -212,7 +175,8 @@
                     
 
                     </div>
-                    <button mat-button color="primary">Apply</button>
+                    <button mat-button color="primary" (click)="onApply(element)">Apply</button>
+
                 </mat-card-header>
                 <mat-card-content class="content">
                     <div class="fees-container">
@@ -244,7 +208,7 @@
               [pageSizeOptions]="[5, 10, 25, 100]"
               (page)="onPageChange($event)">
               aria-label="Select page">
-</mat-paginator>
+   </mat-paginator>
 
     
     <div *ngIf="data.length === 0" class="text-center mt-4">
