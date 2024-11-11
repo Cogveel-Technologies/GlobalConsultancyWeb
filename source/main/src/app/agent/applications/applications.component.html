@@ -326,6 +326,71 @@
                   
                   </form>
                 </mat-step>
+
+                <!-- education -->
+                <mat-step>
+                  <ng-template  matStepLabel> Education  </ng-template>
+                  <div class="program-info-container">
+                    <h2>
+                      <strong>Add Education</strong>
+                    </h2>
+                  
+                    <div class="program-info">
+                   
+                 
+                  <div class="body">
+                    <div class="example-container">
+                      <div class="row">
+                        <!-- Country of Education -->
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Country of Education</mat-label>
+                            <input matInput>
+                            <mat-icon matSuffix>public</mat-icon>
+                          </mat-form-field>
+                        </div>
+                
+                        <!-- Highest Level of Education -->
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Highest Level of Education</mat-label>
+                            <input matInput>
+                            <mat-icon matSuffix>school</mat-icon>
+                          </mat-form-field>
+                        </div>
+                
+                        <!-- Grading Scheme -->
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Grading Scheme</mat-label>
+                            <input matInput>
+                            <mat-icon matSuffix>assignment</mat-icon>
+                          </mat-form-field>
+                        </div>
+                
+                        <!-- Grade Average -->
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Grade Average</mat-label>
+                            <input matInput>
+                            <mat-icon matSuffix>bar_chart</mat-icon>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                
+                      <p class="text-muted">*10th and 12* Grade details are mandatory</p>
+                
+                      <div class="col-md-12">
+                        <button mat-raised-button matStepperPrevious color="warn" class="me-2">Back</button>
+                        <button mat-raised-button matStepperNext color="primary">Next</button>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  </div>
+                  
+                </mat-step>
+
                 <mat-step>
                   <ng-template matStepLabel>Done</ng-template>
                   <p>You are now done.</p>
@@ -334,6 +399,8 @@
                     <button mat-raised-button color="primary" (click)="stepper.reset()">Reset</button>
                   </div>
                 </mat-step>
+
+
               </mat-horizontal-stepper>
             </div>
           </div>
