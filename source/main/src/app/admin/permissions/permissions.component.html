@@ -1,0 +1,89 @@
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items"
+                [active_item]="breadscrum.active"></app-breadcrumb>
+        </div>
+
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <mat-form-field class="w-100 mb-0">
+                        <mat-label>Role</mat-label>
+                        <mat-icon matPrefix>admin_panel_settings</mat-icon>
+                        <mat-select [formControl]="roles" required (selectionChange)="onRoleChange($event.value)">
+                            <mat-option [value]="'all'">Select a Role</mat-option>
+                            <mat-option *ngFor="let role of (allRoles | async)" [value]="role.id">
+                                {{role.roleName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+        <form [formGroup]="permissionsForm" (ngSubmit)="onSubmitPermissions()">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="body table-responsive">
+                            <b class="table-heading">Admin Permissions Dashboard</b>
+                            <table class="table table-hover table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Role</th>
+                                        <th>Add</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                        <th>View</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody formArrayName="modules" *ngIf="isDataLoaded">
+                                    <tr *ngFor="let module of permissionsForm.get('modules')['controls'];let i = index" [formGroupName]="i">
+                                        <td data-label="Role">{{ module.get('roleName').value }}</td>
+                                      <td data-label="Add">
+                                        <input type="checkbox" formControlName="add" />
+                                      </td>
+                                      <td data-label="Edit">
+                                        <input type="checkbox" formControlName="edit" />
+                                      </td>
+                                      <td data-label="Delete">
+                                        <input type="checkbox" formControlName="delete" />
+                                      </td>
+                                      <td data-label="View">
+                                        <input type="checkbox" formControlName="view" />
+                                      </td>
+                                      <td data-label="Actions">
+                                        <button mat-icon-button color="primary" matTooltip="Edit">
+                                          <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                                        </button>
+                                        <button mat-icon-button color="warn" matTooltip="Delete">
+                                          <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                                        </button>
+                                      </td>
+                                    </tr>
+                                    <tr *ngIf="permissionsForm.get('modules')['controls'].length === 0">
+                                      <td colspan="6">No modules found</td>
+                                    </tr>
+                                  </tbody>
+                            </table>
+
+                            <!-- Pagination Component -->
+                            <app-pagination [pageSize]="defaultData.pageSize" (pageChange)="onPageChange($event)"
+                                [length]="records" [pageIndex]="currentPageIndex">
+                            </app-pagination>
+
+                            <!-- Submit Button for Permissions Form -->
+                            <div class="d-flex justify-content-end mt-4">
+                                <button mat-raised-button color="primary" type="submit"
+                                    [disabled]="!roleSelected">Submit Permissions</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

@@ -11,7 +11,7 @@ export class AgentAllDetailsComponent {
   breadscrums = [
     {
       title: 'Agent Details',
-      items: ['Agent List'],
+      items: ['Consultancy','Agents'],
       active: 'Agent Details',
     },
   ];

@@ -118,14 +118,17 @@ export class AdminService {
     );
   }
 
+// Method to get all roles
+getAllRoles(): Observable<{ id: number; roleName: string }[]> {
+  return this.http.get<any>(`${this.apiUrl}/Role/all`).pipe(
+    map(response => response.data.map((role: any) => ({
+      id: role.id,
+      roleName: role.roleName
+    })))
+  );
+}
 
 
-  // Method to get all roles
-  getAllRoles(): Observable<any[]> {
-    return this.http.get<any>(`${this.apiUrl}/Role/all`).pipe(
-      map(response => response.data) // Extracting the data array from the response
-    );
-  }
 
 
   updateUserData(userId: number, userData: User): Observable<any> {
@@ -266,6 +269,8 @@ export class AdminService {
   getConsultanciesOfAdmin(data:ConsultancyDetailsOptions){
     return this.http.get(`${this.apiUrl}/Consultancy/byUserId?UserId=${data.UserId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`).pipe(map(res => res['data']))
   }
+
+
 
 
   //dropdown//
