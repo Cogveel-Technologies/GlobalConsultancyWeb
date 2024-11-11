@@ -17,6 +17,7 @@ import { ConsultancyResolver } from './consultancy-list/consultancy.resolver';
 import { ViewConsultancyComponent } from './consultancy-list/view-consultancy/view-consultancy.component';
 import { AuthGuard } from '@core/guard/auth.guard';
 import { DropdownComponent } from './dropdown/dropdown.component';
+import { PermissionsComponent } from './permissions/permissions.component';
 const routes: Routes = [
   {
     path: 'adminusers',
@@ -100,6 +101,11 @@ const routes: Routes = [
     component: DropdownComponent,
     canActivate: [AuthGuard]   // Apply AuthGuard
   },
+  {
+    path:'permissions',
+    component:PermissionsComponent
+
+  }
 ];
 
 

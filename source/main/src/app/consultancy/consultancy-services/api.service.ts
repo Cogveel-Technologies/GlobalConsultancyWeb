@@ -199,4 +199,12 @@ export class ConsultancyApi {
         return this.http.get(`${this.baseUrl}/Institute/ConsultancyId?CountryId=${data.CountryId}&ConsultancyId=${data.ConsultancyId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&CurrentPage=${data.currentPage}`)
     }
 
+    getRoless(data:ConsultancyDetailsOptions){
+        return this.http.get(`${this.baseUrl}/Role?limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&CurrentPage=${data.currentPage}&isDeleted=${data.IsDeleted}`).pipe(tap(res=>console.log(res)))
+      }
+    
+    
+    
+    
+
 }

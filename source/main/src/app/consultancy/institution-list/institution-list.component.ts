@@ -9,7 +9,6 @@ import { InstituteData } from '../consultancy-models/data.institute';
 import { FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { AdminService } from 'app/admin/admin.service';
-import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 
 
 

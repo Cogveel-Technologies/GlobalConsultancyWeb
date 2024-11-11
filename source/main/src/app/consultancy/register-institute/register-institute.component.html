@@ -2,7 +2,7 @@
   <div class="content-block">
     <div class="block-header" *ngFor="let breadscrum of breadscrums">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="editMode ? 'Edit Institute' : breadscrum.title" [items]="editMode ? ['Institutes']:breadscrum.items"
+      <app-breadcrumb [title]="editMode ? 'Edit Institute' : breadscrum.title" [items]="editMode ? ['Consultancy','Institutes']:breadscrum.items"
         [active_item]="editMode? 'Edit Institute':breadscrum.active">
       </app-breadcrumb>
     </div>

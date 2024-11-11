@@ -14,5 +14,6 @@ export interface ConsultancyDetailsOptions{
     IsPublic?:string,
     UserId?:string,
     IsDeleted?:boolean,
-    IsAdmin?:boolean|string
+    IsAdmin?:boolean|string,
+    roleId?:number|string
 }
