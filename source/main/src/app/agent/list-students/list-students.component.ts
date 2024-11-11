@@ -76,7 +76,7 @@ export class ListstudentsComponent implements OnInit {
           sortExpression: sortDirection,
           currentPage: currentPage,
           searchTerm: searchTerm,
-          isDeleted: true
+          isDeleted: false
         });
       }),
       tap(response => {
@@ -172,7 +172,10 @@ export class ListstudentsComponent implements OnInit {
     this.sortDirection = direction;
     this.refreshStudents();
   }
-  applyStudent(id: any){
+
+  applyStudent(id: any): void {
+    this.agentService.setSelectedId(id);
+    
     this.router.navigate(['/agent/applications']);
   }
 

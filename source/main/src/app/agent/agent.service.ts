@@ -29,9 +29,10 @@ export class AgentService {
   private buildUrl(path: string): string {
     return `${this.apiUrl}/${path}`;
   }
-  
+  //student application wizard
   private selectedRecord: any;
   private showOnlyApplyButton = false;
+  private selectedId: any;
 
   //storing particular record when pressing on apply button in admission component
   storeSelectedRecord(record: any) {
@@ -47,11 +48,19 @@ export class AgentService {
   setShowOnlyApplyButton(value: boolean) {
     this.showOnlyApplyButton = value;
   }
-
   getShowOnlyApplyButton() {
     return this.showOnlyApplyButton;
   }
+   //saving student id for application student wizard
+   setSelectedId(id: any): void {
+    this.selectedId = id;
+  }
 
+  getSelectedId(): any {
+    return this.selectedId;
+  }
+  
+ //for student registration component
   submitStudentData(studentData: Student) {
     const url = this.buildUrl('Student');
     console.log(studentData, "student data");
@@ -78,7 +87,8 @@ export class AgentService {
       }))
     );
   }
-
+  
+  //kkkkkkkkkk
  
   getStudentById(id: number): Observable<Student> {
     console.log(id, "service iddddddddddddddddddddd");
