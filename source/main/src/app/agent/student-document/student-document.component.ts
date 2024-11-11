@@ -25,7 +25,7 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
     },
   ];
   student: Student | null = null;
-  errorMessage: string = '';
+  errorMessage = '';
   isEditMode = false; // Track whether we are in edit mode
   documentToEditId: number | null = null; // Store the ID of the document being edited
 
