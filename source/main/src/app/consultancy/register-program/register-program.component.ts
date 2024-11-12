@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, of, Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, Subscription, switchMap, tap } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { Observable } from 'rxjs';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
+import { AdminService } from 'app/admin/admin.service';
 
 @Component({
   selector: 'app-register-program',
@@ -14,7 +15,7 @@ import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultanc
   styleUrls: ['./register-program.component.scss']
 })
 export class RegisterProgramComponent {
-  constructor(private route: ActivatedRoute, private consultancyApiService: ConsultancyApi, private router: Router, private consultancyService: ConsultancyService) { }
+  constructor(private route: ActivatedRoute, private consultancyApiService: ConsultancyApi, private router: Router, private consultancyService: ConsultancyService, private adminService:AdminService) { }
 
   breadscrums = [
     {
@@ -43,6 +44,7 @@ export class RegisterProgramComponent {
   previousInstituteState: (number | null) = null
   sessions = new FormControl('');
   roleName = localStorage.getItem("roleName");
+  documentTypes: any
 
 
 
@@ -60,7 +62,8 @@ export class RegisterProgramComponent {
       programCategoryId: new FormControl(''),
       instituteId: new FormControl('', Validators.required),
       courseTypeId: new FormControl(''),
-      isPublic: new FormControl('')
+      isPublic: new FormControl(''),
+      documentId:new FormControl('')
     });
 
     console.log(this.defaultData)
@@ -73,6 +76,19 @@ export class RegisterProgramComponent {
     }
     this.programCategoryOptions = this.consultancyApiService.getCategory("programCategory"); // get program category
     this.courseTypeOptions = this.consultancyApiService.getCategory("courseType");// get course types
+
+    this.documentTypes = this.adminService.getDocuments().pipe(
+      map(res => {
+        const data = res['data'];
+        console.log(data);
+        return data.map((item: any) => ({
+          id: item.id,
+          documentType: item.documentType
+        }));
+      })
+    );
+
+
 
 
 
@@ -113,6 +129,7 @@ export class RegisterProgramComponent {
   onSubmit() {
     let newDetails = this.registerProgram.value;
     newDetails.consultancyId = +this.consultancyId;
+    newDetails.documents = newDetails.documents.join(',') 
     console.log(newDetails)
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateProgram(this.editId, newDetails).subscribe(res => {

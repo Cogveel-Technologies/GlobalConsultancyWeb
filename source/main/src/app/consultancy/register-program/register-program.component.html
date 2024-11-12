@@ -184,7 +184,7 @@
 
                             <!-- Status -->
                             <div class="row mb-1">
-                                <div class="col-12 mb-1">
+                                <div class="col-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                         <mat-label>Status</mat-label>
                                         <mat-select formControlName="status" required>
@@ -195,6 +195,17 @@
                                             matSuffix>info</mat-icon>
                                     </mat-form-field>
                                 </div>
+                                <div class="col-6 mb-1">
+                                    <mat-form-field appearance="fill" class="example-full-width">
+                                      <mat-label>Document Type</mat-label>
+                                      <mat-select formControlName="documentId" required multiple>
+                                        <mat-option *ngFor="let document of (documentTypes | async)" [value]="document.id">
+                                          {{ document.documentType }}
+                                        </mat-option>
+                                      </mat-select>
+                                      <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>info</mat-icon>
+                                    </mat-form-field>
+                                  </div>                                  
                             </div>
 
                             <!-- Submit/Update and Cancel Buttons -->
