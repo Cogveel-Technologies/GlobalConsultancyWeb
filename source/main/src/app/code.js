@@ -18,7 +18,7 @@
 //             <mat-horizontal-stepper [linear]="isLinear" #stepper>
 //               <mat-step [stepControl]="HFormGroup1!">
 //                 <form [formGroup]="HFormGroup1!">
-//                   <ng-template matStepLabel>Programme Description</ng-template>
+//                   <ng-template matStepLabel>Program Description</ng-template>
 //                   <div class="program-info-container">
 //                     <h2>Program Information</h2>
 
@@ -227,114 +227,92 @@
 //                 </div>
 //               </mat-step>
 //               <!-- personal info -->
-//               <mat-step [stepControl]="HFormGroup3!">
-//                 <form [formGroup]="HFormGroup3!">
+//               <mat-step [stepControl]="HFormGroup2!">
+//                 <form [formGroup]="HFormGroup2!">
 //                   <ng-template matStepLabel>Personal Info</ng-template>
               
 //                   <div class="program-info-container">
 //                     <h2>Personal Information</h2>
-                    
 //                     <!-- Edit Button positioned at the top-right -->
-//                     <button mat-raised-button color="accent" class="edit-btn" (click)="toggleEditMode()">
-//                       {{ isEditMode ? 'Update' : 'Edit' }}
+//                     <button mat-raised-button color="accent" class="edit-btn" (click)="toggleEdit()">
+//                       {{ iseditingmode ? 'Save' : 'Edit' }}
 //                     </button>
               
 //                     <div class="program-info">
 //                       <div class="info-field">
 //                         <label>Student Name</label>
-//                         <ng-container *ngIf="isEditMode; else staticContent">
-//                           <input matInput [(ngModel)]="studentData.studentName" />
-//                         </ng-container>
-//                         <ng-template #staticContent>
-//                           <p>{{ studentData.studentName }}</p>
-//                         </ng-template>
+//                         <p *ngIf="!iseditingmode">{{ studentData?.studentName }}</p>
+//                         <input *ngIf="iseditingmode" formControlName="studentName" />
 //                       </div>
-              
 //                       <div class="info-field">
 //                         <label>Date of Birth</label>
-//                         <ng-container *ngIf="isEditMode; else staticContent">
-//                           <input matInput [(ngModel)]="studentData.dob" type="date" />
-//                         </ng-container>
-//                         <ng-template #staticContent>
-//                           <p>{{ studentData.dob | date: 'yyyy-MM-dd' }}</p>
-//                         </ng-template>
+//                         <p *ngIf="!iseditingmode">{{ studentData?.dob | date: 'yyyy-MM-dd' }}</p>
+//                         <input *ngIf="iseditingmode" type="date" formControlName="dob" />
 //                       </div>
-              
+                      
 //                       <div class="info-field">
 //                         <label>Citizenship</label>
-//                         <ng-container *ngIf="isEditMode; else staticContent">
-//                           <input matInput [(ngModel)]="studentData.citizenship" />
-//                         </ng-container>
-//                         <ng-template #staticContent>
-//                           <p>{{ studentData.citizenship }}</p>
-//                         </ng-template>
+//                         <p *ngIf="!iseditingmode">{{ studentData?.citizenship }}</p>
+//                         <div *ngIf="iseditingmode">
+//                           <select class="form-control" formControlName="citizenship">
+//                             <option *ngFor="let country of countries" [value]="country.countryName">
+//                               {{ country.countryName }}
+//                             </option>
+//                           </select>
+//                         </div>
 //                       </div>
-              
+                      
+                      
+//                       <div class="info-field">
+//                         <label>Citizenship</label>
+//                         <p *ngIf="!iseditingmode">{{ studentData?.citizenship }}</p>
+//                         <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+//                           <mat-label>Citizenship</mat-label>
+//                           <mat-select formControlName="citizenship">
+//                             <mat-option *ngFor="let country of countries" [value]="country.countryName">
+//                               {{ country.countryName }}
+//                             </mat-option>
+//                           </mat-select>
+//                         </mat-form-field>
+//                       </div>   
+// //                        
 //                       <div class="info-field">
 //                         <label>Language</label>
-//                         <ng-container *ngIf="isEditMode; else staticContent">
-//                           <input matInput [(ngModel)]="studentData.language" />
-//                         </ng-container>
-//                         <ng-template #staticContent>
-//                           <p>{{ studentData.language }}</p>
-//                         </ng-template>
+//                         <p *ngIf="!iseditingmode">{{ studentData?.language }}</p>
+//                         <input *ngIf="iseditingmode" formControlName="language" />
 //                       </div>
-              
 //                       <div class="info-field">
 //                         <label>Passport Expiry</label>
-//                         <ng-container *ngIf="isEditMode; else staticContent">
-//                           <input matInput [(ngModel)]="studentData.passportExpiry" type="date" />
-//                         </ng-container>
-//                         <ng-template #staticContent>
-//                           <p>{{ studentData.passportExpiry | date: 'yyyy-MM-dd' }}</p>
-//                         </ng-template>
+//                         <p *ngIf="!iseditingmode">{{ studentData?.passportExpiry | date: 'yyyy-MM-dd' }}</p>
+//                         <input *ngIf="iseditingmode" type="date" formControlName="passportExpiry" />
 //                       </div>
-              
 //                       <div class="info-field">
 //                         <label>Email Address</label>
-//                         <ng-container *ngIf="isEditMode; else staticContent">
-//                           <input matInput [(ngModel)]="studentData.emailAddress" />
-//                         </ng-container>
-//                         <ng-template #staticContent>
-//                           <p>{{ studentData.emailAddress }}</p>
-//                         </ng-template>
+//                         <p *ngIf="!iseditingmode">{{ studentData?.emailAddress }}</p>
+//                         <input *ngIf="iseditingmode" formControlName="emailAddress" />
 //                       </div>
-              
 //                       <div class="info-field">
 //                         <label>Contact Number</label>
-//                         <ng-container *ngIf="isEditMode; else staticContent">
-//                           <input matInput [(ngModel)]="studentData.contactNo" />
-//                         </ng-container>
-//                         <ng-template #staticContent>
-//                           <p>{{ studentData.contactNo }}</p>
-//                         </ng-template>
+//                         <p *ngIf="!iseditingmode">{{ studentData?.contactNo }}</p>
+//                         <input *ngIf="iseditingmode" formControlName="contactNo" />
 //                       </div>
-              
 //                       <div class="info-field">
 //                         <label>Residential Address</label>
-//                         <ng-container *ngIf="isEditMode; else staticContent">
-//                           <input matInput [(ngModel)]="studentData.residentialAddress" />
-//                         </ng-container>
-//                         <ng-template #staticContent>
-//                           <p>{{ studentData.residentialAddress }}</p>
-//                         </ng-template>
+//                         <p *ngIf="!iseditingmode">{{ studentData?.residentialAddress }}</p>
+//                         <input *ngIf="iseditingmode" formControlName="residentialAddress" />
 //                       </div>
-              
 //                       <div class="info-field">
 //                         <label>Mailing Address</label>
-//                         <ng-container *ngIf="isEditMode; else staticContent">
-//                           <input matInput [(ngModel)]="studentData.mailingAddress" />
-//                         </ng-container>
-//                         <ng-template #staticContent>
-//                           <p>{{ studentData.mailingAddress }}</p>
-//                         </ng-template>
+//                         <p *ngIf="!iseditingmode">{{ studentData?.mailingAddress }}</p>
+//                         <input *ngIf="iseditingmode" formControlName="mailingAddress" />
 //                       </div>
 //                     </div>
               
 //                     <div class="button-container">
 //                       <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
-//                       <button mat-raised-button matStepperNext color="primary" [disabled]="!HFormGroup3!.valid">Next</button>
-//                       <button *ngIf="isEditMode" mat-raised-button color="primary" (click)="updateStudentData()">Update</button>
+//                       <button mat-raised-button matStepperNext color="primary" [disabled]="!HFormGroup2!.valid">
+//                         Next
+//                       </button>
 //                     </div>
 //                   </div>
 //                 </form>
@@ -490,29 +468,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import { Component, OnInit, OnDestroy } from '@angular/core';
 // import {
 //   UntypedFormBuilder,
@@ -534,13 +489,14 @@
 //   styleUrls: ['./applications.component.scss']
 // })
 // export class ApplicationsComponent implements OnInit {
+//   // HFormGroup2: FormGroup;
 //   documentForm: FormGroup;
 //   documentTypes: any[] = [];  
 //   uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>;
 //   isLinear = false;
 //   HFormGroup1?: UntypedFormGroup;
 //   HFormGroup2?: UntypedFormGroup;
-//   HFormGroup3?: UntypedFormGroup;
+
 //   breadscrums = [
 //     {
 //       title: 'Student Application',
@@ -556,7 +512,8 @@
 //   selectedRecord: any;
 //   selectedId: number | null = null;  // Explicit type for clarity
 //   studentData: Student | null = null;
-
+//   countries: any[] = [];
+//   iseditingmode = false;
 //   constructor(
 //     private fb: FormBuilder,
 //     private route: ActivatedRoute,
@@ -568,6 +525,18 @@
 //     // Retrieve the selected ID in the constructor
 //     this.selectedId = this.agentService.getSelectedId();
 //     console.log('Selected ID:', this.selectedId);
+//     // this.HFormGroup2 = this.fb.group({
+//     //   studentName: [''],
+//     //   dob: [''],
+//     //   citizenship: [''],
+//     //   language: [''],
+//     //   passportExpiry: [''],
+//     //   emailAddress: [''],
+//     //   contactNo: [''],
+//     //   residentialAddress: [''],
+//     //   mailingAddress: ['']
+//     // });
+//     this.loadCountries();
 //   }
 
 //   ngOnInit(): void {
@@ -578,16 +547,20 @@
 
 //     // Initialize form groups
 //     this.HFormGroup1 = this._formBuilder.group({});
-   
+    
 //     this.HFormGroup2 = this._formBuilder.group({
 //       file: ['', Validators.required],
+//       studentName: ['', Validators.required],  // Required field with no initial value
+//       dob: ['', Validators.required],  // Required date of birth field
+//       citizenship: ['', Validators.required],  // Required citizenship field
+//       language: ['', Validators.required],  // Required language field
+//       passportExpiry: ['', Validators.required],  // Required passport expiry field
 //       emailAddress: ['', [Validators.required, Validators.email]],
 //       contactNo: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
 //       residentialAddress: ['', Validators.required],
 //       mailingAddress: ['']
 //     });
-//     this.HFormGroup3 = this._formBuilder.group({});
-    
+
 //     this.loadDocumentTypes();
 //   }
 
@@ -602,18 +575,35 @@
 //       (error) => console.error('Error fetching student data:', error)
 //     );
 //   }
-//    // Toggle between edit and view mode
-//    toggleEditMode() {
-//     this.isEditMode = !this.isEditMode;
+//   toggleEdit() {
+//     this.iseditingmode = !this.iseditingmode;
+//     if (this.iseditingmode) {
+//       // Populate the form group with student data when editing starts
+//       this.HFormGroup2.patchValue({
+//         studentName: this.studentData.studentName,
+//         dob: this.studentData.dob ? new Date(this.studentData.dob).toISOString().split('T')[0] : null,  // Ensure valid date format
+//         citizenship: this.studentData.citizenship,
+//         language: this.studentData.language,
+//         passportExpiry: this.studentData.passportExpiry ? new Date(this.studentData.passportExpiry).toISOString().split('T')[0] : null, // Ensure valid date format
+//         emailAddress: this.studentData.emailAddress,
+//         contactNo: this.studentData.contactNo,
+//         residentialAddress: this.studentData.residentialAddress,
+//         mailingAddress: this.studentData.mailingAddress
+//       });
+//     }
+    
 //   }
-
-//   // Handle Update action
-//   updateStudentData() {
-//     console.log('Updated Student Data:', this.studentData);
-//     this.toggleEditMode(); // Disable edit mode after updating
-//   }
-
-  
+//     // Function to load countries
+//     loadCountries() {
+//       this.agentService.getCountries().subscribe(
+//         (response) => {
+//           this.countries = response.data; // Assuming your API returns a "data" array with countries
+//         },
+//         (error) => {
+//           console.error('Error fetching countries:', error);
+//         }
+//       );
+//     }
 //   saveContactInfo(): void {
 //     if (this.HFormGroup2.valid) {
 //       const contactInfo = this.HFormGroup2.value;
@@ -759,3 +749,4 @@
 //     );
 //   }
 // }
+
