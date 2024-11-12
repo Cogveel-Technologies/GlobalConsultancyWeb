@@ -19,13 +19,14 @@ import { StudentDocument } from '../models/studentDocument.model';
   styleUrls: ['./applications.component.scss']
 })
 export class ApplicationsComponent implements OnInit {
+  // HFormGroup2: FormGroup;
   documentForm: FormGroup;
   documentTypes: any[] = [];  
   uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>;
   isLinear = false;
   HFormGroup1?: UntypedFormGroup;
   HFormGroup2?: UntypedFormGroup;
-
+  ContactForm?: UntypedFormGroup;
   breadscrums = [
     {
       title: 'Student Application',
@@ -41,7 +42,8 @@ export class ApplicationsComponent implements OnInit {
   selectedRecord: any;
   selectedId: number | null = null;  // Explicit type for clarity
   studentData: Student | null = null;
-
+  countries: any[] = [];
+  iseditingmode = false;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -53,19 +55,32 @@ export class ApplicationsComponent implements OnInit {
     // Retrieve the selected ID in the constructor
     this.selectedId = this.agentService.getSelectedId();
     console.log('Selected ID:', this.selectedId);
+    
+    this.loadCountries();
   }
 
   ngOnInit(): void {
     this.selectedRecord = this.agentService.getSelectedRecord();
     this.fetchStudentById(this.selectedId);
-    // this.patchForm();
     
 
     // Initialize form groups
     this.HFormGroup1 = this._formBuilder.group({});
     
+    this.ContactForm = this._formBuilder.group({
+      emailAddress: ['', [Validators.required, Validators.email]],
+      contactNo: ['', Validators.required],
+      residentialAddress: ['', Validators.required],
+      mailingAddress: ['', Validators.required]
+    });
+
     this.HFormGroup2 = this._formBuilder.group({
-      file: ['', Validators.required],
+      // file: ['', Validators.required],
+      studentName: ['', Validators.required],  // Required field with no initial value
+      dob: ['', Validators.required],  // Required date of birth field
+      citizenship: ['', Validators.required],  // Required citizenship field
+      language: ['', Validators.required],  // Required language field
+      passportExpiry: ['', Validators.required],  // Required passport expiry field
       emailAddress: ['', [Validators.required, Validators.email]],
       contactNo: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
       residentialAddress: ['', Validators.required],
@@ -86,10 +101,72 @@ export class ApplicationsComponent implements OnInit {
       (error) => console.error('Error fetching student data:', error)
     );
   }
+  toggleEdit() {
+    this.iseditingmode = !this.iseditingmode;
+    
+    if (this.iseditingmode) {
+      // Populate the form group with student data when editing starts
+      this.HFormGroup2.patchValue({
+        studentName: this.studentData?.studentName || '',
+        dob: this.studentData?.dob ? new Date(this.studentData.dob).toISOString().split('T')[0] : '',  // Ensure valid date format
+        citizenship: this.studentData?.citizenship || '',
+        language: this.studentData?.language || '',
+        passportExpiry: this.studentData?.passportExpiry ? new Date(this.studentData.passportExpiry).toISOString().split('T')[0] : '', // Ensure valid date format
+        emailAddress: this.studentData?.emailAddress || '',
+        contactNo: this.studentData?.contactNo || '',
+        residentialAddress: this.studentData?.residentialAddress || '',
+        mailingAddress: this.studentData?.mailingAddress || ''
+      });
+    } else {
+      // Save changes and call update API if exiting edit mode
+      if (this.HFormGroup2.valid) {
+        this.updateStudent();
+      } else {
+        console.log('Form is invalid');
+      }
+    }
+  }
   
-  saveContactInfo(): void {
+  
+  updateStudent() {
     if (this.HFormGroup2.valid) {
-      const contactInfo = this.HFormGroup2.value;
+      const updatedStudent = { ...this.studentData, ...this.HFormGroup2.value };
+      
+      this.agentService.updateStudentData(this.studentData.id, updatedStudent).subscribe({
+        next: (response) => {
+          console.log('Student updated successfully', response);
+  
+          // Fetch the latest data from the server
+          this.fetchStudentById(this.studentData.id);
+  
+          // Exit editing mode
+          this.iseditingmode = false;
+        },
+        error: (error) => {
+          console.error('Error updating student:', error);
+        }
+      });
+    } else {
+      console.log('Form is invalid');
+    }
+  }
+  
+  
+    // Function to load countries
+    loadCountries() {
+      this.agentService.getCountries().subscribe(
+        (response) => {
+          this.countries = response.data; // Assuming your API returns a "data" array with countries
+        },
+        (error) => {
+          console.error('Error fetching countries:', error);
+        }
+      );
+    }
+    
+  saveContactInfo(): void {
+    if (this.ContactForm.valid) {
+      const contactInfo = this.ContactForm.value;
       // this.agentService.saveStudentContactInfo(contactInfo).subscribe(
       //   (response) => {
       //     console.log('Contact information saved:', response);

@@ -13,7 +13,7 @@ import * as CryptoJS from 'crypto-js';
 export class StudentRegisterComponent implements OnInit {
   thirdForm: FormGroup;
   hide3 = true;
-  editMode:boolean = false;
+  editMode = false;
   breadscrums = [
     {
       title: 'Register Student',
@@ -22,7 +22,7 @@ export class StudentRegisterComponent implements OnInit {
     },
   ];
   user: any;
-  errorMessage: string = '';
+  errorMessage = '';
   agents: any[] = []; // To store agent list from backend
   institutes: any[] = []; // To store institute list from backend
 
@@ -57,8 +57,8 @@ export class StudentRegisterComponent implements OnInit {
         this.fetchStudentById(studentId);
       }
     });
-    this.fetchAgents();
-    this.fetchInstitutes();
+    // this.fetchAgents();
+    // this.fetchInstitutes();
   }
 
   initThirdForm() {
