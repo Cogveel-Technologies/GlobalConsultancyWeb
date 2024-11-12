@@ -115,15 +115,19 @@ export class CustomValidatorDirective implements Validator, OnInit {
       case 'street':
         error = this.validateWithSpace(control.value) ? null : { 'invalidStreet': true };
         break;
+
       case 'registrationNo':
         error = this.validateNumber(control.value) ? null : { 'invalidRegistrationNumber': true };
         break;
+
       case 'linkedInUrl':
         error = this.validateLinkedInUrl(control.value) ? null : { 'invalidLinkedInUrl': true };
         break;
+
       case 'fbUrl':
         error = this.validateFacebookUrl(control.value) ? null : { 'invalidFacebookUrl': true };
         break;
+        
       case 'yearEstablished':
         error = this.validateNumber(control.value) ? null : { 'invalidYearEstablished': true };
         break;
