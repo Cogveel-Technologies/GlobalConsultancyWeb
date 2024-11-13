@@ -227,18 +227,47 @@ export class AdmissionComponent implements OnInit {
     );
   }
 
-  onCancel() {
+  onCancel(): void {
     this.searchForm.reset();
+    this.currentPage = 1;  // Reset page to 1
+    this.itemsPerPage = this.pageSizeOptions[0];  // Reset to default page size
+    this.data = [];  // Reset data to an empty array
   }
-
+  
   onApply(record: any) {
     this.adminService.storeSelectedRecord(record);
     this.adminService.setShowOnlyApplyButton(true); // Set flag to show only "Apply" button
-    this.router.navigate(['/agent/list-students']);
+    this.router.navigate(['/agent/list-students'],
+      {
+     queryParams: {origin: 'admission' }
+     
+   });
+
+    // this.router.navigate(['/agent/list-students']);
     console.log(record, 'record apply');
 }
+ 
+  // Example of reset function
+  resetCountrySelection(): void {
+    this.countryCtrl.setValue(null);  // This will reset the dropdown to its initial state
+    this.searchForm.reset();
+  }
+   // Reset functions for each field
+   resetInstituteSelection(): void {
+    this.instituteCtrl.setValue(null);  // Reset Institute selection
+    this.resetProgramSelection();
+    this.resetSessionSelection();
+    // this.searchForm.reset();
+  }
 
+  resetProgramSelection(): void {
+    this.programCtrl.setValue(null);  // Reset Program selection
+    this.resetSessionSelection();
+    // this.searchForm.reset();
+  }
 
-
-
+  resetSessionSelection(): void {
+    this.sessionCtrl.setValue(null);  // Reset Session selection
+    // this.searchForm.reset();
+  }
 }

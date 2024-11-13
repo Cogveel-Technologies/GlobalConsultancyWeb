@@ -212,7 +212,7 @@ getCategory(filterBy: string): Observable<any[]> {
 
 
 getInstitutesByCountry(countryId: number): Observable<any[]> {
-  const url = `${this.apiUrl}/Institute/All?CountryId=${countryId}&IsDeleted=false`;
+  const url = `${this.apiUrl}/Institute/All?CountryId=${countryId}&IsDeleted=false&IsAdmin=true`;
   return this.http.get<any[]>(url)
     .pipe(map(response => response['data']));
 }

@@ -308,4 +308,9 @@ export class ApplicationsComponent implements OnInit {
       }
     );
   }
+  backToPreviousSecreen(){
+    this.router.navigate(['/agent/list-students'], {
+      queryParams: { origin: 'application' } // Pass the origin as 'listStudents'
+    });
+  }
 }
