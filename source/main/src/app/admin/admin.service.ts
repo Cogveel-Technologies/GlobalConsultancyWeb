@@ -263,11 +263,12 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
     return this.http.get(`${this.apiUrl}/Consultancy/All?CountryId=${data.CountryId}&Isdeleted=true`).pipe(map(res => res['data']));
   }
 
-
-
-
   getConsultanciesOfAdmin(data:ConsultancyDetailsOptions){
     return this.http.get(`${this.apiUrl}/Consultancy/byUserId?UserId=${data.UserId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}`).pipe(map(res => res['data']))
+  }
+
+  updateDocument(id:number,data){
+    return this.http.put(`${this.apiUrl}/DocumentType/${id}`,data)
   }
 
 

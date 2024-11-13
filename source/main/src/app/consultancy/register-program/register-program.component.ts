@@ -63,7 +63,7 @@ export class RegisterProgramComponent {
       instituteId: new FormControl('', Validators.required),
       courseTypeId: new FormControl(''),
       isPublic: new FormControl(''),
-      documentId:new FormControl('')
+      documentIds:new FormControl('')
     });
 
     console.log(this.defaultData)
@@ -128,9 +128,8 @@ export class RegisterProgramComponent {
 
   onSubmit() {
     let newDetails = this.registerProgram.value;
-    newDetails.consultancyId = +this.consultancyId;
-    newDetails.documents = newDetails.documents.join(',') 
-    console.log(newDetails)
+    const dataTransform = this.registerProgram.value.documentIds.join(',')
+    newDetails.documentIds = dataTransform
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateProgram(this.editId, newDetails).subscribe(res => {
         if (res['status'] >= 200 && res['status'] < 300) {
@@ -138,6 +137,7 @@ export class RegisterProgramComponent {
         }
       }))
     } else {
+      console.log("helooo")
       this.subscriptions.add(this.consultancyApiService.registerProgram(newDetails).subscribe(res => {
         if (res['status'] >= 200 && res['status'] < 300) {
           this.navigateToProgramList()

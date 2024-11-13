@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { AdminService } from '../admin.service';
 import { PageEvent } from '@angular/material/paginator';
@@ -28,6 +28,8 @@ export class PermissionsComponent implements OnInit {
   roleSelected = false;
   dataLoaded = new BehaviorSubject<boolean>(false); 
   isDataLoaded = false;
+  search$:BehaviorSubject<boolean> = new BehaviorSubject(false);
+  subscription:Subscription = new Subscription();
 
 
   defaultData = this.consultancyService.defaultRenderData();
@@ -55,7 +57,7 @@ ngOnInit(): void {
 
   this.allRoles = this.adminService.getAllRoles()
 
-  this.consultancyApiService.getRoless(this.defaultData).pipe(
+  this.subscription.add(this.consultancyApiService.getRoless(this.defaultData).pipe(
     map((res) => {
       this.records = res['pageInfo'].totalRecords;
       return res['data'];
@@ -63,17 +65,18 @@ ngOnInit(): void {
     tap((roles) => {
       console.log(roles)
       const modulesArray = roles.map((role) =>
-        this.createPermission(role.roleName)
+        this.createPermission(role.roleName, role.id)
       );
       this.permissionsForm.setControl('modules', new FormArray(modulesArray));
       this.isDataLoaded = true; 
     })
-  ).subscribe();
+  ).subscribe());
   
 }
-createPermission(roleName: string): FormGroup {
+createPermission(roleName: string, roleId:number): FormGroup {
   return new FormGroup({
-    roleName: new FormControl(roleName),
+    id: new FormControl(roleId),
+    moduleName: new FormControl(roleName),
     add: new FormControl(false),   
     edit: new FormControl(false),  
     delete: new FormControl(false),
@@ -97,6 +100,10 @@ createPermission(roleName: string): FormGroup {
 
   onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }): void {
     this.sorting$.next({ field, direction });
+  }
+
+  onSearch(){
+
   }
 
   onSubmitPermissions(): void {
