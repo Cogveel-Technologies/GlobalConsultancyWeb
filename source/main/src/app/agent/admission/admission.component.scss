@@ -115,3 +115,94 @@
         margin: 10px; // Adjust margins on smaller screens
     }
 }
+
+
+
+/* Container */
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f0f4f8;
+}
+
+/* Form Wrapper */
+.form-wrapper {
+  width: 100%;
+  max-width: 1000px;
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Title */
+.form-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Full-width Fields */
+.full-width {
+  width: 100%;
+}
+
+/* Mat-form-field enhancements */
+.mat-form-field {
+  background: #f7f9fc;
+  border-radius: 5px;
+}
+
+.mat-form-field.mat-form-field-outline .mat-form-field-outline-start,
+.mat-form-field.mat-form-field-outline .mat-form-field-outline-end {
+  border-radius: 5px;
+}
+
+/* Input and Icon styling */
+.mat-form-field .mat-icon {
+  color: #5c6bc0;
+}
+
+.mat-input-element {
+  font-weight: 500;
+}
+
+/* Button Group Styling */
+.button-group {
+  display: flex;
+  justify-content: right;
+  gap: 15px;
+  margin-top: 1px;
+}
+
+button.mat-raised-button {
+  padding: 10px 30px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  text-transform: capitalize;
+}
+
+.mat-raised-button.mat-primary {
+  background-color: #1976d2;
+  color: white;
+}
+
+.mat-raised-button.mat-accent {
+  background-color: #f57c00;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .form-wrapper {
+    padding: 20px;
+  }
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

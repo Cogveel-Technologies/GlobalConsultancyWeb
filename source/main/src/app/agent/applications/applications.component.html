@@ -72,8 +72,8 @@
                       </div>
                     </div>
                     <div class="button-container">
-                      <button mat-raised-button matStepperNext
-                        color="primary">Next</button>
+                      <button mat-raised-button color="warn" class="msr-2" (click)="backToPreviousSecreen()">Back</button>
+                        <button mat-raised-button matStepperNext color="primary">Next</button>
                     </div>
                   </div>
 
@@ -230,111 +230,112 @@
               <mat-step [stepControl]="HFormGroup2!">
                 <form [formGroup]="HFormGroup2!">
                   <ng-template matStepLabel>Personal Info</ng-template>
-
+              
                   <div class="program-info-container">
                     <h2>Personal Information</h2>
-
+              
                     <!-- Edit Button positioned at the top-right -->
-
-                    <button mat-raised-button color="accent" class="edit-btn"
-                      (click)="toggleEdit()">
+                    <button mat-raised-button color="primary" class="edit-btn" (click)="toggleEdit()">
                       {{ iseditingmode ? 'Update' : 'Edit' }}
                     </button>
+              
                     <div class="program-info">
+              
+                      <!-- Student Name Field -->
                       <div class="info-field">
                         <label>Student Name</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.studentName
-                          }}</p>
-                        <input *ngIf="iseditingmode" class="form-control"
-                          formControlName="studentName" />
+                        <p *ngIf="!iseditingmode">{{ studentData?.studentName }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                          <input matInput formControlName="studentName" />
+                        </mat-form-field>
                       </div>
-
+              
+                      <!-- Date of Birth Field -->
                       <div class="info-field">
                         <label>Date of Birth</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.dob | date:
-                          'yyyy-MM-dd' }}</p>
-                        <input *ngIf="iseditingmode" type="date"
-                          class="form-control" formControlName="dob" />
+                        <p *ngIf="!iseditingmode">{{ studentData?.dob | date: 'yyyy-MM-dd' }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                          <input matInput type="date" formControlName="dob" />
+                        </mat-form-field>
                       </div>
-
+              
+                      <!-- Citizenship Field -->
                       <div class="info-field">
                         <label>Citizenship</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.citizenship
-                          }}</p>
-                        <div *ngIf="iseditingmode">
-                          <select class="form-control"
-                            formControlName="citizenship">
-                            <option *ngFor="let country of countries"
-                              [value]="country.countryName">
+                        <p *ngIf="!iseditingmode">{{ studentData?.citizenship }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                          <mat-select formControlName="citizenship">
+                            <mat-option *ngFor="let country of countries" [value]="country.countryName">
                               {{ country.countryName }}
-                            </option>
-                          </select>
-                        </div>
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
                       </div>
-
+              
+                      <!-- Language Field -->
                       <div class="info-field">
                         <label>Language</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.language
-                          }}</p>
-                        <input *ngIf="iseditingmode" class="form-control"
-                          formControlName="language" />
+                        <p *ngIf="!iseditingmode">{{ studentData?.language }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                          <input matInput formControlName="language" />
+                        </mat-form-field>
                       </div>
-
+              
+                      <!-- Passport Expiry Field -->
                       <div class="info-field">
                         <label>Passport Expiry</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.passportExpiry
-                          | date: 'yyyy-MM-dd' }}</p>
-                        <input *ngIf="iseditingmode" type="date"
-                          class="form-control"
-                          formControlName="passportExpiry" />
+                        <p *ngIf="!iseditingmode">{{ studentData?.passportExpiry | date: 'yyyy-MM-dd' }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                          <input matInput type="date" formControlName="passportExpiry" />
+                        </mat-form-field>
                       </div>
-
+              
+                      <!-- Email Address Field -->
                       <div class="info-field">
                         <label>Email Address</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.emailAddress
-                          }}</p>
-                        <input *ngIf="iseditingmode" type="email"
-                          class="form-control" formControlName="emailAddress" />
+                        <p *ngIf="!iseditingmode">{{ studentData?.emailAddress }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                          <input matInput type="email" formControlName="emailAddress" />
+                        </mat-form-field>
                       </div>
-
+              
+                      <!-- Contact Number Field -->
                       <div class="info-field">
                         <label>Contact Number</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.contactNo
-                          }}</p>
-                        <input *ngIf="iseditingmode" class="form-control"
-                          formControlName="contactNo" />
+                        <p *ngIf="!iseditingmode">{{ studentData?.contactNo }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                          <input matInput formControlName="contactNo" />
+                        </mat-form-field>
                       </div>
-
+              
+                      <!-- Residential Address Field -->
                       <div class="info-field">
                         <label>Residential Address</label>
-                        <p *ngIf="!iseditingmode">{{
-                          studentData?.residentialAddress }}</p>
-                        <input *ngIf="iseditingmode" class="form-control"
-                          formControlName="residentialAddress" />
+                        <p *ngIf="!iseditingmode">{{ studentData?.residentialAddress }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                          <input matInput formControlName="residentialAddress" />
+                        </mat-form-field>
                       </div>
-
+              
+                      <!-- Mailing Address Field -->
                       <div class="info-field">
                         <label>Mailing Address</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.mailingAddress
-                          }}</p>
-                        <input *ngIf="iseditingmode" class="form-control"
-                          formControlName="mailingAddress" />
+                        <p *ngIf="!iseditingmode">{{ studentData?.mailingAddress }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                          <input matInput formControlName="mailingAddress" />
+                        </mat-form-field>
                       </div>
                     </div>
-
+              
+                    <!-- Navigation Buttons -->
                     <div class="button-container">
-                      <button mat-raised-button matStepperPrevious color="warn"
-                        class="msr-2">Back</button>
-                      <button mat-raised-button matStepperNext color="primary"
-                        >
-                        Next
-                      </button>
+                      <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
+                      <button mat-raised-button matStepperNext color="primary">Next</button>
                     </div>
                   </div>
-
                 </form>
               </mat-step>
-
+              
               <!-- Contact Info -->
               <mat-step [stepControl]="ContactForm!">
                 <form [formGroup]="ContactForm!">

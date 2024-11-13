@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { switchMap, tap, map, throttleTime, distinctUntilChanged, startWith } from 'rxjs/operators';
@@ -47,13 +47,43 @@ export class ListstudentsComponent implements OnInit {
   constructor(
     private router: Router,
     private agentService: AgentService,
+    private route: ActivatedRoute, 
     private snackBar: MatSnackBar
   ) {
     this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
     this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize); // Then use it here
+   
   }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const origin = params['origin']; // Fetch the origin parameter
+
+      if (origin === 'admission') {
+
+        this.breadscrums = [
+          {
+            title: 'Students List',
+            items: ['Search'],
+            active: 'Students',
+          },
+        ];
+      }
+      else if (origin === 'application') {
+      
+        this.breadscrums = [
+          {
+            title: 'Students List',
+            items: ['Applications'],
+            active: 'Students',
+          },
+        ];
+        this.agentService.setShowOnlyApplyButton(true);
+      }
+     
+  });
+
+ 
     this.showOnlyApplyButton = this.agentService.getShowOnlyApplyButton();
     // Combine search, pagination, and sorting
     this.students$ = combineLatest([
@@ -178,9 +208,13 @@ export class ListstudentsComponent implements OnInit {
     
     this.router.navigate(['/agent/applications']);
   }
-
+  
+  // applyStudentSearch(){
+  //   this.router.navigate(['/agent/admission']);
+  // }
   ngOnDestroy() {
     // Reset the flag when navigating away from this component
     this.agentService.setShowOnlyApplyButton(false);
-  }
+   
+}
 }

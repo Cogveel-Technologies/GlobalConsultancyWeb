@@ -234,11 +234,13 @@ export class AdmissionComponent implements OnInit {
   onApply(record: any) {
     this.adminService.storeSelectedRecord(record);
     this.adminService.setShowOnlyApplyButton(true); // Set flag to show only "Apply" button
-    this.router.navigate(['/agent/list-students']);
+    this.router.navigate(['/agent/list-students'],
+      {
+     queryParams: {origin: 'admission' }
+     
+   });
+
+    // this.router.navigate(['/agent/list-students']);
     console.log(record, 'record apply');
 }
-
-
-
-
 }

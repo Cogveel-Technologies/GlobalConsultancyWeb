@@ -35,7 +35,7 @@ const routes: Routes = [
   {
     path: 'list-students',
     component: ListstudentsComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
 
   },
   {
