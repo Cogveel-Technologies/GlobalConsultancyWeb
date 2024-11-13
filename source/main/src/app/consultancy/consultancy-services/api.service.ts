@@ -116,6 +116,10 @@ export class ConsultancyApi {
     getAllPrograms(data:ConsultancyDetailsOptions){
         return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Program/All?InstituteId=${data.InstituteId}&ConsultancyId=${data.ConsultancyId}&IsDeleted=${data.IsDeleted}`).pipe(map(response => response['data']))
     }
+    // ------------------------- get documents on the basis of program ---------------------------------
+    getDocumentsOfProgram(id:number){
+        return this.http.get(`${this.baseUrl}/Program/GetDocumentsByProgramId?ProgramId=${id}`)
+    }
     ///////////////////////////////////////////// INTAKES /////////////////////////////////////////////////
     // --------- register-intake ------------------
     registerIntake(data: IntakeData) {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProgramData } from '../consultancy-models/data.program';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
-import { BehaviorSubject, combineLatest, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { FormControl } from '@angular/forms';
 import { AdminService } from 'app/admin/admin.service';
@@ -30,6 +30,22 @@ export class ProgramAllDetailsComponent {
   previousSessionId: number = 0;
   sessionOptions = new FormControl()
   editMode: boolean = false;
+  documentTypes:any;
+  editModeMap: Map<number, boolean> = new Map();
+  documentName = new FormControl('')
+
+  getDocumentTypes(){
+    return this.consultancyApiService.getDocumentsOfProgram(+this.id).pipe(
+      map(res => {
+        const data = res['data'];
+        console.log(data);
+        return data.map((item: any) => ({
+          id: item.id,
+          documentType: item.documentType
+        }));
+      })
+    );
+  }
 
   ngOnInit() {
     // for all details (on view button)
@@ -37,19 +53,15 @@ export class ProgramAllDetailsComponent {
     this.id = this.route.snapshot.paramMap.get('id') || '';
     this.defaultData.ProgramId = String(this.id);
 
+    
+    this.documentTypes = this.getDocumentTypes()
+
+
 
     // this.sessions = this.consultancyApiService.getProgramSessions(this.defaultData).pipe(tap(res=>{
     //   console.log(res[0].id)
     //   this.sessionOptions.setValue(res[0].id)
     // }))
-
-    combineLatest([this.session$]).pipe(switchMap(([sessionId]) => {
-      if (sessionId && this.previousSessionId !== sessionId) {
-
-      }
-      console.log(sessionId)
-      return of([])
-    })).subscribe()
 
   }
 
@@ -58,25 +70,42 @@ export class ProgramAllDetailsComponent {
     this.session$.next(event.value)
   }
 
-  onDeleteDocument() {
+  onDeleteDocument(id:number) {
     const con = confirm("Are you sure?")
     if (con) {
-      let id: number;
-      this.adminService.deleteDocument(id)
+      this.adminService.deleteDocument(id).subscribe(res=>{
+        this.documentTypes = this.getDocumentTypes();
+      })
     }
   }
 
-  onEditDocument() {
-    this.editMode = true;
+  onEditDocument(id:number,docType:string) {
+    this.documentName.setValue(docType)
+    this.editModeMap.set(id, true);
   }
 
-  onUpdate(){
+  onUpdate(id:number){
+    const updatedDetails = {
+      id,
+      documentType: this.documentName.value
+    }
+     this.adminService.updateDocument(id,updatedDetails).subscribe(res=>{
 
+      this.documentTypes = this.adminService.getDocuments().pipe(
+        map(res => {
+          const data = res['data'];
+          console.log(data);
+          return data.map((item: any) => ({
+            id: item.id,
+            documentType: item.documentType
+          }));
+        }),tap(res=> this.editModeMap.set(id,false))
+      );
+     })
   }
 
-  onCancelEdit(){
-    console.log("hello")
-    this.editMode = false;
+  onCancelEdit(id:number){
+    this.editModeMap.set(id, false);
   }
 
   backToList() {

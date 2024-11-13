@@ -198,7 +198,7 @@
                                 <div class="col-6 mb-1">
                                     <mat-form-field appearance="fill" class="example-full-width">
                                       <mat-label>Document Type</mat-label>
-                                      <mat-select formControlName="documentId" required multiple>
+                                      <mat-select formControlName="documentIds" required multiple>
                                         <mat-option *ngFor="let document of (documentTypes | async)" [value]="document.id">
                                           {{ document.documentType }}
                                         </mat-option>

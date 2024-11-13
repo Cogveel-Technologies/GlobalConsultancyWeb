@@ -20,6 +20,9 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
+                  </div>
             </div>
         </div>
 
@@ -32,7 +35,7 @@
                             <table class="table table-hover table-responsive">
                                 <thead>
                                     <tr>
-                                        <th>Role</th>
+                                        <th>Module</th>
                                         <th>Add</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
@@ -42,7 +45,7 @@
                                 </thead>
                                 <tbody formArrayName="modules" *ngIf="isDataLoaded">
                                     <tr *ngFor="let module of permissionsForm.get('modules')['controls'];let i = index" [formGroupName]="i">
-                                        <td data-label="Role">{{ module.get('roleName').value }}</td>
+                                        <td data-label="Role">{{ module.get('moduleName').value }}</td>
                                       <td data-label="Add">
                                         <input type="checkbox" formControlName="add" />
                                       </td>

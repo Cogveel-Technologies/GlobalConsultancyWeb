@@ -59,36 +59,36 @@
                     <div class="table-responsive">
                       <table class="table table-bordered table-hover mt-2">
                         <tbody>
-                          <tr>
-                             <td class="d-flex justify-content-between align-items-center">
-                              <b *ngIf="!editMode ">passport</b>
-                              <input type="text" matInput *ngIf="editMode">
-                             <div>
-                              <button mat-icon-button color="primary" matTooltip="Edit" (click)="onEditDocument()" *ngIf="!editMode">
-                                <!-- <mat-icon>edit</mat-icon> -->
-                                <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                              </button>
+                          <tr *ngFor="let document of (documentTypes|async)">
+                            <td class="d-flex justify-content-between align-items-center">
+                              <b  *ngIf="!editModeMap.get(document.id)">{{document.documentType}}</b>
+                              <mat-form-field  *ngIf="editModeMap.get(document.id)">
+                                <input matInput [formControl]="documentName">
+                              </mat-form-field>
+                              <div>
+                                <button mat-icon-button color="primary" matTooltip="Edit" (click)="onEditDocument(document.id, document.documentType)"
+                                *ngIf="!editModeMap.get(document.id)">
+                                  <!-- <mat-icon>edit</mat-icon> -->
+                                  <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                                </button>
 
-                              <button mat-icon-button color="warn" matTooltip="Delete" (click)="onDeleteDocument()" *ngIf="!editMode">
-                                <!-- <mat-icon>delete</mat-icon> -->
-                                <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                              </button> 
+                                <button mat-icon-button color="warn" matTooltip="Delete" (click)="onDeleteDocument(document.id)"
+                                *ngIf="!editModeMap.get(document.id)">
+                                  <!-- <mat-icon>delete</mat-icon> -->
+                                  <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                                </button>
 
-                              <button mat-icon-button color="primary" matTooltip="Save" (click)="onUpdate()" *ngIf="editMode">
-                                <app-feather-icons [icon]="'check'" [class]="'tbl-fav-check'"></app-feather-icons>
-                              </button>
-                              
-                              <button mat-icon-button color="warn" matTooltip="Cancel" (click)="onCancelEdit()" *ngIf="editMode">
-                                <app-feather-icons [icon]="'x'" [class]="'tbl-fav-close'"></app-feather-icons>
-                              </button>
+                                <button mat-icon-button color="primary" matTooltip="Save" (click)="onUpdate(document.id)"
+                                *ngIf="editModeMap.get(document.id)">
+                                  <app-feather-icons [icon]="'check'" [class]="'tbl-fav-check'"></app-feather-icons>
+                                </button>
 
-                             
-                              
-                             </div>
+                                <button mat-icon-button color="warn" matTooltip="Cancel" (click)="onCancelEdit(document.id)"
+                                *ngIf="editModeMap.get(document.id)">
+                                  <app-feather-icons [icon]="'x'" [class]="'tbl-fav-close'"></app-feather-icons>
+                                </button>
+                              </div>
                             </td>
-                          </tr>
-                          <tr>
-                            <td><b>adhaar</b></td>
                           </tr>
                         </tbody>
                       </table>
@@ -96,90 +96,93 @@
                   </div>
                 </div>
               </div>
-          </mat-tab>
-          <div class="container">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="table-responsive">
-                  <table class="table table-bordered table-hover mt-2">
-                    <thead>
-                      <tr>
-                        <th>Field</th>
-                        <th>Details</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="custom_icons"><mat-icon class="small_icon" color="primary">school</mat-icon> Program
-                          Name</td>
-                        <td>{{details.programName}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon class="small_icon" color="primary">timer</mat-icon> Duration
-                        </td>
-                        <td>{{details.duration}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon class="small_icon" color="primary"
-                            class="small_icon">attach_money</mat-icon>
-                          Application Fee</td>
-                        <td>{{details.applicationFee}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon class="small_icon" color="primary"
-                            class="small_icon">account_balance_wallet</mat-icon> Tuition Fee</td>
-                        <td>{{details.tutionFee}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon class="small_icon" color="primary"
-                            class="small_icon">school</mat-icon>
-                          Level of Education</td>
-                        <td>{{details.levelOfEducation}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon class="small_icon" color="primary"
-                            class="small_icon">check_circle</mat-icon>
-                          Status</td>
-                        <td>{{details.status}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">location_city</mat-icon>
-                          Institute</td>
-                        <td>{{details.instituteName}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">category</mat-icon>
-                          Program Category</td>
-                        <td>{{details.programCategoryName}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon class="small_icon" color="primary"
-                            class="small_icon">note_add</mat-icon>
-                          Subject Requirements</td>
-                        <td>{{details.subjectRequirements}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon class="small_icon" color="primary"
-                            class="small_icon">menu_book</mat-icon>
-                          Academic Requirements</td>
-                        <td>{{details.academicRequirements}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">book</mat-icon> Course
-                          Type</td>
-                        <td>{{details.courseTypeName}}</td>
-                      </tr>
-                      <tr>
-                        <td class="custom_icons"><mat-icon color="primary" class="small_icon">book</mat-icon> Is public
-                        </td>
-                        <td>{{details.isPublic}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+            </mat-tab>
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-hover mt-2">
+                      <thead>
+                        <tr>
+                          <th>Field</th>
+                          <th>Details</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="custom_icons"><mat-icon class="small_icon" color="primary">school</mat-icon>
+                            Program
+                            Name</td>
+                          <td>{{details.programName}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon class="small_icon" color="primary">timer</mat-icon>
+                            Duration
+                          </td>
+                          <td>{{details.duration}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon class="small_icon" color="primary"
+                              class="small_icon">attach_money</mat-icon>
+                            Application Fee</td>
+                          <td>{{details.applicationFee}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon class="small_icon" color="primary"
+                              class="small_icon">account_balance_wallet</mat-icon> Tuition Fee</td>
+                          <td>{{details.tutionFee}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon class="small_icon" color="primary"
+                              class="small_icon">school</mat-icon>
+                            Level of Education</td>
+                          <td>{{details.levelOfEducation}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon class="small_icon" color="primary"
+                              class="small_icon">check_circle</mat-icon>
+                            Status</td>
+                          <td>{{details.status}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon color="primary" class="small_icon">location_city</mat-icon>
+                            Institute</td>
+                          <td>{{details.instituteName}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon color="primary" class="small_icon">category</mat-icon>
+                            Program Category</td>
+                          <td>{{details.programCategoryName}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon class="small_icon" color="primary"
+                              class="small_icon">note_add</mat-icon>
+                            Subject Requirements</td>
+                          <td>{{details.subjectRequirements}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon class="small_icon" color="primary"
+                              class="small_icon">menu_book</mat-icon>
+                            Academic Requirements</td>
+                          <td>{{details.academicRequirements}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon color="primary" class="small_icon">book</mat-icon> Course
+                            Type</td>
+                          <td>{{details.courseTypeName}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom_icons"><mat-icon color="primary" class="small_icon">book</mat-icon> Is
+                            public
+                          </td>
+                          <td>{{details.isPublic}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           </mat-tab>
         </mat-tab-group>
       </div>

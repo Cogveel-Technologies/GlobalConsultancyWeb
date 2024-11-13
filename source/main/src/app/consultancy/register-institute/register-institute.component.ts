@@ -95,6 +95,8 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     const newDetails = this.registerInstitute.value;
+    newDetails.consultancyId = localStorage.getItem('id')
+    
 
     if (this.editMode) {
       this.subscriptions.add(
@@ -106,7 +108,7 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
       );
     } else {
       // add consultancy id and country id to data supposed to send to the backend
-      newDetails.consultancyId = +localStorage.getItem("id");
+      // newDetails.consultancyId = +localStorage.getItem("id");
       newDetails.countryId = this.countryId
       this.subscriptions.add(
         this.consultancyApiService.registerInstitute(newDetails).subscribe(res => {
