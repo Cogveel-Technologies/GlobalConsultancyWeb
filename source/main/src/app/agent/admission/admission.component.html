@@ -14,104 +14,143 @@
     <h2 class="form-title">Search Programs</h2>
     <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
       <div class="row">
-        <!-- Country Field -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Country</mat-label>
-            <mat-icon matPrefix>public</mat-icon>
-            <input
-              matInput
-              placeholder="Select Country"
-              [matAutocomplete]="countryAuto"
-              [formControl]="countryCtrl"
-              required
-            />
-            <mat-autocomplete #countryAuto="matAutocomplete">
-              <mat-option
-                *ngFor="let country of filteredCountryOptions | async"
-                [value]="country.countryName"
-              >
-                {{ country.countryName }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
-
-        <!-- Institutes Field -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Institute</mat-label>
-            <mat-icon matPrefix>school</mat-icon>
-            <input
-              matInput
-              placeholder="Select Institute"
-              [matAutocomplete]="instituteAuto"
-              [formControl]="instituteCtrl"
-              required
-            />
-            <mat-autocomplete #instituteAuto="matAutocomplete">
-              <mat-option
-                *ngFor="let institute of filteredInstituteOptions | async"
-                [value]="institute.name"
-              >
-                {{ institute.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
-
-        <!-- Program Field -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Program</mat-label>
-            <mat-icon matPrefix>menu_book</mat-icon>
-            <input
-              matInput
-              placeholder="Select Program"
-              [matAutocomplete]="programAuto"
-              [formControl]="programCtrl"
-              required
-            />
-            <mat-autocomplete #programAuto="matAutocomplete">
-              <mat-option
-                *ngFor="let program of filteredProgramOptions | async"
-                [value]="program.name"
-              >
-                {{ program.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
-
-        <!-- Session Field -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Session</mat-label>
-            <mat-icon matPrefix>schedule</mat-icon>
-            <input
-              matInput
-              placeholder="Select Session"
-              [matAutocomplete]="sessionAuto"
-              [formControl]="sessionCtrl"
-              required
-            />
-            <mat-autocomplete #sessionAuto="matAutocomplete">
-              <mat-option
-                *ngFor="let session of filteredSessionOptions | async"
-                [value]="session.sessionName"
-              >
-                {{ session.sessionName }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
-      </div>
+       <!-- Country Field -->
+<!-- Country Field -->
+<div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Country</mat-label>
+      <mat-icon matPrefix>public</mat-icon>
+      <input
+        matInput
+        placeholder="Select Country"
+        [matAutocomplete]="countryAuto"
+        [formControl]="countryCtrl"
+      />
+      <mat-autocomplete #countryAuto="matAutocomplete">
+        <mat-option
+          *ngFor="let country of filteredCountryOptions | async"
+          [value]="country.countryName"
+        >
+          {{ country.countryName }}
+        </mat-option>
+      </mat-autocomplete>
+      
+      <!-- Reset icon for clearing selection -->
+      <mat-icon
+        *ngIf="countryCtrl.value"
+        matSuffix
+        (click)="resetCountrySelection()"
+        class="reset-icon"
+      >
+        close
+      </mat-icon>
+    </mat-form-field>
+  </div>
+     
+       <!-- Institutes Field -->
+<div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Institute</mat-label>
+      <mat-icon matPrefix>school</mat-icon>
+      <input
+        matInput
+        placeholder="Select Institute"
+        [matAutocomplete]="instituteAuto"
+        [formControl]="instituteCtrl"
+      />
+      <mat-autocomplete #instituteAuto="matAutocomplete">
+        <mat-option
+          *ngFor="let institute of filteredInstituteOptions | async"
+          [value]="institute.name"
+        >
+          {{ institute.name }}
+        </mat-option>
+      </mat-autocomplete>
+      
+      <!-- Reset icon for clearing selection -->
+      <mat-icon
+        *ngIf="instituteCtrl.value"
+        matSuffix
+        (click)="resetInstituteSelection()"
+        class="reset-icon"
+      >
+        close
+      </mat-icon>
+    </mat-form-field>
+  </div>
+  
+  <!-- Program Field -->
+  <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Program</mat-label>
+      <mat-icon matPrefix>menu_book</mat-icon>
+      <input
+        matInput
+        placeholder="Select Program"
+        [matAutocomplete]="programAuto"
+        [formControl]="programCtrl"
+      />
+      <mat-autocomplete #programAuto="matAutocomplete">
+        <mat-option
+          *ngFor="let program of filteredProgramOptions | async"
+          [value]="program.name"
+        >
+          {{ program.name }}
+        </mat-option>
+      </mat-autocomplete>
+      
+      <!-- Reset icon for clearing selection -->
+      <mat-icon
+        *ngIf="programCtrl.value"
+        matSuffix
+        (click)="resetProgramSelection()"
+        class="reset-icon"
+      >
+        close
+      </mat-icon>
+    </mat-form-field>
+  </div>
+  
+  <!-- Session Field -->
+  <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Session</mat-label>
+      <mat-icon matPrefix>schedule</mat-icon>
+      <input
+        matInput
+        placeholder="Select Session"
+        [matAutocomplete]="sessionAuto"
+        [formControl]="sessionCtrl"
+      />
+      <mat-autocomplete #sessionAuto="matAutocomplete">
+        <mat-option
+          *ngFor="let session of filteredSessionOptions | async"
+          [value]="session.sessionName"
+        >
+          {{ session.sessionName }}
+        </mat-option>
+      </mat-autocomplete>
+      
+      <!-- Reset icon for clearing selection -->
+      <mat-icon
+        *ngIf="sessionCtrl.value"
+        matSuffix
+        (click)="resetSessionSelection()"
+        class="reset-icon"
+      >
+        close
+      </mat-icon>
+    </mat-form-field>
+  </div>
+  
+         
 
       <!-- Action Buttons -->
       <div class="button-group">
         <button mat-raised-button color="accent" type="button" (click)="onCancel()">Reset</button>
         <button mat-raised-button color="primary" type="submit">Search</button>
       
+      </div>
       </div>
     </form>
   </div>

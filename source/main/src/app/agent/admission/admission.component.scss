@@ -206,3 +206,10 @@ button.mat-raised-button {
     gap: 10px;
   }
 }
+.reset-icon {
+  cursor: pointer;
+  position: absolute;
+  right: 1px;
+  top: 50%;
+  transform: translateY(-50%);
+}
