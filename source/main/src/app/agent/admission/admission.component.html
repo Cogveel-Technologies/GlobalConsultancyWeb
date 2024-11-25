@@ -1,222 +1,210 @@
 <section class="content">
-    <div class="content-block">
-        <div class="block-header" *ngFor="let breadscrum of breadscrums">
-            <!-- breadcrumb -->
-            <app-breadcrumb 
-                [title]="breadscrum.title" 
-                [items]="breadscrum.items" 
-                [active_item]="breadscrum.active">
-            </app-breadcrumb>
-        </div>
+  <div class="content-block">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb
+        [title]="breadscrum.title"
+        [items]="breadscrum.items"
+        [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
 
-        <div class="container">
-  <div class="form-wrapper">
-    <h2 class="form-title">Search Programs</h2>
-    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-      <div class="row">
-       <!-- Country Field -->
-<!-- Country Field -->
-<div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Country</mat-label>
-      <mat-icon matPrefix>public</mat-icon>
-      <input
-        matInput
-        placeholder="Select Country"
-        [matAutocomplete]="countryAuto"
-        [formControl]="countryCtrl"
-      />
-      <mat-autocomplete #countryAuto="matAutocomplete">
-        <mat-option
-          *ngFor="let country of filteredCountryOptions | async"
-          [value]="country.countryName"
-        >
-          {{ country.countryName }}
-        </mat-option>
-      </mat-autocomplete>
-      
-      <!-- Reset icon for clearing selection -->
-      <mat-icon
-        *ngIf="countryCtrl.value"
-        matSuffix
-        (click)="resetCountrySelection()"
-        class="reset-icon"
-      >
-        close
-      </mat-icon>
-    </mat-form-field>
-  </div>
-     
-       <!-- Institutes Field -->
-<div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Institute</mat-label>
-      <mat-icon matPrefix>school</mat-icon>
-      <input
-        matInput
-        placeholder="Select Institute"
-        [matAutocomplete]="instituteAuto"
-        [formControl]="instituteCtrl"
-      />
-      <mat-autocomplete #instituteAuto="matAutocomplete">
-        <mat-option
-          *ngFor="let institute of filteredInstituteOptions | async"
-          [value]="institute.name"
-        >
-          {{ institute.name }}
-        </mat-option>
-      </mat-autocomplete>
-      
-      <!-- Reset icon for clearing selection -->
-      <mat-icon
-        *ngIf="instituteCtrl.value"
-        matSuffix
-        (click)="resetInstituteSelection()"
-        class="reset-icon"
-      >
-        close
-      </mat-icon>
-    </mat-form-field>
-  </div>
-  
-  <!-- Program Field -->
-  <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Program</mat-label>
-      <mat-icon matPrefix>menu_book</mat-icon>
-      <input
-        matInput
-        placeholder="Select Program"
-        [matAutocomplete]="programAuto"
-        [formControl]="programCtrl"
-      />
-      <mat-autocomplete #programAuto="matAutocomplete">
-        <mat-option
-          *ngFor="let program of filteredProgramOptions | async"
-          [value]="program.name"
-        >
-          {{ program.name }}
-        </mat-option>
-      </mat-autocomplete>
-      
-      <!-- Reset icon for clearing selection -->
-      <mat-icon
-        *ngIf="programCtrl.value"
-        matSuffix
-        (click)="resetProgramSelection()"
-        class="reset-icon"
-      >
-        close
-      </mat-icon>
-    </mat-form-field>
-  </div>
-  
-  <!-- Session Field -->
-  <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Session</mat-label>
-      <mat-icon matPrefix>schedule</mat-icon>
-      <input
-        matInput
-        placeholder="Select Session"
-        [matAutocomplete]="sessionAuto"
-        [formControl]="sessionCtrl"
-      />
-      <mat-autocomplete #sessionAuto="matAutocomplete">
-        <mat-option
-          *ngFor="let session of filteredSessionOptions | async"
-          [value]="session.sessionName"
-        >
-          {{ session.sessionName }}
-        </mat-option>
-      </mat-autocomplete>
-      
-      <!-- Reset icon for clearing selection -->
-      <mat-icon
-        *ngIf="sessionCtrl.value"
-        matSuffix
-        (click)="resetSessionSelection()"
-        class="reset-icon"
-      >
-        close
-      </mat-icon>
-    </mat-form-field>
-  </div>
-  
-         
+    <div class="container">
+      <div class="form-wrapper">
+        <h2 class="form-title">Search Programs</h2>
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <!-- Country Field -->
+            <!-- Country Field -->
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Country</mat-label>
+                <mat-icon matPrefix>public</mat-icon>
+                <input
+                  matInput
+                  placeholder="Select Country"
+                  [matAutocomplete]="countryAuto"
+                  [formControl]="countryCtrl" />
+                <mat-autocomplete #countryAuto="matAutocomplete">
+                  <mat-option
+                    *ngFor="let country of filteredCountryOptions | async"
+                    [value]="country.countryName">
+                    {{ country.countryName }}
+                  </mat-option>
+                </mat-autocomplete>
 
-      <!-- Action Buttons -->
-      <div class="button-group">
-        <button mat-raised-button color="accent" type="button" (click)="onCancel()">Reset</button>
-        <button mat-raised-button color="primary" type="submit">Search</button>
-      
+                <!-- Reset icon for clearing selection -->
+                <mat-icon
+                  *ngIf="countryCtrl.value"
+                  matSuffix
+                  (click)="resetCountrySelection()"
+                  class="reset-icon">
+                  close
+                </mat-icon>
+              </mat-form-field>
+            </div>
+
+            <!-- Institutes Field -->
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Institute</mat-label>
+                <mat-icon matPrefix>school</mat-icon>
+                <input
+                  matInput
+                  placeholder="Select Institute"
+                  [matAutocomplete]="instituteAuto"
+                  [formControl]="instituteCtrl" />
+                <mat-autocomplete #instituteAuto="matAutocomplete">
+                  <mat-option
+                    *ngFor="let institute of filteredInstituteOptions | async"
+                    [value]="institute.name">
+                    {{ institute.name }}
+                  </mat-option>
+                </mat-autocomplete>
+
+                <!-- Reset icon for clearing selection -->
+                <mat-icon
+                  *ngIf="instituteCtrl.value"
+                  matSuffix
+                  (click)="resetInstituteSelection()"
+                  class="reset-icon">
+                  close
+                </mat-icon>
+              </mat-form-field>
+            </div>
+
+            <!-- Program Field -->
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Program</mat-label>
+                <mat-icon matPrefix>menu_book</mat-icon>
+                <input
+                  matInput
+                  placeholder="Select Program"
+                  [matAutocomplete]="programAuto"
+                  [formControl]="programCtrl" />
+                <mat-autocomplete #programAuto="matAutocomplete">
+                  <mat-option
+                    *ngFor="let program of filteredProgramOptions | async"
+                    [value]="program.name">
+                    {{ program.name }}
+                  </mat-option>
+                </mat-autocomplete>
+
+                <!-- Reset icon for clearing selection -->
+                <mat-icon
+                  *ngIf="programCtrl.value"
+                  matSuffix
+                  (click)="resetProgramSelection()"
+                  class="reset-icon">
+                  close
+                </mat-icon>
+              </mat-form-field>
+            </div>
+
+            <!-- Session Field -->
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Session</mat-label>
+                <mat-icon matPrefix>schedule</mat-icon>
+                <input
+                  matInput
+                  placeholder="Select Session"
+                  [matAutocomplete]="sessionAuto"
+                  [formControl]="sessionCtrl" />
+                <mat-autocomplete #sessionAuto="matAutocomplete">
+                  <mat-option
+                    *ngFor="let session of filteredSessionOptions | async"
+                    [value]="session.sessionName">
+                    {{ session.sessionName }}
+                  </mat-option>
+                </mat-autocomplete>
+
+                <!-- Reset icon for clearing selection -->
+                <mat-icon
+                  *ngIf="sessionCtrl.value"
+                  matSuffix
+                  (click)="resetSessionSelection()"
+                  class="reset-icon">
+                  close
+                </mat-icon>
+              </mat-form-field>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="button-group">
+              <button mat-raised-button color="accent" type="button"
+                (click)="onCancel()">Reset</button>
+              <button mat-raised-button color="primary"
+                type="submit">Search</button>
+
+            </div>
+          </div>
+        </form>
       </div>
+    </div>
+
+    <!-- Box-like structure to show results -->
+
+    <div class="result-container">
+      <div class="result-card" *ngFor="let element of data">
+        <mat-card class="mat-elevation-z8 full-width-card">
+          <mat-card-header class="header">
+            <mat-icon class="icon">school</mat-icon>
+            <div>
+              <mat-card-title class="title">{{ element.instituteName
+                }}</mat-card-title>
+              <mat-card-subtitle class="subtitle">{{ element.programName
+                }}</mat-card-subtitle>
+
+            </div>
+            <button mat-button color="primary"
+              (click)="onApply(element)">Apply</button>
+
+          </mat-card-header>
+          <mat-card-content class="content">
+            <div class="fees-container">
+              <p><strong>Program Description:</strong> {{
+                element.programDescription }}</p>
+            </div>
+            <div class="fees-container">
+              <p><strong>Level of Education:</strong> {{
+                element.levelOfEducation }}</p>
+              <p><strong>Province:</strong> {{ element.province }}</p>
+              <p><strong>Year Established:</strong> {{ element.yearEstablished |
+                date:'yyyy' }}</p>
+            </div>
+            <div class="fees-container">
+              <p><strong>Duration:</strong> {{ element.duration }}</p>
+              <p><strong>Application Fee:</strong> ${{ element.applicationFee
+                }}</p>
+              <p><strong>Tuition Fee:</strong> ${{ element.tutionFee }}</p>
+              <!-- <p><strong>Intakes:</strong> {{ element.noOfIntake }}</p> -->
+            </div>
+          </mat-card-content>
+          <mat-card-footer class="footer">
+            <small><strong>About Institute:</strong> {{ element.aboutInstitute
+              }}</small>
+
+          </mat-card-footer>
+        </mat-card>
+
       </div>
-    </form>
-  </div>
-</div>
-
-          
-       
-     <!-- Box-like structure to show results -->
-
-     <div class="result-container">
-        <div class="result-card" *ngFor="let element of data">
-            <mat-card class="mat-elevation-z8 full-width-card">
-                <mat-card-header class="header">
-                    <mat-icon class="icon">school</mat-icon>
-                    <div>
-                        <mat-card-title class="title">{{ element.instituteName }}</mat-card-title>
-                        <mat-card-subtitle class="subtitle">{{ element.programName }}</mat-card-subtitle>
-                    
-
-                    </div>
-                    <button mat-button color="primary" (click)="onApply(element)">Apply</button>
-
-                </mat-card-header>
-                <mat-card-content class="content">
-                    <div class="fees-container">
-                        <p><strong>Program Description:</strong> {{ element.programDescription }}</p>
-                    </div>
-                    <div class="fees-container">
-                        <p><strong>Level of Education:</strong> {{ element.levelOfEducation }}</p>
-                        <p><strong>Province:</strong> {{ element.province }}</p>
-                        <p><strong>Year Established:</strong> {{ element.yearEstablished | date:'yyyy' }}</p>
-                    </div>
-                    <div class="fees-container">
-                        <p><strong>Duration:</strong> {{ element.duration }}</p>
-                        <p><strong>Application Fee:</strong> ${{ element.applicationFee }}</p>
-                        <p><strong>Tuition Fee:</strong> ${{ element.tutionFee }}</p>
-                        <!-- <p><strong>Intakes:</strong> {{ element.noOfIntake }}</p> -->
-                    </div>
-                </mat-card-content>
-                <mat-card-footer class="footer">
-                    <small><strong>About Institute:</strong> {{ element.aboutInstitute }}</small>
-                   
-                </mat-card-footer>
-            </mat-card>
-            
-        </div>     
 
       <div *ngIf="data.length === 0" class="text-center mt-4">
-  <p>No results found.</p>
-</div>
+        <p>No results found.</p>
+      </div>
 
-<!-- Display paginator only when there are items in the data array -->
-<mat-paginator *ngIf="data.length > 0"
-               [length]="totalItems"
-               [pageSize]="itemsPerPage"
-               [pageSizeOptions]="[5, 10, 25, 100]"
-               (page)="onPageChange($event)"
-               aria-label="Select page">
-</mat-paginator>
-
-    
-    
-
-
+      <!-- Display paginator only when there are items in the data array -->
+      <mat-paginator *ngIf="data.length > 0"
+        [length]="totalItems"
+        [pageSize]="itemsPerPage"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="onPageChange($event)"
+        aria-label="Select page">
+      </mat-paginator>
 
     </div>
-     
-    </div>
+
+  </div>
 </section>

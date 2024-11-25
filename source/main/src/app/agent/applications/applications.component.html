@@ -72,8 +72,10 @@
                       </div>
                     </div>
                     <div class="button-container">
-                      <button mat-raised-button color="warn" class="msr-2" (click)="backToPreviousSecreen()">Back</button>
-                        <button mat-raised-button matStepperNext color="primary">Next</button>
+                      <button mat-raised-button color="warn" class="msr-2"
+                        (click)="backToPreviousSecreen()">Back</button>
+                      <button mat-raised-button matStepperNext
+                        color="primary">Next</button>
                     </div>
                   </div>
 
@@ -230,112 +232,137 @@
               <mat-step [stepControl]="HFormGroup2!">
                 <form [formGroup]="HFormGroup2!">
                   <ng-template matStepLabel>Personal Info</ng-template>
-              
+
                   <div class="program-info-container">
                     <h2>Personal Information</h2>
-              
+
                     <!-- Edit Button positioned at the top-right -->
-                    <button mat-raised-button color="primary" class="edit-btn" (click)="toggleEdit()">
+                    <button mat-raised-button color="primary" class="edit-btn"
+                      (click)="toggleEdit()">
                       {{ iseditingmode ? 'Update' : 'Edit' }}
                     </button>
-              
+
                     <div class="program-info">
-              
+
                       <!-- Student Name Field -->
                       <div class="info-field">
                         <label>Student Name</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.studentName }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                        <p *ngIf="!iseditingmode">{{ studentData?.studentName
+                          }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
                           <input matInput formControlName="studentName" />
                         </mat-form-field>
                       </div>
-              
+
                       <!-- Date of Birth Field -->
                       <div class="info-field">
                         <label>Date of Birth</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.dob | date: 'yyyy-MM-dd' }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                        <p *ngIf="!iseditingmode">{{ studentData?.dob | date:
+                          'yyyy-MM-dd' }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
                           <input matInput type="date" formControlName="dob" />
                         </mat-form-field>
                       </div>
-              
+
                       <!-- Citizenship Field -->
                       <div class="info-field">
                         <label>Citizenship</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.citizenship }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                        <p *ngIf="!iseditingmode">{{ studentData?.citizenship
+                          }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
                           <mat-select formControlName="citizenship">
-                            <mat-option *ngFor="let country of countries" [value]="country.countryName">
+                            <mat-option *ngFor="let country of countries"
+                              [value]="country.countryName">
                               {{ country.countryName }}
                             </mat-option>
                           </mat-select>
                         </mat-form-field>
                       </div>
-              
+
                       <!-- Language Field -->
                       <div class="info-field">
                         <label>Language</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.language }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                        <p *ngIf="!iseditingmode">{{ studentData?.language
+                          }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
                           <input matInput formControlName="language" />
                         </mat-form-field>
                       </div>
-              
+
                       <!-- Passport Expiry Field -->
                       <div class="info-field">
                         <label>Passport Expiry</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.passportExpiry | date: 'yyyy-MM-dd' }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
-                          <input matInput type="date" formControlName="passportExpiry" />
+                        <p *ngIf="!iseditingmode">{{ studentData?.passportExpiry
+                          | date: 'yyyy-MM-dd' }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
+                          <input matInput type="date"
+                            formControlName="passportExpiry" />
                         </mat-form-field>
                       </div>
-              
+
                       <!-- Email Address Field -->
                       <div class="info-field">
                         <label>Email Address</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.emailAddress }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
-                          <input matInput type="email" formControlName="emailAddress" />
+                        <p *ngIf="!iseditingmode">{{ studentData?.emailAddress
+                          }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
+                          <input matInput type="email"
+                            formControlName="emailAddress" />
                         </mat-form-field>
                       </div>
-              
+
                       <!-- Contact Number Field -->
                       <div class="info-field">
                         <label>Contact Number</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.contactNo }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                        <p *ngIf="!iseditingmode">{{ studentData?.contactNo
+                          }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
                           <input matInput formControlName="contactNo" />
                         </mat-form-field>
                       </div>
-              
+
                       <!-- Residential Address Field -->
                       <div class="info-field">
                         <label>Residential Address</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.residentialAddress }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
-                          <input matInput formControlName="residentialAddress" />
+                        <p *ngIf="!iseditingmode">{{
+                          studentData?.residentialAddress }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
+                          <input matInput
+                            formControlName="residentialAddress" />
                         </mat-form-field>
                       </div>
-              
+
                       <!-- Mailing Address Field -->
                       <div class="info-field">
                         <label>Mailing Address</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.mailingAddress }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill" class="full-width">
+                        <p *ngIf="!iseditingmode">{{ studentData?.mailingAddress
+                          }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
                           <input matInput formControlName="mailingAddress" />
                         </mat-form-field>
                       </div>
                     </div>
-              
+
                     <!-- Navigation Buttons -->
                     <div class="button-container">
-                      <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
-                      <button mat-raised-button matStepperNext color="primary">Next</button>
+                      <button mat-raised-button matStepperPrevious color="warn"
+                        class="msr-2">Back</button>
+                      <button mat-raised-button matStepperNext
+                        color="primary">Next</button>
                     </div>
                   </div>
                 </form>
               </mat-step>
-              
+
               <!-- Contact Info -->
               <mat-step [stepControl]="ContactForm!">
                 <form [formGroup]="ContactForm!">
@@ -389,18 +416,14 @@
                 </form>
               </mat-step>
 
-              <!-- education -->
               <mat-step>
-                <ng-template matStepLabel> Education </ng-template>
+                <ng-template matStepLabel>Education</ng-template>
                 <div class="program-info-container">
-                  <h2>
-                    <strong>Add Education</strong>
-                  </h2>
-
+                  <h2><strong>Add Education</strong></h2>
                   <div class="program-info">
-
                     <div class="body">
-                      <div class="example-container">
+                      <form [formGroup]="educationForm"
+                        (ngSubmit)="onEducationNext()">
                         <div class="row">
                           <!-- Country of Education -->
                           <div
@@ -408,7 +431,8 @@
                             <mat-form-field class="example-full-width"
                               appearance="fill">
                               <mat-label>Country of Education</mat-label>
-                              <input matInput>
+                              <input matInput
+                                formControlName="countryOfEducation" />
                               <mat-icon matSuffix>public</mat-icon>
                             </mat-form-field>
                           </div>
@@ -419,7 +443,8 @@
                             <mat-form-field class="example-full-width"
                               appearance="fill">
                               <mat-label>Highest Level of Education</mat-label>
-                              <input matInput>
+                              <input matInput
+                                formControlName="higherLevelOfEducation" />
                               <mat-icon matSuffix>school</mat-icon>
                             </mat-form-field>
                           </div>
@@ -430,7 +455,7 @@
                             <mat-form-field class="example-full-width"
                               appearance="fill">
                               <mat-label>Grading Scheme</mat-label>
-                              <input matInput>
+                              <input matInput formControlName="gradingScheme" />
                               <mat-icon matSuffix>assignment</mat-icon>
                             </mat-form-field>
                           </div>
@@ -441,7 +466,8 @@
                             <mat-form-field class="example-full-width"
                               appearance="fill">
                               <mat-label>Grade Average</mat-label>
-                              <input matInput>
+                              <input matInput
+                                formControlName="gradingAverage" />
                               <mat-icon matSuffix>bar_chart</mat-icon>
                             </mat-form-field>
                           </div>
@@ -452,15 +478,72 @@
 
                         <div class="col-md-12">
                           <button mat-raised-button matStepperPrevious
-                            color="warn" class="me-2">Back</button>
-                          <button mat-raised-button matStepperNext
-                            color="primary">Next</button>
+                            color="warn" class="me-2">
+                            Back
+                          </button>
+                          <button mat-raised-button matStepperNext color="primary"
+                            type="submit">
+                            Next
+                          </button>
+                            
+                          
+
+                        </div>
+                      </form>
+
+                      <!-- Display Education Grid -->
+                      <div class="row mt-4"
+                        *ngIf="educationEntries$ | async as response">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                          <div class="card">
+                            <div class="header mb-3">
+                              <h2>Education Details</h2>
+                            </div>
+
+                            <!-- Education Grid Table -->
+                            <!-- Education Grid Table -->
+                            <table class="table table-hover table-responsive">
+                              <thead class="thead-light">
+                                <tr>
+                                  <th>Country</th>
+                                  <th>Highest Level</th>
+                                  <th>Grading Scheme</th>
+                                  <th>Grade Average</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <!-- Use async pipe to subscribe to educationEntries$ and access inner array -->
+                                <tr
+                                  *ngFor="let education of (educationEntries$ | async)[0]; let i = index">
+                                  <td>{{ education.countryOfEducation }}</td>
+                                  <td>{{ education.higherLevelOfEducation
+                                    }}</td>
+                                  <td>{{ education.gradingScheme }}</td>
+                                  <td>{{ education.gradingAverage }}</td>
+                                  <td>
+                                    
+                                    <button mat-icon-button color="primary"
+                                    (click)="updateEducation(education.id)">
+                                    <mat-icon> 
+                                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons></mat-icon>
+                                  </button>
+                                  <button mat-icon-button color="warn"
+                                      (click)="deleteEducation(education.id)">
+                                      <app-feather-icons [icon]="'trash-2'"
+                                        [class]="'tbl-fav-delete'"></app-feather-icons>
+                                    </button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
               </mat-step>
 
               <mat-step>
