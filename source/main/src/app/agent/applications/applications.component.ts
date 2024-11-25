@@ -12,6 +12,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PaginatedResponse } from '../agent.service'; // Import the PaginatedResponse interface
 import { StudentDocument } from '../models/studentDocument.model';
+import { of } from 'rxjs';
+
 
 @Component({
   selector: 'app-applications',
@@ -21,12 +23,16 @@ import { StudentDocument } from '../models/studentDocument.model';
 export class ApplicationsComponent implements OnInit {
   // HFormGroup2: FormGroup;
   documentForm: FormGroup;
+  educationData: any;  // Define educationData to store the fetched data
   documentTypes: any[] = [];  
+  isEditMode = false; 
   uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>;
+  educationEntries$!: Observable<any>;
   isLinear = false;
   HFormGroup1?: UntypedFormGroup;
   HFormGroup2?: UntypedFormGroup;
   ContactForm?: UntypedFormGroup;
+  educationForm: UntypedFormGroup;
   breadscrums = [
     {
       title: 'Student Application',
@@ -36,7 +42,7 @@ export class ApplicationsComponent implements OnInit {
   ];
 
   errorMessage = '';
-  isEditMode = false; // Track whether we are in edit mode
+  isEditModee = false; // Track whether we are in edit mode
   documentToEditId: number | null = null; // Store the ID of the document being edited
 
   selectedRecord: any;
@@ -62,6 +68,13 @@ export class ApplicationsComponent implements OnInit {
   ngOnInit(): void {
     this.selectedRecord = this.agentService.getSelectedRecord();
     this.fetchStudentById(this.selectedId);
+     this.fetchStudentEducation();
+   
+
+
+    
+
+
     
 
     // Initialize form groups
@@ -85,6 +98,13 @@ export class ApplicationsComponent implements OnInit {
       contactNo: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
       residentialAddress: ['', Validators.required],
       mailingAddress: ['']
+
+    });
+    this.educationForm = this.fb.group({
+      countryOfEducation: [],
+      higherLevelOfEducation: [],
+      gradingScheme: [],
+      gradingAverage: [],
     });
 
     this.loadDocumentTypes();
@@ -313,4 +333,112 @@ export class ApplicationsComponent implements OnInit {
       queryParams: { origin: 'application' } // Pass the origin as 'listStudents'
     });
   }
+  //education
+  onEducationNext(): void {
+    if (this.educationForm.valid) {
+      // Transforming the form data to match the backend structure
+      const educationData = {
+        studentId: this.selectedId,
+        countryOfEducation: this.educationForm.value.countryOfEducation,
+        higherLevelOfEducation: this.educationForm.value.higherLevelOfEducation,
+        gradingScheme: this.educationForm.value.gradingScheme,
+        gradingAverage: this.educationForm.value.gradingAverage,
+      };
+
+      this.agentService.addEducation(educationData).subscribe({
+        next: (response) => {
+          // Refresh the grid
+          this.fetchStudentEducation();
+          console.log('Education details added successfully:', response);
+          this.educationForm.reset();
+        },
+        error: (error) => {
+          console.error('Error saving education details:', error);
+        },
+      });
+    } else {
+      console.log('Please fill out all required fields.');
+    }
+  }
+
+  deleteEducation(id: number): void {
+    this.agentService.deleteEducation(id).subscribe({
+      next: () => {
+          console.log("education deleted successfullyyyyyyyyy")
+        // Refresh the grid
+        // this.educationEntries$ = this.agentService.getEducationEntriesByStudentId(id);
+        this.fetchStudentEducation();
+      },
+      error: (error) => {
+        console.error('Error deleting education entry:', error);
+        
+      },
+    });
+  }
+
+  
+
+  fetchStudentEducation(){
+      // Fetch and handle education data
+         this.agentService.getEducationEntriesByStudentId(this.selectedId).subscribe({
+         next: (response) => {
+    console.log('Service response:', response); // Log the response
+         this.educationEntries$ = of(response.data ? [response.data] : []); // Pass the response to educationEntries$
+
+    // Log the educationEntries$ Observable
+    this.educationEntries$.subscribe({
+      next: (data) => {
+        console.log('Logged data from educationEntries$', data); // This will log the emitted data
+      },
+      error: (error) => {
+        console.error('Error in educationEntries$ observable:', error);
+      }
+    });
+  },
+  error: (error) => {
+    console.error('Error fetching education entries:', error); // Log the error
+    this.educationEntries$ = of([]); // Empty observable on error
+  },
+});
+
+
+  }
+
+  updateEducation(id: number): void {
+    // Fetch the education entry by ID from the service
+    this.agentService.getEducationEntryByEducationId(id).subscribe({
+      next: (response) => {
+        // Store the response in educationData
+        this.educationData = response.data; // Assuming response.data contains the education information
+        console.log('Fetched education data:', this.educationData);
+        
+        // Optionally, call another function to patch the form with this data
+        this.patchEducationForm(this.educationData);
+
+        // Scroll to the top of the page after patching the form
+        window.scrollTo(0, 0);
+      },
+      error: (error) => {
+        console.error('Error fetching education entry:', error);
+      },
+    });
+  }
+
+  // Function to patch form data, assuming you have a form to populate
+  patchEducationForm(data: any): void {
+    // Your logic for patching the form
+    // This is an example if you are using a reactive form (FormGroup)
+    this.educationForm.patchValue({
+      countryOfEducation: data.countryOfEducation,
+      higherLevelOfEducation: data.higherLevelOfEducation,
+      gradingScheme: data.gradingScheme,
+      gradingAverage: data.gradingAverage,
+    });
+  }
+
+
+
+
+
+
 }

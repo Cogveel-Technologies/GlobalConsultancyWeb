@@ -24,7 +24,7 @@ export interface PaginatedResponse<T> {
   providedIn: 'root'
 })
 export class AdminService {
-  private apiUrl = 'https://www.affectionate-mcnulty.180-179-213-167.plesk.page/api'; // Your API base URL
+  private apiUrl = 'https://consultancy.180-179-213-167.plesk.page/api'; // Your API base URL
   private currentPageSubject = new BehaviorSubject<number>(1);
   private pageSizeSubject = new BehaviorSubject<number>(10);
 
