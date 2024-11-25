@@ -20,7 +20,9 @@ export interface PaginatedResponse<T> {
   providedIn: 'root'
 })
 export class AgentService {
-  private apiUrl = 'https://www.affectionate-mcnulty.180-179-213-167.plesk.page/api';
+  private apiUrl = 'https://consultancy.180-179-213-167.plesk.page/api';
+
+  // https://consultancy.180-179-213-167.plesk.page/swagger/index.html
   // private currentPageSubject = new BehaviorSubject<number>(1);
   // private pageSizeSubject = new BehaviorSubject<number>(10);
 
@@ -59,6 +61,49 @@ export class AgentService {
   getSelectedId(): any {
     return this.selectedId;
   }
+  //adding application student education
+  addEducation(data: any): Observable<any> {
+    console.log(data,"education data");
+    return this.http.post(`${this.apiUrl}/Education`, data);
+  }
+
+  // getEducationEntriesByStudentId(studentId: number): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/Eduaction?studentId=${studentId}`);
+  // }
+
+  getEducationEntryByEducationId(educationId: number,): Observable<any> {
+    const apiUrl = `${this.apiUrl}/Education/byId?Id=${educationId}`;
+    return this.http.get(apiUrl).pipe(
+      tap((response) => {
+        console.log('Education API response:', response);
+      })
+    );
+  }
+  
+  getEducationEntriesByStudentId(studentId: number): Observable<any> {
+    const apiUrl = `${this.apiUrl}/Education/studentId?studentId=${studentId}`;
+    return this.http.get(apiUrl).pipe(
+      tap((response) => {
+        console.log('Education API response:', response);
+      })
+    );
+  }
+  
+
+  
+  deleteEducation(id: number): Observable<any> {
+    const apiUrl = `${this.apiUrl}/Education/byId?Id=${id}`;
+    return this.http.delete(apiUrl).pipe(
+      tap((response) => {
+        console.log('Education API response:', response);
+      })
+    );
+  }
+  
+  
+
+  
+  
   
  //for student registration component
   submitStudentData(studentData: Student) {
