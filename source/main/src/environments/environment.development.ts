@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+
   apiUrl: 'https://consultancy.180-179-213-167.plesk.page/api',
 };
 
