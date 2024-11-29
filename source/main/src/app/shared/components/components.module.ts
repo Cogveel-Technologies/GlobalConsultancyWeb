@@ -9,6 +9,8 @@ import { SearchComponent } from "./search/search.component";
 import { NoDataFoundComponent } from './no-data-found/no-data-found.component';
 
 
+
+
 @NgModule({
   declarations: [
     FileUploadComponent,
@@ -17,7 +19,7 @@ import { NoDataFoundComponent } from './no-data-found/no-data-found.component';
      SortingComponent,
      CustomSortComponent,
      SearchComponent,
-     NoDataFoundComponent
+     NoDataFoundComponent,
     ],
   imports: [SharedModule],
   exports: [FileUploadComponent, BreadcrumbComponent,CustomSortComponent, PaginationComponent, SortingComponent, SearchComponent, NoDataFoundComponent],

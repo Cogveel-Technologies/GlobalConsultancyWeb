@@ -1,0 +1,18 @@
+<mat-form-field appearance="fill" class="full-width">
+  <input
+    type="text"
+    matInput
+    [placeholder]="placeHolder"
+    [(ngModel)]="searchText"
+    [matAutocomplete]="auto"
+    (input)="filterData()"
+    (focus)="onFocus()" 
+   
+  />
+
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelect($event.option.value)">
+    <mat-option *ngFor="let option of filteredOptions" [value]="option">
+      {{ option[displayField] }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

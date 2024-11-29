@@ -8,32 +8,12 @@
 
         <div class="card p-4">
             <div class="row g-3">
-                <div class="col-md-4" *ngIf="roleName === 'superadmin'">
-                    <mat-form-field appearance="fill" class="w-100 mb-0" >
-                        <mat-label>Select a consultancy</mat-label>
-                        <mat-icon matPrefix>school</mat-icon>
-                        <mat-select (selectionChange)="onConsultancyChange($event)"
-                            [formControl]="consultancyControl">
-                            <mat-option [value]="'all'">All</mat-option>
-                            <mat-option *ngFor="let consultancy of (consultancies | async)" [value]="consultancy.id">
-                                {{ consultancy.consultancyName }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                <div class="col-md-4">
+                    <app-searchable-dropdown [options]="consultancies" [displayField]="'consultancyName'" [programInstitute]="instituteName ? instituteName : ''" (selectionChange)="onConsultancyChange($event)" [placeHolder]="'Consultancy'"></app-searchable-dropdown>
                 </div>
 
                 <div class="col-md-4">
-                    <mat-form-field appearance="fill" class="w-100 mb-0">
-                        <mat-label>Select an institute</mat-label>
-                        <mat-icon matPrefix>school</mat-icon>
-                        <mat-select (selectionChange)="onInstituteChange($event)"
-                            [formControl]="instituteControl">
-                            <mat-option [value]="'all'" *ngIf="roleName !== 'superadmin'">All</mat-option>
-                            <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
-                                {{ institute.name }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <app-searchable-dropdown [options]="institutes" [displayField]="'name'" [programInstitute]="instituteName ? instituteName : '' " (selectionChange)="instituteSelected($event)" [placeHolder]="'Institute'"></app-searchable-dropdown>
                 </div>
 
                 <div class="col-md-2">
@@ -131,7 +111,7 @@
                                                 [class]="'tbl-fav-delete'"></app-feather-icons>
                                         </button>
                                         <button mat-icon-button color="warn" matTooltip="Sessions"
-                                            (click)="onSession(program.id, program.instituteId)">
+                                            (click)="onSession(program.programName, program.instituteName,program.id,program.instituteId)">
                                             <!-- <mat-icon>delete</mat-icon> -->
                                             <app-feather-icons [icon]="'calendar'"
                                                 [class]="'tbl-fav-edit'"></app-feather-icons>

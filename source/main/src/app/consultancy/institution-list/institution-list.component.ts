@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, startWith, Subscription, switchMap, tap, throttleTime, toArray } from 'rxjs';
 import { Observable } from 'rxjs';
 import { InstituteData } from '../consultancy-models/data.institute';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -33,9 +33,10 @@ export class InstitutionListComponent {
   editMode: boolean;
   subscriptions: Subscription = new Subscription();
   universities!: Observable<InstituteData[]>;
-  countries: Observable<{ countryName: string, id: number }[]>;
+  countries: Observable<{ countryName: string, id: number }[]> | any;
   country$: BehaviorSubject<number | string> = new BehaviorSubject<number | string>('');
   countryId: number;
+  countryName:string;
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
@@ -44,12 +45,18 @@ export class InstitutionListComponent {
   currentPageIndex: number;
   sorting$: BehaviorSubject<{ field: string, direction: string }> = new BehaviorSubject<{ field: string, direction: string }>({ field: this.defaultData.OrderBy, direction: this.defaultData.sortExpression });
   searchTerm: string = '';
-  countryList = new FormControl('all');
+  countryList = new FormControl();
   consultancyList = new FormControl()
   previousCountryId: string | number;
   institutesFromConsultancy: boolean = false;
   roleName: string = localStorage.getItem('roleName');
-  consultancies: Observable<[{ id: number, consultancyName: string }] | []>;
+  consultancies: Observable<[{ id: number, consultancyName: string }] | []>|any;
+  selectedCountryName: string = ''; // To display the country name in the input field
+  selectedCountryId: string = '';
+  filteredCountries :{id:number,countryName:string}[];
+  instituteConsultancyInputData:string|null = null
+  
+
 
 
 
@@ -65,6 +72,8 @@ export class InstitutionListComponent {
   }
 
   ngOnInit() {
+    // receiving country id from dropdown component
+    
     // if showing of institute comes from consultancy list
     this.adminService.sendConsultancyId.subscribe(res => {
       if (res) {
@@ -72,8 +81,13 @@ export class InstitutionListComponent {
         this.pagination$.next({ consultancyId: res, search: true, pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: '' })
       }
     })
+
+    
     // fetching all countries for the dropdown and displaying
-    this.countries = this.consultancyApiService.getAllCountries()
+    this.consultancyApiService.getAllCountries().subscribe(res=>{
+      console.log(Array.isArray(res))
+      this.countries = res
+    })
 
     // Implementing filter on the basis of country
     this.subscriptions.add(
@@ -82,28 +96,35 @@ export class InstitutionListComponent {
         distinctUntilChanged(),
         switchMap(([search, pageRelated, sort]) => {
           if (pageRelated) {
-            if (pageRelated.countryId !== this.previousCountryId) {
+            if (+pageRelated.countryId !== +this.previousCountryId) {
+              console.log("ppppp")
               this.defaultData.ConsultancyId = '';
               this.previousCountryId = pageRelated.countryId;
               this.consultancies = of([]);
-              this.consultancyList.setValue('');
+              this.selectedCountryName =  '';
               if (pageRelated.countryId === 'all'|| pageRelated.countryId === '') {
                 console.log("if country block")
                 this.defaultData.CountryId = '';
                 if (this.institutesFromConsultancy) {
                   if (this.roleName === 'superadmin') {
+                    console.log("super adminnnnn")
                     this.consultancies = this.adminService.getAllConsultancies(this.defaultData);
                   }
                 }
               } else {
-                console.log("else country block")
+                this.defaultData.IsAdmin = true
+                this.instituteConsultancyInputData = ''
                 this.defaultData.CountryId = String(pageRelated.countryId);
-                this.consultancies = this.adminService.getAllConsultancies(this.defaultData);
+                console.log(this.defaultData)
+                this.adminService.getAllConsultancies(this.defaultData).subscribe(res=> {
+                  this.consultancies = res
+                })
               }
             }
             if (pageRelated.consultancyId) {
               console.log("if consultancy block")
               console.log(pageRelated.consultancyId)
+              this.defaultData.CountryId = '';
               this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
               this.consultancyList.setValue(+pageRelated.consultancyId)
             }
@@ -127,6 +148,7 @@ export class InstitutionListComponent {
               this.defaultData.sortExpression = sort.direction;
               this.defaultData.OrderBy = sort.field;
               // institutes of consultancy
+              console.log("heheh")
               return this.universities = this.getInstitutes(this.defaultData);
             }
           }
@@ -137,11 +159,16 @@ export class InstitutionListComponent {
   }
 
   // selection event (selection of country)
-  onCountryChange(value: any) {
-    console.log(value)
-    this.currentPageIndex = 0;
-    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: value })
-  }
+  // onCountryChange(event: any) {
+  //   console.log(event)
+  //   const selectedCountry = event.option.value;  // Get the full country object
+  //   this.selectedCountryId = selectedCountry.id;  // Save the country ID
+  //   this.selectedCountryName = selectedCountry.countryName; // Save the country name to display it in the input field
+    
+  //   // You can now send the selectedCountryId to the backend
+  //   console.log('Selected Country ID:', this.selectedCountryId);
+  //   this.pagination$.next({ pageSize: event.pageSize, pageIndex: 1, countryId: this.selectedCountryId, search: false,  })
+  // }
 
   addInstitute() {
     this.router.navigate(['/consultancy/register-institute'])
@@ -173,8 +200,8 @@ export class InstitutionListComponent {
     this.consultancyService.countrySelected.next(this.countryId)
   }
 
-  seePrograms(id: number, consultancyId:number) {
-    this.consultancyService.sendInstituteId.next({id:id,consultancyId:consultancyId});
+  seePrograms(id: number, instituteName:string, consultancyId:number) {
+    this.consultancyService.sendInstituteId.next({id,instituteName,consultancyId});
     this.router.navigate(['/consultancy/program-list'])
   }
 
@@ -182,9 +209,19 @@ export class InstitutionListComponent {
     this.pagination$.next({ countryId: this.defaultData.CountryId, consultancyId: event })
   }
 
+
+
   onSearch() {
-    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true, countryId: this.defaultData.CountryId })
+    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true, countryId: this.countryId })
   }
+
+  countrySelected(event:any){
+    this.countryId = event
+    if(this.roleName === 'superadmin'){
+      this.pagination$.next({ countryId: this.countryId })
+    }
+  }
+
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false);
