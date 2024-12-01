@@ -46,13 +46,19 @@ export class AgentListComponent {
   currentPageIndex: number;
   roleName = localStorage.getItem("roleName")
   consultancyControl = new FormControl('all');
-  consultancies: Observable<[{ id: number, consultancyName: string }]>;
+  consultancies: Observable<[{ id: number, consultancyName: string }]>|any;
 
 
   ngOnInit() {
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true
-      this.consultancies = this.adminService.getAllConsultancies(this.defaultData);
+      this.adminService.getAllConsultancies(this.defaultData).pipe(map(res => {
+        res = [{ id: 'all', consultancyName: 'All' }, ...res]
+        return res
+      })).subscribe(res => {
+        console.log(res)
+        this.consultancies = res
+      });
       this.agents = this.getAgents(this.defaultData)
     } else {
       this.agents = this.getAgents(this.defaultData)
@@ -62,8 +68,11 @@ export class AgentListComponent {
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(), switchMap(([search, pageRelated, sort]) => {
         if (pageRelated.consultancyId && this.roleName === 'superadmin') {
-          console.log(pageRelated.consultancyId)
-          this.defaultData.ConsultancyId = pageRelated.consultancyId;
+          if(pageRelated.consultancyId === 'all'){
+            this.defaultData.ConsultancyId = ''
+          }else{
+            this.defaultData.ConsultancyId = pageRelated.consultancyId;
+          }
           this.defaultData.IsAdmin = true
         }
         if (pageRelated.search) {
@@ -111,7 +120,7 @@ export class AgentListComponent {
   }
 
   onConsultancyChange(event: any) {
-    this.pagination$.next({ consultancyId: event.value })
+    this.pagination$.next({ consultancyId: event })
   }
 
   onSearch() {

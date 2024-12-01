@@ -44,7 +44,7 @@ export class SessionListComponent {
   consultancyList = new FormControl(0);
   search$ = new BehaviorSubject<boolean>(false);
   programs: Observable<SpecificConsultancyRelated[]> | any;
-  previousInstituteId: number = 0;
+  previousInstituteId: string|number = '';
   previousProgramId: number = 0;
   sessionFromProgram: number = 0;
   roleName: string = localStorage.getItem("roleName")
@@ -72,9 +72,15 @@ export class SessionListComponent {
     // if superadmin has logged in
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true;
-      this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res=> this.institutes = res)
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res => {
+        res = [{id:0,name:'All'},...res]
+        return res
+      })).subscribe(res=> this.institutes = res)
     } else {
-      this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res => this.institutes = res)
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res => {
+        res = [{id:0,name:'All'},...res]
+        return res
+      })).subscribe(res => this.institutes = res)
     }
 
     // get sessions from program details
@@ -115,29 +121,28 @@ export class SessionListComponent {
       distinctUntilChanged(),
       switchMap(([instituteId, programId, searchTerm, pageRelated, sort, search]) => {
         console.log(instituteId);
+        console.log(this.previousInstituteId)
+        console.log("PROGRAM" , programId)
         if ((instituteId || instituteId === 0) && this.previousInstituteId !== instituteId) {
-          console.log("institute")
-          this.previousInstituteId = +instituteId
+          console.log("TTTTTTTTTTTTTHHHHHHHHHH")
+          this.previousInstituteId = instituteId
           console.log(instituteId)
           if (instituteId) {
             this.defaultData.InstituteId = String(instituteId)
-            this.instituteList.setValue(+instituteId)
+            this.consultancyApiService.getAllPrograms(this.defaultData).subscribe(res => {
+              this.programs = res
+            })
           } else {
+            console.log("PPPPPPP")
             this.defaultData.InstituteId = '';
+            this.defaultData.ProgramId = '';
+            this.programs = []
           }
-          this.defaultData.ProgramId = '';
-          this.programs = of([]);
-          this.programList.setValue(0);
           console.log(this.defaultData)
-          this.consultancyApiService.getAllPrograms(this.defaultData).subscribe(res => {
-            this.programs = res
-          })
         }
 
         if (programId && this.previousProgramId !== programId) {
-          console.log("program")
-          console.log(programId)
-          this.programList.setValue(+programId)
+          console.log("PROGRAM")
           this.previousProgramId = +programId;
           this.defaultData.InstituteId = '';
           this.defaultData.ProgramId = String(programId)
@@ -167,7 +172,7 @@ export class SessionListComponent {
 
   onProgramChange(event: any) {
     this.search$.next(false);
-    this.program$.next(event.value)
+    this.program$.next(event)
   }
 
   onSearch() {

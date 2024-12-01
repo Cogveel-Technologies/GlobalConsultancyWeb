@@ -165,9 +165,8 @@ export class ConsultancyListComponent implements OnInit {
     this.currentPageSubject.next(this.currentPage);
   }
 
-  getInstitutes(consultancyId:number){
-    console.log(consultancyId)
-    this.adminService.sendConsultancyId.next(consultancyId)
+  getInstitutes(countryName:string, consultancyName:string,consultancyId:number){
+    this.consultancyService.consultancyInstitutes.next({countryName,consultancyName,consultancyId})
     this.router.navigate([`/consultancy/institution-list`])
   }
 

@@ -19,13 +19,15 @@ export class SearchableDropdownComponent implements OnInit, OnChanges {
   @Input() placeHolder = '';
   @Input() clearInputField = '';
   @Input() instituteConsultancyData = '';
+  @Input() instituteCountry = ''
+  @Input() instituteConsultancy = ''
 
   @Output() selectionChange = new EventEmitter<any>(); // Emit selected option
 
   filteredOptions: any[] = []; // Filtered options for the dropdown
   searchText = ''; // Search text for filtering
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.filteredOptions = [...this.options];
@@ -34,21 +36,33 @@ export class SearchableDropdownComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
     if (this.programInstitute) {
       this.searchText = this.programInstitute;
-    } else if (this.sessionInstitue) {
+    }
+    if (this.sessionInstitue) {
       this.searchText = this.sessionInstitue;
-    } else if (this.intakeInstitute) {
+    }
+    if (this.intakeInstitute) {
       this.searchText = this.intakeInstitute;
-    } else if (this.intakeProgram) {
+    }
+    if (this.intakeProgram) {
       this.searchText = this.intakeProgram;
-    } else if (this.intakeSession) {
+    }
+    if (this.intakeSession) {
       this.searchText = this.intakeSession;
-    } else if (this.instituteConsultancyData === '') {
+    }
+    if (this.instituteConsultancyData === '') {
       this.searchText = this.instituteConsultancyData;
     }
-  
+
+    if (this.instituteConsultancy) {
+      this.searchText = this.instituteConsultancy
+    }
+    if (this.instituteCountry) {
+      this.searchText = this.instituteCountry
+    }
+
     this.cdr.detectChanges();
   }
-  
+
   filterData(): void {
     const filter = this.searchText.toLowerCase();
     this.filteredOptions = this.options.filter((option) =>

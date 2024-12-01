@@ -98,11 +98,21 @@ export class IntakesListComponent {
 
 
     if(this.roleName !== "superadmin"){
-      this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res=> this.institutes = res)
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res=>{
+        res = [{id:0, name:'All'}, ...res]
+        return res
+      })).subscribe(res=>{
+         this.institutes = res
+        })
     }else{
       console.log("super adminnnnn")
       this.defaultData.IsAdmin = true;
-      this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res => this.institutes = res)
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res=>{
+        res = [{id:0, name:'All'}, ...res]
+        return res
+      })).subscribe(res =>{
+         this.institutes = res
+        })
     }
   
 
@@ -116,8 +126,8 @@ export class IntakesListComponent {
         console.log(+this.previousInstituteId)
         if ((instituteId || instituteId === 0) && +this.previousInstituteId !== instituteId) {
           console.log("hello")
-          this.programs = of([])
-          this.sessions = of([]);
+          this.programs = [];
+          this.sessions = [];
           if (instituteId === 0) {
             console.log(this.defaultData)
             this.defaultData.InstituteId = '';
@@ -130,9 +140,10 @@ export class IntakesListComponent {
           this.defaultData.ProgramId = '';
           this.defaultData.SessionId = '';
           this.isProgramId = true;
-          this.program.setValue('')
         }
-        if (programId && this.previousProgramId !== String(programId)) {
+        console.log(programId, "ppppppppppp")
+        console.log(this.previousProgramId, "ppppppppppp previous")
+        if (programId && String(this.previousProgramId) !== String(programId)) {
           console.log("only program id")
           this.previousProgramId = String(programId)
           this.defaultData.ProgramId = String(programId);
@@ -168,6 +179,7 @@ export class IntakesListComponent {
           this.defaultData.pageSize = pageRelated.pageSize;
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field;
+          console.log(this.defaultData)
           return this.intakes = this.getIntakes(this.defaultData);
         } else {
           return of([])

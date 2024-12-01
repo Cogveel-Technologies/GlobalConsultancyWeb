@@ -46,4 +46,5 @@ export class ConsultancyService {
   sendInstituteId: BehaviorSubject<{id:number,instituteName:string,consultancyId:number}|null> = new BehaviorSubject(null);
   sendProgramId: BehaviorSubject<{instituteName?:string,programName?:string,instituteId?:number|string,programId?:number|string}|null> = new BehaviorSubject(null);
   getIntakesofSession:BehaviorSubject<{sessionId?:number|string, instituteName:string, programName:string, sessionName }|null> = new BehaviorSubject(null)
+  consultancyInstitutes: BehaviorSubject<{countryName:string,consultancyName:string,consultancyId:number}|null> = new BehaviorSubject<{countryName:string,consultancyName:string,consultancyId:number}>(null)
 }

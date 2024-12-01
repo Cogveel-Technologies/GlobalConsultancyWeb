@@ -10,10 +10,10 @@
     <div class="card p-4">
       <div class="row g-3">
         <div class="col-md-4">
-          <app-searchable-dropdown [options]="countries" [displayField]="'countryName'" (selectionChange)="countrySelected($event)" [placeHolder]="'Country'"></app-searchable-dropdown>
+          <app-searchable-dropdown [options]="countries" [displayField]="'countryName'" (selectionChange)="countrySelected($event)" [placeHolder]="'Country'" [instituteCountry]="instituteCountry"></app-searchable-dropdown>
         </div>
         <div class="col-md-4" *ngIf="roleName === 'superadmin'">
-          <app-searchable-dropdown [options]="consultancies" [displayField]="'consultancyName'" (selectionChange)="onConsultancyChange($event)" [placeHolder]="'Consultancy'" [instituteConsultancyData]="instituteConsultancyInputData"></app-searchable-dropdown>
+          <app-searchable-dropdown [options]="consultancies" [displayField]="'consultancyName'" (selectionChange)="onConsultancyChange($event)" [placeHolder]="'Consultancy'" [instituteConsultancyData]="instituteConsultancyInputData" [instituteConsultancy]="instituteConsultancy"></app-searchable-dropdown>
         </div>
         <!-- *ngIf="roleName === 'superadmin'" -->
         <div class="col-md-2">

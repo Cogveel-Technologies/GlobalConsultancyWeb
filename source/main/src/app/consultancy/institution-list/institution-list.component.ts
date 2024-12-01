@@ -55,6 +55,8 @@ export class InstitutionListComponent {
   selectedCountryId: string = '';
   filteredCountries :{id:number,countryName:string}[];
   instituteConsultancyInputData:string|null = null;
+  instituteCountry:string;
+  instituteConsultancy:string;
  
   
 
@@ -76,10 +78,13 @@ export class InstitutionListComponent {
     // receiving country id from dropdown component
     
     // if showing of institute comes from consultancy list
-    this.adminService.sendConsultancyId.subscribe(res => {
+    this.consultancyService.consultancyInstitutes.subscribe(res => {
       if (res) {
+        console.log(res)
+        this.instituteConsultancy = res.consultancyName;
+        this.instituteCountry = res.countryName;
         this.institutesFromConsultancy = true
-        this.pagination$.next({ consultancyId: res, search: true, pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: '' })
+        this.pagination$.next({ consultancyId: res.consultancyId, search: true, pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: '' })
       }
     })
 
@@ -107,7 +112,7 @@ export class InstitutionListComponent {
               this.consultancies = of([]);
               this.selectedCountryName =  '';
               if (pageRelated.countryId === 'all'|| pageRelated.countryId === '') {
-                console.log("if country block")
+                this.consultancies = [];
                 this.defaultData.CountryId = '';
                 if (this.institutesFromConsultancy) {
                   if (this.roleName === 'superadmin') {

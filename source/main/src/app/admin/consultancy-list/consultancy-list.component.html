@@ -109,7 +109,7 @@
                     <button mat-icon-button color="success" (click)="viewConsultancy(consultancy.id)" matTooltip="View">
                       <mat-icon>visibility</mat-icon>
                     </button>
-                    <button mat-icon-button color="success" (click)="getInstitutes(consultancy.id)" matTooltip="Institutes">
+                    <button mat-icon-button color="success" (click)="getInstitutes(consultancy.country,consultancy.consultancyName, consultancy.id)" matTooltip="Institutes">
                       <app-feather-icons [icon]="'layers'" [class]="'tbl-institute-icon'"></app-feather-icons>
                     </button>
                   </td>
