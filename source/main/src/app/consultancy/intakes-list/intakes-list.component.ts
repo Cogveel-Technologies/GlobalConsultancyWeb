@@ -225,7 +225,7 @@ export class IntakesListComponent {
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false);
-    // this.consultancyService.getIntakesofSession.next({ instituteId: '', programId: '', sessionId: '' })
+    this.consultancyService.getIntakesofSession.next({ instituteName:'',programName:'', sessionName:'' })
     this.subscription.unsubscribe()
   }
 }

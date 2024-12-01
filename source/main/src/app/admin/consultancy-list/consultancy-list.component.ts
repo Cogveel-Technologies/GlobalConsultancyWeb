@@ -46,6 +46,7 @@ export class ConsultancyListComponent implements OnInit {
   private sortDirectionSubject = new BehaviorSubject<'asc' | 'desc'>(this.sortDirection);
   private searchTermSubject = new BehaviorSubject<string>('');
   private userSubject:BehaviorSubject<string|number> =new BehaviorSubject<string|number>('');
+  private searchSubject:BehaviorSubject<boolean|string> =new BehaviorSubject<boolean|string>('');
 
   constructor(
     private router: Router,
@@ -61,7 +62,7 @@ export class ConsultancyListComponent implements OnInit {
     // if super admin logs in
     if(this.roleName === 'superadmin'){
       console.log(this.roleName)
-      this.users = this.adminService.getAllUsers()
+      this.adminService.getAllUsers().subscribe(res => this.users = res)
     }
 
     // Combine search, pagination, and sorting
@@ -76,9 +77,10 @@ export class ConsultancyListComponent implements OnInit {
       this.currentPageSubject,
       this.sortFieldSubject,
       this.sortDirectionSubject,
-      this.userSubject
+      this.userSubject,
+      this.searchSubject
     ]).pipe(
-      switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection,userId]) => {
+      switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection,userId,search]) => {
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection, userId });
         return this.adminService.getConsultancyList({
           limit: pageSize,
@@ -149,7 +151,6 @@ export class ConsultancyListComponent implements OnInit {
     });
   }
   
-  
 
   viewConsultancy(consultancyId: number) {
     this.router.navigate(['/admin/view-consultancy'], {
@@ -174,6 +175,10 @@ export class ConsultancyListComponent implements OnInit {
     this.sortField = field;
     this.sortDirection = direction;
     this.refreshConsultancies();
+  }
+
+  onUserChange(event:any){
+    this.userSubject.next(event)
   }
 
   selectAdmin(event:any){

@@ -33,7 +33,7 @@ export class InstitutionListComponent {
   editMode: boolean;
   subscriptions: Subscription = new Subscription();
   universities!: Observable<InstituteData[]>;
-  countries: Observable<{ countryName: string, id: number }[]> | any;
+  countries: Observable<{ countryName: string, id: number|string }[]> | any;
   country$: BehaviorSubject<number | string> = new BehaviorSubject<number | string>('');
   countryId: number;
   countryName:string;
@@ -54,7 +54,8 @@ export class InstitutionListComponent {
   selectedCountryName: string = ''; // To display the country name in the input field
   selectedCountryId: string = '';
   filteredCountries :{id:number,countryName:string}[];
-  instituteConsultancyInputData:string|null = null
+  instituteConsultancyInputData:string|null = null;
+ 
   
 
 
@@ -84,8 +85,11 @@ export class InstitutionListComponent {
 
     
     // fetching all countries for the dropdown and displaying
-    this.consultancyApiService.getAllCountries().subscribe(res=>{
-      console.log(Array.isArray(res))
+    this.consultancyApiService.getAllCountries().pipe(map(res => {
+      console.log(res)
+      const allOption = [{id:'all',countryName:'All'},...res]
+      return allOption
+    })).subscribe(res=> {
       this.countries = res
     })
 

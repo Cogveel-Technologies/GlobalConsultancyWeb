@@ -1,9 +1,12 @@
 :host {
-    display: block; /* Ensures the component itself behaves like a block element */
-    width: 100%; /* Inherits 100% of the parent container's width */
-  }
-  
-  .full-width {
-    width: 100%; /* Ensures the mat-form-field spans the full width */
-  }
-  
+  display: block; /* Ensures the component behaves like a block element */
+  width: 100%; /* Inherits 100% of the parent container's width */
+}
+
+.full-width {
+  width: 100%; /* Ensures the mat-form-field spans the full width */
+}
+
+mat-form-field {
+  width: 100%; /* Ensures Angular Material form fields stretch to full width */
+}

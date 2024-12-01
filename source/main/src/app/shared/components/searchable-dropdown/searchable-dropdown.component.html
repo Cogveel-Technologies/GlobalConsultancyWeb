@@ -7,7 +7,6 @@
     [matAutocomplete]="auto"
     (input)="filterData()"
     (focus)="onFocus()" 
-   
   />
 
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelect($event.option.value)">

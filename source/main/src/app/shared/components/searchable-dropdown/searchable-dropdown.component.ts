@@ -1,17 +1,17 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-searchable-dropdown',
   templateUrl: './searchable-dropdown.component.html',
   styleUrls: ['./searchable-dropdown.component.scss'],
 })
-export class SearchableDropdownComponent implements OnInit {
+export class SearchableDropdownComponent implements OnInit, OnChanges {
   @Input() options: any[] = []; // Options for the dropdown
   @Input() displayField; // Field to display in the dropdown
   @Input() valueField = 'id'; // Field to emit when selected
   @Input() placeholder = 'Search'; // Placeholder text
   @Input() programInstitute = '';
-  @Input() sessionInstitue ='';
+  @Input() sessionInstitue = '';
   @Input() sessionProgram = '';
   @Input() intakeInstitute = '';
   @Input() intakeProgram = '';
@@ -25,33 +25,30 @@ export class SearchableDropdownComponent implements OnInit {
   filteredOptions: any[] = []; // Filtered options for the dropdown
   searchText = ''; // Search text for filtering
 
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    // If no options are passed, use dummy data
     this.filteredOptions = [...this.options];
   }
 
-  ngOnChanges(){
-    if(this.programInstitute){
-      this.searchText = this.programInstitute
+  ngOnChanges(): void {
+    if (this.programInstitute) {
+      this.searchText = this.programInstitute;
+    } else if (this.sessionInstitue) {
+      this.searchText = this.sessionInstitue;
+    } else if (this.intakeInstitute) {
+      this.searchText = this.intakeInstitute;
+    } else if (this.intakeProgram) {
+      this.searchText = this.intakeProgram;
+    } else if (this.intakeSession) {
+      this.searchText = this.intakeSession;
+    } else if (this.instituteConsultancyData === '') {
+      this.searchText = this.instituteConsultancyData;
     }
-    if(this.sessionInstitue){
-      this.searchText = this.sessionInstitue
-    }
-    if(this.intakeInstitute){
-      this.searchText = this.intakeInstitute
-    }
-    if(this.intakeProgram){
-      this.searchText = this.intakeProgram
-    }
-    if(this.intakeSession){
-      this.searchText = this.intakeSession
-    }
-    if(this.instituteConsultancyData === ''){
-      this.searchText = this.instituteConsultancyData
-    }
+  
+    this.cdr.detectChanges();
   }
-
+  
   filterData(): void {
     const filter = this.searchText.toLowerCase();
     this.filteredOptions = this.options.filter((option) =>
@@ -70,6 +67,6 @@ export class SearchableDropdownComponent implements OnInit {
     // Emit the selected ID (or the full object if needed)
     this.selectionChange.emit(selected[this.valueField]);
 
-    console.log(selected[this.valueField])
+    console.log(selected[this.valueField]);
   }
 }
