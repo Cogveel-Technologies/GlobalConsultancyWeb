@@ -27,7 +27,7 @@ export class SearchableDropdownComponent implements OnInit, OnChanges {
   filteredOptions: any[] = []; // Filtered options for the dropdown
   searchText = ''; // Search text for filtering
 
-  constructor(private cdr: ChangeDetectorRef) { }
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.filteredOptions = [...this.options];
@@ -36,33 +36,28 @@ export class SearchableDropdownComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
     if (this.programInstitute) {
       this.searchText = this.programInstitute;
-    }
-    if (this.sessionInstitue) {
+    } else if (this.sessionInstitue) {
       this.searchText = this.sessionInstitue;
-    }
-    if (this.intakeInstitute) {
+    } else if (this.intakeInstitute) {
       this.searchText = this.intakeInstitute;
-    }
-    if (this.intakeProgram) {
+    } else if (this.intakeProgram) {
       this.searchText = this.intakeProgram;
-    }
-    if (this.intakeSession) {
+    } else if (this.intakeSession) {
       this.searchText = this.intakeSession;
-    }
-    if (this.instituteConsultancyData === '') {
+    } else if (this.instituteConsultancyData === '') {
       this.searchText = this.instituteConsultancyData;
-    }
-
-    if (this.instituteConsultancy) {
+    } 
+    
+    if(this.instituteConsultancy){
       this.searchText = this.instituteConsultancy
     }
-    if (this.instituteCountry) {
+     if(this.instituteCountry){
       this.searchText = this.instituteCountry
     }
-
+  
     this.cdr.detectChanges();
   }
-
+  
   filterData(): void {
     const filter = this.searchText.toLowerCase();
     this.filteredOptions = this.options.filter((option) =>

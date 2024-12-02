@@ -57,10 +57,6 @@ export class InstitutionListComponent {
   instituteConsultancyInputData:string|null = null;
   instituteCountry:string;
   instituteConsultancy:string;
- 
-  
-
-
 
 
 
@@ -135,7 +131,6 @@ export class InstitutionListComponent {
               console.log(pageRelated.consultancyId)
               this.defaultData.CountryId = '';
               this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
-              this.consultancyList.setValue(+pageRelated.consultancyId)
             }
             if (pageRelated.search) {
               if (this.roleName === 'superadmin') {
@@ -238,6 +233,7 @@ export class InstitutionListComponent {
     this.adminService.sendConsultancyId.next('');
     this.subscriptions.unsubscribe();
     this.institutesFromConsultancy = false;
+    this.consultancyService.consultancyInstitutes.next(null)
   }
 
 }
