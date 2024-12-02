@@ -36,6 +36,62 @@ export class AgentService {
   private showOnlyApplyButton = false;
   private selectedId: any;
 
+  
+   
+
+  addTest(testData: any): Observable<any> {
+    const url = `${this.apiUrl}/Test`;
+    return this.http.post<any>(url, testData);
+  }
+  
+  // getAllTests(): Observable<any> {
+  //   const url = `${this.apiUrl}/Test/all`;
+  //   return this.http.get<any>(url);
+  // }
+
+  
+  
+  getTestByStudentId(studentId: number): Observable<any> {
+    const apiUrl = `${this.apiUrl}/Test/byId?Id=${studentId}`;
+    return this.http.get<any>(apiUrl).pipe(
+      tap((response) => {
+        console.log('Fetched test data response:', response); // Debugging log
+      })
+    );
+  }
+  
+
+
+
+  getAllTestByStudentId(studentId: number): Observable<any[]> {
+    const apiUrl = `${this.apiUrl}/Test/studentId?studentId=${studentId}`;
+    
+    return this.http.get<any>(apiUrl).pipe(
+      map(response => {
+        // Wrap the single object in an array if needed
+        return response.data   // Ensure it's an array
+      }),
+      tap((response) => {
+        console.log('Test API response:', response); // Log the response for debugging
+      })
+    );
+  }
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   //storing particular record when pressing on apply button in admission component
   storeSelectedRecord(record: any) {
     this.selectedRecord = record;
@@ -101,7 +157,20 @@ export class AgentService {
   }
   
   
-
+  
+  updateEducationEntryByEducationId(educationId: number, updatedData: any): Observable<any> {
+    const apiUrl = `${this.apiUrl}/Education/${educationId}`;
+    return this.http.put<any>(apiUrl, updatedData).pipe(
+      tap((response) => {
+        console.log('Update Education API response:', response);
+      }),
+      catchError((error) => {
+        console.error('Error updating education entry:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+    
   
   
   
@@ -176,10 +245,12 @@ export class AgentService {
     const url = this.buildUrl('Agent/all');
     return this.http.get(url);
   } 
+
   getInstitutes(): Observable<any> {
     const url = this.buildUrl('Institute/All');
     return this.http.get(url);
   }
+
   // Methods for student-document
   submitStudentDocument(formData: FormData): Observable<any> {
     formData.forEach((value, key) => {
@@ -192,6 +263,25 @@ export class AgentService {
   getDocumentTypes(): Observable<{ data: any[], status: number, message: string }> {
     return this.http.get<{ data: any[], status: number, message: string }>(`${this.apiUrl}/DocumentType/all`);
   }
+
+  
+  getDocumentTypesByProgramId(programId: number): Observable<any> {
+    const apiUrl = `${this.apiUrl}/Program/GetDocumentsByProgramId?ProgramId=${programId}`;
+    return this.http.get<any>(apiUrl).pipe(
+      tap((response) => {
+        console.log('Documents by Program ID', response);
+      }),
+      catchError((error) => {
+        console.error('Error fetching documents by Program ID:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+//   getDocumentTypesByProgramId(id:number){
+//     console.log(id,"service mukhtaraa")
+//     return this.http.get(`${this.apiUrl}/Program/GetDocumentsByProgramId?ProgramId=${id}`)
+// }
 
   
   deleteStudentDocument(documentId: number): Observable<any> {

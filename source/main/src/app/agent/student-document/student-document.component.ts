@@ -86,7 +86,7 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
   loadDocumentTypes() {
     const documentTypesSubscription = this.agentService.getDocumentTypes().subscribe(
       (response) => {
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
           this.documentTypes = response.data;
         } else {
           console.error('Failed to load document types:', response.message);
