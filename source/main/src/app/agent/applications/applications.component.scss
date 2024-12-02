@@ -3,6 +3,7 @@ body {
   }
   
   .program-info-container {
+    // background-color: #d6dce2;
     background-color: #f8f8f8;
     padding: 20px;
     border-radius: 8px;
@@ -110,3 +111,40 @@ body {
     justify-content: flex-end;
     margin-top: 20px;
   }
+
+ 
+
+  .header {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space items out */
+  }
+  
+  .header h2 {
+    margin: 0; /* Optional: remove default margin for better alignment */
+  }
+  
+  .header button {
+    margin-left: auto; /* Push the button to the right */
+  }
+ 
+
+
+  .info-contain{
+    // font-size: 14px; /* Small font size */
+    // line-height: 1.5; /* Adjust line spacing */
+    // font-family: Arial, sans-serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    // margin-left: 42px;
+    // margin-top: 5px;
+    background-color: #f8f8f8;
+    padding-left: 50px;
+    
+  }
+  
+  .info-item {
+    margin: 0; /* Remove default margins */
+    padding: 3px 0; /* Add slight padding between items */
+  }
+  

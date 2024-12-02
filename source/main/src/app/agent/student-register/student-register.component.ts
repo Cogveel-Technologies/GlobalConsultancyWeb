@@ -72,9 +72,9 @@ export class StudentRegisterComponent implements OnInit {
       contactNo: ['', Validators.required],
       residentialAddress: ['', Validators.required],
       mailingAddress: ['', Validators.required],
-      agentId: ['', Validators.required], // Dropdown for agent
+      // agentId: ['', Validators.required], // Dropdown for agent
       password: ['', Validators.required],
-      instituteId: ['', Validators.required], // Dropdown for institute
+      // instituteId: ['', Validators.required], // Dropdown for institute
     });
 
     // Debug: Log form status changes
@@ -143,9 +143,9 @@ export class StudentRegisterComponent implements OnInit {
         contactNo: this.user.contactNo || '',
         residentialAddress: this.user.residentialAddress || '',
         mailingAddress: this.user.mailingAddress || '',
-        agentId: this.user.agentId || '', // Set agent from fetched data
+        // agentId: this.user.agentId || '', // Set agent from fetched data
         password: this.user.password || '',
-        instituteId: this.user.instituteId || '', // Set institute from fetched data
+        // instituteId: this.user.instituteId || '', // Set institute from fetched data
       });
     }
   }

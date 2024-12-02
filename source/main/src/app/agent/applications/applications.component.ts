@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -15,6 +15,7 @@ import { StudentDocument } from '../models/studentDocument.model';
 import { of } from 'rxjs';
 
 
+
 @Component({
   selector: 'app-applications',
   templateUrl: './applications.component.html',
@@ -26,13 +27,17 @@ export class ApplicationsComponent implements OnInit {
   educationData: any;  // Define educationData to store the fetched data
   documentTypes: any[] = [];  
   isEditMode = false; 
-  uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>;
+  isEdittingMode = false; 
+   uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>;
+  //  tests$: Observable<any>; // Observable to hold the test data
+  testByStudentId$: Observable<any>; // Observable to hold API response
   educationEntries$!: Observable<any>;
   isLinear = false;
   HFormGroup1?: UntypedFormGroup;
   HFormGroup2?: UntypedFormGroup;
   ContactForm?: UntypedFormGroup;
   educationForm: UntypedFormGroup;
+  testForm: UntypedFormGroup;
   breadscrums = [
     {
       title: 'Student Application',
@@ -44,7 +49,7 @@ export class ApplicationsComponent implements OnInit {
   errorMessage = '';
   isEditModee = false; // Track whether we are in edit mode
   documentToEditId: number | null = null; // Store the ID of the document being edited
-
+  testData: any;
   selectedRecord: any;
   selectedId: number | null = null;  // Explicit type for clarity
   studentData: Student | null = null;
@@ -63,15 +68,18 @@ export class ApplicationsComponent implements OnInit {
     console.log('Selected ID:', this.selectedId);
     
     this.loadCountries();
+    
+   
   }
 
   ngOnInit(): void {
+    this.loadUploadedDocument();
     this.selectedRecord = this.agentService.getSelectedRecord();
     this.fetchStudentById(this.selectedId);
+     
      this.fetchStudentEducation();
-   
-
-
+    
+     this.testByStudId();
     
 
 
@@ -101,14 +109,24 @@ export class ApplicationsComponent implements OnInit {
 
     });
     this.educationForm = this.fb.group({
+      id: [null], // Use this field to track if it's edit mode
       countryOfEducation: [],
       higherLevelOfEducation: [],
       gradingScheme: [],
       gradingAverage: [],
     });
+    this.testForm = this.fb.group({
+      testName: [],
+      testType: [],
+      subject: [],
+      testDate: [],
+      testDuration: [],
+      score: [],
+    });
 
     this.loadDocumentTypes();
   }
+
 
   private fetchStudentById(id: number): void {
     this.agentService.getStudentById(id).subscribe(
@@ -121,6 +139,7 @@ export class ApplicationsComponent implements OnInit {
       (error) => console.error('Error fetching student data:', error)
     );
   }
+
   toggleEdit() {
     this.iseditingmode = !this.iseditingmode;
     
@@ -147,6 +166,7 @@ export class ApplicationsComponent implements OnInit {
     }
   }
   
+
   
   updateStudent() {
     if (this.HFormGroup2.valid) {
@@ -209,26 +229,37 @@ export class ApplicationsComponent implements OnInit {
   private patchForm() {
     if (this.studentData) {
       this.documentForm.patchValue({
-        studentName: this.studentData.studentName || '',
+        studentName: this.selectedRecord.programName || '',
         contactNo: this.studentData.contactNo || '',
       });
     }
   }
   
+  
   loadDocumentTypes() {
-    this.agentService.getDocumentTypes().subscribe(
+    const Id = this.selectedRecord.programId;
+    this.agentService.getDocumentTypesByProgramId(Id).subscribe(
       (response) => {
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
+          // Assign the fetched data to the documentTypes array
           this.documentTypes = response.data;
+          console.log('Document types loaded successfully:', this.documentTypes);
+          
         } else {
+          // Log the message from the response if the status is not as expected
           console.error('Failed to load document types:', response.message);
         }
       },
       (error) => {
+        // Log errors from the API call
         console.error('Error loading document types:', error);
       }
     );
   }
+  
+  
+  
+
 
   loadUploadedDocument() {
     if (this.studentData) {
@@ -328,38 +359,89 @@ export class ApplicationsComponent implements OnInit {
       }
     );
   }
+
   backToPreviousSecreen(){
     this.router.navigate(['/agent/list-students'], {
       queryParams: { origin: 'application' } // Pass the origin as 'listStudents'
     });
   }
-  //education
-  onEducationNext(): void {
-    if (this.educationForm.valid) {
-      // Transforming the form data to match the backend structure
-      const educationData = {
-        studentId: this.selectedId,
-        countryOfEducation: this.educationForm.value.countryOfEducation,
-        higherLevelOfEducation: this.educationForm.value.higherLevelOfEducation,
-        gradingScheme: this.educationForm.value.gradingScheme,
-        gradingAverage: this.educationForm.value.gradingAverage,
-      };
 
-      this.agentService.addEducation(educationData).subscribe({
-        next: (response) => {
-          // Refresh the grid
-          this.fetchStudentEducation();
-          console.log('Education details added successfully:', response);
-          this.educationForm.reset();
-        },
-        error: (error) => {
-          console.error('Error saving education details:', error);
-        },
-      });
-    } else {
-      console.log('Please fill out all required fields.');
+  //education
+  // onEducationNext(): void {
+  //   if (this.educationForm.valid) {
+  //     // Transforming the form data to match the backend structure
+  //     const educationData = {
+  //       studentId: this.selectedId,
+  //       countryOfEducation: this.educationForm.value.countryOfEducation,
+  //       higherLevelOfEducation: this.educationForm.value.higherLevelOfEducation,
+  //       gradingScheme: this.educationForm.value.gradingScheme,
+  //       gradingAverage: this.educationForm.value.gradingAverage,
+  //     };
+
+  //     this.agentService.addEducation(educationData).subscribe({
+  //       next: (response) => {
+  //         // Refresh the grid
+  //         this.fetchStudentEducation();
+  //         console.log('Education details added successfully:', response);
+  //         this.educationForm.reset();
+  //       },
+  //       error: (error) => {
+  //         console.error('Error saving education details:', error);
+  //       },
+  //     });
+  //   } else {
+  //     console.log('Please fill out all required fields.');
+  //   }
+  // }
+ 
+  
+
+    // Reset the form and exit edit mode
+    onEducationNext(): void {
+      if (this.educationForm.valid) {
+        const educationData = {
+          studentId: this.selectedId, // Replace with actual student ID
+          countryOfEducation: this.educationForm.value.countryOfEducation,
+          higherLevelOfEducation: this.educationForm.value.higherLevelOfEducation,
+          gradingScheme: this.educationForm.value.gradingScheme,
+          gradingAverage: this.educationForm.value.gradingAverage,
+        };
+    
+        if (this.isEdittingMode) {
+          this.agentService.updateEducationEntryByEducationId(this.educationData.id, educationData)
+            .subscribe({
+              next: (response) => {
+                console.log('Education details updated successfully:', response);
+                this.fetchStudentEducation(); // Refresh the grid
+                this.resetForm();
+              },
+              error: (error) => {
+                console.error('Error updating education details:', error);
+              },
+            });
+        } else {
+          this.agentService.addEducation(educationData)
+            .subscribe({
+              next: (response) => {
+                console.log('Education details added successfully:', response);
+                this.fetchStudentEducation(); // Refresh the grid
+                this.resetForm();
+              },
+              error: (error) => {
+                console.error('Error saving education details:', error);
+              },
+            });
+        }
+      } else {
+        console.log('Please fill out all required fields.');
+      }
     }
-  }
+    
+    resetForm(): void {
+      this.educationForm.reset();
+      this.isEdittingMode = false;
+    }
+
 
   deleteEducation(id: number): void {
     this.agentService.deleteEducation(id).subscribe({
@@ -382,9 +464,9 @@ export class ApplicationsComponent implements OnInit {
       // Fetch and handle education data
          this.agentService.getEducationEntriesByStudentId(this.selectedId).subscribe({
          next: (response) => {
-    console.log('Service response:', response); // Log the response
+         console.log('Service response:', response); // Log the response
          this.educationEntries$ = of(response.data ? [response.data] : []); // Pass the response to educationEntries$
-
+        // this.educationEntries$ = response.data ; // Pass the response to educationEntries$
     // Log the educationEntries$ Observable
     this.educationEntries$.subscribe({
       next: (data) => {
@@ -397,12 +479,13 @@ export class ApplicationsComponent implements OnInit {
   },
   error: (error) => {
     console.error('Error fetching education entries:', error); // Log the error
-    this.educationEntries$ = of([]); // Empty observable on error
+    // this.educationEntries$ = of([]); // Empty observable on error
   },
 });
 
 
   }
+
 
   updateEducation(id: number): void {
     // Fetch the education entry by ID from the service
@@ -415,8 +498,8 @@ export class ApplicationsComponent implements OnInit {
         // Optionally, call another function to patch the form with this data
         this.patchEducationForm(this.educationData);
 
-        // Scroll to the top of the page after patching the form
-        window.scrollTo(0, 0);
+        // Scroll to the bottom of the page after patching the form
+        window.scrollTo(0, 600);
       },
       error: (error) => {
         console.error('Error fetching education entry:', error);
@@ -428,6 +511,7 @@ export class ApplicationsComponent implements OnInit {
   patchEducationForm(data: any): void {
     // Your logic for patching the form
     // This is an example if you are using a reactive form (FormGroup)
+    this.isEdittingMode = true;
     this.educationForm.patchValue({
       countryOfEducation: data.countryOfEducation,
       higherLevelOfEducation: data.higherLevelOfEducation,
@@ -436,9 +520,101 @@ export class ApplicationsComponent implements OnInit {
     });
   }
 
+  onAddEducation(){
+    // Scroll to the bottom of the page after patching the form
+    // window.scrollTo(0, 600);
+    // Scroll to the bottom with smooth behavior after patching the form
+ window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+
+  }
+  
+ 
+  onTestSubmit(): void {
+    if (this.testForm.valid) {
+      // Map form data to match the API's expected structure
+      const testData = {
+          testName: this.testForm.value.testName,
+       
+         subject: this.testForm.value.subject,
+        studentId: this.selectedId, // Use actual student ID if available, or set to 0
+        testType: this.testForm.value.testType,
+        testDate: this.testForm.value.testDate, // Ensure it's a valid date string
+        testDuration: this.testForm.value.testDuration.toString(), // Convert to string if necessary
+        score: this.testForm.value.score.toString(), // Convert to string if necessary
+      };
+  
+      this.agentService.addTest(testData).subscribe({
+        next: (response) => {
+          console.log('Test details added successfully:', response);
+          // alert('Test details saved successfully!');
+          this.testByStudId();
+          this.testForm.reset();
+           // Scroll to the top of the page after patching the form
+        window.scrollTo(500, 0);
+        },
+        error: (error) => {
+          console.error('Error saving test details:', error);
+          // alert('Failed to save the test details. Please try again.');
+        },
+      });
+    } else {
+      console.log('Please fill out all required fields.');
+      // alert('Please fill out all required fields.');
+    }
+  }
+  
+  
+  onTestReset(): void {
+    this.testForm.reset();
+  }
+
+  testByStudId(){
+    const studeentId = this.selectedId; // Replace with the actual student ID
+     this.testByStudentId$ = this.agentService.getAllTestByStudentId(studeentId);
+  }
+
+  updateTest(id: number): void {
+    // Fetch the test entry by ID from the service
+    this.agentService.getTestByStudentId(id).subscribe({
+      next: (response) => {
+        if (response?.data) {
+          // Store the fetched test data
+          this.testData = response.data; // Assuming response.data contains the test information
+          console.log('Fetched test data:', this.testData);
+  
+          // Call a function to patch the form with this data
+          this.patchTestForm(this.testData);
+  
+          // Scroll to the desired position after patching the form
+          window.scrollTo(0, 800);
+        } else {
+          console.warn('No test data found for the provided ID.');
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching test entry:', error);
+      },
+    });
+  }
+
+  patchTestForm(data: any): void {
+    this.testForm.patchValue({
+      testName: data.testName,
+      testType: data.testType,
+      testDate: data.testDate,
+      subject: data.subject,
+      testDuration: data.testDuration,
+      score: data.score,
+    });
+  }
+  
+  
 
 
 
 
+  
+  }
 
-}
+
