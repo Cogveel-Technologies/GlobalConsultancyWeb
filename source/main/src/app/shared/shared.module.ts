@@ -6,12 +6,14 @@ import { MaterialModule } from './material.module';
 import { FeatherIconsModule } from './components/feather-icons/feather-icons.module';
 import { CustomValidatorDirective } from 'app/custom-validator.directive';
 import { DatePickerComponent } from 'app/date-picker/date-picker.component';
+import { SearchableDropdownComponent } from './components/searchable-dropdown/searchable-dropdown.component';
 
 
 
 @NgModule({
   declarations: [
     CustomValidatorDirective,
+    SearchableDropdownComponent
     // Other directives or components
   ],
   imports: [
@@ -21,8 +23,8 @@ import { DatePickerComponent } from 'app/date-picker/date-picker.component';
     RouterModule,
     MaterialModule,
     FeatherIconsModule,
-    DatePickerComponent
- 
+    DatePickerComponent,
+    
   ],
   exports: [
     CommonModule,
@@ -32,8 +34,8 @@ import { DatePickerComponent } from 'app/date-picker/date-picker.component';
     MaterialModule,
     FeatherIconsModule,
     CustomValidatorDirective,
-    DatePickerComponent
-
+    DatePickerComponent,
+    SearchableDropdownComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] // Allow custom elements
 })

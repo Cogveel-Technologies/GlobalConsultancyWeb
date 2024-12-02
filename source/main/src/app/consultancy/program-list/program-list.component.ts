@@ -10,6 +10,7 @@ import { ConsultancyService } from '../consultancy-services/consultancy.service'
 import { PageEvent } from '@angular/material/paginator';
 import { distinctUntilChanged } from 'rxjs';
 import { AdminService } from 'app/admin/admin.service';
+import { number } from 'echarts';
 
 
 
@@ -35,7 +36,7 @@ export class ProgramListComponent {
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   consultancyId: string = localStorage.getItem("id");
   selectedOptions: boolean = false;
-  institutes: Observable<SpecificConsultancyRelated[] | null>;
+  institutes: Observable<SpecificConsultancyRelated[]> | any;
   instituteForm: FormGroup;
   institute$: BehaviorSubject<number | ''> = new BehaviorSubject<number | ''>('');
   subscription: Subscription = new Subscription();
@@ -53,7 +54,9 @@ export class ProgramListComponent {
   consultancyControl: FormControl = new FormControl("all");
   ProgramFromInstitute: number = 0;
   roleName: string = localStorage.getItem('roleName');
-  consultancies: Observable<[{ id: number, consultancyName: string }]>;
+  consultancies: Observable<[{ id: number, consultancyName: string }]> | any;
+  instituteId: number;
+  instituteName: string;
 
 
 
@@ -70,9 +73,17 @@ export class ProgramListComponent {
     // if superadmin has logged in
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true;
-      this.consultancies = this.adminService.getAllConsultancies(this.defaultData);
+      this.adminService.getAllConsultancies(this.defaultData).pipe(map(res => {
+        res = [{ id: 'all', consultancyName: 'All' }, ...res]
+        return res
+      })).subscribe(res => {
+        console.log(res)
+        this.consultancies = res
+      });
     } else {
-      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData)
+      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res => {
+        this.institutes = res
+      })
     }
     // get all program by default
     this.programs = this.getPrograms(this.defaultData)
@@ -82,6 +93,7 @@ export class ProgramListComponent {
       if (res) {
         console.log(res)
         this.ProgramFromInstitute = res.id;
+        this.instituteName = res.instituteName;
         this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, instituteId: res.id, search: true, consultancyId: res.consultancyId })
         this.institutes = this.consultancyApiService.getSpecificInstitutes()
 
@@ -109,10 +121,9 @@ export class ProgramListComponent {
             if (pageRelated.consultancyId && typeof pageRelated.consultancyId === 'number') {
               console.log(pageRelated.consultancyId)
               this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
-              this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData)
-              console.log(this.defaultData)
+              this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res => this.institutes = res)
             } else {
-              this.institutes = of([])
+              this.institutes = []
               this.defaultData.ConsultancyId = '';
             }
           }
@@ -130,13 +141,11 @@ export class ProgramListComponent {
             }
           }
 
-
-
           if (pageRelated.search) {
-            if(searchTerm){
+            if (searchTerm) {
               this.defaultData.currentPage = 1;
               this.currentPageIndex = 0;
-            }else{
+            } else {
               this.defaultData.currentPage = pageRelated.pageIndex;
               this.currentPageIndex = pageRelated.pageIndex - 1;
             }
@@ -205,19 +214,21 @@ export class ProgramListComponent {
 
   onSearch() {
     this.currentPageIndex = 0;
-    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true, consultancyId: this.defaultData.ConsultancyId, instituteId: +this.defaultData.InstituteId })
+    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true, consultancyId: this.defaultData.ConsultancyId, instituteId: +this.instituteId })
   }
 
-  onSession(id: number, instituteId: number) {
-    console.log(id)
-    console.log(instituteId)
-    this.consultancyService.sendProgramId.next({ programId: id, instituteId: instituteId })
+  onSession(programName: string, instituteName: string, programId: number, instituteId: number) {
+    this.consultancyService.sendProgramId.next({ programName, instituteName, programId, instituteId })
     this.router.navigate(['consultancy/session-list'])
   }
 
   onConsultancyChange(event: any) {
     console.log(event)
-    this.pagination$.next({ consultancyId: event.value })
+    this.pagination$.next({ consultancyId: event })
+  }
+
+  instituteSelected(event: any) {
+    this.instituteId = event
   }
 
   ngOnDestroy() {

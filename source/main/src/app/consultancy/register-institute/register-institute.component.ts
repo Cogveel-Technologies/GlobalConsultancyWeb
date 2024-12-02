@@ -40,7 +40,7 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   editId: number;
   instituteId: string;
   consultancyId: number;
-  countries: Observable<{ countryName: string, id: number }[]>;
+  countries: Observable<{ countryName: string, id: number|string }[]>;
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   countryId: number;
   countryName: string;

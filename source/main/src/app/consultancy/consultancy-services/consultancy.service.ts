@@ -43,7 +43,8 @@ export class ConsultancyService {
   countrySelected: BehaviorSubject<number|null> = new BehaviorSubject(null); 
   editOrViewPage:BehaviorSubject<boolean> = new BehaviorSubject(false);
   sendSessionId:BehaviorSubject<number|null> = new BehaviorSubject(null);
-  sendInstituteId: BehaviorSubject<{id:number,consultancyId:number}|null> = new BehaviorSubject(null);
-  sendProgramId: BehaviorSubject<{instituteId:number|string,programId:number|string}|null> = new BehaviorSubject(null);
-  getIntakesofSession:BehaviorSubject<{instituteId:number|string,programId:number|string,sessionId:number|string}|null> = new BehaviorSubject(null)
+  sendInstituteId: BehaviorSubject<{id:number,instituteName:string,consultancyId:number}|null> = new BehaviorSubject(null);
+  sendProgramId: BehaviorSubject<{instituteName?:string,programName?:string,instituteId?:number|string,programId?:number|string}|null> = new BehaviorSubject(null);
+  getIntakesofSession:BehaviorSubject<{sessionId?:number|string, instituteName:string, programName:string, sessionName }|null> = new BehaviorSubject(null)
+  consultancyInstitutes: BehaviorSubject<{countryName:string,consultancyName:string,consultancyId:number}|null> = new BehaviorSubject<{countryName:string,consultancyName:string,consultancyId:number}>(null)
 }

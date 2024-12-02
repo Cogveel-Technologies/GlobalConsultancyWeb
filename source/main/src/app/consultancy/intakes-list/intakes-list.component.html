@@ -8,40 +8,15 @@
     <div class="card p-4">
       <div class="row g-3">
         <div class="col-md-4">
-          <mat-form-field appearance="fill" class="w-100 mb-0">
-            <mat-label>Institute</mat-label>
-            <mat-icon matPrefix>business</mat-icon> <!-- Suitable for Institute -->
-            <mat-select [formControl]="institute" (selectionChange)="onInstituteChange($event)" required>
-              <mat-option [value]="0">All</mat-option>
-              <mat-option *ngFor="let institute of (institutes | async)" [value]="institute.id">
-                {{ institute.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <app-searchable-dropdown [options]="institutes" [displayField]="'name'" [intakeInstitute]="instituteName ? instituteName : ''" (selectionChange)="onInstituteSelected($event)" [placeHolder]="'Institute'"></app-searchable-dropdown>
         </div>
         
         <div class="col-md-4">
-          <mat-form-field appearance="fill" class="w-100 mb-0">
-            <mat-label>Program</mat-label>
-            <mat-icon matPrefix>school</mat-icon> <!-- Suitable for Program -->
-            <mat-select [formControl]="program" (selectionChange)="onProgramChange($event)">
-              <mat-option *ngFor="let program of (programs | async)" [value]="program.id">
-                {{ program.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <app-searchable-dropdown [options]="programs" [displayField]="'name'" [intakeProgram]="programName ? programName : ''" (selectionChange)="onProgramChange($event)" [placeHolder]="'Program'"></app-searchable-dropdown>
         </div>
         
         <div class="col-md-4">
-          <mat-form-field appearance="fill" class="w-100 mb-0">
-            <mat-label>Session</mat-label>
-            <mat-icon matPrefix>event</mat-icon> <!-- Suitable for Session -->
-            <mat-select [formControl]="session" (selectionChange)="onSessionChange($event)">
-              <mat-option *ngFor="let session of (sessions | async)" [value]="session.id">
-                {{ session.sessionName }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <app-searchable-dropdown [options]="sessions" [displayField]="'sessionName'" [intakeSession]="sessionName ? sessionName : ''"  (selectionChange)="onSessionChange($event)" [placeHolder]="'Session'"></app-searchable-dropdown>
         </div>
         
         <div class="col-md-4">

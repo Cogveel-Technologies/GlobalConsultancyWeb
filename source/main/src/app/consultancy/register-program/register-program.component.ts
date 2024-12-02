@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, Subscription, switchMap, tap, toArray } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { Observable } from 'rxjs';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
@@ -44,7 +44,8 @@ export class RegisterProgramComponent {
   previousInstituteState: (number | null) = null
   sessions = new FormControl('');
   roleName = localStorage.getItem("roleName");
-  documentTypes: any
+  documentTypes: any;
+  searchControl = new FormControl()
 
 
 
@@ -124,6 +125,12 @@ export class RegisterProgramComponent {
     } else {
       this.router.navigate(["consultancy", "program-list"]);
     }
+  }
+
+  filterInstitutes(searchTerm:string){
+    this.instituteOptions.pipe(toArray()).subscribe(res=>{
+      console.log(res)
+    })
   }
 
   onSubmit() {

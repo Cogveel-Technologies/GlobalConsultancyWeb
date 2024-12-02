@@ -172,7 +172,7 @@ export class ConsultancyApi {
         return this.http.get<Observable<SpecificConsultancyRelated[]>>(`${this.baseUrl}/Session/All?InstituteId=${data.InstituteId}&ConsultancyId=${data.ConsultancyId}`).pipe(map(response => response['data']))
     }
     // ------------------------ Country Api ---------------------------------
-    getAllCountries(): Observable<{ countryName: string, id: number }[]> {
+    getAllCountries(): Observable<{ countryName: string, id: (number|string) }[]> {
         return this.http.get<Observable<{ countryName: string, id: number }[]>>(`${this.baseUrl}/Country/All`).pipe(map(res => res['data']))
     }
 
