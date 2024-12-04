@@ -30,6 +30,7 @@ export class AgentListComponent {
     return this.consultancyApiService.getAgents(params).pipe
       (map(res => {
         this.records = res['pageInfo']['totalRecords'];
+        console.log(res['data'])
         return res['data']
       }));
   }
@@ -60,8 +61,10 @@ export class AgentListComponent {
         this.consultancies = res
       });
       this.agents = this.getAgents(this.defaultData)
+      console.log("PPPPPPP")
     } else {
       this.agents = this.getAgents(this.defaultData)
+      console.log("HHHHHHHHH")
     }
 
     this.subscription.add(combineLatest([this.searchTerm$, this.pagination$, this.sorting$]).pipe(
@@ -73,7 +76,6 @@ export class AgentListComponent {
           }else{
             this.defaultData.ConsultancyId = pageRelated.consultancyId;
           }
-          this.defaultData.IsAdmin = true
         }
         if (pageRelated.search) {
           if (search) {

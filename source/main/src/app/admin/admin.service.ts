@@ -36,6 +36,7 @@ export class AdminService {
 
   isEditMode: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
   sendConsultancyId: BehaviorSubject<number | string> = new BehaviorSubject<number | string>('')
+  sendRoleId:BehaviorSubject<number|null> = new BehaviorSubject<number>(null)
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {
@@ -287,5 +288,22 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     });
   }
+
+  /////////////////////////////////////// PERMISSIONS API ///////////////////////////////////////////
+
+  // add Permissions 
+  addPermissions(permissions:any){
+    return this.http.post(`${this.apiUrl}/Permission/Bulk Data`,permissions)
+  }
+  // get Permissions
+  getPermissions(params:ConsultancyDetailsOptions){
+    return this.http.get(`${this.apiUrl}/Permission?limit=${params.pageSize}&OrderBy=${params.OrderBy}&sortExpression=${params.sortExpression}&CurrentPage=${params.currentPage}&isDeleted=${params.IsDeleted}`)
+  }
+  // update Permission
+  updatePermission(permission:any){
+    return this.http.put(`${this.apiUrl}/Permission/${permission.id}`,permission)
+  }
   
 }
+
+

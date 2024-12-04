@@ -2,3 +2,13 @@
     display: block;
     margin-bottom: 1em;
 }
+
+.permissions-container{
+    display: flex;
+    justify-content: space-between;
+}
+.btn-add-permissions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
