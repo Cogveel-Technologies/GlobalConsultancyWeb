@@ -11,6 +11,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { distinctUntilChanged } from 'rxjs';
 import { AdminService } from 'app/admin/admin.service';
 import { number } from 'echarts';
+import { PermissionsService } from 'app/general-services/permissions.service';
 
 
 
@@ -29,7 +30,7 @@ export class ProgramListComponent {
     },
   ];
 
-  constructor(private router: Router, private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private adminService: AdminService) { }
+  constructor(private router: Router, private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private adminService: AdminService, private permissionService:PermissionsService) { }
   editMode: boolean;
   programs!: Observable<ProgramData[]>;
   programsOnInstitutes: Observable<SpecificConsultancyRelated[]>;
@@ -70,6 +71,7 @@ export class ProgramListComponent {
 
   ngOnInit() {
     console.log(this.roleName)
+    console.log(this.permissionService.permissions)
     // if superadmin has logged in
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true;

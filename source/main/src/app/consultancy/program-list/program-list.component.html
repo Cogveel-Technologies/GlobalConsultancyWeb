@@ -111,7 +111,7 @@
                                                 [class]="'tbl-fav-delete'"></app-feather-icons>
                                         </button>
                                         <button mat-icon-button color="warn" matTooltip="Sessions"
-                                            (click)="onSession(program.programName, program.instituteName,program.id,program.instituteId)">
+                                            (click)="onSession(program.programName, program.instituteName,program.id,program.instituteId)" *appPermissions="{action:'canAdd'}">
                                             <!-- <mat-icon>delete</mat-icon> -->
                                             <app-feather-icons [icon]="'calendar'"
                                                 [class]="'tbl-fav-edit'"></app-feather-icons>

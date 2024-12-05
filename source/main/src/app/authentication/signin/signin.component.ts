@@ -62,6 +62,8 @@ import {
 import { loginService } from 'app/login.service';
 import {  map } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { GeneralService } from 'app/general-service';
+import { PermissionsService } from 'app/general-services/permissions.service';
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
@@ -79,7 +81,10 @@ export class SigninComponent
     private formBuilder: UntypedFormBuilder,
     // private router: Router,
     private authService: AuthService,
-    private loginService:loginService, private router:Router, private toastr:ToastrService
+    private loginService:loginService,
+    private router:Router, 
+    private toastr:ToastrService,
+    private permissionService:PermissionsService
   ) {
     super();
   }
@@ -103,8 +108,7 @@ export class SigninComponent
         return res['data'];
       })).subscribe({
       next: res => {
-        console.log(res.menu)
-        console.log(res.roleName)
+        this.permissionService.setPermissions(res.permissions)
         localStorage.setItem("token", res.jwtToken);
         localStorage.setItem("id",res.id);
         localStorage.setItem("menu",JSON.stringify(res.menuItems));

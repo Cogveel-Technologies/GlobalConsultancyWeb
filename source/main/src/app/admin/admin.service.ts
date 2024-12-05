@@ -303,6 +303,10 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
   updatePermission(permission:any){
     return this.http.put(`${this.apiUrl}/Permission/${permission.id}`,permission)
   }
+  // delete Permission
+  deletePermission(id:number){
+    return this.http.delete(`${this.apiUrl}/Permission/byId?Id=${id}`)
+  }
   
 }
 

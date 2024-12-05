@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { AdminService } from '../admin.service';
 import { PageEvent } from '@angular/material/paginator';
 import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 import { ConsultancyApi } from 'app/consultancy/consultancy-services/api.service'
 import { MyDialogComponentComponent } from '../my-dialog-component/my-dialog-component.component';
 import { MatDialog } from '@angular/material/dialog';
+import { dataTool } from 'echarts';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class PermissionsComponent implements OnInit {
   search$:BehaviorSubject<boolean> = new BehaviorSubject(false);
   subscription:Subscription = new Subscription();
   editedRowIndex:number|null = null;
+  modulesArray:any
   
 
 
@@ -61,6 +63,7 @@ ngOnInit(): void {
     modules: new FormArray([]),
   });
   this.allRoles = this.adminService.getAllRoles()
+  this.modulesArray = this.permissionsForm.get('modules') as FormArray;
 
  
   this.subscription.add(
@@ -74,7 +77,6 @@ ngOnInit(): void {
         tap((roles) => {
           console.log(roles)
           // Push each role/permission into the FormArray
-          const modulesArray = this.permissionsForm.get('modules') as FormArray;
           roles.forEach((role: any) => {
             console.log
             const roleFormGroup = new FormGroup({
@@ -86,7 +88,7 @@ ngOnInit(): void {
               canDelete: new FormControl(role.canDelete),
               canView: new FormControl(role.canView),
             });
-            modulesArray.push(roleFormGroup); // Add to FormArray
+            this.modulesArray.push(roleFormGroup); // Add to FormArray
           });
         })
       )
@@ -94,6 +96,34 @@ ngOnInit(): void {
         console.log(this.permissionsForm.value); // Form is updated
       })
   );
+
+  combineLatest([this.pagination$]).pipe(
+    switchMap(([pageRelated]) => {
+      this.defaultData.pageSize = pageRelated.pageSize;
+      this.defaultData.currentPage = pageRelated.pageIndex;
+      console.log(this.defaultData);
+      return this.adminService.getPermissions(this.defaultData).pipe(
+        tap((res) => {
+          this.records = res['pageInfo'].totalRecords;
+          this.modulesArray.clear(); // Clear the FormArray before adding new data
+          res['data'].forEach((role: any) => {
+            const roleFormGroup = new FormGroup({
+              id: new FormControl(role.id),
+              subMenuId: new FormControl(role.subMenuId || null),
+              roleId: new FormControl(role.roleId || ''),
+              canAdd: new FormControl(role.canAdd),
+              canEdit: new FormControl(role.canEdit),
+              canDelete: new FormControl(role.canDelete),
+              canView: new FormControl(role.canView),
+            });
+            this.modulesArray.push(roleFormGroup); // Add to FormArray
+          });
+        }),
+        map((res) => res['data']) // Emit only the data array if needed
+      );
+    })
+  ).subscribe();
+  
   
 }
 
@@ -108,6 +138,7 @@ ngOnInit(): void {
   }
 
   onPageChange(event: PageEvent): void {
+    console.log(event)
     this.currentPageIndex = event.pageIndex;
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 });
   }
@@ -123,24 +154,19 @@ ngOnInit(): void {
   onEdit(data: any, rowIndex: number): void {
     if (this.editedRowIndex === rowIndex) {
       console.log(data)
-      // Exit edit mode and save changes
-      this.editedRowIndex = null; // Immediately toggle back to default state
+      this.editedRowIndex = null; 
       console.log('Exiting edit mode for row:', rowIndex);
-  
-      // Proceed with saving changes asynchronously
+
       this.adminService.updatePermission(data).subscribe(
         (res) => {
           console.log('Permission updated successfully:', res);
-          // No further action needed; UI already toggled
         },
         (err) => {
           console.error('Error updating permission:', err);
-          // Handle error: Optionally re-enable edit mode
-          this.editedRowIndex = rowIndex; // Revert UI state to edit mode if needed
+          this.editedRowIndex = rowIndex; 
         }
       );
     } else {
-      // Enter edit mode for the clicked row
       this.editedRowIndex = rowIndex;
       console.log('Editing row:', rowIndex);
     }
@@ -164,6 +190,19 @@ ngOnInit(): void {
       disableClose: false, // Optional: Close when clicking outside
       data: { message: 'This is a message passed to the dialog' } // Optional: Pass data
     });
+  }
+
+  onDelete(id:number){
+    const con = confirm("Are you sure?");
+    if(con){
+      this.adminService.deletePermission(id).subscribe(res =>{
+        this.adminService.getPermissions(this.defaultData)
+        const indexToRemove = this.permissionsForm.get('modules')?.value.findIndex((module: any) => module.id === id);
+        if (indexToRemove !== -1) {
+          (this.permissionsForm.get('modules') as FormArray).removeAt(indexToRemove);
+        }
+      })
+    }
   }
 
  

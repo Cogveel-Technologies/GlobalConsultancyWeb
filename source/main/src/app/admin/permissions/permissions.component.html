@@ -73,7 +73,7 @@
                         <button mat-icon-button color="primary" matTooltip="Edit" (click)="onEdit(module.value,i)">
                           <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                         </button>
-                        <button mat-icon-button color="warn" matTooltip="Delete">
+                        <button mat-icon-button color="warn" matTooltip="Delete" (click)="onDelete(module.value.id)">
                           <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                         </button>
                       </ng-template>
