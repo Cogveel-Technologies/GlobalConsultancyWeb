@@ -307,6 +307,10 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
   deletePermission(id:number){
     return this.http.delete(`${this.apiUrl}/Permission/byId?Id=${id}`)
   }
+  // get sub-menu
+  getSubmenu(){
+    return this.http.get(`${this.apiUrl}/SubMenu/all`)
+  }
   
 }
 

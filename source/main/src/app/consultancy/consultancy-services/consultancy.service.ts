@@ -34,7 +34,7 @@ export class ConsultancyService {
       IntakeId:'',
       IsPublic:'',
       IsDeleted:false,
-      IsAdmin:'',
+      IsAdmin:false,
       roleId:''
     }
     return defaultData

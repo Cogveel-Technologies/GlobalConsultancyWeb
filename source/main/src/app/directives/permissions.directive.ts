@@ -12,5 +12,7 @@ export class PermissionsDirective {
     const permissions = this.permissionService.getPermissions();
     const hasPermission = permissions.find(el=> el[action] === true);
     console.log(hasPermission)
+    console.log(permissions)
+
   }
 }
