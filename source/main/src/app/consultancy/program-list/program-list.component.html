@@ -94,24 +94,24 @@
                                     <td data-label="Actions">
                                         <button mat-icon-button
                                             [routerLink]="['/consultancy/program-details', program.id]"
-                                            matTooltip="View">
+                                            matTooltip="View" *appPermissions="{feature:'ProgramList',action:'canView'}">
                                             <mat-icon>visibility</mat-icon>
                                         </button>
                                         <button mat-icon-button color="primary"
-                                            [routerLink]="['/consultancy/edit-program', program.id]" matTooltip="Edit">
+                                            [routerLink]="['/consultancy/edit-program', program.id]" matTooltip="Edit" *appPermissions="{feature:'ProgramList',action:'canEdit'}">
                                             <!-- <mat-icon>edit</mat-icon> -->
                                             <app-feather-icons [icon]="'edit'"
                                                 [class]="'tbl-fav-edit'"></app-feather-icons>
 
                                         </button>
                                         <button mat-icon-button color="warn" (click)="deleteProgram(program.id)"
-                                            matTooltip="Delete">
+                                            matTooltip="Delete" *appPermissions="{feature:'ProgramList',action:'canDelete'}">
                                             <!-- <mat-icon>delete</mat-icon> -->
                                             <app-feather-icons [icon]="'trash-2'"
                                                 [class]="'tbl-fav-delete'"></app-feather-icons>
                                         </button>
                                         <button mat-icon-button color="warn" matTooltip="Sessions"
-                                            (click)="onSession(program.programName, program.instituteName,program.id,program.instituteId)" *appPermissions="{action:'canAdd'}">
+                                            (click)="onSession(program.programName, program.instituteName,program.id,program.instituteId)">
                                             <!-- <mat-icon>delete</mat-icon> -->
                                             <app-feather-icons [icon]="'calendar'"
                                                 [class]="'tbl-fav-edit'"></app-feather-icons>

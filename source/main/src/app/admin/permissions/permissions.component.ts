@@ -8,7 +8,7 @@ import { ConsultancyService } from 'app/consultancy/consultancy-services/consult
 import { ConsultancyApi } from 'app/consultancy/consultancy-services/api.service'
 import { MyDialogComponentComponent } from '../my-dialog-component/my-dialog-component.component';
 import { MatDialog } from '@angular/material/dialog';
-import { dataTool } from 'echarts';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 @Component({
@@ -23,10 +23,10 @@ export class PermissionsComponent implements OnInit {
 
   permissionsForm: FormGroup;
   roleOptions: Observable<any>;
-  allRoles: Observable<any>;  // Add this observable to store all roles data
+  allRoles: Observable<any>|any;  // Add this observable to store all roles data
   rolesList = ["Admin", "Consultancy"];
   roles = new FormControl('all');
-  currentPageIndex: number = 0;
+  currentPageIndex: number;
   records: number;
   roleSelected = false;
   dataLoaded = new BehaviorSubject<boolean>(false);
@@ -36,12 +36,14 @@ export class PermissionsComponent implements OnInit {
   editedRowIndex: number | null = null;
   modulesArray: any
   update$: BehaviorSubject<boolean> = new BehaviorSubject(false)
+  roleId$: BehaviorSubject<number|null> = new BehaviorSubject(null)
+  roleId:number
 
 
 
 
   defaultData = this.consultancyService.defaultRenderData();
-  pagination$ = new BehaviorSubject<{ pageSize?: number, pageIndex?: number, search?: boolean }>({
+  pagination$ = new BehaviorSubject<{ pageSize?: number, pageIndex?: number, search?: boolean, roleId?:number }>({
     pageSize: this.defaultData.pageSize,
     pageIndex: this.defaultData.currentPage,
     search: true
@@ -55,7 +57,8 @@ export class PermissionsComponent implements OnInit {
     private adminService: AdminService,
     private consultancyService: ConsultancyService,
     private consultancyApiService: ConsultancyApi,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cdr:ChangeDetectorRef
   ) { }
 
 
@@ -63,12 +66,21 @@ export class PermissionsComponent implements OnInit {
     this.permissionsForm = new FormGroup({
       modules: new FormArray([]),
     });
-    this.allRoles = this.adminService.getAllRoles()
+    this.adminService.getAllRoles().subscribe(res=> {
+      console.log(res)
+      this.allRoles = res
+    } )
     this.modulesArray = this.permissionsForm.get('modules') as FormArray;
 
 
     combineLatest([this.pagination$, this.update$]).pipe(
       switchMap(([pageRelated]) => {
+        if(this.roleSelected){
+          console.log(pageRelated)
+          console.log("PPPPPPPP")
+          this.cdr.detectChanges()
+          this.defaultData.roleId = pageRelated.roleId
+        }
         this.defaultData.pageSize = pageRelated.pageSize;
         this.defaultData.currentPage = pageRelated.pageIndex;
         console.log(this.defaultData);
@@ -104,14 +116,17 @@ export class PermissionsComponent implements OnInit {
 
 
   onRoleChange(value: any): void {
-    this.defaultData.roleId = value;
-    this.roleSelected = typeof value === 'number';
+    this.currentPageIndex = 0;
+    this.roleSelected = true;
+    this.roleId$.next(value)
+    this.roleId = value
+    this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, roleId:value })
   }
 
   onPageChange(event: PageEvent): void {
     console.log(event)
     this.currentPageIndex = event.pageIndex;
-    this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 });
+    this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1, roleId:this.roleId });
   }
 
   onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }): void {

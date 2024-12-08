@@ -1,42 +1,50 @@
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpErrorResponse
-} from "@angular/common/http";
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Router } from "@angular/router";
+import { environment } from "environments/environment";
+
 
 @Injectable()
 export class CheckToken implements HttpInterceptor {
   constructor(private router: Router) {}
-
+  
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // Exclude the login request (or any other endpoint you wish to exclude from token checking)
+    const baseUrl = environment.apiUrl
+
+    console.log(req.url)
+    if (req.url === `${baseUrl}/Login`) {
+      return next.handle(req);  // Allow the login request to proceed without token
+    }
+
     const token = localStorage.getItem('token');
+    if (!token) {
+      console.log("TTTTT")
+      localStorage.clear()
+      this.router.navigate(['/authentication/signin']);
+      return throwError(() => new Error('No token found'));
+    }
 
     // Clone the request to add the Authorization header if the token exists
-    const newCloneReq = req.clone({
-      setHeaders: token ? { Authorization: `Bearer ${token}` } : {}
+    const clonedRequest = req.clone({
+      setHeaders: { Authorization: `Bearer ${token}` }
     });
 
-    return next.handle(newCloneReq).pipe(
+    return next.handle(clonedRequest).pipe(
       catchError((error: HttpErrorResponse) => {
-        // Check if the error is a 401 Unauthorized error
+        // Handle 401 Unauthorized error (token expired or invalid)
         if (error.status === 401) {
-          // Handle the logout when the token is expired or unauthorized
-          this.handleTokenExpiration();
+          this.handleTokenExpiration(); // Token expired, handle logout and redirection
         }
         return throwError(() => error);
       })
     );
   }
 
-  // This function handles logout and redirection
   private handleTokenExpiration(): void {
-    localStorage.removeItem('token'); // Remove the token from local storage
-    this.router.navigate(['/authentication/signin']); // Redirect to the login page
+    localStorage.removeItem('token'); // Remove expired token
+    this.router.navigate(['/authentication/signin']); // Redirect to login page
   }
 }

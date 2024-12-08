@@ -153,7 +153,7 @@ export class ConsultancyApi {
     }
     // ------------------- display-session ----------------
     getSession(data: ConsultancyDetailsOptions): Observable<SessionData[]> {
-        return this.http.get<SessionData[]>(`${this.baseUrl}/Session?InstituteId=${data.InstituteId}&ProgramId=${data.ProgramId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&CurrentPage=${data.currentPage}`)
+        return this.http.get<SessionData[]>(`${this.baseUrl}/Session?IsAdmin=${data.IsAdmin}&InstituteId=${data.InstituteId}&ProgramId=${data.ProgramId}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&CurrentPage=${data.currentPage}&isDeleted=${data.IsDeleted}`)
     }
     // ------------- delete-session -----------------
     deleteSession(id: number) {

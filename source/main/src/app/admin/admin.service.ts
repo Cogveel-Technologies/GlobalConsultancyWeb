@@ -297,7 +297,7 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
   }
   // get Permissions
   getPermissions(params:ConsultancyDetailsOptions){
-    return this.http.get(`${this.apiUrl}/Permission?limit=${params.pageSize}&OrderBy=${params.OrderBy}&sortExpression=${params.sortExpression}&CurrentPage=${params.currentPage}&isDeleted=${params.IsDeleted}`)
+    return this.http.get(`${this.apiUrl}/Permission?RoleId=${params.roleId}&limit=${params.pageSize}&OrderBy=${params.OrderBy}&sortExpression=${params.sortExpression}&CurrentPage=${params.currentPage}&isDeleted=${params.IsDeleted}`)
   }
   // update Permission
   updatePermission(permission:any){

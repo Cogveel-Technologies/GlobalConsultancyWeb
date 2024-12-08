@@ -8,16 +8,7 @@
     <div class="card p-4">
       <div class="row g-3 permissions-container">
         <div class="col-md-4">
-          <mat-form-field class="w-100 mb-0">
-            <mat-label>Role</mat-label>
-            <mat-icon matPrefix>admin_panel_settings</mat-icon>
-            <mat-select [formControl]="roles" required (selectionChange)="onRoleChange($event.value)">
-              <mat-option [value]="'all'">Select a Role</mat-option>
-              <mat-option *ngFor="let role of (allRoles | async)" [value]="role.id">
-                {{ role.roleName }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <app-searchable-dropdown [options]="allRoles" [displayField]="'roleName'" (selectionChange)="onRoleChange($event)" [placeHolder]="'Role'"></app-searchable-dropdown>
         </div>
         <div class="col-md-2">
           <button mat-mini-fab color="primary" (click)="openDialog()" [disabled]="!roleSelected">
@@ -90,9 +81,10 @@
               </table>
 
               <!-- Pagination Component -->
-              <app-pagination [pageSize]="defaultData.pageSize" (pageChange)="onPageChange($event)" [length]="records"
-                [pageIndex]="currentPageIndex">
-              </app-pagination>
+                <!-- Show pagination only if institutesList data exists -->
+            <app-pagination  [pageSize]="defaultData.pageSize"
+              (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
+            </app-pagination>
             </div>
           </div>
         </div>
