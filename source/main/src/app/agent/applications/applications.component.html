@@ -12,15 +12,15 @@
           <div class="info-contain">
             <p class="info-item">
               <strong>Student Name:</strong>
-              <span class="ms-1 fw-normal">Mukhtar</span>
+              <span class="ms-1 fw-normal">{{ studentData?.studentName}}</span>
             </p>
             <p class="info-item">
               <strong>Program Name:</strong>
-              <span class="ms-1 fw-normal">MCA</span>
+              <span class="ms-1 fw-normal">{{selectedRecord?.programName}}</span>
             </p>
             <p class="info-item">
               <strong>Session:</strong>
-              <span class="ms-1 fw-normal">2024</span>
+              <span class="ms-1 fw-normal">{{selectedRecord?.sessionName}}</span>
             </p>
           </div>
 
@@ -47,7 +47,7 @@
                         <p>{{selectedRecord?.province}}</p>
                       </div>
                       <div class="info-field">
-                        <label>Applocation Fee</label>
+                        <label>Application Fee</label>
                         <p>{{selectedRecord?.applicationFee}}</p>
                       </div>
                       <div class="info-field">
@@ -63,17 +63,17 @@
 
                     <div class="program-summary">
                       <div class="program-title">
-                        <h3>Master in Business Administration - MBA</h3>
-                        <span class="duration-badge">24 Months</span>
+                        <h3>{{selectedRecord?.programName}}</h3>
+                        <span class="duration-badge">{{selectedRecord?.duration}}</span>
                       </div>
                       <div class="program-details">
                         <div>
                           <label>Average Processing Time</label>
-                          <p>48 Hrs</p>
+                          <p>{{selectedRecord?.duration}}</p>
                         </div>
                         <div>
                           <label>Tuition Fee</label>
-                          <p>USD 25860 per year</p>
+                          <p>{{selectedRecord?.tutionFee}}</p>
                         </div>
                         <div>
                           <label>SEVIS Fee</label>
@@ -249,6 +249,7 @@
               <mat-step [stepControl]="HFormGroup2!">
                 <form [formGroup]="HFormGroup2!">
                   <ng-template matStepLabel>Personal Info</ng-template>
+                  
 
                   <div class="program-info-container">
                     <h2>Personal Information</h2>
@@ -574,7 +575,7 @@
                         <p class="text-muted">*10th and 12* Grade details are
                           mandatory</p>
 
-                        <div class="col-md-12">
+                        <div class="button-container">
                           <button mat-raised-button matStepperPrevious
                             color="warn" class="me-2">
                             Back
@@ -645,7 +646,8 @@
                             </button>
                               <button
                                 mat-icon-button
-                                color="warn">
+                                color="warn"
+                                (click)="deleteTest(test.id)">
                                 <mat-icon>
                                   <app-feather-icons
                                     [icon]="'trash-2'"
@@ -661,12 +663,17 @@
                 </div>
 
                 <ng-template matStepLabel>Test</ng-template>
-                <div class="header">
+                <div class="program-info-container">
+                
+                  <!-- class="header" -->
                   <h2><strong>Add Test</strong></h2>
-                </div>
-                <form [formGroup]="testForm" (ngSubmit)="onTestSubmit()">
+                  
+                
+                <div class="program-info">
                   <div class="body">
-                    <div class="example-container">
+                <form [formGroup]="testForm" (ngSubmit)="onTestSubmit()">
+                  
+                    
                       <div class="row">
                         <div
                           class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
@@ -731,28 +738,37 @@
                           </mat-form-field>
                         </div>
 
-                        <div class="col-md-12">
-                          <button mat-raised-button color="primary" class="me-2"
-                            type="submit">Save</button>
-                          <button mat-raised-button color="warn" type="button"
-                            (click)="onTestReset()">Reset</button>
-                        </div>
-                      </div>
+                      
                     </div>
+                  
+                  <div class="button-container">
+                    <button mat-raised-button matStepperPrevious
+                      color="warn" class="me-2" type="button">
+                      Back
+                    </button>
+                    <button mat-raised-button color="primary" class="me-2"
+                      type="submit" matStepperNext>{{ isEditsMode ? 'Update' : 'Next' }}</button>
+                    <!-- <button mat-raised-button color="warn" type="button"
+                      (click)="onTestReset()">Reset</button> -->
+                      
                   </div>
                 </form>
+                </div>
+                </div>
+                </div>
+                
               </mat-step>
 
               <mat-step>
                 <ng-template matStepLabel>Done</ng-template>
-                <p>You are now done.</p>
+                <p>Your application has been processed successfully.</p>
+                <p>Click **Apply** to finalize your application.</p>
                 <div>
-                  <button mat-raised-button matStepperPrevious color="warn"
-                    class="msr-2">Back</button>
-                  <button mat-raised-button color="primary"
-                    (click)="stepper.reset()">Reset</button>
+                  <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
+                  <button mat-raised-button color="primary" (click)="openConfirmationDialog()">Apply</button>
                 </div>
               </mat-step>
+              
 
             </mat-horizontal-stepper>
           </div>

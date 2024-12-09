@@ -13,7 +13,8 @@ import { Observable } from 'rxjs';
 import { PaginatedResponse } from '../agent.service'; // Import the PaginatedResponse interface
 import { StudentDocument } from '../models/studentDocument.model';
 import { of } from 'rxjs';
-
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class ApplicationsComponent implements OnInit {
   educationData: any;  // Define educationData to store the fetched data
   documentTypes: any[] = [];  
   isEditMode = false; 
+  isEditsMode = false; 
   isEdittingMode = false; 
    uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>;
   //  tests$: Observable<any>; // Observable to hold the test data
@@ -48,6 +50,7 @@ export class ApplicationsComponent implements OnInit {
 
   errorMessage = '';
   isEditModee = false; // Track whether we are in edit mode
+  
   documentToEditId: number | null = null; // Store the ID of the document being edited
   testData: any;
   selectedRecord: any;
@@ -60,7 +63,8 @@ export class ApplicationsComponent implements OnInit {
     private route: ActivatedRoute,
     private _formBuilder: UntypedFormBuilder,
     private agentService: AgentService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
   ) {
     this.initDocumentForm();
     // Retrieve the selected ID in the constructor
@@ -366,36 +370,7 @@ export class ApplicationsComponent implements OnInit {
     });
   }
 
-  //education
-  // onEducationNext(): void {
-  //   if (this.educationForm.valid) {
-  //     // Transforming the form data to match the backend structure
-  //     const educationData = {
-  //       studentId: this.selectedId,
-  //       countryOfEducation: this.educationForm.value.countryOfEducation,
-  //       higherLevelOfEducation: this.educationForm.value.higherLevelOfEducation,
-  //       gradingScheme: this.educationForm.value.gradingScheme,
-  //       gradingAverage: this.educationForm.value.gradingAverage,
-  //     };
-
-  //     this.agentService.addEducation(educationData).subscribe({
-  //       next: (response) => {
-  //         // Refresh the grid
-  //         this.fetchStudentEducation();
-  //         console.log('Education details added successfully:', response);
-  //         this.educationForm.reset();
-  //       },
-  //       error: (error) => {
-  //         console.error('Error saving education details:', error);
-  //       },
-  //     });
-  //   } else {
-  //     console.log('Please fill out all required fields.');
-  //   }
-  // }
  
-  
-
     // Reset the form and exit edit mode
     onEducationNext(): void {
       if (this.educationForm.valid) {
@@ -522,9 +497,9 @@ export class ApplicationsComponent implements OnInit {
 
   onAddEducation(){
     // Scroll to the bottom of the page after patching the form
-    // window.scrollTo(0, 600);
+    window.scrollTo(0, 650);
     // Scroll to the bottom with smooth behavior after patching the form
- window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+//  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 
 
   }
@@ -534,39 +509,58 @@ export class ApplicationsComponent implements OnInit {
     if (this.testForm.valid) {
       // Map form data to match the API's expected structure
       const testData = {
-          testName: this.testForm.value.testName,
-       
-         subject: this.testForm.value.subject,
-        studentId: this.selectedId, // Use actual student ID if available, or set to 0
+        testName: this.testForm.value.testName,
+        subject: this.testForm.value.subject,
+        studentId: this.selectedId, // Use the actual student ID if available
         testType: this.testForm.value.testType,
         testDate: this.testForm.value.testDate, // Ensure it's a valid date string
         testDuration: this.testForm.value.testDuration.toString(), // Convert to string if necessary
         score: this.testForm.value.score.toString(), // Convert to string if necessary
       };
   
-      this.agentService.addTest(testData).subscribe({
-        next: (response) => {
-          console.log('Test details added successfully:', response);
-          // alert('Test details saved successfully!');
-          this.testByStudId();
-          this.testForm.reset();
-           // Scroll to the top of the page after patching the form
-        window.scrollTo(500, 0);
-        },
-        error: (error) => {
-          console.error('Error saving test details:', error);
-          // alert('Failed to save the test details. Please try again.');
-        },
-      });
-    } else {
-      console.log('Please fill out all required fields.');
-      // alert('Please fill out all required fields.');
+      // Check if we are updating an existing test or creating a new one
+      if (this.isEditsMode) {
+        // Update API call
+        this.agentService.updateTest(this.testData.id, testData).subscribe({
+          next: (response) => {
+            console.log('Test details updated successfully:', response);
+          
+          
+           
+            this.testByStudId(); // Refresh the test list
+            this.onTestReset();
+            // this.editTestId = null; // Clear the test ID
+            // window.scrollTo(0, 0); // Scroll to the top of the page
+            
+          },
+          error: (error) => {
+            console.error('Error updating test details:', error);
+          },
+        });
+      } else {
+        // Create API call
+        this.agentService.addTest(testData).subscribe({
+          next: (response) => {
+            console.log('Test details added successfully:', response);
+            // alert('Test details saved successfully!');
+            this.testByStudId();
+            this.testForm.reset();
+             // Scroll to the top of the page after patching the form
+          // window.scrollTo(0, 0);
+          },
+          error: (error) => {
+            console.error('Error saving test details:', error);
+            // alert('Failed to save the test details. Please try again.');
+          },
+        });
+      }
+     
     }
   }
   
-  
   onTestReset(): void {
     this.testForm.reset();
+    this.isEditsMode = false;
   }
 
   testByStudId(){
@@ -581,13 +575,15 @@ export class ApplicationsComponent implements OnInit {
         if (response?.data) {
           // Store the fetched test data
           this.testData = response.data; // Assuming response.data contains the test information
+          
           console.log('Fetched test data:', this.testData);
   
           // Call a function to patch the form with this data
           this.patchTestForm(this.testData);
   
           // Scroll to the desired position after patching the form
-          window.scrollTo(0, 800);
+          // window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+          window.scrollTo(0,650);
         } else {
           console.warn('No test data found for the provided ID.');
         }
@@ -599,6 +595,7 @@ export class ApplicationsComponent implements OnInit {
   }
 
   patchTestForm(data: any): void {
+    this.isEditsMode = true;
     this.testForm.patchValue({
       testName: data.testName,
       testType: data.testType,
@@ -609,12 +606,63 @@ export class ApplicationsComponent implements OnInit {
     });
   }
   
-  
-
-
-
-
-  
+  deleteTest(id: number): void{
+    this.agentService.deleteTestById(id).subscribe({
+      next: () => {
+          console.log("test deleted successfullyyyyyyyyy")
+        // Refresh the grid
+       
+        this.testByStudId();
+      },
+      error: (error) => {
+        console.error('Error deleting test  entry:', error);
+        
+      },
+    }); 
   }
 
+// dialog
+openConfirmationDialog(): void {
+  const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    width: '400px',
+    data: { message: 'Do you want to finalize your application?' },
+  });
+
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result) {
+      this.applyApplication(); // Call API if user confirms
+    }
+  });
+}
+
+applyApplication(): void {
+  // Define the payload as required by the backend API
+  const applicationData = {
+    studentId:  this.selectedId || 0, // Replace with actual studentId value
+    programId: this.selectedRecord.programId || 0, // Replace with actual programId value
+    sessionId: this.selectedRecord.sessionId || 0, // Replace with actual sessionId value
+  };
+
+  // Log payload for debugging
+  console.log('Sending application payload:', applicationData);
+
+  // Call the agent service to finalize the application
+  this.agentService.finalizeApplication(applicationData).subscribe({
+    next: (response) => {
+      console.log('Application finalized successfully:', response);
+      alert('Your application has been successfully processed.');
+      this.router.navigate(['/agent/application-list']);
+    },
+    error: (error) => {
+      console.error('Error finalizing application:', error);
+      alert('Failed to process the application. Please try again.');
+    },
+  });
+}
+
+}
+
+
+  
+ 
 

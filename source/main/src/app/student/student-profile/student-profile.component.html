@@ -80,16 +80,7 @@
                         <br>
                         <p class="text-muted">{{student.mailingAddress}}</p>
                       </div>
-                      <!-- <div class="col-md-3 col-6">
-                        <strong>Agent Id</strong>
-                        <br>
-                        <p class="text-muted">{{student.agentId}}</p>
-                      </div> -->
-                      <!-- <div class="col-md-3 col-6">
-                        <strong>Id</strong>
-                        <br>
-                        <p class="text-muted">{{student.id}}</p>
-                      </div> -->
+                      
                       <div class="col-md-3 col-6">
                         <strong>Citizenship</strong>
                         <br>
@@ -185,36 +176,8 @@
            
 
 
-<!-- note sub component -->
-  <!-- note  sub component -->
-     <!-- note  sub component -->
 
-     <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon class="example-tab-icon msr-2">note</mat-icon>
-        Note
-      </ng-template>
-      <div class="header">
-        <h2>
-          <strong>Add Note</strong>
-        </h2>
-      </div>
-      <div class="body">
-        <div class="example-container">
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Note</mat-label>
-            <textarea matInput></textarea>
-          </mat-form-field>
-          
-          <p class="text-muted">Comments will be emailed to the admission executive.</p>
-          
-          <div class="col-md-12">
-            <button mat-raised-button color="primary">Add Note</button>
-          </div>
-        </div>
-      </div>
-       </mat-tab>
-
+     
    <!-- test sub component -->
           <!-- test sub component -->
                <!-- test sub component -->
@@ -222,73 +185,127 @@
                <mat-tab>
                 <ng-template mat-tab-label>
                   <mat-icon class="example-tab-icon msr-2">add</mat-icon>
-                  Test
+                   Test
                 </ng-template>
-                <div class="header">
-                  <h2>
-                    <strong>Add Test</strong>
-                  </h2>
-                </div>
-                <div class="body">
-                  <div class="example-container">
-                    <div class="row">
-                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                        <mat-form-field class="example-full-width" appearance="fill">
-                          <mat-label>Test Name</mat-label>
-                          <input matInput>
-                          <mat-icon matSuffix>assignment</mat-icon>
-                        </mat-form-field>
+                <div class="row " *ngIf="testByStudentId$ | async as response">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                      <div class="header d-flex align-items-center justify-content-between">
+                        <h2>Test Details</h2>
+                        <button mat-raised-button color="primary" (click)="onAddEducation()">Add</button>
                       </div>
-              
-                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                        <mat-form-field class="example-full-width" appearance="fill">
-                          <mat-label>Test Type</mat-label>
-                          <input matInput>
-                          <mat-icon matSuffix>category</mat-icon>
-                        </mat-form-field>
+                      <div class="body">
+                        <div class="example-container">
+                      <table class="table table-hover table-responsive">
+                        <thead class="thead-light">
+                          <tr>
+                            <th>Test Name</th>
+                            <th>Test Type</th>
+                            <th>Subject</th>
+                            <th>Test Date</th>
+                            <th>Duration</th>
+                            <th>Score</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let test of response; let i = index">
+                            <td data-label="Test Name">{{ test.testName }}</td>
+                            <td data-label="Test Type">{{ test.testType }}</td>
+                            <td data-label="Subject">{{ test.subject }}</td>
+                            <td data-label="Test Date">{{ test.testDate }}</td>
+                            <td data-label="Duration">{{ test.testDuration }}</td>
+                            <td data-label="Score">{{ test.score }}</td>
+                            <td data-label="Actions">
+                              <button mat-icon-button color="primary" (click)="updateTest(test.id)">
+                                <mat-icon><app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons></mat-icon>
+                              </button>
+                              <button mat-icon-button color="warn" (click)="deleteTest(test.id)">
+                                <mat-icon><app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons></mat-icon>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                       </div>
-              
-                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                        <mat-form-field class="example-full-width" appearance="fill">
-                          <mat-label>Subject</mat-label>
-                          <input matInput>
-                          <mat-icon matSuffix>subject</mat-icon>
-                        </mat-form-field>
                       </div>
-              
-                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                        <mat-form-field class="example-full-width" appearance="fill">
-                          <mat-label>Test Date</mat-label>
-                          <input matInput type="date">
-                          <mat-icon matSuffix>event</mat-icon>
-                        </mat-form-field>
-                      </div>
-              
-                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                        <mat-form-field class="example-full-width" appearance="fill">
-                          <mat-label>Test Duration (in minutes)</mat-label>
-                          <input matInput type="number">
-                          <mat-icon matSuffix>timer</mat-icon>
-                        </mat-form-field>
-                      </div>
-              
-                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                        <mat-form-field class="example-full-width" appearance="fill">
-                          <mat-label>Score</mat-label>
-                          <input matInput type="number">
-                          <mat-icon matSuffix>grade</mat-icon>
-                        </mat-form-field>
-                      </div>
-              
-                    <div class="col-md-12">
-                     
-                      <button mat-raised-button color="primary" class="me-2">Save</button>
-                      <button mat-raised-button color="warn">Reset</button>
                     </div>
                   </div>
                 </div>
+              
+                
+              
+               
+                <div>
+                  <div class="header">
+                    <h2>
+                      <strong>Add Test</strong>
+                    </h2>
+                  </div>
+                  <div>
+                    <div class="body">
+                      <div class="example-container">
+                      <form [formGroup]="testForm" (ngSubmit)="onTestSubmit()">
+                        <div class="row">
+                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <mat-label>Test Name</mat-label>
+                              <input matInput formControlName="testName">
+                              <mat-icon matSuffix>assignment</mat-icon>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <mat-label>Test Type</mat-label>
+                              <input matInput formControlName="testType">
+                              <mat-icon matSuffix>category</mat-icon>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <mat-label>Subject</mat-label>
+                              <input matInput formControlName="subject">
+                              <mat-icon matSuffix>subject</mat-icon>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <mat-label>Test Date</mat-label>
+                              <input matInput type="date" formControlName="testDate">
+                              <mat-icon matSuffix>event</mat-icon>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <mat-label>Test Duration (in minutes)</mat-label>
+                              <input matInput type="number" formControlName="testDuration">
+                              <mat-icon matSuffix>timer</mat-icon>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <mat-label>Score</mat-label>
+                              <input matInput type="number" formControlName="score">
+                              <mat-icon matSuffix>grade</mat-icon>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="button-container">
+                          <button mat-raised-button color="warn" class="me-2" type="button">
+                            Back
+                          </button>
+                          <button mat-raised-button color="primary" class="me-2" type="submit" >
+                            {{ isEditsMode ? 'Update' : 'Next' }}
+                          </button>
+                        </div>
+                        
+                      </form>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </mat-tab>
+              
               
       <!-- education sub component -->
            
@@ -297,6 +314,66 @@
           <mat-icon class="example-tab-icon msr-2">school</mat-icon>
           Education
         </ng-template>
+        <!-- Display Education Grid -->
+        <div class="row mt-4"
+        *ngIf="educationEntries$ | async as response">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div
+              class="header mb-3 d-flex align-items-center justify-content-between">
+              <h2>Education Details</h2>
+              <button mat-raised-button color="primary"
+                (click)="onAddEducation()">
+                Add
+              </button>
+            </div>
+
+            <!-- Education Grid Table -->
+            <!-- Education Grid Table -->
+            <table class="table table-hover table-responsive">
+              <thead class="thead-light">
+                <tr>
+                  <th>Country</th>
+                  <th>Highest Level of Education</th>
+                  <th>Grading Scheme</th>
+                  <th>Grade Average</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Use async pipe to subscribe to educationEntries$ and access inner array -->
+                <tr
+                  *ngFor="let education of (educationEntries$ | async)[0]; let i = index">
+                  <td data-label="Country of Education">{{
+                    education.countryOfEducation }}</td>
+                  <td data-label="Higher Level of Education">{{
+                    education.higherLevelOfEducation
+                    }}</td>
+                  <td data-label="Grading Scheme">{{
+                    education.gradingScheme }}</td>
+                  <td data-label="Grading Average">{{
+                    education.gradingAverage }}</td>
+                  <td data-label="Actions">
+
+                    <button mat-icon-button color="primary"
+                      (click)="updateEducation(education.id)">
+                      <mat-icon>
+                        <app-feather-icons [icon]="'edit'"
+                          [class]="'tbl-fav-edit'"></app-feather-icons></mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn"
+                      (click)="deleteEducation(education.id)">
+                      <app-feather-icons [icon]="'trash-2'"
+                        [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
         <div class="header">
           <h2>
             <strong>Add Education</strong>
@@ -304,50 +381,97 @@
         </div>
         <div class="body">
           <div class="example-container">
-            <div class="row">
-              <!-- Country of Education -->
-              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Country of Education</mat-label>
-                  <input matInput>
-                  <mat-icon matSuffix>public</mat-icon>
-                </mat-form-field>
+             <div class="row">
+              <form [formGroup]="educationForm"
+              (ngSubmit)="onEducationNext()">
+              <div class="row">
+                <!-- Country of Education -->
+                <div
+                  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width"
+                    appearance="fill">
+                    <mat-label>Country of Education</mat-label>
+                    <mat-select formControlName="countryOfEducation">
+                      <mat-option *ngFor="let country of countries"
+                        [value]="country.countryName">
+                        {{ country.countryName }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-icon matSuffix>public</mat-icon>
+                  </mat-form-field>
+                </div>
+
+                <!-- Citizenship Field -->
+                <!-- <div class="info-field">
+              <label>Citizenship</label>
+              <p *ngIf="!iseditingmode">{{ studentData?.citizenship
+                }}</p>
+              <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                class="full-width">
+                <mat-select formControlName="citizenship">
+                  <mat-option *ngFor="let country of countries"
+                    [value]="country.countryName">
+                    {{ country.countryName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div> -->
+
+                <!-- Highest Level of Education -->
+                <div
+                  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width"
+                    appearance="fill">
+                    <mat-label>Highest Level of Education</mat-label>
+                    <input matInput
+                      formControlName="higherLevelOfEducation" />
+                    <mat-icon matSuffix>school</mat-icon>
+                  </mat-form-field>
+                </div>
+
+                <!-- Grading Scheme -->
+                <div
+                  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width"
+                    appearance="fill">
+                    <mat-label>Grading Scheme</mat-label>
+                    <input matInput formControlName="gradingScheme" />
+                    <mat-icon matSuffix>assignment</mat-icon>
+                  </mat-form-field>
+                </div>
+
+                <!-- Grade Average -->
+                <div
+                  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width"
+                    appearance="fill">
+                    <mat-label>Grade Average</mat-label>
+                    <input matInput
+                      formControlName="gradingAverage" />
+                    <mat-icon matSuffix>bar_chart</mat-icon>
+                  </mat-form-field>
+                </div>
               </div>
-      
-              <!-- Highest Level of Education -->
-              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Highest Level of Education</mat-label>
-                  <input matInput>
-                  <mat-icon matSuffix>school</mat-icon>
-                </mat-form-field>
+
+              <p class="text-muted">*10th and 12* Grade details are
+                mandatory</p>
+
+              <div class="button-container">
+                <button mat-raised-button 
+                  color="warn" class="me-2">
+                  Back
+                </button>
+                <button mat-raised-button
+                  color="primary"
+                  type="submit">
+                  {{ isEdittingMode ? 'Update' : 'Submit' }}
+                </button>
+
               </div>
+            </form>
+             </div>
       
-              <!-- Grading Scheme -->
-              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Grading Scheme</mat-label>
-                  <input matInput>
-                  <mat-icon matSuffix>assignment</mat-icon>
-                </mat-form-field>
-              </div>
-      
-              <!-- Grade Average -->
-              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Grade Average</mat-label>
-                  <input matInput>
-                  <mat-icon matSuffix>bar_chart</mat-icon>
-                </mat-form-field>
-              </div>
-            </div>
-      
-            <p class="text-muted">*10th and 12* Grade details are mandatory</p>
-      
-            <div class="col-md-12">
-              <button mat-raised-button color="primary" class="me-2">Add More Education</button>
-              <button mat-raised-button color="accent">Update</button>
-            </div>
+           
           </div>
         </div>
       </mat-tab>
@@ -380,6 +504,7 @@
               </div>
             
             </mat-tab>
+
           </mat-tab-group>
         </div>
       </div>

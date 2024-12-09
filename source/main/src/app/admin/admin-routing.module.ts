@@ -20,92 +20,99 @@ import { DropdownComponent } from './dropdown/dropdown.component';
 import { PermissionsComponent } from './permissions/permissions.component';
 const routes: Routes = [
   {
-    path: 'adminusers',
-    component: AdminusersComponent,
-    // canActivate: [AuthGuard],  // Apply AuthGuard
-    resolve: {
-      users: UserResolver
-    }
-  },
-  {
-    path: 'documenttype',
-    component: DocumentTypeComponent,
-    canActivate: [AuthGuard]   // Apply AuthGuard
-  },
-  {
-    path: 'listusers',
-    component: ListusersComponent,
-    canActivate: [AuthGuard]   // Apply AuthGuard
-  },
-  {
-    path: 'pagination',
-    component: PaginationComponent,
-    canActivate: [AuthGuard]   // Apply AuthGuard
-  },
-  {
-    path: 'sorting',
-    component: SortingComponent,
-    canActivate: [AuthGuard]   // Apply AuthGuard
-  },
-  {
-    path: 'view-users',
-    component: ViewUserComponent,
-    resolve: {
-      user: UserResolver,
-    }
-    // No AuthGuard here
-  },
-  {
-    path: 'addagents',
-    component: AddAgentComponent,
-    canActivate: [AuthGuard]   // Apply AuthGuard
-  },
-  {
-    path: 'listagents',
-    component: ListagentsComponent,
-    canActivate: [AuthGuard]   // Apply AuthGuard
-  },
-  {
-    path: 'listroles',
-    component: RolesComponent,
-    // canActivate: [AuthGuard]   // Apply AuthGuard
-  },
-  {
-    path: 'listrole',
-    component: ListRolesComponent,
-    canActivate: [AuthGuard]   // Apply AuthGuard
-  },
-  {
-    path: 'consultancy',
-    component: RegisterConsultancyComponent,
-    // canActivate: [AuthGuard],  // Apply AuthGuard
-    resolve: {
-      consultancy: ConsultancyResolver,
-    },
-  },
-  {
-    path: 'consultancy-list',
-    component: ConsultancyListComponent,
-    canActivate: [AuthGuard]   // Apply AuthGuard
-  },
-  {
-    path: 'view-consultancy',
-    component: ViewConsultancyComponent,
-    resolve: {
-      consultancy: ConsultancyResolver,
-    }
-    // No AuthGuard here
-  },
-  {
-    path: 'dropdown',
-    component: DropdownComponent,
-    canActivate: [AuthGuard]   // Apply AuthGuard
-  },
-  {
-    path:'permissions',
-    component:PermissionsComponent
-
+    path: '',
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'adminusers',
+        component: AdminusersComponent,
+        // canActivate: [AuthGuard],  // Apply AuthGuard
+        resolve: {
+          users: UserResolver
+        }
+      },
+      {
+        path: 'documenttype',
+        component: DocumentTypeComponent,
+        // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path: 'listusers',
+        component: ListusersComponent,
+        // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path: 'pagination',
+        component: PaginationComponent,
+        // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path: 'sorting',
+        component: SortingComponent,
+        // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path: 'view-users',
+        component: ViewUserComponent,
+        resolve: {
+          user: UserResolver,
+        }
+        // No AuthGuard here
+      },
+      {
+        path: 'addagents',
+        component: AddAgentComponent,
+        // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path: 'listagents',
+        component: ListagentsComponent,
+        // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path: 'listroles',
+        component: RolesComponent,
+        // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path: 'listrole',
+        component: ListRolesComponent,
+        // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path: 'consultancy',
+        component: RegisterConsultancyComponent,
+        // canActivate: [AuthGuard],  // Apply AuthGuard
+        resolve: {
+          consultancy: ConsultancyResolver,
+        },
+      },
+      {
+        path: 'consultancy-list',
+        component: ConsultancyListComponent,
+        // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path: 'view-consultancy',
+        component: ViewConsultancyComponent,
+        resolve: {
+          consultancy: ConsultancyResolver,
+        }
+        // No AuthGuard here
+      },
+      {
+        path: 'dropdown',
+        component: DropdownComponent,
+        // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path:'permissions',
+        component:PermissionsComponent
+    
+      }
+    ]
   }
+ 
 ];
 
 
