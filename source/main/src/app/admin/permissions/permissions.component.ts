@@ -63,6 +63,7 @@ export class PermissionsComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.adminService.updatePermissions.subscribe(res => this.update$.next(true))
     this.permissionsForm = new FormGroup({
       modules: new FormArray([]),
     });

@@ -96,15 +96,15 @@
                     <td data-label="Phone No">{{ institute.phoneNo }}</td>
                     <td data-label="Actions">
                       <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.id]"
-                        matTooltip="View" (click)="onView()">
+                        matTooltip="View" (click)="onView()" *appPermissions="{feature:'InstituteList',action:'canView'}">
                         <mat-icon>visibility</mat-icon>
                       </button>
                       <button mat-icon-button color="primary"
-                        [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit">
+                        [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit" *appPermissions="{feature:'InstituteList',action:'canEdit'}">
                         <!-- <mat-icon>edit</mat-icon> -->
                         <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                       </button>
-                      <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)" matTooltip="Delete">
+                      <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)" matTooltip="Delete" *appPermissions="{feature:'InstituteList',action:'canDelete'}">
                         <!-- <mat-icon>delete</mat-icon> -->
                         <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                       </button>

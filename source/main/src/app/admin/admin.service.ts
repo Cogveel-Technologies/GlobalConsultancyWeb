@@ -37,6 +37,7 @@ export class AdminService {
   isEditMode: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
   sendConsultancyId: BehaviorSubject<number | string> = new BehaviorSubject<number | string>('')
   sendRoleId:BehaviorSubject<number|null> = new BehaviorSubject<number>(null)
+  updatePermissions: BehaviorSubject<boolean> = new BehaviorSubject(false)
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {
@@ -311,6 +312,7 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
   getSubmenu(){
     return this.http.get(`${this.apiUrl}/SubMenu/all`)
   }
+  
   
 }
 

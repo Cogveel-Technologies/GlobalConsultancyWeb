@@ -66,7 +66,7 @@ export class MyDialogComponentComponent implements OnInit {
       console.log(permissions);
       this.adminService.addPermissions(permissions).subscribe(res => {
         console.log(res);
-        this.dialogRef.close(); // Close the dialog after successful submission
+        this.dialogRef.close(this.adminService.updatePermissions.next(true)); 
       });
     } else {
       console.log('Form is invalid');

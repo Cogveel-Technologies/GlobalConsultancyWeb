@@ -87,15 +87,15 @@
                   <td data-label="State">{{ agent.agentPhone }}</td>
                   <td data-label="Registration No">{{ agent.agentEmail }}</td>
                   <td data-label="Actions">
-                    <button mat-icon-button [routerLink]="['/consultancy/agent-details', agent.id]" matTooltip="View">
+                    <button mat-icon-button [routerLink]="['/consultancy/agent-details', agent.id]" matTooltip="View" *appPermissions="{feature:'AgentList',action:'canView'}">
                       <mat-icon>visibility</mat-icon>
                     </button>
                     <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-agent', agent.id]"
-                      matTooltip="Edit">
+                      matTooltip="Edit" *appPermissions="{feature:'AgentList',action:'canEdit'}">
                       <!-- <mat-icon>edit</mat-icon> -->
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>
-                    <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)" matTooltip="Delete">
+                    <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)" matTooltip="Delete" *appPermissions="{feature:'AgentList',action:'canDelete'}">
                       <!-- <mat-icon>delete</mat-icon> -->
                       <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                     </button>
