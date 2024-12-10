@@ -66,7 +66,7 @@ export class ApplicationsComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
   ) {
-    this.initDocumentForm();
+   
     // Retrieve the selected ID in the constructor
     this.selectedId = this.agentService.getSelectedId();
     console.log('Selected ID:', this.selectedId);
@@ -84,7 +84,7 @@ export class ApplicationsComponent implements OnInit {
      this.fetchStudentEducation();
     
      this.testByStudId();
-    
+     this.initDocumentForm();
 
 
     
@@ -233,7 +233,7 @@ export class ApplicationsComponent implements OnInit {
   private patchForm() {
     if (this.studentData) {
       this.documentForm.patchValue({
-        studentName: this.selectedRecord.programName || '',
+        studentName: this.studentData.studentName || '',
         contactNo: this.studentData.contactNo || '',
       });
     }
@@ -281,7 +281,7 @@ export class ApplicationsComponent implements OnInit {
   onDocumentFormSubmit() {
     if (this.documentForm.valid && this.studentData) {
       const documentTypeId = this.documentForm.get('documentType')?.value;
-      const studentId = this.studentData.id;
+      const studentId = this.selectedId;
       const remarks = this.documentForm.get('remarks')?.value;
       const file = this.documentForm.get('file')?.value;
       const uploadedBy = 'yourUserId'; // Replace with the actual user ID or username.
@@ -304,7 +304,9 @@ export class ApplicationsComponent implements OnInit {
           }
         );
       } else {
+        console.log(formData,"applicatiosss");
         this.agentService.submitStudentDocument(formData).subscribe(
+         
           response => {
             console.log('Submit Success', response);
             // window.location.reload();
