@@ -7,6 +7,7 @@ import { StudentApplicationComponent } from './student-application/student-appli
 import { StudentDocumentComponent } from './student-document/student-document.component';
 import { ComponentsModule } from '../shared/components/components.module';
 
+
 // import { CustomsortpaginationModule } from 'app/customsortpagination/customsortpagination.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {
@@ -23,6 +24,8 @@ import { SharedModule } from '@shared/shared.module';
 
 import { AdmissionComponent } from './admission/admission.component';
 import { ApplicationsComponent } from './applications/applications.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { ApplicationListComponent } from './application-list/application-list.component';
 
 
 
@@ -37,6 +40,8 @@ import { ApplicationsComponent } from './applications/applications.component';
    
     AdmissionComponent,
         ApplicationsComponent,
+        ConfirmationDialogComponent,
+        ApplicationListComponent,
       
     
   

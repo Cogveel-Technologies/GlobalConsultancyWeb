@@ -10,6 +10,7 @@ import { ViewStudentComponent } from './list-students/view-student/view-student.
 import { AuthGuard } from '@core/guard/auth.guard';
 import { AdmissionComponent } from './admission/admission.component';
 import { ApplicationsComponent } from './applications/applications.component';
+import { ApplicationListComponent } from './application-list/application-list.component';
 
 
 
@@ -41,6 +42,11 @@ const routes: Routes = [
   {
     path: 'applications',
     component: ApplicationsComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'application-list',
+    component: ApplicationListComponent,
     // canActivate: [AuthGuard]
   },
   {

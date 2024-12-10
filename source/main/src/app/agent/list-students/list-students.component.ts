@@ -101,6 +101,7 @@ export class ListstudentsComponent implements OnInit {
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
         return this.agentService.getStudentsList({
+          isAdmin: false,
           limit: pageSize,
           orderBy: sortField,
           sortExpression: sortDirection,

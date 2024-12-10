@@ -4,6 +4,7 @@ import { Observable, of, BehaviorSubject, throwError } from 'rxjs'; // Import th
 import { Student } from './models/student.model';
 import { tap, map, catchError } from 'rxjs/operators';
 import { StudentDocument } from './models/studentDocument.model';
+import { ApplicationModel } from './models/applicationModel';
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -22,9 +23,7 @@ export interface PaginatedResponse<T> {
 export class AgentService {
   private apiUrl = 'https://consultancy.180-179-213-167.plesk.page/api';
 
-  // https://consultancy.180-179-213-167.plesk.page/swagger/index.html
-  // private currentPageSubject = new BehaviorSubject<number>(1);
-  // private pageSizeSubject = new BehaviorSubject<number>(10);
+ 
 
   constructor(private http: HttpClient) {}
 
@@ -36,7 +35,91 @@ export class AgentService {
   private showOnlyApplyButton = false;
   private selectedId: any;
 
+  //application api
+  finalizeApplication(applicationData: any): Observable<any> {
+    const url = `${this.apiUrl}/StudentApplication`;
   
+    return this.http.post<any>(url, applicationData).pipe(
+      tap((response) => {
+        console.log('API Response:', response);
+      }),
+      catchError((error) => {
+        console.error('API Error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+  
+  
+  // getApplications(params: { 
+  //   limit: number; 
+  //   orderBy: string; 
+  //   sortExpression: string; 
+  //   currentPage: number; 
+  //   searchText?: string; // Updated to match the `getStudentsList` API
+  //   isDeleted?: boolean; 
+  //   isAdmin: boolean; // Explicitly included as in `getStudentsList`
+  // }): Observable<PaginatedResponse<ApplicationModel>> {
+  //   // Construct the base URL with consistent parameter naming
+  //   let url = `${this.apiUrl}/StudentApplication?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}&isAdmin=${params.isAdmin}`;
+    
+  //   // Append optional parameters if provided
+  //   if (params.searchText) {
+  //     url += `&searchText=${params.searchText}`;
+  //   }
+  //   if (params.isDeleted !== undefined) {
+  //     url += `&isDeleted=${params.isDeleted}`;
+  //   }
+  
+  //   return this.http.get<PaginatedResponse<ApplicationModel>>(url).pipe(
+  //     // Debugging: Log the constructed URL and response
+  //     tap(() => console.log('API URL:', url)),
+  //     tap(response => console.log('Fetched applications:', response)),
+  //     catchError(this.handleError<PaginatedResponse<ApplicationModel>>('getApplications', {
+  //       data: [],
+  //       pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+  //       status: 0,
+  //       message: ''
+  //     }))
+  //   );
+  // }
+   // Get a list of students with pagination, sorting, and searching
+   getApplications(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean, isAdmin: boolean }): Observable<PaginatedResponse<ApplicationModel>> {
+  let url = `${this.apiUrl}/StudentApplication?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}&isAdmin=${params.isAdmin}`;
+  if (params.searchTerm) {
+      url += `&searchText=${params.searchTerm}`;
+  }
+  if (params.isDeleted !== undefined) {
+      url += `&isDeleted=${params.isDeleted}`;
+  }
+
+  return this.http.get<PaginatedResponse<ApplicationModel>>(url).pipe(
+      tap(response => console.log('Fetched Applications:', response)),  // Log the full response
+      catchError(this.handleError<PaginatedResponse<ApplicationModel>>('getApplications', {
+          data: [], 
+          pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+          status: 0, 
+          message: '' 
+      }))
+  );
+}
+
+  
+//  delete application
+  deleteApplication(id: number): Observable<any> {
+    const apiUrl = `${this.apiUrl}/StudentApplication/byId?Id=${id}`;
+    return this.http.delete(apiUrl).pipe(
+      tap((response) => {
+        console.log('Delete API response:', response);
+      })
+    );
+  }
+  
+
+
+
+
+  // test rralted apis
    
 
   addTest(testData: any): Observable<any> {
@@ -44,11 +127,7 @@ export class AgentService {
     return this.http.post<any>(url, testData);
   }
   
-  // getAllTests(): Observable<any> {
-  //   const url = `${this.apiUrl}/Test/all`;
-  //   return this.http.get<any>(url);
-  // }
-
+ 
   
   
   getTestByStudentId(studentId: number): Observable<any> {
@@ -77,12 +156,30 @@ export class AgentService {
     );
   }
   
+  updateTest(updateTestId: number, updatedData: any): Observable<any>{
+    const apiUrl = `${this.apiUrl}/Test/${updateTestId}`;
+    return this.http.put<any>(apiUrl, updatedData).pipe(
+      tap((response) => {
+        console.log('Update test API response:', response);
+      }),
+      catchError((error) => {
+        console.error('Error updating test entry:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+ 
+
+  deleteTestById(id: number): Observable<any> {
+    const apiUrl = `${this.apiUrl}/Test/byId?Id=${id}`;
+    return this.http.delete(apiUrl).pipe(
+      tap((response) => {
+        console.log('Test API response:', response);
+      })
+    );
+  }
   
-
-
-
-
-
 
 
 
@@ -180,27 +277,53 @@ export class AgentService {
     console.log(studentData, "student data");
     return this.http.post(url, studentData);
   }
+ 
+   // Get a list of students with pagination, sorting, and searching
+  //  getStudentsList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean, }): Observable<PaginatedResponse<Student>> {
+  //   let url = `${this.apiUrl}/Student?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
+  //   if (params.searchTerm) {
+  //     url += `&searchText=${params.searchTerm}`;
+  //   }
+  //   if (params.isDeleted !== undefined) {
+  //     url += `&isDeleted=${params.isDeleted}`;
+  //   }
 
-  // Get a list of students with pagination, sorting, and searching
-  getStudentsList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean }): Observable<PaginatedResponse<Student>> {
-    let url = `${this.apiUrl}/Student?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
-    if (params.searchTerm) {
+  //   return this.http.get<PaginatedResponse<Student>>(url).pipe(
+  //     tap(response => console.log('Fetched students:', response)),  // Log the full response
+  //     catchError(this.handleError<PaginatedResponse<Student>>('getStudentsList', {
+  //       data: [], 
+  //       pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+  //       status: 0, 
+  //       message: '' 
+  //     }))
+  //   );
+  // }
+
+
+
+
+
+ // Get a list of students with pagination, sorting, and searching
+getStudentsList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean, isAdmin: boolean }): Observable<PaginatedResponse<Student>> {
+  let url = `${this.apiUrl}/Student?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}&isAdmin=${params.isAdmin}`;
+  if (params.searchTerm) {
       url += `&searchText=${params.searchTerm}`;
-    }
-    if (params.isDeleted !== undefined) {
+  }
+  if (params.isDeleted !== undefined) {
       url += `&isDeleted=${params.isDeleted}`;
-    }
+  }
 
-    return this.http.get<PaginatedResponse<Student>>(url).pipe(
+  return this.http.get<PaginatedResponse<Student>>(url).pipe(
       tap(response => console.log('Fetched students:', response)),  // Log the full response
       catchError(this.handleError<PaginatedResponse<Student>>('getStudentsList', {
-        data: [], 
-        pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
-        status: 0, 
-        message: '' 
+          data: [], 
+          pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+          status: 0, 
+          message: '' 
       }))
-    );
-  }
+  );
+}
+
   
   //kkkkkkkkkk
  
