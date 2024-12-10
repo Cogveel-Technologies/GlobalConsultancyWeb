@@ -233,13 +233,18 @@ export class AgentService {
     );
   }
   
+  
   getEducationEntriesByStudentId(studentId: number): Observable<any> {
     const apiUrl = `${this.apiUrl}/Education/studentId?studentId=${studentId}`;
     return this.http.get(apiUrl).pipe(
+      // map(res => res['data']),
+
       tap((response) => {
         console.log('Education API response:', response);
       })
+      
     );
+
   }
   
 
