@@ -36,6 +36,7 @@ import { GlobalErrorHandler } from './global-error-handler/global-error-handler'
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MY_FORMATS } from './date-formats';
+import { PermissionsDirective } from './directives/permissions.directive';
 
 
 // import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -64,7 +65,6 @@ export function createTranslateLoader(http: HttpClient) {
     AgentModule,
     LoadingBarRouterModule,
     NgScrollbarModule,
-
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

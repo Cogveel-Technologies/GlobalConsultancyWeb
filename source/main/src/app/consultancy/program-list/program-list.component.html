@@ -35,7 +35,7 @@
                             <ul class="tbl-export-btn">
                                 <li class="tbl-header-btn">
                                     <div class="m-l-10" matTooltip="ADD">
-                                        <button mat-mini-fab color="primary" (click)="addProgram()">
+                                        <button mat-mini-fab color="primary" (click)="addProgram()" *appPermissions="{feature:'Program',action:'canAdd'}">
                                             <mat-icon class="col-white">add</mat-icon>
                                         </button>
                                     </div>
@@ -94,18 +94,18 @@
                                     <td data-label="Actions">
                                         <button mat-icon-button
                                             [routerLink]="['/consultancy/program-details', program.id]"
-                                            matTooltip="View">
+                                            matTooltip="View" *appPermissions="{feature:'Program',action:'canView'}">
                                             <mat-icon>visibility</mat-icon>
                                         </button>
                                         <button mat-icon-button color="primary"
-                                            [routerLink]="['/consultancy/edit-program', program.id]" matTooltip="Edit">
+                                            [routerLink]="['/consultancy/edit-program', program.id]" matTooltip="Edit" *appPermissions="{feature:'Program',action:'canEdit'}">
                                             <!-- <mat-icon>edit</mat-icon> -->
                                             <app-feather-icons [icon]="'edit'"
                                                 [class]="'tbl-fav-edit'"></app-feather-icons>
 
                                         </button>
                                         <button mat-icon-button color="warn" (click)="deleteProgram(program.id)"
-                                            matTooltip="Delete">
+                                            matTooltip="Delete" *appPermissions="{feature:'Program',action:'canDelete'}">
                                             <!-- <mat-icon>delete</mat-icon> -->
                                             <app-feather-icons [icon]="'trash-2'"
                                                 [class]="'tbl-fav-delete'"></app-feather-icons>

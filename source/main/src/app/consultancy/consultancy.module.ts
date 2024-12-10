@@ -22,6 +22,7 @@ import { SessionListComponent } from './session-list/session-list.component';
 import { RegisterAgentComponent } from './register-agent/register-agent.component';
 import { AgentListComponent } from './agent-list/agent-list.component';
 import { AgentAllDetailsComponent } from './agent-all-details/agent-all-details.component';
+import { PermissionsDirective } from 'app/directives/permissions.directive';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { AgentAllDetailsComponent } from './agent-all-details/agent-all-details.
     RegisterAgentComponent,
     AgentListComponent,
     AgentAllDetailsComponent,
+    PermissionsDirective
   ],
   imports: [
     SharedModule,

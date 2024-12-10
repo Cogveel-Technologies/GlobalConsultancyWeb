@@ -79,10 +79,18 @@ export class ProgramAllDetailsComponent {
     }
   }
 
-  onEditDocument(id:number,docType:string) {
-    this.documentName.setValue(docType)
-    this.editModeMap.set(id, true);
+  onEditDocument(id: number, docType: string) {
+    // Set the clicked document to edit mode
+    this.editModeMap.clear(); // Reset all documents
+    this.editModeMap.set(id, true); // Set the clicked document to edit mode
+  
+    // Set the value of the input to the current document type
+    this.documentName.setValue(docType);
   }
+  
+  
+  
+  
 
   onUpdate(id:number){
     const updatedDetails = {

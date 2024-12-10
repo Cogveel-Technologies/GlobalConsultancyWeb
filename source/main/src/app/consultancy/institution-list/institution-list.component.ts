@@ -117,7 +117,6 @@ export class InstitutionListComponent {
                   }
                 }
               } else {
-                this.defaultData.IsAdmin = true
                 this.instituteConsultancyInputData = ''
                 this.defaultData.CountryId = String(pageRelated.countryId);
                 console.log(this.defaultData)

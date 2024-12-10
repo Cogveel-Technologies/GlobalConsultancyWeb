@@ -59,32 +59,42 @@
                     <div class="table-responsive">
                       <table class="table table-bordered table-hover mt-2">
                         <tbody>
-                          <tr *ngFor="let document of (documentTypes|async)">
+                          <tr *ngFor="let document of (documentTypes | async)">
                             <td class="d-flex justify-content-between align-items-center">
-                              <b  *ngIf="!editModeMap.get(document.id)">{{document.documentType}}</b>
-                              <mat-form-field  *ngIf="editModeMap.get(document.id)">
+                              <!-- Show document type if not in edit mode -->
+                              <b *ngIf="!editModeMap.get(document.id)">{{ document.documentType }}</b>
+            
+                              <!-- Show input field if in edit mode -->
+                              <mat-form-field *ngIf="editModeMap.get(document.id)">
                                 <input matInput [formControl]="documentName">
                               </mat-form-field>
+            
                               <div>
-                                <button mat-icon-button color="primary" matTooltip="Edit" (click)="onEditDocument(document.id, document.documentType)"
-                                *ngIf="!editModeMap.get(document.id)">
-                                  <!-- <mat-icon>edit</mat-icon> -->
+                                <!-- Edit button, visible only if not in edit mode -->
+                                <button mat-icon-button color="primary" matTooltip="Edit" 
+                                        (click)="onEditDocument(document.id, document.documentType)" 
+                                        *ngIf="!editModeMap.get(document.id)">
                                   <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                                 </button>
-
-                                <button mat-icon-button color="warn" matTooltip="Delete" (click)="onDeleteDocument(document.id)"
-                                *ngIf="!editModeMap.get(document.id)">
-                                  <!-- <mat-icon>delete</mat-icon> -->
+            
+                                <!-- Delete button -->
+                                <button mat-icon-button color="warn" matTooltip="Delete" 
+                                        (click)="onDeleteDocument(document.id)" 
+                                        *ngIf="!editModeMap.get(document.id)">
                                   <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                                 </button>
-
-                                <button mat-icon-button color="primary" matTooltip="Save" (click)="onUpdate(document.id)"
-                                *ngIf="editModeMap.get(document.id)">
+            
+                                <!-- Save button, visible only if in edit mode -->
+                                <button mat-icon-button color="primary" matTooltip="Save" 
+                                        (click)="onUpdate(document.id)" 
+                                        *ngIf="editModeMap.get(document.id)">
                                   <app-feather-icons [icon]="'check'" [class]="'tbl-fav-check'"></app-feather-icons>
                                 </button>
-
-                                <button mat-icon-button color="warn" matTooltip="Cancel" (click)="onCancelEdit(document.id)"
-                                *ngIf="editModeMap.get(document.id)">
+            
+                                <!-- Cancel button -->
+                                <button mat-icon-button color="warn" matTooltip="Cancel" 
+                                        (click)="onCancelEdit(document.id)" 
+                                        *ngIf="editModeMap.get(document.id)">
                                   <app-feather-icons [icon]="'x'" [class]="'tbl-fav-close'"></app-feather-icons>
                                 </button>
                               </div>
@@ -97,6 +107,8 @@
                 </div>
               </div>
             </mat-tab>
+            
+                        
             <div class="container">
               <div class="row">
                 <div class="col-md-12">

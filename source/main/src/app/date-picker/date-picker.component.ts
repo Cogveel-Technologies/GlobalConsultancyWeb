@@ -113,16 +113,22 @@ export class DatePickerComponent {
   
   // Disable past dates in the date picker
   dateFilter = (date: Moment | null): boolean => {
-    return date ? moment(date).isSameOrAfter(moment().startOf('day')) : true;
+    if (!date) return false; // Prevent null dates
+    return date.isSameOrAfter(moment(), 'month'); // Compare at the month level
   };
 
-  setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
-    this.sendFromDate.next(normalizedMonthAndYear)
-    this.sendToDate.next(normalizedMonthAndYear)
-    const ctrlValue = this.date.value ?? moment();
-    ctrlValue.month(normalizedMonthAndYear.month());
-    ctrlValue.year(normalizedMonthAndYear.year());
-    this.date.setValue(ctrlValue);
-    datepicker.close();
-  }
+ 
+setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
+  // Emit the selected dates
+  this.sendFromDate.emit(normalizedMonthAndYear);
+  this.sendToDate.emit(normalizedMonthAndYear);
+
+  // Update the control value with the selected month and year
+  const ctrlValue = this.date.value ? this.date.value.clone() : moment();
+  ctrlValue.month(normalizedMonthAndYear.month());
+  ctrlValue.year(normalizedMonthAndYear.year());
+  this.date.setValue(ctrlValue);
+
+  datepicker.close();
+}
 }

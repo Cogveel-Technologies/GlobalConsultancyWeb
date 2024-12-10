@@ -10,7 +10,7 @@ import { ConsultancyService } from '../consultancy-services/consultancy.service'
 import { PageEvent } from '@angular/material/paginator';
 import { distinctUntilChanged } from 'rxjs';
 import { AdminService } from 'app/admin/admin.service';
-import { number } from 'echarts';
+
 
 
 
@@ -69,7 +69,6 @@ export class ProgramListComponent {
   }
 
   ngOnInit() {
-    console.log(this.roleName)
     // if superadmin has logged in
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true;

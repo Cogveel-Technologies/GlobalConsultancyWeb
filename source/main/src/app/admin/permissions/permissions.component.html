@@ -1,92 +1,94 @@
 <section class="content">
-    <div class="container-fluid">
-        <div class="block-header" *ngFor="let breadscrum of breadscrums">
-            <!-- breadcrumb -->
-            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items"
-                [active_item]="breadscrum.active"></app-breadcrumb>
-        </div>
-
-        <div class="card p-4">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <mat-form-field class="w-100 mb-0">
-                        <mat-label>Role</mat-label>
-                        <mat-icon matPrefix>admin_panel_settings</mat-icon>
-                        <mat-select [formControl]="roles" required (selectionChange)="onRoleChange($event.value)">
-                            <mat-option [value]="'all'">Select a Role</mat-option>
-                            <mat-option *ngFor="let role of (allRoles | async)" [value]="role.id">
-                                {{role.roleName}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
-                  </div>
-            </div>
-        </div>
-
-        <form [formGroup]="permissionsForm" (ngSubmit)="onSubmitPermissions()">
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="body table-responsive">
-                            <b class="table-heading">Admin Permissions Dashboard</b>
-                            <table class="table table-hover table-responsive">
-                                <thead>
-                                    <tr>
-                                        <th>Module</th>
-                                        <th>Add</th>
-                                        <th>Edit</th>
-                                        <th>Delete</th>
-                                        <th>View</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody formArrayName="modules" *ngIf="isDataLoaded">
-                                    <tr *ngFor="let module of permissionsForm.get('modules')['controls'];let i = index" [formGroupName]="i">
-                                        <td data-label="Role">{{ module.get('moduleName').value }}</td>
-                                      <td data-label="Add">
-                                        <input type="checkbox" formControlName="add" />
-                                      </td>
-                                      <td data-label="Edit">
-                                        <input type="checkbox" formControlName="edit" />
-                                      </td>
-                                      <td data-label="Delete">
-                                        <input type="checkbox" formControlName="delete" />
-                                      </td>
-                                      <td data-label="View">
-                                        <input type="checkbox" formControlName="view" />
-                                      </td>
-                                      <td data-label="Actions">
-                                        <button mat-icon-button color="primary" matTooltip="Edit">
-                                          <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                                        </button>
-                                        <button mat-icon-button color="warn" matTooltip="Delete">
-                                          <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                                        </button>
-                                      </td>
-                                    </tr>
-                                    <tr *ngIf="permissionsForm.get('modules')['controls'].length === 0">
-                                      <td colspan="6">No modules found</td>
-                                    </tr>
-                                  </tbody>
-                            </table>
-
-                            <!-- Pagination Component -->
-                            <app-pagination [pageSize]="defaultData.pageSize" (pageChange)="onPageChange($event)"
-                                [length]="records" [pageIndex]="currentPageIndex">
-                            </app-pagination>
-
-                            <!-- Submit Button for Permissions Form -->
-                            <div class="d-flex justify-content-end mt-4">
-                                <button mat-raised-button color="primary" type="submit"
-                                    [disabled]="!roleSelected">Submit Permissions</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+  <div class="container-fluid">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active"></app-breadcrumb>
     </div>
+
+    <div class="card p-4">
+      <div class="row g-3 permissions-container">
+        <div class="col-md-4">
+          <app-searchable-dropdown [options]="allRoles" [displayField]="'roleName'" (selectionChange)="onRoleChange($event)" [placeHolder]="'Role'"></app-searchable-dropdown>
+        </div>
+        <div class="col-md-2">
+          <button mat-mini-fab color="primary" (click)="openDialog()" [disabled]="!roleSelected">
+            <mat-icon class="col-white">add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="permissionsForm">
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="body table-responsive">
+              <b class="table-heading">Admin Permissions Dashboard</b>
+              <table class="table table-hover table-responsive">
+                <thead>
+                  <tr>
+                    <th>Menu</th>
+                    <th>Add</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    <th>View</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="modules" >
+                  <tr *ngFor="let module of modules.controls; let i = index" [formGroupName]="i">
+                    <!-- <td data-label="Module">{{ module.get('name').value }}</td> -->
+                    <td data-label="Menu">
+                      {{ module.get('subMenuName')?.value || 'No Name' }}
+                    </td>
+                    <td data-label="Add">
+                      <mat-checkbox formControlName="canAdd"></mat-checkbox>
+                    </td>
+                    <td data-label="Edit">
+                      <mat-checkbox formControlName="canEdit"></mat-checkbox>
+                    </td>
+                    <td data-label="Delete">
+                      <mat-checkbox formControlName="canDelete"></mat-checkbox>
+                    </td>
+                    <td data-label="View">
+                      <mat-checkbox formControlName="canView"></mat-checkbox>
+                    </td>
+                    <td data-label="Actions">
+                      <ng-container *ngIf="editedRowIndex === i; else defaultButtons">
+                        <!-- Save and Cancel Buttons -->
+                        <button mat-icon-button color="primary" matTooltip="Save" (click)="onEdit(module.value, i)">
+                          <mat-icon>done</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" matTooltip="Cancel" (click)="onCancelEdit()">
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      </ng-container>
+                      <ng-template #defaultButtons>
+                        <!-- Edit and Delete Buttons -->
+                        <button mat-icon-button color="primary" matTooltip="Edit" (click)="onEdit(module.value,i)">
+                          <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                        </button>
+                        <button mat-icon-button color="warn" matTooltip="Delete" (click)="onDelete(module.value.id)">
+                          <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                        </button>
+                      </ng-template>
+                    </td>
+                  </tr>
+                  <tr *ngIf="modules.controls.length === 0">
+                    <td colspan="6">No modules found</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Pagination Component -->
+                <!-- Show pagination only if institutesList data exists -->
+            <app-pagination  [pageSize]="defaultData.pageSize"
+              (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
+            </app-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </section>
