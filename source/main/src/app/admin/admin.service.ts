@@ -312,6 +312,16 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
   getSubmenu(){
     return this.http.get(`${this.apiUrl}/SubMenu/all`)
   }
+
+  /////////////////////////////////////// DROPDOWN API'S ////////////////////////////////////////////////
+
+  getDropDown(){
+    return this.http.get(`${this.apiUrl}/DropDownList/all`)
+  }
+
+  addDropDownValues(data:any){
+    return this.http.post(`${this.apiUrl}/DropDownListValues`,data)
+  }
   
   
 }
