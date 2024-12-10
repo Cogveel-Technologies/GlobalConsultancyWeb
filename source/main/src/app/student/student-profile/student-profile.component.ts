@@ -80,12 +80,12 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
    
 
     this.testForm = this.fb.group({
-      testName: ['', Validators.required],
-      testType: ['', Validators.required],
-      subject: ['', Validators.required],
-      testDate: ['', Validators.required],
-      testDuration: ['', Validators.required],
-      score: ['', Validators.required],
+      testName: [],
+      testType: [],
+      subject: [],
+      testDate: [],
+      testDuration: [],
+      score: [],
     });
 
     this.educationForm = this.fb.group({
@@ -180,6 +180,7 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
             console.log('Test details updated successfully');
             this.testByStudId();
             this.onTestReset();
+            window.scrollTo(0, 0);
           },
           error: (error) => {
             console.error('Error updating test details:', error);
@@ -191,6 +192,7 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
             console.log('Test details added successfully');
             this.testByStudId();
             this.testForm.reset();
+            window.scrollTo(0, 0);
           },
           error: (error) => {
             console.error('Error saving test details:', error);
@@ -223,8 +225,9 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
         if (response?.data) {
           this.testData = response.data;
           console.log('Fetched test data:', this.testData);
-          this.patchTestForm(this.testData);
           window.scrollTo(0, 650);
+          this.patchTestForm(this.testData);
+         
         } else {
           console.warn('No test data found for the provided ID.');
         }
@@ -280,6 +283,7 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
               console.log('Education details updated successfully:', response);
               this.fetchStudentEducation(); // Refresh the grid
               this.resetForm();
+              window.scrollTo(0, 0);
             },
             error: (error) => {
               console.error('Error updating education details:', error);
@@ -292,6 +296,7 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
               console.log('Education details added successfully:', response);
               this.fetchStudentEducation(); // Refresh the grid
               this.resetForm();
+              window.scrollTo(0, 0);
             },
             error: (error) => {
               console.error('Error saving education details:', error);
@@ -385,6 +390,7 @@ patchEducationForm(data: any): void {
     gradingScheme: data.gradingScheme,
     gradingAverage: data.gradingAverage,
   });
+  
 }
 
 

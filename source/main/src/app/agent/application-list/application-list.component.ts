@@ -49,32 +49,31 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      if (params['origin'] === 'admission') {
-        this.breadcrumbs = [
-          {
-            title: 'Applications List',
-            items: ['Search'],
-            active: 'Applications',
-          },
-        ];
-      }
-    });
-
     // Combine search, pagination, and sorting
     this.applications$ = combineLatest([
       this.searchControl.valueChanges.pipe(
-        startWith(''),
-        throttleTime(300),
-        distinctUntilChanged(),
-        tap((term) => this.searchTermSubject.next(term))
+        startWith(''), // Ensure initial value is handled
+        throttleTime(50), // Debounce user input
+        distinctUntilChanged(), // Avoid duplicate API calls
+        tap((term) => {
+          console.log('Search term:', term); // Debug log
+          this.currentPage = 1; // Reset current page to 1
+          this.currentPageSubject.next(this.currentPage); // Emit the new current page
+        })
       ),
-      this.pageSizeSubject,
-      this.currentPageSubject,
-      this.sortFieldSubject,
-      this.sortDirectionSubject,
+      this.pageSizeSubject.asObservable(),
+      this.currentPageSubject.asObservable(),
+      this.sortFieldSubject.asObservable(),
+      this.sortDirectionSubject.asObservable(),
     ]).pipe(
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
+        console.log('Fetching applications with:', {
+          searchTerm,
+          pageSize,
+          currentPage,
+          sortField,
+          sortDirection,
+        }); // Debug log
         return this.agentService.getApplications({
           limit: pageSize,
           orderBy: sortField,
@@ -82,32 +81,32 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
           currentPage: currentPage,
           searchTerm: searchTerm,
           isDeleted: false,
+          isAdmin: false,
         });
       }),
       tap((response) => {
         this.totalApplications = response.pageInfo?.totalRecords || 0;
         this.totalPages = response.pageInfo?.totalPages || 1;
         this.currentPage = response.pageInfo?.currentPage || 1;
-
-        if (this.totalApplications === 0) {
-          console.log('No applications found.');
-        }
       }),
-      map((response) => response.data as ApplicationModel[]) // Explicitly type as ApplicationModel[]
+      map((response) => response.data as ApplicationModel[])
     );
-
-    // Trigger initial load
+  
+    // Trigger initial refresh
     this.refreshApplications();
   }
-
+  
+  
   refreshApplications() {
-    this.searchTermSubject.next(this.searchControl.value);
-    this.sortFieldSubject.next(this.sortField);
-    this.sortDirectionSubject.next(this.sortDirection);
     this.pageSizeSubject.next(this.pageSize);
     this.currentPageSubject.next(this.currentPage);
+    this.sortFieldSubject.next(this.sortField);
+    this.sortDirectionSubject.next(this.sortDirection);
+  
+    // Trigger search term update explicitly
+    this.searchTermSubject.next(this.searchControl.value || '');
   }
-
+  
   deleteApplication(applicationId: number) {
     this.agentService.deleteApplication(applicationId).subscribe({
       next: () => {

@@ -4,6 +4,7 @@ import { Observable, of, BehaviorSubject, throwError } from 'rxjs'; // Import th
 import { Student } from './models/student.model';
 import { tap, map, catchError } from 'rxjs/operators';
 import { StudentDocument } from './models/studentDocument.model';
+import { ApplicationModel } from './models/applicationModel';
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -49,20 +50,61 @@ export class AgentService {
     );
   }
   
-  // fetch applications
-  getApplications(params: any): Observable<any> {
-    // const apiUrl = `https://consultancy.180-179-213-167.plesk.page/api/StudentApplication`;
-    const url = `${this.apiUrl}/StudentApplication`;
-    return this.http.get<any>(url, { params }).pipe(
-      tap((response) => {
-        console.log('Applications fetched successfully:', response);
-      }),
-      catchError((error) => {
-        console.error('Error fetching applications:', error);
-        return throwError(() => error);
-      })
-    );
+  
+  // getApplications(params: { 
+  //   limit: number; 
+  //   orderBy: string; 
+  //   sortExpression: string; 
+  //   currentPage: number; 
+  //   searchText?: string; // Updated to match the `getStudentsList` API
+  //   isDeleted?: boolean; 
+  //   isAdmin: boolean; // Explicitly included as in `getStudentsList`
+  // }): Observable<PaginatedResponse<ApplicationModel>> {
+  //   // Construct the base URL with consistent parameter naming
+  //   let url = `${this.apiUrl}/StudentApplication?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}&isAdmin=${params.isAdmin}`;
+    
+  //   // Append optional parameters if provided
+  //   if (params.searchText) {
+  //     url += `&searchText=${params.searchText}`;
+  //   }
+  //   if (params.isDeleted !== undefined) {
+  //     url += `&isDeleted=${params.isDeleted}`;
+  //   }
+  
+  //   return this.http.get<PaginatedResponse<ApplicationModel>>(url).pipe(
+  //     // Debugging: Log the constructed URL and response
+  //     tap(() => console.log('API URL:', url)),
+  //     tap(response => console.log('Fetched applications:', response)),
+  //     catchError(this.handleError<PaginatedResponse<ApplicationModel>>('getApplications', {
+  //       data: [],
+  //       pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+  //       status: 0,
+  //       message: ''
+  //     }))
+  //   );
+  // }
+   // Get a list of students with pagination, sorting, and searching
+   getApplications(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean, isAdmin: boolean }): Observable<PaginatedResponse<ApplicationModel>> {
+  let url = `${this.apiUrl}/StudentApplication?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}&isAdmin=${params.isAdmin}`;
+  if (params.searchTerm) {
+      url += `&searchText=${params.searchTerm}`;
   }
+  if (params.isDeleted !== undefined) {
+      url += `&isDeleted=${params.isDeleted}`;
+  }
+
+  return this.http.get<PaginatedResponse<ApplicationModel>>(url).pipe(
+      tap(response => console.log('Fetched Applications:', response)),  // Log the full response
+      catchError(this.handleError<PaginatedResponse<ApplicationModel>>('getApplications', {
+          data: [], 
+          pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+          status: 0, 
+          message: '' 
+      }))
+  );
+}
+
+  
 //  delete application
   deleteApplication(id: number): Observable<any> {
     const apiUrl = `${this.apiUrl}/StudentApplication/byId?Id=${id}`;

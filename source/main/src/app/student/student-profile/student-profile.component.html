@@ -315,19 +315,20 @@
           Education
         </ng-template>
         <!-- Display Education Grid -->
-        <div class="row mt-4"
+        <div class="row"
         *ngIf="educationEntries$ | async as response">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
           <div class="card">
             <div
-              class="header mb-3 d-flex align-items-center justify-content-between">
+              class="header d-flex align-items-center justify-content-between">
               <h2>Education Details</h2>
               <button mat-raised-button color="primary"
                 (click)="onAddEducation()">
                 Add
               </button>
             </div>
-
+            <div class="body">
+              <div class="example-container">
             <!-- Education Grid Table -->
             <!-- Education Grid Table -->
             <table class="table table-hover table-responsive">
@@ -374,6 +375,8 @@
           </div>
         </div>
       </div>
+        </div>
+        </div>
         <div class="header">
           <h2>
             <strong>Add Education</strong>
