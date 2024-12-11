@@ -118,7 +118,7 @@ export class IntakesListComponent {
 
 
 
-    this.subscription.add(combineLatest([this.institute$, this.program$, this.session$, this.searchTerm$, this.pagination$, this.sorting$, this.search$]).pipe(
+    this.intakes = combineLatest([this.institute$, this.program$, this.session$, this.searchTerm$, this.pagination$, this.sorting$, this.search$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(),
       switchMap(([instituteId, programId, sessionId, searchTerm, pageRelated, sort, search]) => {
@@ -180,11 +180,11 @@ export class IntakesListComponent {
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field;
           console.log(this.defaultData)
-          return this.intakes = this.getIntakes(this.defaultData);
+          return this.getIntakes(this.defaultData);
         } else {
           return of([])
         }
-      })).subscribe())
+      }))
   }
 
   onSessionChange(event: any) {

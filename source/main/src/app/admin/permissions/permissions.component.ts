@@ -173,7 +173,8 @@ export class PermissionsComponent implements OnInit {
   openDialog(): void {
     this.adminService.sendRoleId.next(+this.defaultData.roleId)
     this.dialog.open(MyDialogComponentComponent, {
-      width: '400px', // Optional: Adjust width
+      width: '900px',
+      height: '550px', // Optional: Adjust width
       disableClose: false, // Optional: Close when clicking outside
       data: { message: 'This is a message passed to the dialog' } // Optional: Pass data
     });

@@ -104,7 +104,7 @@ export class ProgramListComponent {
       this.selectedOptions = state;
     }));
 
-    this.subscription.add(combineLatest([this.searchTerm$, this.pagination$, this.sorting$])
+    this.programs = combineLatest([this.searchTerm$, this.pagination$, this.sorting$])
       .pipe(throttleTime(1000, undefined, { leading: true, trailing: true }),
         distinctUntilChanged(),
         switchMap(([searchTerm, pageRelated, sorting]) => {
@@ -153,10 +153,10 @@ export class ProgramListComponent {
             this.defaultData.sortExpression = sorting.direction;
             this.defaultData.OrderBy = sorting.field;
             console.log(this.defaultData)
-            return this.programs = this.getPrograms(this.defaultData)
+            return this.getPrograms(this.defaultData)
           }
           return of([])
-        })).subscribe())
+        }))
 
     // if we click on view or edit pencil, and then navigate back
     // if (this.selectedOptions) {

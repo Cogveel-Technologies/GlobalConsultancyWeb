@@ -1,97 +1,105 @@
 .parent {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 12px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .parent strong {
-    font-size: 1.2rem;
-    color: #333;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+ 
+.parent strong {
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
+}
+ 
+.boxes-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 8px;
+  gap: 8px;
+}
+ 
+.boxes-container div {
+  text-align: center;
+  flex: 1;
+}
+ 
+.boxes-container div p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #555;
+}
+ 
+.boxes-container div input[type="checkbox"] {
+  margin-top: 4px;
+  transform: scale(1.1);
+  cursor: pointer;
+}
+ 
+mat-dialog-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  text-align: center;
+}
+ 
+mat-dialog-content {
+  padding: 12px;
+  max-width: 500px;
+  width: 100%;
+}
+ 
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px;
+}
+ 
+mat-dialog-actions .close-btn {
+  background-color: #f5f5f5;
+  color: #333;
+  font-weight: 400;
+  margin-right: 8px;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+ 
+mat-dialog-actions .close-btn:hover {
+  background-color: #e0e0e0;
+}
+ 
+mat-dialog-actions .submit-btn {
+  background-color: #3f51b5;
+  color: #fff;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+ 
+mat-dialog-actions .submit-btn:hover {
+  background-color: #2e3e8f;
+}
+ 
+form {
+  font-family: 'Roboto', sans-serif;
+}
+
+.action-buttons{
+  display: flex;
+  justify-content: flex-end;
+}
+ 
+@media (max-width: 768px) {
   .boxes-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
+    flex-direction: column;
+    gap: 4px;
   }
-  
+ 
   .boxes-container div {
-    text-align: center;
-    flex: 1;
-    padding: 8px;
-  }
-  
-  .boxes-container div p {
-    margin: 0;
-    font-weight: 500;
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  .boxes-container div input[type="checkbox"] {
-    margin-top: 8px;
-    transform: scale(1.2);
-    cursor: pointer;
-  }
-  
-  mat-dialog-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #3f51b5;
-    margin-bottom: 12px;
-    text-align: center;
-  }
-  
-  mat-dialog-content {
-    padding: 16px;
-    max-width: 600px;
     width: 100%;
   }
-  
-  mat-dialog-actions {
-    display: flex;
-    justify-content: flex-end;
-    padding: 16px;
-  }
-  
-  mat-dialog-actions .close-btn {
-    background-color: #e0e0e0;
-    color: #333;
-    font-weight: 500;
-    margin-right: 8px;
-  }
-  
-  mat-dialog-actions .close-btn:hover {
-    background-color: #d6d6d6;
-  }
-  
-  mat-dialog-actions .submit-btn {
-    background-color: #3f51b5;
-    color: #fff;
-    font-weight: 600;
-  }
-  
-  mat-dialog-actions .submit-btn:hover {
-    background-color: #364495;
-  }
-  
-  form {
-    font-family: 'Roboto', sans-serif;
-  }
-  
-  @media (max-width: 768px) {
-    .boxes-container {
-      flex-direction: column;
-      gap: 8px;
-    }
-  
-    .boxes-container div {
-      width: 100%;
-    }
-  }
-  
+}

@@ -98,15 +98,33 @@
                   <td data-label="Program Name">{{ intake.programName }}</td>
                   <td data-label="Program Name">{{ intake.instituteName }}</td>
                   <td data-label="Actions">
+                    <ng-container *ngIf="roleName !== 'superadmin'">
                     <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-intake', intake.id]"
                       matTooltip="Edit" *appPermissions="{feature:'Intake',action:'canEdit'}">
                       <!-- <mat-icon>edit</mat-icon> -->
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>
+                  </ng-container>
+                    <ng-container *ngIf="roleName === 'superadmin'">
+                    <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-intake', intake.id]"
+                      matTooltip="Edit">
+                      <!-- <mat-icon>edit</mat-icon> -->
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                    </button>
+                  </ng-container>
+                  
+                  <ng-container *ngIf="roleName !== 'superadmin'">
                     <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)" matTooltip="Delete" *appPermissions="{feature:'Intake',action:'canDelete'}">
                       <!-- <mat-icon>delete</mat-icon> -->
                       <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                     </button>
+                  </ng-container>
+                  <ng-container *ngIf="roleName === 'superadmin'">
+                    <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)" matTooltip="Delete">
+                      <!-- <mat-icon>delete</mat-icon> -->
+                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button>
+                  </ng-container>
                   </td>
                 </tr>
               </tbody>

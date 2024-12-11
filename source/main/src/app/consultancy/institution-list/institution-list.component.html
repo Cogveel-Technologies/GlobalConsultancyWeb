@@ -10,10 +10,15 @@
     <div class="card p-4">
       <div class="row g-3">
         <div class="col-md-4">
-          <app-searchable-dropdown [options]="countries" [displayField]="'countryName'" (selectionChange)="countrySelected($event)" [placeHolder]="'Country'" [instituteCountry]="instituteCountry"></app-searchable-dropdown>
+          <app-searchable-dropdown [options]="countries" [displayField]="'countryName'"
+            (selectionChange)="countrySelected($event)" [placeHolder]="'Country'"
+            [instituteCountry]="instituteCountry"></app-searchable-dropdown>
         </div>
         <div class="col-md-4" *ngIf="roleName === 'superadmin'">
-          <app-searchable-dropdown [options]="consultancies" [displayField]="'consultancyName'" (selectionChange)="onConsultancyChange($event)" [placeHolder]="'Consultancy'" [instituteConsultancyData]="instituteConsultancyInputData" [instituteConsultancy]="instituteConsultancy"></app-searchable-dropdown>
+          <app-searchable-dropdown [options]="consultancies" [displayField]="'consultancyName'"
+            (selectionChange)="onConsultancyChange($event)" [placeHolder]="'Consultancy'"
+            [instituteConsultancyData]="instituteConsultancyInputData"
+            [instituteConsultancy]="instituteConsultancy"></app-searchable-dropdown>
         </div>
         <!-- *ngIf="roleName === 'superadmin'" -->
         <div class="col-md-2">
@@ -37,7 +42,8 @@
               <ul class="tbl-export-btn">
                 <li class="tbl-header-btn">
                   <div class="m-l-10" matTooltip="ADD">
-                    <button mat-mini-fab color="primary" (click)="addInstitute()" *appPermissions="{feature:'Institute',action:'canAdd'}">
+                    <button mat-mini-fab color="primary" (click)="addInstitute()"
+                      *appPermissions="{feature:'Institute',action:'canAdd'}">
                       <mat-icon class="col-white">add</mat-icon>
                     </button>
                   </div>
@@ -95,20 +101,46 @@
                     <td data-label="Email">{{ institute.email }}</td>
                     <td data-label="Phone No">{{ institute.phoneNo }}</td>
                     <td data-label="Actions">
-                      <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.id]"
-                        matTooltip="View" (click)="onView()" *appPermissions="{feature:'InstituteList',action:'canView'}">
-                        <mat-icon>visibility</mat-icon>
-                      </button>
-                      <button mat-icon-button color="primary"
-                        [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit" *appPermissions="{feature:'Institute',action:'canEdit'}">
-                        <!-- <mat-icon>edit</mat-icon> -->
-                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                      </button>
-                      <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)" matTooltip="Delete" *appPermissions="{feature:'Institute',action:'canDelete'}">
-                        <!-- <mat-icon>delete</mat-icon> -->
-                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                      </button>
-                      <button mat-icon-button color="warn" matTooltip="Programs" (click)="seePrograms(institute.id, institute.instituteName, institute.consultancyId)">
+                      <ng-container *ngIf="roleName !== 'superadmin'">
+                        <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.id]"
+                          matTooltip="View" (click)="onView()"
+                          *appPermissions="{feature:'InstituteList',action:'canView'}">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                      </ng-container>
+                      <ng-container *ngIf="roleName === 'superadmin'">
+                        <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.id]"
+                          matTooltip="View" (click)="onView()">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                      </ng-container>
+                      <ng-container *ngIf="roleName !== 'superadmin'">
+                        <button mat-icon-button color="primary"
+                          [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit"
+                          *appPermissions="{feature:'Institute',action:'canEdit'}">
+                          <!-- <mat-icon>edit</mat-icon> -->
+                          <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                        </button>
+                      </ng-container>
+                      <ng-container *ngIf="roleName === 'superadmin'">
+                        <button mat-icon-button color="primary"
+                          [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit"
+                          >
+                          <!-- <mat-icon>edit</mat-icon> -->
+                          <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                        </button>
+                      </ng-container>
+
+                      <ng-container *ngIf="roleName === 'superadmin'">
+                        <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)"
+                          matTooltip="Delete">
+                          <!-- <mat-icon>delete</mat-icon> -->
+                          <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                        </button>
+                      </ng-container>
+
+                      <button mat-icon-button color="warn" matTooltip="Programs"
+                        (click)="seePrograms(institute.id, institute.instituteName, institute.consultancyId)">
                         <!-- <mat-icon>delete</mat-icon> -->
                         <app-feather-icons [icon]="'book'" [class]="'tbl-fav-edit'"></app-feather-icons>
                       </button>
