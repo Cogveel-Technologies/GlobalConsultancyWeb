@@ -77,16 +77,36 @@
                 <td data-label="Session Name">{{ session.sessionName }}</td>
                 <td data-label="Institute Name">{{ session.instituteName }}</td>
                 <td data-label="Actions">
+                  <ng-container *ngIf="roleName !== 'superadmin'">
                   <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-session', session.id]"
                     matTooltip="Edit"  *appPermissions="{feature:'Session',action:'canEdit'}">
                     <!-- <mat-icon>edit</mat-icon> -->
                     <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
 
                   </button>
+                </ng-container>
+                  <ng-container *ngIf="roleName === 'superadmin'">
+                  <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-session', session.id]"
+                    matTooltip="Edit">
+                    <!-- <mat-icon>edit</mat-icon> -->
+                    <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+
+                  </button>
+                </ng-container>
+                
+                <ng-container *ngIf="roleName !== 'superadmin'">
                   <button mat-icon-button color="warn" (click)="onDeleteSession(session.id)" matTooltip="Delete"  *appPermissions="{feature:'Session',action:'canDelete'}">
                     <!-- <mat-icon>delete</mat-icon> -->
                     <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                   </button>
+                  </ng-container>
+
+                <ng-container *ngIf="roleName === 'superadmin'">
+                  <button mat-icon-button color="warn" (click)="onDeleteSession(session.id)" matTooltip="Delete"  >
+                    <!-- <mat-icon>delete</mat-icon> -->
+                    <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                  </button>
+                  </ng-container>
                   <button mat-icon-button color="primary" matTooltip="Intakes"
                     (click)="onIntakes(session.id, session.instituteName, session.programName, session.sessionName)">
                     <!-- <mat-icon>edit</mat-icon> -->

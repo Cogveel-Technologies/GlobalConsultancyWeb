@@ -87,18 +87,46 @@
                   <td data-label="State">{{ agent.agentPhone }}</td>
                   <td data-label="Registration No">{{ agent.agentEmail }}</td>
                   <td data-label="Actions">
+                    <ng-container *ngIf="roleName !== 'superadmin'">
                     <button mat-icon-button [routerLink]="['/consultancy/agent-details', agent.id]" matTooltip="View" *appPermissions="{feature:'Agent',action:'canView'}">
                       <mat-icon>visibility</mat-icon>
                     </button>
+                  </ng-container>
+                    <ng-container *ngIf="roleName === 'superadmin'">
+                    <button mat-icon-button [routerLink]="['/consultancy/agent-details', agent.id]" matTooltip="View">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                  </ng-container>
+                  
+                  <ng-container *ngIf="roleName !== 'superadmin'">
                     <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-agent', agent.id]"
                       matTooltip="Edit" *appPermissions="{feature:'Agent',action:'canEdit'}">
                       <!-- <mat-icon>edit</mat-icon> -->
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>
+                  </ng-container>
+
+                  <ng-container *ngIf="roleName === 'superadmin'">
+                    <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-agent', agent.id]"
+                      matTooltip="Edit">
+                      <!-- <mat-icon>edit</mat-icon> -->
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                    </button>
+                  </ng-container>
+
+                  <ng-container *ngIf="roleName !== 'superadmin'">
                     <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)" matTooltip="Delete" *appPermissions="{feature:'Agent',action:'canDelete'}">
                       <!-- <mat-icon>delete</mat-icon> -->
                       <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                     </button>
+                  </ng-container>
+
+                  <ng-container *ngIf="roleName === 'superadmin'">
+                    <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)" matTooltip="Delete" >
+                      <!-- <mat-icon>delete</mat-icon> -->
+                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button>
+                  </ng-container>
                   </td>
                 </tr>
               </tbody>

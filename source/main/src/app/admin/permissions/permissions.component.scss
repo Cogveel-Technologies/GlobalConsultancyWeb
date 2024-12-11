@@ -1,14 +1,54 @@
-.table-heading{
+.table-heading {
     display: block;
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    // text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 0.5em;
 }
 
-.permissions-container{
+.permissions-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    background-color: #f9f9f9;
+    padding: 1em;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.btn-add-permissions{
+
+.permissions-container > * {
+    flex: 1;
+    text-align: center;
+}
+
+.btn-add-permissions {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 0.75em 1.5em;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-add-permissions:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-add-permissions:active {
+    background-color: #3e8e41;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }

@@ -48,6 +48,7 @@ export class AgentListComponent {
   roleName = localStorage.getItem("roleName")
   consultancyControl = new FormControl('all');
   consultancies: Observable<[{ id: number, consultancyName: string }]>|any;
+ 
 
 
   ngOnInit() {
@@ -67,7 +68,7 @@ export class AgentListComponent {
       console.log("HHHHHHHHH")
     }
 
-    this.subscription.add(combineLatest([this.searchTerm$, this.pagination$, this.sorting$]).pipe(
+    this.agents = combineLatest([this.searchTerm$, this.pagination$, this.sorting$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(), switchMap(([search, pageRelated, sort]) => {
         if (pageRelated.consultancyId && this.roleName === 'superadmin') {
@@ -90,10 +91,10 @@ export class AgentListComponent {
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field
           console.log(this.defaultData)
-          return this.agents = this.getAgents(this.defaultData)
+          return this.getAgents(this.defaultData)
         }
         return of([])
-      })).subscribe())
+      }))
   }
 
   deleteAgent(id: number) {

@@ -9,16 +9,23 @@
         <div class="card p-4">
             <div class="row g-3">
                 <div class="col-md-4" *ngIf="roleName === 'superadmin'">
-                    <app-searchable-dropdown [options]="consultancies" [displayField]="'consultancyName'" [programInstitute]="instituteName ? instituteName : ''" (selectionChange)="onConsultancyChange($event)" [placeHolder]="'Consultancy'"></app-searchable-dropdown>
+                    <app-searchable-dropdown [options]="consultancies" [displayField]="'consultancyName'"
+                        [programInstitute]="instituteName ? instituteName : ''"
+                        (selectionChange)="onConsultancyChange($event)"
+                        [placeHolder]="'Consultancy'"></app-searchable-dropdown>
                 </div>
 
                 <div class="col-md-4">
-                    <app-searchable-dropdown [options]="institutes" [displayField]="'name'" [programInstitute]="instituteName ? instituteName : '' " (selectionChange)="instituteSelected($event)" [placeHolder]="'Institute'"></app-searchable-dropdown>
+                    <app-searchable-dropdown [options]="institutes" [displayField]="'name'"
+                        [programInstitute]="instituteName ? instituteName : '' "
+                        (selectionChange)="instituteSelected($event)"
+                        [placeHolder]="'Institute'"></app-searchable-dropdown>
                 </div>
 
                 <div class="col-md-2">
-                    <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
-                  </div>
+                    <button type="submit" class="btn-space" mat-raised-button color="primary"
+                        (click)="onSearch()">Search</button>
+                </div>
             </div>
         </div>
 
@@ -35,7 +42,8 @@
                             <ul class="tbl-export-btn">
                                 <li class="tbl-header-btn">
                                     <div class="m-l-10" matTooltip="ADD">
-                                        <button mat-mini-fab color="primary" (click)="addProgram()" *appPermissions="{feature:'Program',action:'canAdd'}">
+                                        <button mat-mini-fab color="primary" (click)="addProgram()"
+                                            *appPermissions="{feature:'Program',action:'canAdd'}">
                                             <mat-icon class="col-white">add</mat-icon>
                                         </button>
                                     </div>
@@ -92,24 +100,62 @@
                                     <td data-label="Level of Education">{{ program.levelOfEducation }}</td>
                                     <td data-label="Status">{{ program.status }}</td>
                                     <td data-label="Actions">
-                                        <button mat-icon-button
-                                            [routerLink]="['/consultancy/program-details', program.id]"
-                                            matTooltip="View" *appPermissions="{feature:'Program',action:'canView'}">
-                                            <mat-icon>visibility</mat-icon>
-                                        </button>
-                                        <button mat-icon-button color="primary"
-                                            [routerLink]="['/consultancy/edit-program', program.id]" matTooltip="Edit" *appPermissions="{feature:'Program',action:'canEdit'}">
-                                            <!-- <mat-icon>edit</mat-icon> -->
-                                            <app-feather-icons [icon]="'edit'"
-                                                [class]="'tbl-fav-edit'"></app-feather-icons>
+                                        <ng-container *ngIf="roleName !== 'superadmin'">
+                                            <button mat-icon-button
+                                                [routerLink]="['/consultancy/program-details', program.id]"
+                                                matTooltip="View"
+                                                *appPermissions="{feature:'Program',action:'canView'}">
+                                                <mat-icon>visibility</mat-icon>
+                                            </button>
+                                        </ng-container>
+                                        <ng-container *ngIf="roleName === 'superadmin'">
+                                            <button mat-icon-button
+                                                [routerLink]="['/consultancy/program-details', program.id]"
+                                                matTooltip="View">
+                                                <mat-icon>visibility</mat-icon>
+                                            </button>
+                                        </ng-container>
+                                        <ng-container *ngIf="roleName !== 'superadmin'">
+                                            <button mat-icon-button color="primary"
+                                                [routerLink]="['/consultancy/edit-program', program.id]"
+                                                matTooltip="Edit"
+                                                *appPermissions="{feature:'Program',action:'canEdit'}">
+                                                <!-- <mat-icon>edit</mat-icon> -->
+                                                <app-feather-icons [icon]="'edit'"
+                                                    [class]="'tbl-fav-edit'"></app-feather-icons>
 
-                                        </button>
-                                        <button mat-icon-button color="warn" (click)="deleteProgram(program.id)"
-                                            matTooltip="Delete" *appPermissions="{feature:'Program',action:'canDelete'}">
-                                            <!-- <mat-icon>delete</mat-icon> -->
-                                            <app-feather-icons [icon]="'trash-2'"
-                                                [class]="'tbl-fav-delete'"></app-feather-icons>
-                                        </button>
+                                            </button>
+                                        </ng-container>
+                                        <ng-container *ngIf="roleName === 'superadmin'">
+                                            <button mat-icon-button color="primary"
+                                                [routerLink]="['/consultancy/edit-program', program.id]"
+                                                matTooltip="Edit"
+                                                >
+                                                <!-- <mat-icon>edit</mat-icon> -->
+                                                <app-feather-icons [icon]="'edit'"
+                                                    [class]="'tbl-fav-edit'"></app-feather-icons>
+
+                                            </button>
+                                        </ng-container>
+                                        <ng-container *ngIf="roleName !== 'superadmin'">
+                                            <button mat-icon-button color="warn" (click)="deleteProgram(program.id)"
+                                                matTooltip="Delete"
+                                                *appPermissions="{feature:'Program',action:'canDelete'}">
+                                                <!-- <mat-icon>delete</mat-icon> -->
+                                                <app-feather-icons [icon]="'trash-2'"
+                                                    [class]="'tbl-fav-delete'"></app-feather-icons>
+                                            </button>
+                                        </ng-container>
+                                        <ng-container *ngIf="roleName === 'superadmin'">
+                                            <button mat-icon-button color="warn" (click)="deleteProgram(program.id)"
+                                                matTooltip="Delete">
+                                                <!-- <mat-icon>delete</mat-icon> -->
+                                                <app-feather-icons [icon]="'trash-2'"
+                                                    [class]="'tbl-fav-delete'"></app-feather-icons>
+                                            </button>
+                                        </ng-container>
+
+
                                         <button mat-icon-button color="warn" matTooltip="Sessions"
                                             (click)="onSession(program.programName, program.instituteName,program.id,program.instituteId)">
                                             <!-- <mat-icon>delete</mat-icon> -->

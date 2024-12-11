@@ -116,7 +116,7 @@ export class SessionListComponent {
     //   this.sessions = this.getSessions(this.defaultData);
     // }
 
-    this.subscription.add(combineLatest([this.institute$, this.program$, this.searchTerm$, this.pagination$, this.sorting$, this.search$]).pipe(
+    this.sessions =combineLatest([this.institute$, this.program$, this.searchTerm$, this.pagination$, this.sorting$, this.search$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(),
       switchMap(([instituteId, programId, searchTerm, pageRelated, sort, search]) => {
@@ -163,11 +163,11 @@ export class SessionListComponent {
           this.defaultData.pageSize = pageRelated.pageSize;
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field;
-          return this.sessions = this.getSessions(this.defaultData)
+          return this.getSessions(this.defaultData)
         } else {
           return of([])
         }
-      })).subscribe())
+      }))
   }
 
   onProgramChange(event: any) {

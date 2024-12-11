@@ -32,7 +32,7 @@ export class InstitutionListComponent {
   constructor(private router: Router, public consultancyService: ConsultancyService, private consultancyApiService: ConsultancyApi, private adminService: AdminService) { }
   editMode: boolean;
   subscriptions: Subscription = new Subscription();
-  universities!: Observable<InstituteData[]>;
+  universities!: Observable<InstituteData[]> | Observable<[]>;
   countries: Observable<{ countryName: string, id: number|string }[]> | any;
   country$: BehaviorSubject<number | string> = new BehaviorSubject<number | string>('');
   countryId: number;
@@ -95,8 +95,8 @@ export class InstitutionListComponent {
     })
 
     // Implementing filter on the basis of country
-    this.subscriptions.add(
-      combineLatest([this.searchTerm$, this.pagination$, this.sorting$]).pipe(
+    
+    this.universities =  combineLatest([this.searchTerm$, this.pagination$, this.sorting$]).pipe(
         throttleTime(1000, undefined, { leading: true, trailing: true }),
         distinctUntilChanged(),
         switchMap(([search, pageRelated, sort]) => {
@@ -152,13 +152,12 @@ export class InstitutionListComponent {
               this.defaultData.OrderBy = sort.field;
               // institutes of consultancy
               console.log("heheh")
-              return this.universities = this.getInstitutes(this.defaultData);
+              return this.getInstitutes(this.defaultData);
             }
           }
           return of([]);
         })
-      ).subscribe()
-    );
+      )
   }
 
   // selection event (selection of country)
