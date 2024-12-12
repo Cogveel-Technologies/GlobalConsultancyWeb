@@ -155,7 +155,7 @@ export class InstitutionListComponent {
               return this.getInstitutes(this.defaultData);
             }
           }
-          return of([]);
+          return of();
         })
       )
   }

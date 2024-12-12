@@ -215,7 +215,7 @@ export class ConsultancyApi {
     }
     // ------------------- display-agent ----------------
     getAgents(data: ConsultancyDetailsOptions): Observable<AgentDetails[]> {
-        return this.http.get<AgentDetails[]>(`${this.baseUrl}/Agent?IsAdmin=${data.IsAdmin}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&CurrentPage=${data.currentPage}&isDeleted=${data.IsDeleted}`)
+        return this.http.get<AgentDetails[]>(`${this.baseUrl}/Agent?IsAdmin=${data.IsAdmin}&limit=${data.pageSize}&OrderBy=${data.OrderBy}&sortExpression=${data.sortExpression}&searchText=${data.searchText}&CurrentPage=${data.currentPage}&isDeleted=${data.IsDeleted}`)
     }
     // ------------- delete-agent -----------------
     deleteAgent(id: number) {

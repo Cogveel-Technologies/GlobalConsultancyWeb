@@ -155,7 +155,7 @@ export class ProgramListComponent {
             console.log(this.defaultData)
             return this.getPrograms(this.defaultData)
           }
-          return of([])
+          return of()
         }))
 
     // if we click on view or edit pencil, and then navigate back

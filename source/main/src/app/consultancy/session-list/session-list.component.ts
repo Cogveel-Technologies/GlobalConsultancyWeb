@@ -165,7 +165,7 @@ export class SessionListComponent {
           this.defaultData.OrderBy = sort.field;
           return this.getSessions(this.defaultData)
         } else {
-          return of([])
+          return of()
         }
       }))
   }

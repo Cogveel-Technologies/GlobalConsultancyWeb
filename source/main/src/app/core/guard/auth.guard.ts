@@ -5,17 +5,25 @@ import { AuthService } from '../service/auth.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard  {
+export class AuthGuard {
   constructor(private authService: AuthService, private router: Router) {}
+
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const accessiblePaths = JSON.parse(localStorage.getItem('accessiblePaths') || '[]');
-    const requestedRoute = state.url;
+    const roleName = localStorage.getItem("roleName")?.toLowerCase();
     
-    if (accessiblePaths.includes(requestedRoute)) {
+    if (roleName === 'superadmin') {
       return true;
     } else {
-      this.router.navigate(['/authentication/signin']);
-      return false;
+      const targetUrl = state.url;
+      const urlSegments = targetUrl.split('/');
+      console.log(urlSegments)
+      
+      if (urlSegments.includes(roleName)) {
+        return true;
+      } else {
+        this.router.navigate(['/authentication/signin']);
+        return false;
+      }
     }
   }
 }
