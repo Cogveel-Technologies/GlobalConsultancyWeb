@@ -93,7 +93,7 @@ export class AgentListComponent {
           console.log(this.defaultData)
           return this.getAgents(this.defaultData)
         }
-        return of([])
+        return of()
       }))
   }
 

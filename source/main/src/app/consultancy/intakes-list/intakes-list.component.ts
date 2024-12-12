@@ -182,7 +182,7 @@ export class IntakesListComponent {
           console.log(this.defaultData)
           return this.getIntakes(this.defaultData);
         } else {
-          return of([])
+          return of()
         }
       }))
   }
