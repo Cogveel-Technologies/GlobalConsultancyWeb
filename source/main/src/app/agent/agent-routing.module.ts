@@ -11,6 +11,7 @@ import { AuthGuard } from '@core/guard/auth.guard';
 import { AdmissionComponent } from './admission/admission.component';
 import { ApplicationsComponent } from './applications/applications.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
+import { RegisterwizardComponent } from './registerwizard/registerwizard.component';
 
 
 
@@ -31,7 +32,13 @@ const routes: Routes = [
     resolve: {
       student: StudentResolver
     },
+
     // canActivate:[AuthGuard]
+  },
+  {
+    path: 'registerwizard',
+    component: RegisterwizardComponent,
+    // canActivate: [AuthGuard]
   },
   {
     path: 'list-students',

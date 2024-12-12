@@ -1,0 +1,155 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .program-info-container {
+    // background-color: #d6dce2;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 1000px;
+    margin: 20px auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .program-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+  }
+  
+  .info-field {
+    flex: 1 1 25%;
+  }
+  
+  .info-field label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: block;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  .info-field p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+    text-decoration: underline;
+  }
+  
+  .program-summary {
+    background-color: #e0f0ff;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .program-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .program-title h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+  
+  .duration-badge {
+    background-color: #3b82f6;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+  }
+  
+  .program-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .program-details div {
+    flex: 1;
+  }
+  
+  .program-details label {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .program-details p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+  }
+
+  .edit-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 10px;
+    margin-right: 10px;
+  }
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+ 
+
+  .header {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space items out */
+  }
+  
+  .header h2 {
+    margin: 0; /* Optional: remove default margin for better alignment */
+  }
+  
+  .header button {
+    margin-left: auto; /* Push the button to the right */
+  }
+ 
+
+
+  .info-contain{
+    // font-size: 14px; /* Small font size */
+    // line-height: 1.5; /* Adjust line spacing */
+    // font-family: Arial, sans-serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    // margin-left: 42px;
+    // margin-top: 5px;
+    background-color: #f8f8f8;
+    padding-left: 50px;
+    
+  }
+  
+  .info-item {
+    margin: 0; /* Remove default margins */
+    padding: 3px 0; /* Add slight padding between items */
+  }
+  
+.pheading{
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}

@@ -91,7 +91,15 @@ export class ListstudentsComponent implements OnInit {
         startWith(''),
         throttleTime(60),
         distinctUntilChanged(),
-        tap(term => this.searchTermSubject.next(term))
+        tap((term) => {
+          console.log('Search term:', term); // Debug log
+          this.currentPage = 1; // Reset current page to 1
+          this.currentPageSubject.next(this.currentPage); // Emit the new current page
+          // this.refreshStudents();
+          // this.searchTermSubject.next(term)
+        }),
+       
+        
       ),
       this.pageSizeSubject,
       this.currentPageSubject,
@@ -171,16 +179,23 @@ export class ListstudentsComponent implements OnInit {
   
     // Navigate to the registration form
     editStudent(studentId: number) {
-      this.router.navigate(['/agent/register-student'], {
+      // this.router.navigate(['/agent/register-student'], {
+      //   queryParams: { id: studentId, origin: 'listStudents' } // Pass the origin as 'listStudents'
+      // });
+
+      this.router.navigate(['/agent/registerwizard'], {
         queryParams: { id: studentId, origin: 'listStudents' } // Pass the origin as 'listStudents'
       });
+
     }
     
+
   viewStudent(studentId: number) {
     this.router.navigate(['/agent/view-student'], {
       queryParams: { id: studentId }
     });
   }
+  
 
   addStudentDocument(studentId: number) {
      this.router.navigate(['/agent/student-document'],

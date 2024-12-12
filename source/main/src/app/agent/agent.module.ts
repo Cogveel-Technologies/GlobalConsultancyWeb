@@ -26,6 +26,7 @@ import { AdmissionComponent } from './admission/admission.component';
 import { ApplicationsComponent } from './applications/applications.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
+import { RegisterwizardComponent } from './registerwizard/registerwizard.component';
 
 
 
@@ -42,6 +43,7 @@ import { ApplicationListComponent } from './application-list/application-list.co
         ApplicationsComponent,
         ConfirmationDialogComponent,
         ApplicationListComponent,
+        RegisterwizardComponent,
       
     
   
