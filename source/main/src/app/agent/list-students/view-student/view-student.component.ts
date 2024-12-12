@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Student } from 'app/agent/models/student.model';
 import { AgentService } from 'app/agent/agent.service';
 import { PaginatedResponse } from 'app/agent/agent.service';// Import the PaginatedResponse interface
-
+import { of } from 'rxjs';
 import { StudentDocument } from 'app/agent/models/studentDocument.model';
 
 @Component({
@@ -14,6 +14,9 @@ import { StudentDocument } from 'app/agent/models/studentDocument.model';
 })
 export class ViewStudentComponent implements OnInit, OnDestroy {
   student: Student | null = null;
+  educationData: any;
+  testByStudentId$: Observable<any>;
+  educationEntries$!: Observable<any>;
   breadscrums = [
     {
       title: 'View Student',
@@ -21,7 +24,8 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
       active: 'View Student',
     },
   ];
-
+  
+ 
   documentTypes: any[] = []; 
   // uploadedDocument$: Observable<any>;
   uploadedDocument$: Observable<PaginatedResponse<StudentDocument>>; // Correctly define the Observable
@@ -38,7 +42,8 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
       this.loadUploadedDocument();  // Load the uploaded document when the component initializes
     });
     this.subscriptions.add(routeSubscription);
-
+    this.fetchStudentEducation();
+    this.testByStudId();
     // Load document types when component initializes
     this.loadDocumentTypes();
   }
@@ -60,6 +65,37 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   }
 
  
+
+fetchStudentEducation(){
+  // Fetch and handle education data
+     this.agentService.getEducationEntriesByStudentId(this.student.id).subscribe({
+     next: (response) => {
+     console.log('Service response:', response); // Log the response
+     this.educationEntries$ = of(response.data ? [response.data] : []); // Pass the response to educationEntries$
+    // this.educationEntries$ = response.data ; // Pass the response to educationEntries$
+// Log the educationEntries$ Observable
+this.educationEntries$.subscribe({
+  next: (data) => {
+    console.log('Logged data from educationEntries$', data); // This will log the emitted data
+  },
+  error: (error) => {
+    console.error('Error in educationEntries$ observable:', error);
+  }
+});
+},
+error: (error) => {
+console.error('Error fetching education entries:', error); // Log the error
+// this.educationEntries$ = of([]); // Empty observable on error
+},
+});
+
+
+}
+
+
+
+
+
   loadUploadedDocument() {
     if (this.student) {
       this.uploadedDocument$ = this.agentService.getUploadedDocuments({
@@ -82,6 +118,38 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   viewDocument(documentUrl: string) {
     window.open(documentUrl, '_blank');
   }
+  
+
+
+ 
+
+  testByStudId() {
+   
+      const studentId = this.student.id;
+      this.testByStudentId$ = this.agentService.getAllTestByStudentId(studentId);
+  
+      // Subscribe to the observable to print the response
+      this.testByStudentId$.subscribe(response => {
+        console.log('Response:', response); // Logs the response
+      });
+    
+  }
+  
+ 
+
+
+  deleteTest(id: number): void {
+    this.agentService.deleteTestById(id).subscribe({
+      next: () => {
+        console.log("Test deleted successfully");
+        this.testByStudId();
+      },
+      error: (error) => {
+        console.error('Error deleting test entry:', error);
+      },
+    });
+  }
+
 
   ngOnDestroy() {
     // Unsubscribe from all subscriptions
