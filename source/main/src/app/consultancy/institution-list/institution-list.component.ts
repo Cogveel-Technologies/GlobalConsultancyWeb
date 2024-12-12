@@ -179,8 +179,8 @@ export class InstitutionListComponent {
   deleteInstitute(id: number) {
     const con = confirm("Are you sure?")
     if (con) {
-      this.subscriptions.add(this.consultancyApiService.deleteInstitute(id).subscribe(res => {
-        this.universities = this.getInstitutes(this.defaultData)
+      this.subscriptions.add(this.consultancyApiService.deleteInstitute(id).subscribe(() => {
+        this.pagination$.next({pageSize:this.defaultData.pageSize,pageIndex:this.defaultData.currentPage})
       }));
     }
   }

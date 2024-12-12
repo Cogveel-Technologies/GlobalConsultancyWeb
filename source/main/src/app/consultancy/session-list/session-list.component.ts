@@ -185,7 +185,7 @@ export class SessionListComponent {
     const con = confirm("Are you sure?")
     if (con) {
       this.subscription.add(this.consultancyApiService.deleteSession(id).subscribe(res => {
-        this.sessions = this.getSessions(this.defaultData)
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage })
       }));
     }
   }

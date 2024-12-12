@@ -206,7 +206,7 @@ export class ProgramListComponent {
     const con = confirm("Are you sure?")
     if (con) {
       this.subscription.add(this.consultancyApiService.deleteProgram(id).subscribe(() => {
-        this.programs = this.getPrograms(this.defaultData);
+        this.pagination$.next({pageSize:this.defaultData.pageSize,pageIndex:this.defaultData.currentPage,search:true})
       }));
     }
   }

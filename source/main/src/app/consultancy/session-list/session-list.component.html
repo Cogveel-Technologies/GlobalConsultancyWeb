@@ -10,9 +10,9 @@
         <div class="col-md-4">
           <app-searchable-dropdown [options]="institutes" [displayField]="'name'" (selectionChange)="onInstituteSelected($event)" [sessionInstitue]="instituteName ? instituteName : ''" [placeHolder]="'Institute'"></app-searchable-dropdown>
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <app-searchable-dropdown [options]="programs" [displayField]="'name'" (selectionChange)=" onProgramChange($event)" [sessionInstitue]="programName? programName: ''" [placeHolder]="'Program'"></app-searchable-dropdown>
-        </div>
+        </div> -->
         <div class="col-md-2">
           <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
         </div>

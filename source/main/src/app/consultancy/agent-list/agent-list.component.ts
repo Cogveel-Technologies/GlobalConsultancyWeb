@@ -101,7 +101,7 @@ export class AgentListComponent {
     const con = confirm("Are you sure?")
     if (con) {
       this.subscription.add(this.consultancyApiService.deleteAgent(id).subscribe(() => {
-        this.agents = this.getAgents(this.defaultData)
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
       }))
     }
   }

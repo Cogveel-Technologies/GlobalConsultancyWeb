@@ -224,7 +224,7 @@ export class IntakesListComponent {
     const con = confirm("Are you sure?")
     if (con) {
       this.subscription.add(this.consultancyApiService.deleteIntake(id).subscribe(res => {
-        this.intakes = this.getIntakes(this.defaultData);
+        this.pagination$.next({ pageSize:this.defaultData.pageSize, pageIndex: this.defaultData.currentPage })
       }));
     }
   }
