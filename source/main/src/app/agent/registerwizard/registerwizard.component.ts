@@ -561,7 +561,7 @@ export class RegisterwizardComponent implements OnInit {
             this.testByStudId();
             this.testForm.reset();
              // Scroll to the top of the page after patching the form
-          // window.scrollTo(0, 0);
+          window.scrollTo(0, 0);
           },
           error: (error) => {
             console.error('Error saving test details:', error);
