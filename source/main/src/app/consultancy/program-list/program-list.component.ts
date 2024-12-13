@@ -57,6 +57,8 @@ export class ProgramListComponent {
   consultancies: Observable<[{ id: number, consultancyName: string }]> | any;
   instituteId: number;
   instituteName: string;
+  programEditState: boolean = false
+
 
 
 
@@ -69,6 +71,19 @@ export class ProgramListComponent {
   }
 
   ngOnInit() {
+    this.consultancyService.programEditState.subscribe(res => {
+      this.programEditState = res
+    })
+
+
+   if(this.programEditState){
+    this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
+      console.log("Mmmm")
+      console.log(res)
+      this.pagination$.next(res)
+    })
+   }
+
     // if superadmin has logged in
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true;
@@ -141,6 +156,7 @@ export class ProgramListComponent {
           }
 
           if (pageRelated.search) {
+            console.log(pageRelated)
             if (searchTerm) {
               this.defaultData.currentPage = 1;
               this.currentPageIndex = 0;
@@ -206,7 +222,7 @@ export class ProgramListComponent {
     const con = confirm("Are you sure?")
     if (con) {
       this.subscription.add(this.consultancyApiService.deleteProgram(id).subscribe(() => {
-        this.pagination$.next({pageSize:this.defaultData.pageSize,pageIndex:this.defaultData.currentPage,search:true})
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
       }));
     }
   }
@@ -230,10 +246,18 @@ export class ProgramListComponent {
     this.instituteId = event
   }
 
+  onEditProgram() {
+    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true })
+  }
+
+  onViewProgram(){
+    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true })
+  }
+
   ngOnDestroy() {
     this.institute$.next('');
     this.consultancyService.sendInstituteId.next(null)
+    this.consultancyService.programEditState.next(false)
     this.subscription.unsubscribe();
   }
-
 }

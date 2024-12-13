@@ -121,6 +121,7 @@ export class RegisterProgramComponent {
   navigateToProgramList() {
     if (this.editMode) {
       this.consultancyService.showList.next(true)
+      this.consultancyService.programEditState.next(true)
       this.router.navigate(["consultancy", "program-list"]);
     } else {
       this.router.navigate(["consultancy", "program-list"]);
