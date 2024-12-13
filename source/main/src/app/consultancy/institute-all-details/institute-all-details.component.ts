@@ -39,6 +39,7 @@ export class InstituteAllDetailsComponent {
   }
 
   backToList(){
+    this.consultancyService.instituteEditState.next(true)
     this.consultancyService.showList.next(true);
     this.consultancyService.countrySelected.next(this.countryId)
     this.consultancyService.editOrViewPage.next(true)

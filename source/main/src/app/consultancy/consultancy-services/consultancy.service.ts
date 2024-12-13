@@ -49,4 +49,7 @@ export class ConsultancyService {
   consultancyInstitutes: BehaviorSubject<{countryName:string,consultancyName:string,consultancyId:number}|null> = new BehaviorSubject<{countryName:string,consultancyName:string,consultancyId:number}>(null)
   editProgramCurrentPageAndPageSize: BehaviorSubject<null|{pageIndex:number,pageSize:number,search:boolean}> = new BehaviorSubject(null)
   programEditState:BehaviorSubject<null|boolean> = new BehaviorSubject(null)
+  instituteEditState:BehaviorSubject<null|boolean> = new BehaviorSubject(null)
+  editInstituteCurrentPageAndPageSize: BehaviorSubject<null|{pageIndex:number,pageSize:number,search:boolean,countryId:number|string}> = new BehaviorSubject(null)
+  sessionEditState:BehaviorSubject<null|boolean> = new BehaviorSubject(null);
 }

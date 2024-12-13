@@ -104,7 +104,7 @@
                       <ng-container *ngIf="roleName !== 'superadmin'">
                         <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.id]"
                           matTooltip="View" (click)="onView()"
-                          *appPermissions="{feature:'InstituteList',action:'canView'}">
+                          *appPermissions="{feature:'Institute',action:'canView'}" (click)="onEditorViewInstitute()">
                           <mat-icon>visibility</mat-icon>
                         </button>
                       </ng-container>
@@ -117,7 +117,7 @@
                       <ng-container *ngIf="roleName !== 'superadmin'">
                         <button mat-icon-button color="primary"
                           [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit"
-                          *appPermissions="{feature:'Institute',action:'canEdit'}">
+                          *appPermissions="{feature:'Institute',action:'canEdit'}" (click)="onEditorViewInstitute()">
                           <!-- <mat-icon>edit</mat-icon> -->
                           <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                         </button>
