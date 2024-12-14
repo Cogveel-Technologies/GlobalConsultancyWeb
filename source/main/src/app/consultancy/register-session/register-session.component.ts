@@ -59,7 +59,7 @@ export class RegisterSessionComponent {
       if(institute){
         console.log(this.instituteId)
         this.defaultData.InstituteId = String(this.instituteId);
-        return this.programs = this.consultancyApiService.getAllPrograms(this.defaultData)
+        return of()
       }else{
         return of([])
       }

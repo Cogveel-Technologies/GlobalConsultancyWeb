@@ -158,12 +158,11 @@
                                         </ng-container>
 
 
-                                        <button mat-icon-button color="warn" matTooltip="Sessions"
-                                            (click)="onSession(program.programName, program.instituteName,program.id,program.instituteId)">
-                                            <!-- <mat-icon>delete</mat-icon> -->
-                                            <app-feather-icons [icon]="'calendar'"
-                                                [class]="'tbl-fav-edit'"></app-feather-icons>
-                                        </button>
+                                        <button mat-icon-button color="primary" matTooltip="Intakes"
+                                        (click)="getIntakesOfprogram(program.instituteId,program.instituteName,program.id,program.programName)">
+                                        <!-- <mat-icon>edit</mat-icon> -->
+                                        <app-feather-icons [icon]="'users'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                                      </button>
                                     </td>
                                 </tr>
                             </tbody>

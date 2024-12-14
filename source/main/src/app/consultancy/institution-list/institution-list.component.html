@@ -103,8 +103,8 @@
                     <td data-label="Actions">
                       <ng-container *ngIf="roleName !== 'superadmin'">
                         <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.id]"
-                          matTooltip="View" (click)="onView()"
-                          *appPermissions="{feature:'Institute',action:'canView'}" (click)="onEditorViewInstitute()">
+                          matTooltip="View" (click)="onView()" *appPermissions="{feature:'Institute',action:'canView'}"
+                          (click)="onEditorViewInstitute()">
                           <mat-icon>visibility</mat-icon>
                         </button>
                       </ng-container>
@@ -124,16 +124,15 @@
                       </ng-container>
                       <ng-container *ngIf="roleName === 'superadmin'">
                         <button mat-icon-button color="primary"
-                          [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit"
-                          >
+                          [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit">
                           <!-- <mat-icon>edit</mat-icon> -->
                           <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                         </button>
                       </ng-container>
 
                       <ng-container *ngIf="roleName !== 'superadmin'">
-                        <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)"
-                          matTooltip="Delete" *appPermissions="{feature:'Institute',action:'canDelete'}">
+                        <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)" matTooltip="Delete"
+                          *appPermissions="{feature:'Institute',action:'canDelete'}">
                           <!-- <mat-icon>delete</mat-icon> -->
                           <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                         </button>
@@ -147,9 +146,15 @@
                       </ng-container>
 
                       <button mat-icon-button color="warn" matTooltip="Programs"
-                        (click)="seePrograms(institute.id, institute.instituteName, institute.consultancyId)">
+                        (click)="institutePrograms(institute.id, institute.instituteName, institute.consultancyId)">
                         <!-- <mat-icon>delete</mat-icon> -->
                         <app-feather-icons [icon]="'book'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                      </button>
+
+                      <button mat-icon-button color="warn" matTooltip="Sessions"
+                        (click)="instituteSession(institute.id,institute.instituteName)">
+                        <!-- <mat-icon>delete</mat-icon> -->
+                        <app-feather-icons [icon]="'calendar'" [class]="'tbl-fav-edit'"></app-feather-icons>
                       </button>
                     </td>
                   </tr>

@@ -100,7 +100,7 @@
                   <td data-label="Actions">
                     <ng-container *ngIf="roleName !== 'superadmin'">
                     <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-intake', intake.id]"
-                      matTooltip="Edit" *appPermissions="{feature:'Intake',action:'canEdit'}" (click)="onEditorViewIntake()">
+                      matTooltip="Edit" *appPermissions="{feature:'Intake',action:'canEdit'}">
                       <!-- <mat-icon>edit</mat-icon> -->
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>

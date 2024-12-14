@@ -33,15 +33,15 @@ export class InstitutionListComponent {
   editMode: boolean;
   subscriptions: Subscription = new Subscription();
   universities!: Observable<InstituteData[]> | Observable<[]>;
-  countries: Observable<{ countryName: string, id: number|string }[]> | any;
+  countries: Observable<{ countryName: string, id: number | string }[]> | any;
   country$: BehaviorSubject<number | string> = new BehaviorSubject<number | string>('');
-  countryId: number|string = '';
-  countryName:string;
+  countryId: number | string = '';
+  countryName: string;
   defaultData: ConsultancyDetailsOptions = { ...this.consultancyService.defaultRenderData() };
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
-  pagination$: BehaviorSubject<{ pageSize?: number|string, pageIndex?: number|string, countryId?: number | string, consultancyId?: number | string, search?: boolean }> = new BehaviorSubject<{ pageSize?: number, pageIndex?: number, countryId?: number | string, consultancyId?: number | string, search?: boolean }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: String(this.defaultData.CountryId), consultancyId: this.defaultData.ConsultancyId, search: true });
+  pagination$: BehaviorSubject<{ pageSize?: number | string, pageIndex?: number | string, countryId?: number | string, consultancyId?: number | string, search?: boolean }> = new BehaviorSubject<{ pageSize?: number, pageIndex?: number, countryId?: number | string, consultancyId?: number | string, search?: boolean }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: String(this.defaultData.CountryId), consultancyId: this.defaultData.ConsultancyId, search: true });
   currentPageIndex: number;
   sorting$: BehaviorSubject<{ field: string, direction: string }> = new BehaviorSubject<{ field: string, direction: string }>({ field: this.defaultData.OrderBy, direction: this.defaultData.sortExpression });
   searchTerm: string = '';
@@ -50,14 +50,14 @@ export class InstitutionListComponent {
   previousCountryId: string | number = '';
   institutesFromConsultancy: boolean = false;
   roleName: string = localStorage.getItem('roleName');
-  consultancies: Observable<[{ id: number, consultancyName: string }] | []>|any;
+  consultancies: Observable<[{ id: number, consultancyName: string }] | []> | any;
   selectedCountryName: string = ''; // To display the country name in the input field
   selectedCountryId: string = '';
-  filteredCountries :{id:number,countryName:string}[];
-  instituteConsultancyInputData:string|null = null;
-  instituteCountry:string;
-  instituteConsultancy:string;
-  instituteEditState:boolean = false;
+  filteredCountries: { id: number, countryName: string }[];
+  instituteConsultancyInputData: string | null = null;
+  instituteCountry: string;
+  instituteConsultancy: string;
+  instituteEditState: boolean = false;
 
 
 
@@ -66,7 +66,7 @@ export class InstitutionListComponent {
       tap(res => {
         if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
           console.log("Condition met: No data and currentPage > 1");
-          this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize:this.defaultData.pageSize, countryId:this.defaultData.CountryId, search:true });
+          this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize: this.defaultData.pageSize, countryId: this.defaultData.CountryId, search: true });
         }
       }),
       filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)),
@@ -77,7 +77,7 @@ export class InstitutionListComponent {
       })
     );
   }
-  
+
 
   ngOnInit() {
     // state management for navigating from view or edit page
@@ -86,14 +86,14 @@ export class InstitutionListComponent {
     })
 
     // if user navigates back from edit or view page
-    if(this.instituteEditState){
+    if (this.instituteEditState) {
       this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
         console.log("Mmmm")
         console.log(res)
         this.pagination$.next(res)
       })
-     }
-    
+    }
+
     // if showing of institute comes from consultancy list
     this.consultancyService.consultancyInstitutes.subscribe(res => {
       if (res) {
@@ -105,95 +105,83 @@ export class InstitutionListComponent {
       }
     })
 
-    
+
     // fetching all countries for the dropdown and displaying
     this.consultancyApiService.getAllCountries().pipe(map(res => {
       console.log(res)
-      const allOption = [{id:'all',countryName:'All'},...res]
+      const allOption = [{ id: 'all', countryName: 'All' }, ...res]
       return allOption
-    })).subscribe(res=> {
+    })).subscribe(res => {
       this.countries = res
     })
 
     // Implementing filter on the basis of country
-    
-    this.universities =  combineLatest([this.searchTerm$, this.pagination$, this.sorting$]).pipe(
-        throttleTime(1000, undefined, { leading: true, trailing: true }),
-        distinctUntilChanged(),
-        switchMap(([search, pageRelated, sort]) => {
-          if (pageRelated) {
-            console.log(pageRelated.countryId)
-            console.log(this.previousCountryId)
-            if (+pageRelated.countryId !== +this.previousCountryId) {
-              console.log("ppppp")
-              this.defaultData.ConsultancyId = '';
-              this.previousCountryId = pageRelated.countryId;
-              this.consultancies = of([]);
-              this.selectedCountryName =  '';
-              if (pageRelated.countryId === 'all'|| pageRelated.countryId === '') {
-                this.consultancies = [];
-                this.defaultData.CountryId = '';
-                if (this.institutesFromConsultancy) {
-                  if (this.roleName === 'superadmin') {
-                    console.log("super adminnnnn")
-                    this.consultancies = this.adminService.getAllConsultancies(this.defaultData);
-                  }
-                }
-              } else {
-                this.instituteConsultancyInputData = ''
-                this.defaultData.CountryId = String(pageRelated.countryId);
-                console.log(this.defaultData)
-                this.adminService.getAllConsultancies(this.defaultData).subscribe(res=> {
-                  this.consultancies = res
-                })
-              }
-            }
-            if (pageRelated.consultancyId) {
-              console.log("if consultancy block")
-              console.log(pageRelated.consultancyId)
-              this.defaultData.CountryId = '';
-              this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
-            }
-            if (pageRelated.search) {
-              if (this.roleName === 'superadmin') {
-                this.defaultData.IsAdmin = true
-              }
-              if(search){
-                console.log("AAAAAA")
-                this.defaultData.currentPage = 1;
-                this.currentPageIndex = 0;
-              }else{
-                this.defaultData.currentPage = +pageRelated.pageIndex;
-                console.log("TTTTTTT")
-                this.currentPageIndex = +pageRelated.pageIndex - 1;
-              }
 
+    this.universities = combineLatest([this.searchTerm$, this.pagination$, this.sorting$]).pipe(
+      throttleTime(1000, undefined, { leading: true, trailing: true }),
+      distinctUntilChanged(),
+      switchMap(([search, pageRelated, sort]) => {
+        if (pageRelated) {
+          console.log(pageRelated.countryId)
+          console.log(this.previousCountryId)
+          if (+pageRelated.countryId !== +this.previousCountryId) {
+            console.log("ppppp")
+            this.defaultData.ConsultancyId = '';
+            this.previousCountryId = pageRelated.countryId;
+            this.consultancies = of([]);
+            this.selectedCountryName = '';
+            if (pageRelated.countryId === 'all' || pageRelated.countryId === '') {
+              this.consultancies = [];
+              this.defaultData.CountryId = '';
+              if (this.institutesFromConsultancy) {
+                if (this.roleName === 'superadmin') {
+                  console.log("super adminnnnn")
+                  this.consultancies = this.adminService.getAllConsultancies(this.defaultData);
+                }
+              }
+            } else {
+              this.instituteConsultancyInputData = ''
+              this.defaultData.CountryId = String(pageRelated.countryId);
               console.log(this.defaultData)
-              this.defaultData.searchText = search;
-              this.defaultData.pageSize = +pageRelated.pageSize;
-              this.defaultData.sortExpression = sort.direction;
-              this.defaultData.OrderBy = sort.field;
-              // institutes of consultancy
-              console.log("heheh")
-              return this.getInstitutes(this.defaultData);
+              this.adminService.getAllConsultancies(this.defaultData).subscribe(res => {
+                this.consultancies = res
+              })
             }
           }
-          return of();
-        })
-      )
-  }
+          if (pageRelated.consultancyId) {
+            console.log("if consultancy block")
+            console.log(pageRelated.consultancyId)
+            this.defaultData.CountryId = '';
+            this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
+          }
+          if (pageRelated.search) {
+            if (this.roleName === 'superadmin') {
+              this.defaultData.IsAdmin = true
+            }
+            if (search) {
+              console.log("AAAAAA")
+              this.defaultData.currentPage = 1;
+              this.currentPageIndex = 0;
+            } else {
+              this.defaultData.currentPage = +pageRelated.pageIndex;
+              console.log("TTTTTTT")
+              this.currentPageIndex = +pageRelated.pageIndex - 1;
+            }
 
-  // selection event (selection of country)
-  // onCountryChange(event: any) {
-  //   console.log(event)
-  //   const selectedCountry = event.option.value;  // Get the full country object
-  //   this.selectedCountryId = selectedCountry.id;  // Save the country ID
-  //   this.selectedCountryName = selectedCountry.countryName; // Save the country name to display it in the input field
-    
-  //   // You can now send the selectedCountryId to the backend
-  //   console.log('Selected Country ID:', this.selectedCountryId);
-  //   this.pagination$.next({ pageSize: event.pageSize, pageIndex: 1, countryId: this.selectedCountryId, search: false,  })
-  // }
+            console.log(this.defaultData)
+            this.defaultData.searchText = search;
+            this.defaultData.pageSize = +pageRelated.pageSize;
+            this.defaultData.sortExpression = sort.direction;
+            this.defaultData.OrderBy = sort.field;
+            // institutes of consultancy
+            console.log("heheh")
+            return this.getInstitutes(this.defaultData);
+          }
+        }
+        return of();
+      })
+    )
+  }
 
   addInstitute() {
     this.router.navigate(['/consultancy/register-institute'])
@@ -203,7 +191,7 @@ export class InstitutionListComponent {
     const con = confirm("Are you sure?")
     if (con) {
       this.subscriptions.add(this.consultancyApiService.deleteInstitute(id).subscribe(() => {
-        this.pagination$.next({pageSize:this.defaultData.pageSize,pageIndex:this.defaultData.currentPage,countryId:this.defaultData.CountryId,search:true})
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: this.defaultData.CountryId, search: true })
       }));
     }
   }
@@ -225,26 +213,31 @@ export class InstitutionListComponent {
     this.consultancyService.countrySelected.next(+this.countryId)
   }
 
-  seePrograms(id: number, instituteName:string, consultancyId:number) {
-    this.consultancyService.sendInstituteId.next({id,instituteName,consultancyId});
+  institutePrograms(id: number, instituteName: string, consultancyId: number) {
+    this.consultancyService.sendInstituteId.next({ id, instituteName, consultancyId });
     this.router.navigate(['/consultancy/program-list'])
+  }
+
+  instituteSession(id: number, name: string) {
+    this.consultancyService.getSessionsOfInstitute.next({ instituteId: id, instituteName: name })
+    this.router.navigate(['/consultancy/session-list'])
   }
 
   onConsultancyChange(event: any) {
     this.pagination$.next({ countryId: this.defaultData.CountryId, consultancyId: event })
   }
 
-  onEditorViewInstitute(){
-    this.consultancyService.editInstituteCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true, countryId:this.defaultData.CountryId })
+  onEditorViewInstitute() {
+    this.consultancyService.editInstituteCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true, countryId: this.defaultData.CountryId })
   }
 
   onSearch() {
     this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true, countryId: this.countryId })
   }
 
-  countrySelected(event:any){
+  countrySelected(event: any) {
     this.countryId = event
-    if(this.roleName === 'superadmin'){
+    if (this.roleName === 'superadmin') {
       this.pagination$.next({ countryId: this.countryId })
     }
   }

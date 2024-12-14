@@ -115,9 +115,6 @@ export class ProgramListComponent {
         this.ProgramFromInstitute = res.id;
         this.instituteName = res.instituteName;
         this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, instituteId: res.id, search: true, consultancyId: res.consultancyId })
-        this.institutes = this.consultancyApiService.getSpecificInstitutes()
-
-        // this.instituteControl.setValue(id);
       }
     }))
 
@@ -239,7 +236,7 @@ export class ProgramListComponent {
   }
 
   onSession(programName: string, instituteName: string, programId: number, instituteId: number) {
-    this.consultancyService.sendProgramId.next({ programName, instituteName, programId, instituteId })
+    // this.consultancyService.sendProgramId.next({ programName, instituteName, programId, instituteId })
     this.router.navigate(['consultancy/session-list'])
   }
 
@@ -258,6 +255,11 @@ export class ProgramListComponent {
 
   onViewProgram(){
     this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true })
+  }
+
+  getIntakesOfprogram(instituteId:number,instituteName:string,id:number,name:string){
+    this.consultancyService.getIntakesOfProgam.next({instituteId,instituteName,programId:id,programName:name})
+    this.router.navigate(['/consultancy/intake-list'])
   }
 
   ngOnDestroy() {

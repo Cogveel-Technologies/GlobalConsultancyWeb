@@ -42,6 +42,7 @@ export class ListRolesComponent implements OnInit {
   private sortFieldSubject = new BehaviorSubject<string>(this.sortField);
   private sortDirectionSubject = new BehaviorSubject<'asc' | 'desc'>(this.sortDirection);
   private searchTermSubject = new BehaviorSubject<string>('');
+  private onDelete = new BehaviorSubject<boolean>(false)
 
   constructor(
     private router: Router,
@@ -68,6 +69,7 @@ export class ListRolesComponent implements OnInit {
     ]).pipe(
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
+
         return this.adminService.getRolesList({
           limit: pageSize,
           orderBy: sortField,
