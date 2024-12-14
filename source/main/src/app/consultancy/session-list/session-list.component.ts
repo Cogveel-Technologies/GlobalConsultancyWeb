@@ -35,7 +35,7 @@ export class SessionListComponent {
   search = new FormControl();
   searchTerm$ = this.search.valueChanges.pipe(startWith(''));
   records: number;
-  pagination$: BehaviorSubject<{ pageSize: number, pageIndex: number }> = new BehaviorSubject<{ pageSize: number, pageIndex: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage });
+  pagination$: BehaviorSubject<{ pageSize?: number, pageIndex?: number, search?:boolean }> = new BehaviorSubject<{ pageSize: number, pageIndex: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage });
   sorting$: BehaviorSubject<{ field: string, direction: string }> = new BehaviorSubject<{ field: string, direction: string }>({ field: this.defaultData.OrderBy, direction: this.defaultData.sortExpression })
   currentPage$: BehaviorSubject<number> = new BehaviorSubject<number>(this.defaultData.currentPage);
   currentPageIndex: number;
@@ -52,6 +52,7 @@ export class SessionListComponent {
   instituteId: number
   instituteName: string
   programName: string
+  sessionEditState:boolean;
 
 
 
@@ -69,6 +70,19 @@ export class SessionListComponent {
 
 
   ngOnInit() {
+    this.consultancyService.sessionEditState.subscribe(res => {
+      console.log(res)
+      this.sessionEditState = res
+    })
+
+    
+    if(this.sessionEditState){
+      this.consultancyService.editSessionCurrentPageAndPageSize.subscribe(res => {
+        console.log(res)
+        this.pagination$.next({ pageSize: res.pageSize, pageIndex: res.pageIndex })
+        this.search$.next(res.search)
+      })
+     }
     // if superadmin has logged in
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true;
@@ -163,6 +177,7 @@ export class SessionListComponent {
           this.defaultData.pageSize = pageRelated.pageSize;
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field;
+          console.log(this.defaultData)
           return this.getSessions(this.defaultData)
         } else {
           return of()
@@ -216,13 +231,15 @@ export class SessionListComponent {
     this.router.navigate(["consultancy/intake-list"])
   }
 
-  onConsultancyChange(event: any) {
 
+  onEditorViewSession(){
+    this.consultancyService.editSessionCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true})
   }
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false);
     this.consultancyService.sendProgramId.next({ programId: '', instituteId: '' })
+    this.consultancyService.sessionEditState.next(false)
     this.subscription.unsubscribe()
   }
 }

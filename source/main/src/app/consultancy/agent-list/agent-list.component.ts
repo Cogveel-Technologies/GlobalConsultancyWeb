@@ -48,10 +48,22 @@ export class AgentListComponent {
   roleName = localStorage.getItem("roleName")
   consultancyControl = new FormControl('all');
   consultancies: Observable<[{ id: number, consultancyName: string }]>|any;
+  agentEditorViewState:boolean;
  
 
 
   ngOnInit() {
+    this.consultancyService.agentEditorViewState.subscribe(res => this.agentEditorViewState = res)
+    
+    if(this.agentEditorViewState){
+      this.consultancyService.editAgentCurrentPageAndPageSize.subscribe(res => {
+        console.log("HHHHHHH YYYYYYYYY")
+        console.log(res)
+        this.pagination$.next(res)
+        // this.search$.next(res.search)
+      })
+     }
+
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true
       this.adminService.getAllConsultancies(this.defaultData).pipe(map(res => {
@@ -130,7 +142,12 @@ export class AgentListComponent {
     this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true })
   }
 
+  onEditorViewAgent(){
+    this.consultancyService.editAgentCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true})
+  }
+
   ngOnDestroy() {
+    this.consultancyService.agentEditorViewState.next(false)
     this.subscription.unsubscribe()
   }
 

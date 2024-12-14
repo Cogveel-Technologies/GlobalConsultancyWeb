@@ -55,6 +55,7 @@ export class IntakesListComponent {
   instituteName:string;
   programName:string;
   sessionName:string
+  editIntakeState:boolean;
 
 
 
@@ -81,6 +82,16 @@ export class IntakesListComponent {
         this.intakesFromSession = true
       }
     })
+
+    this.consultancyService.intakeEditState.subscribe(res => this.editIntakeState = res)
+
+    if(this.editIntakeState){
+      this.consultancyService.editIntakeCurrentPageAndPageSize.subscribe(res => {
+        console.log(res)
+        this.pagination$.next({ pageSize: res.pageSize, pageIndex: res.pageIndex })
+        this.search$.next(res.search)
+      })
+     }
 
     // check if user is navigating from the edit form
     // this.consultancyService.showList.subscribe(state=>{
@@ -193,6 +204,10 @@ export class IntakesListComponent {
     localStorage.setItem("sessionId", event)
   }
 
+  onEditorViewIntake(){
+    this.consultancyService.editIntakeCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true})
+  }
+
   onProgramChange(event: any) {
     this.search$.next(false)
     this.program$.next(event)
@@ -238,6 +253,7 @@ export class IntakesListComponent {
   ngOnDestroy() {
     this.consultancyService.showList.next(false);
     this.consultancyService.getIntakesofSession.next({ instituteName:'',programName:'', sessionName:'' })
+    this.consultancyService.intakeEditState.next(false)
     this.subscription.unsubscribe()
   }
 }

@@ -52,4 +52,9 @@ export class ConsultancyService {
   instituteEditState:BehaviorSubject<null|boolean> = new BehaviorSubject(null)
   editInstituteCurrentPageAndPageSize: BehaviorSubject<null|{pageIndex:number,pageSize:number,search:boolean,countryId:number|string}> = new BehaviorSubject(null)
   sessionEditState:BehaviorSubject<null|boolean> = new BehaviorSubject(null);
+  editSessionCurrentPageAndPageSize: BehaviorSubject<null|{pageIndex:number,pageSize:number,search:boolean}> = new BehaviorSubject(null)
+  intakeEditState:BehaviorSubject<null|boolean> = new BehaviorSubject(null)
+  editIntakeCurrentPageAndPageSize: BehaviorSubject<null|{pageIndex:number,pageSize:number,search:boolean}> = new BehaviorSubject(null)
+  agentEditorViewState:BehaviorSubject<null|boolean> = new BehaviorSubject(null);
+  editAgentCurrentPageAndPageSize: BehaviorSubject<null|{pageIndex:number,pageSize:number,search:boolean}> = new BehaviorSubject(null)
 }

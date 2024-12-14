@@ -94,6 +94,7 @@ export class RegisterSessionComponent {
 
   routeToSessionList() {
     if(this.editMode){
+      this.consultancyService.sessionEditState.next(true)
       this.consultancyService.showList.next(true)
       this.router.navigate(['consultancy', 'session-list'])
     }else{
