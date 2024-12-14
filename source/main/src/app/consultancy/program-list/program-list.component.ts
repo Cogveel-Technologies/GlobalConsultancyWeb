@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProgramData } from '../consultancy-models/data.program';
 import { ConsultancyApi } from '../consultancy-services/api.service';
-import { BehaviorSubject, combineLatest, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
@@ -64,7 +64,13 @@ export class ProgramListComponent {
 
   getPrograms(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getPrograms(params).pipe
-      (map(res => {
+      (tap(res => {
+              if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
+                console.log("Condition met: No data and currentPage > 1");
+                this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize:this.defaultData.pageSize, search:true });
+              }
+            }),
+            filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)),map(res => {
         this.records = res['pageInfo']['totalRecords'];
         return res['data']
       }))

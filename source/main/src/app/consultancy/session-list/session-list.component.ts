@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SessionData } from '../consultancy-models/data.session';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
@@ -61,7 +61,15 @@ export class SessionListComponent {
 
   // get sessions
   getSessions(data: ConsultancyDetailsOptions) {
-    return this.consultancyApiService.getSession(data).pipe(map(response => {
+    return this.consultancyApiService.getSession(data).pipe(
+      tap(res => {
+              if ((!res['data'] || res['data'].length === 0) && data.currentPage > 1) {
+                console.log("Condition met: No data and currentPage > 1");
+                this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize:this.defaultData.pageSize, search:true });
+              }
+            }),
+            filter(res => !((!res['data'] || res['data'].length === 0) && data.currentPage > 1)),
+      map(response => {
       console.log(response)
       this.records = response['pageInfo']['totalRecords'];
       return response['data']

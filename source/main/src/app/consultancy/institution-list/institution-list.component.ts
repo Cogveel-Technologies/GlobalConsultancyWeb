@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, of, startWith, Subscription, switchMap, tap, throttleTime, toArray } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, of, startWith, Subscription, switchMap, tap, throttleTime, toArray } from 'rxjs';
 import { Observable } from 'rxjs';
 import { InstituteData } from '../consultancy-models/data.institute';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -61,22 +61,31 @@ export class InstitutionListComponent {
 
 
 
-
   getInstitutes(params: ConsultancyDetailsOptions) {
-    return this.consultancyApiService.getInstitutes(params).pipe
-      (map(res => {
-        console.log(res)
+    return this.consultancyApiService.getInstitutes(params).pipe(
+      tap(res => {
+        if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
+          console.log("Condition met: No data and currentPage > 1");
+          this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize:this.defaultData.pageSize, countryId:this.defaultData.CountryId, search:true });
+        }
+      }),
+      filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)),
+      map(res => {
+        console.log(res);
         this.records = res['pageInfo']['totalRecords'];
-        return res['data']
-      }));
+        return res['data'];
+      })
+    );
   }
+  
 
   ngOnInit() {
+    // state management for navigating from view or edit page
     this.consultancyService.instituteEditState.subscribe(res => {
       this.instituteEditState = res
     })
 
-    
+    // if user navigates back from edit or view page
     if(this.instituteEditState){
       this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
         console.log("Mmmm")

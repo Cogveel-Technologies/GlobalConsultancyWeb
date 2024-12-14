@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { IntakeData } from '../consultancy-models/data.intake';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -26,9 +26,9 @@ export class IntakesListComponent {
   intakes!: Observable<IntakeData[]>
   sessionSelected: boolean = false;
   sessionListForm: FormGroup;
-  sessions: Observable<{ id: number, sessionName: string }[]>|any;
-  institutes: Observable<SpecificConsultancyRelated[]> |any;
-  programs: Observable<SpecificConsultancyRelated[]>|any;
+  sessions: Observable<{ id: number, sessionName: string }[]> | any;
+  institutes: Observable<SpecificConsultancyRelated[]> | any;
+  programs: Observable<SpecificConsultancyRelated[]> | any;
   program$: BehaviorSubject<string | number> = new BehaviorSubject<string | number>('')
   institute$: BehaviorSubject<string | number> = new BehaviorSubject<string | number>('');
   session$: BehaviorSubject<string | number> = new BehaviorSubject<string | number>('');
@@ -51,20 +51,27 @@ export class IntakesListComponent {
   previousSessionId: number = 0;
   intakesFromSession: boolean = false;
   isProgramId: boolean = false;
-  roleName:string = localStorage.getItem("roleName");
-  instituteName:string;
-  programName:string;
-  sessionName:string
-  editIntakeState:boolean;
+  roleName: string = localStorage.getItem("roleName");
+  instituteName: string;
+  programName: string;
+  sessionName: string
+  editIntakeState: boolean;
 
 
 
   getIntakes(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getIntakes(params).pipe
-      (map(res => {
-        this.records = res['pageInfo']['totalRecords'];
-        return res['data']
-      }))
+      (tap(res => {
+        if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
+          console.log("Condition met: No data and currentPage > 1");
+          this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize: this.defaultData.pageSize });
+        }
+      }),
+        filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)),
+        map(res => {
+          this.records = res['pageInfo']['totalRecords'];
+          return res['data']
+        }))
   }
 
   // get all data
@@ -85,13 +92,13 @@ export class IntakesListComponent {
 
     this.consultancyService.intakeEditState.subscribe(res => this.editIntakeState = res)
 
-    if(this.editIntakeState){
+    if (this.editIntakeState) {
       this.consultancyService.editIntakeCurrentPageAndPageSize.subscribe(res => {
         console.log(res)
         this.pagination$.next({ pageSize: res.pageSize, pageIndex: res.pageIndex })
         this.search$.next(res.search)
       })
-     }
+    }
 
     // check if user is navigating from the edit form
     // this.consultancyService.showList.subscribe(state=>{
@@ -108,24 +115,24 @@ export class IntakesListComponent {
     // }
 
 
-    if(this.roleName !== "superadmin"){
-      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res=>{
-        res = [{id:0, name:'All'}, ...res]
+    if (this.roleName !== "superadmin") {
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res => {
+        res = [{ id: 0, name: 'All' }, ...res]
         return res
-      })).subscribe(res=>{
-         this.institutes = res
-        })
-    }else{
+      })).subscribe(res => {
+        this.institutes = res
+      })
+    } else {
       console.log("super adminnnnn")
       this.defaultData.IsAdmin = true;
-      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res=>{
-        res = [{id:0, name:'All'}, ...res]
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res => {
+        res = [{ id: 0, name: 'All' }, ...res]
         return res
-      })).subscribe(res =>{
-         this.institutes = res
-        })
+      })).subscribe(res => {
+        this.institutes = res
+      })
     }
-  
+
 
 
 
@@ -145,7 +152,7 @@ export class IntakesListComponent {
           } else {
             this.defaultData.InstituteId = String(instituteId);
             console.log(this.defaultData)
-            this.consultancyApiService.getAllPrograms(this.defaultData).subscribe(res=> this.programs =  res);
+            this.consultancyApiService.getAllPrograms(this.defaultData).subscribe(res => this.programs = res);
           }
           this.previousInstituteId = String(instituteId);
           this.defaultData.ProgramId = '';
@@ -164,7 +171,7 @@ export class IntakesListComponent {
           this.session.setValue('');
           this.isProgramId = true;
           console.log(this.defaultData)
-          this.consultancyApiService.getProgramSessions(this.defaultData).subscribe(res=> {
+          this.consultancyApiService.getProgramSessions(this.defaultData).subscribe(res => {
             console.log(res)
             this.sessions = res
           })
@@ -179,10 +186,10 @@ export class IntakesListComponent {
           console.log(this.defaultData)
         }
         if (search) {
-          if(searchTerm){
+          if (searchTerm) {
             this.defaultData.currentPage = 1;
             this.currentPageIndex = 0;
-          }else{
+          } else {
             this.defaultData.currentPage = pageRelated.pageIndex;
             this.currentPageIndex = pageRelated.pageIndex - 1;
           }
@@ -204,8 +211,8 @@ export class IntakesListComponent {
     localStorage.setItem("sessionId", event)
   }
 
-  onEditorViewIntake(){
-    this.consultancyService.editIntakeCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true})
+  onEditorViewIntake() {
+    this.consultancyService.editIntakeCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
   }
 
   onProgramChange(event: any) {
@@ -239,7 +246,7 @@ export class IntakesListComponent {
     const con = confirm("Are you sure?")
     if (con) {
       this.subscription.add(this.consultancyApiService.deleteIntake(id).subscribe(res => {
-        this.pagination$.next({ pageSize:this.defaultData.pageSize, pageIndex: this.defaultData.currentPage })
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage })
       }));
     }
   }
@@ -252,7 +259,7 @@ export class IntakesListComponent {
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false);
-    this.consultancyService.getIntakesofSession.next({ instituteName:'',programName:'', sessionName:'' })
+    this.consultancyService.getIntakesofSession.next({ instituteName: '', programName: '', sessionName: '' })
     this.consultancyService.intakeEditState.next(false)
     this.subscription.unsubscribe()
   }
