@@ -101,9 +101,12 @@ export class ProgramListComponent {
         this.consultancies = res
       });
     } else {
-      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res => {
-        this.institutes = res
-      })
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res=>{
+        res = [{id:0, name:'All'}, ...res]
+        return res
+      })).subscribe(res=>{
+         this.institutes = res
+        })
     }
     // get all program by default
     this.programs = this.getPrograms(this.defaultData)
@@ -126,6 +129,14 @@ export class ProgramListComponent {
       .pipe(throttleTime(1000, undefined, { leading: true, trailing: true }),
         distinctUntilChanged(),
         switchMap(([searchTerm, pageRelated, sorting]) => {
+          
+          if(pageRelated.instituteId === 0){
+            this.defaultData.ConsultancyId = ''
+            this.defaultData.InstituteId = ''
+            this.defaultData.ProgramId = ''
+            this.defaultData.SessionId = ''
+          }
+
           if (String(pageRelated.consultancyId) !== String(this.previousConsultancyState) && this.roleName === 'superadmin') {
             this.defaultData.InstituteId = ''
             this.previousConsultancyState = pageRelated.consultancyId;

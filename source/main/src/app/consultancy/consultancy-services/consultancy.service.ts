@@ -57,5 +57,5 @@ export class ConsultancyService {
   editIntakeCurrentPageAndPageSize: BehaviorSubject<null|{pageIndex:number,pageSize:number,search:boolean}> = new BehaviorSubject(null)
   agentEditorViewState:BehaviorSubject<null|boolean> = new BehaviorSubject(null);
   editAgentCurrentPageAndPageSize: BehaviorSubject<null|{pageIndex:number,pageSize:number,search:boolean}> = new BehaviorSubject(null)
-  getIntakesOfProgam: BehaviorSubject<null|{instituteId:number,instituteName:string,programId:number,programName:string}> = new BehaviorSubject(null)
+  getIntakesOfProgam: BehaviorSubject<null|{instituteId?:number,instituteName?:string,programId?:number,programName?:string}> = new BehaviorSubject(null)
 }

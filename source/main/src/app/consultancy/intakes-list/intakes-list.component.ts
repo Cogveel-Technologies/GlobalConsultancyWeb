@@ -49,12 +49,13 @@ export class IntakesListComponent {
   previousInstituteId: string = '';
   previousProgramId: string = '';
   previousSessionId: number = 0;
-  intakesFromSession: boolean = false;
-  isProgramId: boolean = false;
+  intakesFromSession: boolean|number = true;
+  isProgramId: boolean = true;
   roleName:string = localStorage.getItem("roleName");
   instituteName:string;
   programName:string;
   sessionName:string;
+
 
 
 
@@ -76,6 +77,8 @@ export class IntakesListComponent {
     // intakes from program list
     this.consultancyService.getIntakesOfProgam.subscribe(res => {
       if(res){
+        console.log("pppsdfjasdklfjaslfjasklj")
+        this.intakesFromSession = false;
         this.institute$.next(res.instituteId)
         this.instituteName = res.instituteName;
         this.program$.next(res.programId)
@@ -88,11 +91,11 @@ export class IntakesListComponent {
       if (res && res.sessionId) {
         console.log(res)
         console.log("ksdfksttekjttttttt")
-        this.session$.next(res.sessionId)
-        this.instituteName = res.instituteName;
-        this.programName = res.programName;
-        this.sessionName = res.sessionName;
         this.intakesFromSession = true
+        this.institute$.next(res.instituteId)
+        this.instituteName = res.instituteName;
+        this.session$.next(res.sessionId)
+        this.sessionName = res.sessionName;
       }
     })
 
@@ -131,18 +134,23 @@ export class IntakesListComponent {
             console.log(this.defaultData)
             this.defaultData.InstituteId = '';
           } else {
-            this.defaultData.InstituteId = String(instituteId);
+            console.log(instituteId, "--------------")
+            this.defaultData.InstituteId = ''+instituteId;
             console.log(this.defaultData)
-            this.consultancyApiService.getAllPrograms(this.defaultData).subscribe(res=> this.programs =  res);
+            if(!this.intakesFromSession){
+              console.log(this.intakesFromSession)
+              this.consultancyApiService.getAllPrograms(this.defaultData).subscribe(res=> this.programs =  res);
+            }else{
+              console.log("MmMMmMMmmmmMmM")
+              this.consultancyApiService.getSpecificSessions(this.defaultData).subscribe(res => this.sessions = res)
+            }
           }
           this.previousInstituteId = String(instituteId);
           this.defaultData.ProgramId = '';
           this.defaultData.SessionId = '';
           this.isProgramId = true;
         }
-        console.log(programId, "ppppppppppp")
-        console.log(this.previousProgramId, "ppppppppppp previous")
-        if (programId && String(this.previousProgramId) !== String(programId)) {
+        if (programId && String(this.previousProgramId) !== String(programId) && !this.intakesFromSession) {
           console.log("only program id")
           this.previousProgramId = String(programId)
           this.defaultData.ProgramId = String(programId);
@@ -160,7 +168,7 @@ export class IntakesListComponent {
         if (sessionId && this.previousSessionId !== sessionId) {
           console.log("only session id")
           this.previousSessionId = Number(sessionId);
-          this.defaultData.InstituteId = '';
+          // this.defaultData.InstituteId = '';
           this.defaultData.ProgramId = '';
           this.defaultData.SessionId = String(sessionId)
           this.session.setValue(sessionId)
@@ -235,8 +243,10 @@ export class IntakesListComponent {
   }
 
   ngOnDestroy() {
+    this.intakesFromSession = true
     this.consultancyService.showList.next(false);
-    this.consultancyService.getIntakesofSession.next({ instituteName:'',programName:'', sessionName:'' })
+    this.consultancyService.getIntakesOfProgam.next(null)
+    this.consultancyService.getIntakesofSession.next(null)
     this.subscription.unsubscribe()
   }
 }

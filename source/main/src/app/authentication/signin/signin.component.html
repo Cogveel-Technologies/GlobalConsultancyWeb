@@ -58,7 +58,7 @@
                     <div class="form-group auth-form-group mb-4">
                       <mat-icon matSuffix class="auth-page-icon">email</mat-icon>
                       <input type="email" appCustomValidator="email" formControlName="userName" class="form-control auth-control" id="email"
-                        placeholder="Email" [ngClass]="{ 'is-invalid': submitted && form['email'].errors }">
+                        placeholder="Email" [ngClass]="{ 'is-invalid': submitted && form['email'].errors }" required>
                       <div *ngIf="submitted && form['email'].errors" class="invalid-feedback">
                         <div *ngIf="form['email'].errors['required']">Email is required</div>
                         <div *ngIf="form['email'].errors['email']">Email must be a valid email address</div>
@@ -69,7 +69,7 @@
                       <mat-icon matSuffix class="auth-page-icon">vpn_key</mat-icon>
                       <input type="password" formControlName="password" class="form-control auth-control"
                         id="password" [ngClass]="{ 'is-invalid': submitted && form['password'].errors }"
-                        placeholder="Password" />
+                        placeholder="Password" required/>
                       <div *ngIf="submitted && form['password'].errors" class="invalid-feedback">
                         <div *ngIf="form['password'].errors['required']">Password is required</div>
                       </div>
@@ -90,7 +90,7 @@
                     </div>
 
                     <div class="container-login100-form-btn">
-                      <button mat-raised-button color="primary" class="login100-form-btn" type="submit">
+                      <button [disabled]="!signInForm.valid" mat-raised-button color="primary" class="login100-form-btn" type="submit">
                         Login
                       </button>
                     </div>
