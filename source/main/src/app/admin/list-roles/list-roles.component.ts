@@ -35,6 +35,9 @@ export class ListRolesComponent implements OnInit {
   // Inline editing variables
   editingRoleId: number | null = null;
   editingRoleName: string = '';
+  pageNumber:number
+  deleteOperation:boolean = false
+  editOperation:boolean = false
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -69,7 +72,8 @@ export class ListRolesComponent implements OnInit {
     ]).pipe(
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
-
+        this.pageNumber = currentPage;
+        console.log(this.pageNumber)
         return this.adminService.getRolesList({
           limit: pageSize,
           orderBy: sortField,
@@ -103,7 +107,11 @@ export class ListRolesComponent implements OnInit {
     this.sortFieldSubject.next(this.sortField);
     this.sortDirectionSubject.next(this.sortDirection);
     this.pageSizeSubject.next(this.pageSize);
-    this.currentPageSubject.next(this.currentPage);
+    if(this.deleteOperation || this.editOperation){
+      this.currentPageSubject.next(this.pageNumber);
+    }else{
+      this.currentPageSubject.next(this.currentPage);
+    }
   }
 
   addRole() {
@@ -120,6 +128,7 @@ export class ListRolesComponent implements OnInit {
   deleteRole(roleId: number) {
     this.adminService.deleteRole(roleId).subscribe({
       next: () => {
+        this.deleteOperation = true
         this.refreshRoles();
         // this.snackBar.open('Role deleted successfully', 'Close', { duration: 3000 });
       },
@@ -131,6 +140,7 @@ export class ListRolesComponent implements OnInit {
 
   // Inline editing methods
   editRole(roleId: number, roleName: string) {
+    this.editOperation = true
     this.editingRoleId = roleId;
     this.editingRoleName = roleName;
   }

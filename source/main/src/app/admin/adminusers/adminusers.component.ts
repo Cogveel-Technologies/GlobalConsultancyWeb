@@ -26,6 +26,7 @@ export class AdminusersComponent implements OnInit, OnDestroy {
   filteredFirstNameOptions: any[] = []; // Array for autocomplete options
   errorMessage: string = '';
   genders: string[] = ['Male', 'Female', 'Other'];
+  editMode:any
 
   private subscriptions: Subscription[] = [];
 
@@ -40,6 +41,11 @@ export class AdminusersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.adminService.editorViewUserPageState.subscribe(res=>{
+      if(res){
+        this.adminService.editUserState.next(true)
+      }
+    })
     this. fetchAllRoles();
     const routeSub = this.route.queryParams.subscribe(params => {
       const userId = params['id'];

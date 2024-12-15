@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
@@ -16,7 +16,7 @@ import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.comp
   templateUrl: './listusers.component.html',
   styleUrls: ['./listusers.component.scss']
 })
-export class ListusersComponent implements OnInit {
+export class ListusersComponent implements OnInit,OnDestroy {
   breadscrums = [
     {
       title: 'Users',
@@ -33,6 +33,10 @@ export class ListusersComponent implements OnInit {
   pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
   currentPage = 1; // Default current page
   totalPages = 1; // Total number of pages
+
+  pageNumber:number
+  deleteOperation:boolean = false
+  editOperation:boolean = false
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -51,6 +55,21 @@ export class ListusersComponent implements OnInit {
   }
   
   ngOnInit() {
+    console.log(this.editOperation)
+
+    this.adminService.editUserState.subscribe(res => this.editOperation = res);
+
+    if(this.editOperation){
+      this.adminService.editorViewUserPageState.subscribe(res => {
+        this.editOperation = true
+        this.pageNumber = res
+        this.currentPageSubject.next(res)
+      })
+    }
+
+    // if(this.editOperation){
+    //   this.currentPageSubject
+    // }
     // Combine search, pagination, and sorting
     this.users$ = combineLatest([
       this.searchControl.valueChanges.pipe(
@@ -65,6 +84,8 @@ export class ListusersComponent implements OnInit {
       this.sortDirectionSubject
     ]).pipe(
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
+        this.pageNumber = currentPage;
+        console.log(currentPage)
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
         return this.adminService.getUsersList({
           limit: pageSize,
@@ -97,7 +118,11 @@ export class ListusersComponent implements OnInit {
     this.sortFieldSubject.next(this.sortField);
     this.sortDirectionSubject.next(this.sortDirection);
     this.pageSizeSubject.next(this.pageSize);
-    this.currentPageSubject.next(this.currentPage);
+    if(this.deleteOperation || this.editOperation){
+      this.currentPageSubject.next(this.pageNumber);
+    }else{
+      this.currentPageSubject.next(this.currentPage);
+    }
   }
 
  
@@ -116,6 +141,7 @@ export class ListusersComponent implements OnInit {
   deleteUser(userId: number) {
     this.adminService.deleteUser(userId).subscribe({
       next: () => {
+        this.deleteOperation = true
         this.refreshUsers();
         this.snackBar.open('User deleted successfully', 'Close', { duration: 100 });
       },
@@ -133,12 +159,15 @@ export class ListusersComponent implements OnInit {
   }
 
   editUser(userId: number) {
+    console.log(this.pageNumber)
+    this.adminService.editorViewUserPageState.next(this.pageNumber)
     this.router.navigate(['/admin/adminusers'], {
       queryParams: { id: userId }
     });
   }
 
   viewUser(userId: number) {
+    this.adminService.editorViewUserPageState.next(this.pageNumber)
     this.router.navigate(['/admin/view-users'], {
       queryParams: { id: userId }
     });
@@ -166,5 +195,8 @@ export class ListusersComponent implements OnInit {
     this.sortField = field;
     this.sortDirection = direction;
     this.refreshUsers();
+  }
+  ngOnDestroy(): void {
+    this.adminService.editUserState.next(false)
   }
 }
