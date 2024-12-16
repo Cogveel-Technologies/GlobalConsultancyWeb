@@ -6,7 +6,7 @@ import { ConsultancyApi } from '../consultancy-services/api.service';
 import { Observable } from 'rxjs';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
-import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
+
 
 
 
@@ -86,6 +86,7 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   // navigate to institute list page
   navigateToInstituteList() {
     if (this.editMode) {
+      this.consultancyService.instituteEditState.next(true)
       this.consultancyService.showList.next(true)
       this.router.navigate(['consultancy', 'institution-list']);
     } else {

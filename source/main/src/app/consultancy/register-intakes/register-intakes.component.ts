@@ -101,6 +101,7 @@ export class RegisterIntakesComponent {
 
   navigateToIntakeList() {
     if (this.editMode) {
+      this.consultancyService.intakeEditState.next(true)
       this.consultancyService.showList.next(true)
       this.router.navigate(["consultancy", "intake-list"]);
     } else {

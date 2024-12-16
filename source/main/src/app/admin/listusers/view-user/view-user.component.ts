@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../user.model';
+import { AdminService } from 'app/admin/admin.service';
 
 @Component({
   selector: 'app-view-user',
@@ -17,9 +18,15 @@ export class ViewUserComponent implements OnInit {
   ];
   user: User | null = null;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private adminService:AdminService) {}
 
   ngOnInit() {
+    this.adminService.editorViewUserPageState.subscribe(res=>{
+      if(res){
+        this.adminService.editUserState.next(true)
+      }
+    })
+
     this.route.data.subscribe((data: { user: User | null }) => {
       this.user = data.user;
       console.log('Resolved user:', this.user);

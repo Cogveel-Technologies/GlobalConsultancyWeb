@@ -11,12 +11,12 @@
           <app-searchable-dropdown [options]="institutes" [displayField]="'name'" [intakeInstitute]="instituteName ? instituteName : ''" (selectionChange)="onInstituteSelected($event)" [placeHolder]="'Institute'"></app-searchable-dropdown>
         </div>
         
-        <div class="col-md-4">
+        <div class="col-md-4" *ngIf="!intakesFromSession">
           <app-searchable-dropdown [options]="programs" [displayField]="'name'" [intakeProgram]="programName ? programName : ''" (selectionChange)="onProgramChange($event)" [placeHolder]="'Program'"></app-searchable-dropdown>
         </div>
         
-        <div class="col-md-4">
-          <app-searchable-dropdown [options]="sessions" [displayField]="'sessionName'" [intakeSession]="sessionName ? sessionName : ''"  (selectionChange)="onSessionChange($event)" [placeHolder]="'Session'"></app-searchable-dropdown>
+        <div class="col-md-4" *ngIf="intakesFromSession">
+          <app-searchable-dropdown [options]="sessions" [displayField]="intakesFromSession ? 'name' : 'sessionName'" [intakeSession]="sessionName ? sessionName : ''"  (selectionChange)="onSessionChange($event)" [placeHolder]="'Session'"></app-searchable-dropdown>
         </div>
         
         <div class="col-md-4">

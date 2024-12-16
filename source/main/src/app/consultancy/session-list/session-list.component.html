@@ -10,9 +10,9 @@
         <div class="col-md-4">
           <app-searchable-dropdown [options]="institutes" [displayField]="'name'" (selectionChange)="onInstituteSelected($event)" [sessionInstitue]="instituteName ? instituteName : ''" [placeHolder]="'Institute'"></app-searchable-dropdown>
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <app-searchable-dropdown [options]="programs" [displayField]="'name'" (selectionChange)=" onProgramChange($event)" [sessionInstitue]="programName? programName: ''" [placeHolder]="'Program'"></app-searchable-dropdown>
-        </div>
+        </div> -->
         <div class="col-md-2">
           <button type="submit" class="btn-space" mat-raised-button color="primary" (click)="onSearch()">Search</button>
         </div>
@@ -79,7 +79,7 @@
                 <td data-label="Actions">
                   <ng-container *ngIf="roleName !== 'superadmin'">
                   <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-session', session.id]"
-                    matTooltip="Edit"  *appPermissions="{feature:'Session',action:'canEdit'}">
+                    matTooltip="Edit"  *appPermissions="{feature:'Session',action:'canEdit'}" (click)="onEditorViewSession()">
                     <!-- <mat-icon>edit</mat-icon> -->
                     <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
 
@@ -108,7 +108,7 @@
                   </button>
                   </ng-container>
                   <button mat-icon-button color="primary" matTooltip="Intakes"
-                    (click)="onIntakes(session.id, session.instituteName, session.programName, session.sessionName)">
+                    (click)="onIntakes(session.id, session.instituteName, session.programName, session.sessionName, session.instituteId)">
                     <!-- <mat-icon>edit</mat-icon> -->
                     <app-feather-icons [icon]="'users'" [class]="'tbl-fav-edit'"></app-feather-icons>
                   </button>

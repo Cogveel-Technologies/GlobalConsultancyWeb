@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConsultancyService } from '../consultancy-services/consultancy.service';
 
 @Component({
   selector: 'app-register-agent',
@@ -10,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./register-agent.component.scss']
 })
 export class RegisterAgentComponent {
-  constructor(private fb: FormBuilder, private consultancyApiService: ConsultancyApi, private route: ActivatedRoute, private router: Router) { }
+  constructor(private fb: FormBuilder, private consultancyApiService: ConsultancyApi, private route: ActivatedRoute, private router: Router, private consultancyService:ConsultancyService) { }
   breadscrums = [
     {
       title: 'Add Agent',
@@ -51,6 +52,9 @@ export class RegisterAgentComponent {
   }
 
   navigateToAgentList() {
+    if(this.editMode){
+      this.consultancyService.agentEditorViewState.next(true)
+    }
     this.router.navigate(["consultancy", "agent-list"])
   }
 

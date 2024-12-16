@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProgramData } from '../consultancy-models/data.program';
 import { ConsultancyApi } from '../consultancy-services/api.service';
-import { BehaviorSubject, combineLatest, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
@@ -57,18 +57,39 @@ export class ProgramListComponent {
   consultancies: Observable<[{ id: number, consultancyName: string }]> | any;
   instituteId: number;
   instituteName: string;
+  programEditState: boolean = false
+
 
 
 
   getPrograms(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getPrograms(params).pipe
-      (map(res => {
+      (tap(res => {
+              if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
+                console.log("Condition met: No data and currentPage > 1");
+                this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize:this.defaultData.pageSize, search:true });
+              }
+            }),
+            filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)),map(res => {
         this.records = res['pageInfo']['totalRecords'];
         return res['data']
       }))
   }
 
   ngOnInit() {
+    this.consultancyService.programEditState.subscribe(res => {
+      this.programEditState = res
+    })
+
+
+   if(this.programEditState){
+    this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
+      console.log("Mmmm")
+      console.log(res)
+      this.pagination$.next(res)
+    })
+   }
+
     // if superadmin has logged in
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true;
@@ -80,9 +101,12 @@ export class ProgramListComponent {
         this.consultancies = res
       });
     } else {
-      this.institutes = this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res => {
-        this.institutes = res
-      })
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res=>{
+        res = [{id:0, name:'All'}, ...res]
+        return res
+      })).subscribe(res=>{
+         this.institutes = res
+        })
     }
     // get all program by default
     this.programs = this.getPrograms(this.defaultData)
@@ -94,9 +118,6 @@ export class ProgramListComponent {
         this.ProgramFromInstitute = res.id;
         this.instituteName = res.instituteName;
         this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, instituteId: res.id, search: true, consultancyId: res.consultancyId })
-        this.institutes = this.consultancyApiService.getSpecificInstitutes()
-
-        // this.instituteControl.setValue(id);
       }
     }))
 
@@ -108,6 +129,14 @@ export class ProgramListComponent {
       .pipe(throttleTime(1000, undefined, { leading: true, trailing: true }),
         distinctUntilChanged(),
         switchMap(([searchTerm, pageRelated, sorting]) => {
+          
+          if(pageRelated.instituteId === 0){
+            this.defaultData.ConsultancyId = ''
+            this.defaultData.InstituteId = ''
+            this.defaultData.ProgramId = ''
+            this.defaultData.SessionId = ''
+          }
+
           if (String(pageRelated.consultancyId) !== String(this.previousConsultancyState) && this.roleName === 'superadmin') {
             this.defaultData.InstituteId = ''
             this.previousConsultancyState = pageRelated.consultancyId;
@@ -141,6 +170,7 @@ export class ProgramListComponent {
           }
 
           if (pageRelated.search) {
+            console.log(pageRelated)
             if (searchTerm) {
               this.defaultData.currentPage = 1;
               this.currentPageIndex = 0;
@@ -206,7 +236,7 @@ export class ProgramListComponent {
     const con = confirm("Are you sure?")
     if (con) {
       this.subscription.add(this.consultancyApiService.deleteProgram(id).subscribe(() => {
-        this.programs = this.getPrograms(this.defaultData);
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
       }));
     }
   }
@@ -217,7 +247,7 @@ export class ProgramListComponent {
   }
 
   onSession(programName: string, instituteName: string, programId: number, instituteId: number) {
-    this.consultancyService.sendProgramId.next({ programName, instituteName, programId, instituteId })
+    // this.consultancyService.sendProgramId.next({ programName, instituteName, programId, instituteId })
     this.router.navigate(['consultancy/session-list'])
   }
 
@@ -230,10 +260,23 @@ export class ProgramListComponent {
     this.instituteId = event
   }
 
+  onEditProgram() {
+    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true })
+  }
+
+  onViewProgram(){
+    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true })
+  }
+
+  getIntakesOfprogram(instituteId:number,instituteName:string,id:number,name:string){
+    this.consultancyService.getIntakesOfProgam.next({instituteId,instituteName,programId:id,programName:name})
+    this.router.navigate(['/consultancy/intake-list'])
+  }
+
   ngOnDestroy() {
     this.institute$.next('');
     this.consultancyService.sendInstituteId.next(null)
+    this.consultancyService.programEditState.next(false)
     this.subscription.unsubscribe();
   }
-
 }

@@ -117,6 +117,7 @@ export class ProgramAllDetailsComponent {
   }
 
   backToList() {
+    this.consultancyService.programEditState.next(true)
     this.consultancyService.showList.next(true)
     this.router.navigate(["/consultancy/program-list"]);
   }

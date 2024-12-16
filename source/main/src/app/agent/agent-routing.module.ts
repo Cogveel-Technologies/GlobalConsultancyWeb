@@ -25,63 +25,69 @@ const routes: Routes = [
   //   path: 'sorting',
   //   component: SortingComponent,
   // },
+  {
+    path: '',
+    canActivate: [AuthGuard], // Apply AuthGuard to all child routes
+    children: [
 
-  {
-    path: 'register-student',
-    component: StudentRegisterComponent,
-    resolve: {
-      student: StudentResolver
-    },
+      {
+        path: 'register-student',
+        component: StudentRegisterComponent,
+        resolve: {
+          student: StudentResolver
+        },
 
-    // canActivate:[AuthGuard]
-  },
-  {
-    path: 'registerwizard',
-    component: RegisterwizardComponent,
-    // canActivate: [AuthGuard]
-  },
-  {
-    path: 'list-students',
-    component: ListstudentsComponent,
-    // canActivate: [AuthGuard]
+        // canActivate:[AuthGuard]
+      },
+      {
+        path: 'registerwizard',
+        component: RegisterwizardComponent,
+        // canActivate: [AuthGuard]
+      },
+      {
+        path: 'list-students',
+        component: ListstudentsComponent,
+        // canActivate: [AuthGuard]
 
-  },
-  {
-    path: 'applications',
-    component: ApplicationsComponent,
-    // canActivate: [AuthGuard]
-  },
-  {
-    path: 'application-list',
-    component: ApplicationListComponent,
-    // canActivate: [AuthGuard]
-  },
-  {
-    path: 'student-application',
-    component: StudentApplicationComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'admission',
-    component: AdmissionComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'student-document',
-    component: StudentDocumentComponent,
-    resolve: {
-      student: StudentResolver
-    },
-    // canActivate:[AuthGuard]
-  },
- 
-  {
-    path: 'view-student',
-    component: ViewStudentComponent,
-    resolve: {
-      student: StudentResolver
-    }
-  },
+      },
+      {
+        path: 'applications',
+        component: ApplicationsComponent,
+        // canActivate: [AuthGuard]
+      },
+      {
+        path: 'application-list',
+        component: ApplicationListComponent,
+        // canActivate: [AuthGuard]
+      },
+      {
+        path: 'student-application',
+        component: StudentApplicationComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'admission',
+        component: AdmissionComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'student-document',
+        component: StudentDocumentComponent,
+        resolve: {
+          student: StudentResolver
+        },
+        // canActivate:[AuthGuard]
+      },
+
+      {
+        path: 'view-student',
+        component: ViewStudentComponent,
+        resolve: {
+          student: StudentResolver
+        }
+      },
+    ]
+  }
 
 
 ];

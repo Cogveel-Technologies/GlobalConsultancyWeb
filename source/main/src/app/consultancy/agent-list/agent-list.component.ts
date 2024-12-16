@@ -3,7 +3,7 @@ import { AgentDetails } from '../consultancy-models/data.agent';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -28,11 +28,17 @@ export class AgentListComponent {
 
   getAgents(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getAgents(params).pipe
-      (map(res => {
-        this.records = res['pageInfo']['totalRecords'];
-        console.log(res['data'])
-        return res['data']
-      }));
+      (tap(res => {
+        if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
+          console.log("Condition met: No data and currentPage > 1");
+          this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize: this.defaultData.pageSize, search: true });
+        }
+      }),
+        filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)), map(res => {
+          this.records = res['pageInfo']['totalRecords'];
+          console.log(res['data'])
+          return res['data']
+        }));
   }
   agents: Observable<AgentDetails[]>;
   subscription: Subscription = new Subscription();
@@ -47,11 +53,23 @@ export class AgentListComponent {
   currentPageIndex: number;
   roleName = localStorage.getItem("roleName")
   consultancyControl = new FormControl('all');
-  consultancies: Observable<[{ id: number, consultancyName: string }]>|any;
- 
+  consultancies: Observable<[{ id: number, consultancyName: string }]> | any;
+  agentEditorViewState: boolean;
+
 
 
   ngOnInit() {
+    this.consultancyService.agentEditorViewState.subscribe(res => this.agentEditorViewState = res)
+
+    if (this.agentEditorViewState) {
+      this.consultancyService.editAgentCurrentPageAndPageSize.subscribe(res => {
+        console.log("HHHHHHH YYYYYYYYY")
+        console.log(res)
+        this.pagination$.next(res)
+        // this.search$.next(res.search)
+      })
+    }
+
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true
       this.adminService.getAllConsultancies(this.defaultData).pipe(map(res => {
@@ -72,9 +90,9 @@ export class AgentListComponent {
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(), switchMap(([search, pageRelated, sort]) => {
         if (pageRelated.consultancyId && this.roleName === 'superadmin') {
-          if(pageRelated.consultancyId === 'all'){
+          if (pageRelated.consultancyId === 'all') {
             this.defaultData.ConsultancyId = ''
-          }else{
+          } else {
             this.defaultData.ConsultancyId = pageRelated.consultancyId;
           }
         }
@@ -101,7 +119,7 @@ export class AgentListComponent {
     const con = confirm("Are you sure?")
     if (con) {
       this.subscription.add(this.consultancyApiService.deleteAgent(id).subscribe(() => {
-        this.agents = this.getAgents(this.defaultData)
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
       }))
     }
   }
@@ -130,7 +148,12 @@ export class AgentListComponent {
     this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true })
   }
 
+  onEditorViewAgent() {
+    this.consultancyService.editAgentCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
+  }
+
   ngOnDestroy() {
+    this.consultancyService.agentEditorViewState.next(false)
     this.subscription.unsubscribe()
   }
 
