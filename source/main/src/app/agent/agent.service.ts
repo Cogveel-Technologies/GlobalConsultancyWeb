@@ -345,6 +345,10 @@ getStudentsList(params: { limit: number, orderBy: string, sortExpression: string
     );
   }
 
+  getAllStudents(){
+    return this.http.get(`${this.apiUrl}/Student/all`)
+  }
+
   deleteStudent(studentId: number): Observable<any> {
     console.log(`Delete student with id ${studentId}`);
     const url = this.buildUrl(`Student/byId?id=${studentId}`); // Correctly format the query parameter

@@ -8,7 +8,7 @@ export interface ConsultancyDetailsOptions{
     InstituteId?:string,
     ProgramId?:string,
     SessionId?:string,
-    ConsultancyId?:string,
+    ConsultancyId?:string|null,
     CountryId?:string,
     IntakeId?:string,
     IsPublic?:string,

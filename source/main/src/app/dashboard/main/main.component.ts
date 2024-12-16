@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AdminService } from 'app/admin/admin.service';
+import { AgentService } from 'app/agent/agent.service';
+import { ConsultancyApi } from 'app/consultancy/consultancy-services/api.service';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
+
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -15,6 +20,7 @@ import {
   ApexTitleSubtitle,
   ApexStates,
 } from 'ng-apexcharts';
+import { map, Subscription } from 'rxjs';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -47,6 +53,15 @@ export class MainComponent implements OnInit {
   public smallColumnChart!: Partial<ChartOptions>;
   public smallLineChart!: Partial<ChartOptions>;
 
+  
+  // variables
+  totalConsultancies:number;
+  totalUsers:number;
+  totalAgents:number;
+  totalStudents:number;
+  subscription:Subscription;
+  defaultData:any = this.consultancyService.defaultRenderData()
+
   public sampleData = [
     31, 40, 28, 44, 60, 55, 68, 51, 42, 85, 77, 31, 40, 28, 44, 60, 55,
   ];
@@ -58,11 +73,32 @@ export class MainComponent implements OnInit {
       active: 'Dashboard',
     },
   ];
-  constructor() {
+  constructor(private consultancyApiService:ConsultancyApi, private consultancyService:ConsultancyService, private adminService:AdminService, private agentService:AgentService) {
     //constructor
+     this.consultancyApiService.getAllConsultancies().subscribe(res=>{
+      this.totalConsultancies = res.length;
+      console.log(this.totalConsultancies)
+     })
+
+     this.consultancyApiService.getAllAgents(this.defaultData).pipe(map(res => res['data'])).subscribe(res=>{
+      this.totalAgents = res.length;
+      console.log("Agents--------", res)
+     })
+
+     this.adminService.getAllUsers().subscribe(res=>{
+      this.totalUsers = res.length;
+      console.log(this.totalUsers)
+     })
+
+     this.agentService.getAllStudents().pipe(map(res => res['data'])).subscribe(res=>{
+      this.totalStudents = res.length;
+      console.log(this.totalStudents)
+     })
   }
 
   ngOnInit() {
+    //consultancy
+
     this.cardChart1();
     this.cardChart2();
     this.cardChart3();
@@ -70,6 +106,9 @@ export class MainComponent implements OnInit {
     this.chart1();
     this.chart2();
   }
+  //   ngOnDestroy(){
+  //   this.subscription.unsubscribe()
+  // }
   private cardChart1() {
     this.smallBarChart = {
       chart: {
@@ -242,14 +281,14 @@ export class MainComponent implements OnInit {
   private chart1() {
     this.areaChartOptions = {
       series: [
-        {
-          name: 'New Clients',
-          data: [31, 40, 28, 51, 42, 85, 77],
-        },
-        {
-          name: 'Old Clients',
-          data: [11, 32, 45, 32, 34, 52, 41],
-        },
+        // {
+        //   name: 'New Clients',
+        //   data: [31, 40, 28, 51, 42, 85, 77],
+        // },
+        // {
+        //   name: 'Old Clients',
+        //   data: [11, 32, 45, 32, 34, 52, 41],
+        // },
       ],
       chart: {
         height: 350,

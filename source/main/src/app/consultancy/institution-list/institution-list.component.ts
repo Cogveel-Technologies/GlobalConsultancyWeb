@@ -227,8 +227,6 @@ export class InstitutionListComponent {
     this.pagination$.next({ countryId: this.defaultData.CountryId, consultancyId: event })
   }
 
-  // hahahahhahahahhah
-  
   onEditorViewInstitute() {
     this.consultancyService.editInstituteCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true, countryId: this.defaultData.CountryId })
   }

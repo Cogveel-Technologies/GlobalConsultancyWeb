@@ -37,6 +37,8 @@ import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/m
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MY_FORMATS } from './date-formats';
 import { PermissionsDirective } from './directives/permissions.directive';
+import { SpinnerInterceptor } from './general-interceptors/spinner.interceptor';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 
 // import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -55,6 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
     AuthLayoutComponent,
     MainLayoutComponent,
     LoGinComponent,
+    SpinnerComponent,
     ],
   imports: [
     BrowserModule,
@@ -81,8 +84,14 @@ export function createTranslateLoader(http: HttpClient) {
     })
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SpinnerInterceptor,
+      multi: true,
+    },
     {provide: HTTP_INTERCEPTORS,useClass: CheckToken,multi: true},
     {provide: HTTP_INTERCEPTORS,useClass: ResponseInterceptor,multi: true},
+    
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     fakeBackendProvider,
     WINDOW_PROVIDERS,

@@ -52,7 +52,7 @@
                 <tr>
                   <th>
                     <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
-                      [sortFields]="['agentCompany']" [sortLabels]="['Company']" (sortChange)="onSortChange($event)">
+                      [sortFields]="['agentCompany']" [sortLabels]="['Consultancy']" (sortChange)="onSortChange($event)">
                     </app-sorting>
                   </th>
                   <th>
@@ -88,7 +88,7 @@
                   <td data-label="Registration No">{{ agent.agentEmail }}</td>
                   <td data-label="Actions">
                     <ng-container *ngIf="roleName !== 'superadmin'">
-                    <button mat-icon-button [routerLink]="['/consultancy/agent-details', agent.id]" matTooltip="View" *appPermissions="{feature:'Agent',action:'canView'}">
+                    <button mat-icon-button [routerLink]="['/consultancy/agent-details', agent.id]" matTooltip="View" *appPermissions="{feature:'Agent',action:'canView'}" (click)="onEditorViewAgent()">
                       <mat-icon>visibility</mat-icon>
                     </button>
                   </ng-container>
@@ -108,7 +108,7 @@
 
                   <ng-container *ngIf="roleName === 'superadmin'">
                     <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-agent', agent.id]"
-                      matTooltip="Edit">
+                      matTooltip="Edit" (click)="onEditorViewAgent()">
                       <!-- <mat-icon>edit</mat-icon> -->
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>

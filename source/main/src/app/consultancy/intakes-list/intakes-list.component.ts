@@ -55,6 +55,7 @@ export class IntakesListComponent {
   instituteName:string;
   programName:string;
   sessionName:string;
+  intakeEditState:boolean
 
 
 
@@ -73,6 +74,19 @@ export class IntakesListComponent {
     this.sessionListForm = new FormGroup({
       session: new FormControl()
     })
+
+    this.consultancyService.intakeEditState.subscribe(res => {
+      console.log(res)
+      this.intakeEditState = res
+    })
+
+    if(this.intakeEditState){
+      this.consultancyService.editIntakeCurrentPageAndPageSize.subscribe(res => {
+        console.log(res)
+        this.pagination$.next({ pageSize: res.pageSize, pageIndex: res.pageIndex })
+        this.search$.next(res.search)
+      })
+    }
 
     // intakes from program list
     this.consultancyService.getIntakesOfProgam.subscribe(res => {
@@ -242,11 +256,17 @@ export class IntakesListComponent {
     this.search$.next(true)
   }
 
+  onEditorViewIntake(){
+    this.consultancyService.editIntakeCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
+  }
+  
+
   ngOnDestroy() {
     this.intakesFromSession = true
     this.consultancyService.showList.next(false);
     this.consultancyService.getIntakesOfProgam.next(null)
     this.consultancyService.getIntakesofSession.next(null)
+    this.consultancyService.intakeEditState.next(false)
     this.subscription.unsubscribe()
   }
 }
