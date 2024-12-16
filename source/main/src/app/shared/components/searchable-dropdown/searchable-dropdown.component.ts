@@ -71,8 +71,17 @@ export class SearchableDropdownComponent implements OnInit, OnChanges {
   }
 
   onSelect(selected: any): void {
+    console.log(selected)
+    console.log(this.searchText)
+    if(selected === this.searchText){
+      console.log("gsdfs")
+      this.searchText = ''
+      console.log(this.searchText)
+      this.cdr.detectChanges()
+    }
     // Update input field to show the name, not the id
     this.searchText = selected[this.displayField];
+    console.log(this.searchText)
     // Emit the selected ID (or the full object if needed)
     this.selectionChange.emit(selected[this.valueField]);
 
