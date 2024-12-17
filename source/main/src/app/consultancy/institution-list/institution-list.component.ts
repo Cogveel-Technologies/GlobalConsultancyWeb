@@ -88,6 +88,7 @@ export class InstitutionListComponent {
       this.instituteSessionState = res
     })
 
+
     // institute program state
     this.consultancyService.instituteProgramState.subscribe(res => {
       this.instituteProgramState = res

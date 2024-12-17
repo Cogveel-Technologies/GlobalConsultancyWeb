@@ -111,6 +111,7 @@ export class IntakesListComponent {
         this.instituteName = res.instituteName;
         this.session$.next(res.sessionId)
         this.sessionName = res.sessionName;
+        this.consultancyService.intakeSessionState.next(true)
       }
     })
 
