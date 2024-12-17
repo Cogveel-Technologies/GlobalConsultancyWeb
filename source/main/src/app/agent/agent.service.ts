@@ -548,4 +548,8 @@ genericSearch(params: {
       return of(result as T); // Return a safe result
     };
   }
+
+  getGraphDetails(){
+    return this.http.get(`${this.apiUrl}/StudentApplication/ConsultancyId`)
+  }
 }

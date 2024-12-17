@@ -61,6 +61,7 @@ export class MainComponent implements OnInit {
   totalStudents:number;
   subscription:Subscription;
   defaultData:any = this.consultancyService.defaultRenderData()
+  graphDetails:any
 
   public sampleData = [
     31, 40, 28, 44, 60, 55, 68, 51, 42, 85, 77, 31, 40, 28, 44, 60, 55,
@@ -75,7 +76,11 @@ export class MainComponent implements OnInit {
   ];
   constructor(private consultancyApiService:ConsultancyApi, private consultancyService:ConsultancyService, private adminService:AdminService, private agentService:AgentService) {
     //constructor
-     this.consultancyApiService.getAllConsultancies().subscribe(res=>{
+  }
+
+  ngOnInit() {
+
+    this.consultancyApiService.getAllConsultancies().subscribe(res=>{
       this.totalConsultancies = res.length;
       console.log(this.totalConsultancies)
      })
@@ -94,10 +99,12 @@ export class MainComponent implements OnInit {
       this.totalStudents = res.length;
       console.log(this.totalStudents)
      })
-  }
-
-  ngOnInit() {
     //consultancy
+
+    this.agentService.getGraphDetails().pipe(map(res => res['data'])).subscribe(res => {
+      this.graphDetails = res
+      console.log(this.graphDetails)
+    })
 
     this.cardChart1();
     this.cardChart2();
@@ -344,19 +351,31 @@ export class MainComponent implements OnInit {
     this.barChartOptions = {
       series: [
         {
-          name: 'Project 1',
+          name: 'Consultancy 1',
           data: [44, 55, 41, 37, 22, 43, 21],
         },
         {
-          name: 'Project 2',
+          name: 'Consultancy 2',
           data: [53, 32, 33, 52, 13, 43, 32],
         },
         {
-          name: 'Project 3',
+          name: 'Consultancy 3',
           data: [12, 17, 11, 9, 15, 11, 20],
         },
         {
-          name: 'Project 4',
+          name: 'Consultancy 4',
+          data: [9, 7, 5, 8, 6, 9, 4],
+        },
+        {
+          name: 'Consultancy10',
+          data: [9, 7, 5, 8, 6, 9, 4],
+        },
+        {
+          name: 'Consultancy10',
+          data: [9, 7, 5, 8, 6, 9, 4],
+        },
+        {
+          name: 'Consultancy10',
           data: [9, 7, 5, 8, 6, 9, 4],
         },
       ],
@@ -377,12 +396,12 @@ export class MainComponent implements OnInit {
         colors: ['#fff'],
       },
       xaxis: {
-        categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
-        labels: {
-          formatter: function (val: string) {
-            return val + 'K';
-          },
-        },
+        categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014,2015],
+        // labels: {
+        //   formatter: function (val: string) {
+        //     return val + 'M';
+        //   },
+        // },
       },
       yaxis: {
         title: {

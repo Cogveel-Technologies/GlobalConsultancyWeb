@@ -86,6 +86,7 @@ export class SessionListComponent {
         this.institute$.next(res.instituteId)
         this.instituteName = res.instituteName
         this.search$.next(true)
+        this.consultancyService.instituteSessionState.next(true)
       }
     })
 

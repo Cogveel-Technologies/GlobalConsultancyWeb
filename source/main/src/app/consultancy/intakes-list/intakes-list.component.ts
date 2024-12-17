@@ -97,6 +97,7 @@ export class IntakesListComponent {
         this.instituteName = res.instituteName;
         this.program$.next(res.programId)
         this.programName = res.programName;
+        this.consultancyService.intakeProgramState.next(true)
       }
     })
 

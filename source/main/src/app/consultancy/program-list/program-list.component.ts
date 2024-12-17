@@ -81,6 +81,13 @@ export class ProgramListComponent {
       this.programEditState = res
     })
 
+    this.consultancyService.intakeProgramState.subscribe(res =>{
+      if(res){
+        this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
+          this.pagination$.next(res)
+        })
+      }
+    })
 
    if(this.programEditState){
     this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
@@ -114,7 +121,7 @@ export class ProgramListComponent {
     // show program from institute details
     this.subscription.add(this.consultancyService.sendInstituteId.subscribe(res => {
       if (res) {
-        console.log(res)
+        this.consultancyService.instituteProgramState.next(true)
         this.ProgramFromInstitute = res.id;
         this.instituteName = res.instituteName;
         this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, instituteId: res.id, search: true, consultancyId: res.consultancyId })
@@ -269,6 +276,7 @@ export class ProgramListComponent {
   }
 
   getIntakesOfprogram(instituteId:number,instituteName:string,id:number,name:string){
+    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true })
     this.consultancyService.getIntakesOfProgam.next({instituteId,instituteName,programId:id,programName:name})
     this.router.navigate(['/consultancy/intake-list'])
   }
@@ -277,6 +285,7 @@ export class ProgramListComponent {
     this.institute$.next('');
     this.consultancyService.sendInstituteId.next(null)
     this.consultancyService.programEditState.next(false)
+    this.consultancyService.intakeProgramState.next(false)
     this.subscription.unsubscribe();
   }
 }
