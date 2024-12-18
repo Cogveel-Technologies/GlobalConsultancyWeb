@@ -23,21 +23,21 @@ export class ListRolesComponent implements OnInit {
     },
   ];
   roles$: Observable<Role[]>;
-  totalRoles: number = 0;
+  totalRoles = 0;
 
   searchControl: FormControl = new FormControl('');
-  sortField: string = 'id'; // Default sort field
+  sortField = 'id'; // Default sort field
   sortDirection: 'asc' | 'desc' = 'asc'; // Default sort direction
   pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
-  currentPage: number = 1; // Default current page
-  totalPages: number = 1; // Total number of pages
+  currentPage = 1; // Default current page
+  totalPages = 1; // Total number of pages
 
   // Inline editing variables
   editingRoleId: number | null = null;
-  editingRoleName: string = '';
+  editingRoleName = '';
   pageNumber:number
-  deleteOperation:boolean = false
-  editOperation:boolean = false
+  deleteOperation = false
+  editOperation = false
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
