@@ -53,15 +53,17 @@ export class MainComponent implements OnInit {
   public smallColumnChart!: Partial<ChartOptions>;
   public smallLineChart!: Partial<ChartOptions>;
 
-  
+
   // variables
-  totalConsultancies:number;
-  totalUsers:number;
-  totalAgents:number;
-  totalStudents:number;
-  subscription:Subscription;
-  defaultData:any = this.consultancyService.defaultRenderData()
-  graphDetails:any
+  totalConsultancies: number;
+  totalUsers: number;
+  totalAgents: number;
+  totalStudents: number;
+  subscription: Subscription;
+  defaultData: any = this.consultancyService.defaultRenderData()
+  graphDetails: any
+  filteredYears: any[]
+  consultancyData:any
 
   public sampleData = [
     31, 40, 28, 44, 60, 55, 68, 51, 42, 85, 77, 31, 40, 28, 44, 60, 55,
@@ -74,37 +76,53 @@ export class MainComponent implements OnInit {
       active: 'Dashboard',
     },
   ];
-  constructor(private consultancyApiService:ConsultancyApi, private consultancyService:ConsultancyService, private adminService:AdminService, private agentService:AgentService) {
+  constructor(private consultancyApiService: ConsultancyApi, private consultancyService: ConsultancyService, private adminService: AdminService, private agentService: AgentService) {
     //constructor
   }
 
+
   ngOnInit() {
 
-    this.consultancyApiService.getAllConsultancies().subscribe(res=>{
+    this.consultancyApiService.getAllConsultancies().subscribe(res => {
       this.totalConsultancies = res.length;
       console.log(this.totalConsultancies)
-     })
+    })
 
-     this.consultancyApiService.getAllAgents(this.defaultData).pipe(map(res => res['data'])).subscribe(res=>{
+    this.consultancyApiService.getAllAgents(this.defaultData).pipe(map(res => res['data'])).subscribe(res => {
       this.totalAgents = res.length;
       console.log("Agents--------", res)
-     })
+    })
 
-     this.adminService.getAllUsers().subscribe(res=>{
+    this.adminService.getAllUsers().subscribe(res => {
       this.totalUsers = res.length;
       console.log(this.totalUsers)
-     })
+    })
 
-     this.agentService.getAllStudents().pipe(map(res => res['data'])).subscribe(res=>{
+    this.agentService.getAllStudents().pipe(map(res => res['data'])).subscribe(res => {
       this.totalStudents = res.length;
       console.log(this.totalStudents)
-     })
+    })
     //consultancy
 
     this.agentService.getGraphDetails().pipe(map(res => res['data'])).subscribe(res => {
       this.graphDetails = res
       console.log(this.graphDetails)
+      this.consultancyData = {};
+      //get consultancy admission details on the basis of year  
+      for (let i = 0; i < this.graphDetails.length; i++) {
+        const year = this.graphDetails[i].year;
+        if (!Object.keys(map).includes(year)) {
+          const yearBasedAdmissionsByConsultancies = this.graphDetails.filter((el) => {
+            return el.year === year;
+          }).map(el => {
+            return {consultancyName:el.consultancyName, numberOfApplications:el.numberOfApplications}
+          })
+          map[year] = yearBasedAdmissionsByConsultancies;
+        }
+      }
     })
+
+
 
     this.cardChart1();
     this.cardChart2();
@@ -396,7 +414,7 @@ export class MainComponent implements OnInit {
         colors: ['#fff'],
       },
       xaxis: {
-        categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014,2015],
+        categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015],
         // labels: {
         //   formatter: function (val: string) {
         //     return val + 'M';
