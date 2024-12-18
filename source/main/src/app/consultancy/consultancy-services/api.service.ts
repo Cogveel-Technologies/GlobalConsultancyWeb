@@ -34,7 +34,7 @@ export class ConsultancyApi {
     }
     // --------  get-all-consultancies ----------
     getAllConsultancies(): Observable<ConsultancyData[]> {
-        return this.http.get<Observable<ConsultancyData[]>>(`${this.baseUrl}/Consultancy/all`).pipe(map(response => response['data']))
+        return this.http.get<Observable<ConsultancyData[]>>(`${this.baseUrl}/Consultancy/all?Isdeleted=false`).pipe(map(response => response['data']))
     }
     // -------- delete-consultancy ---------------
     deleteConsultancy(id: number) {
@@ -225,9 +225,13 @@ export class ConsultancyApi {
     updateAgent(id: number, data: AgentDetails) {
         return this.http.put(`${this.baseUrl}/Agent/${id}`, data)
     }
-    // --------- single-session-details ------------------
+    // --------- single-agent-details ------------------
     getAgentDetails(id: number): Observable<AgentDetails> {
         return this.http.get<Observable<AgentDetails>>(`${this.baseUrl}/Agent/byId?Id=${id}`).pipe(map(res => res['data']))
+    }
+    // ------------- get all agents ---------------------------------
+    getAllAgents(data:ConsultancyDetailsOptions){
+        return this.http.get(`${this.baseUrl}/Agent/All?Isdeleted=${data.IsDeleted}`)
     }
     // ------------------ get institutes of consultancy -------------------------
     getInstitutesOfConsultancy(data: ConsultancyDetailsOptions): Observable<any> {

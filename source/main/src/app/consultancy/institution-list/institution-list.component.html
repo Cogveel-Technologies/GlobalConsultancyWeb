@@ -110,7 +110,7 @@
                       </ng-container>
                       <ng-container *ngIf="roleName === 'superadmin'">
                         <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.id]"
-                          matTooltip="View" (click)="onView()">
+                          matTooltip="View" (click)="onView()" (click)="onEditorViewInstitute()">
                           <mat-icon>visibility</mat-icon>
                         </button>
                       </ng-container>
@@ -124,7 +124,7 @@
                       </ng-container>
                       <ng-container *ngIf="roleName === 'superadmin'">
                         <button mat-icon-button color="primary"
-                          [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit">
+                          [routerLink]="['/consultancy/edit-institute', institute.id]" matTooltip="Edit" (click)="onEditorViewInstitute()">
                           <!-- <mat-icon>edit</mat-icon> -->
                           <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                         </button>

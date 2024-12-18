@@ -87,7 +87,7 @@
                 </ng-container>
                   <ng-container *ngIf="roleName === 'superadmin'">
                   <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-session', session.id]"
-                    matTooltip="Edit">
+                    matTooltip="Edit" (click)="onEditorViewSession()">
                     <!-- <mat-icon>edit</mat-icon> -->
                     <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
 

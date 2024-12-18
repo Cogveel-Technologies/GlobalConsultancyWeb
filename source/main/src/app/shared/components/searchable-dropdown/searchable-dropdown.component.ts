@@ -21,6 +21,7 @@ export class SearchableDropdownComponent implements OnInit, OnChanges {
   @Input() instituteConsultancyData = '';
   @Input() instituteCountry = ''
   @Input() instituteConsultancy = ''
+  @Input() roleName = ''
 
   @Output() selectionChange = new EventEmitter<any>(); // Emit selected option
 
@@ -54,6 +55,10 @@ export class SearchableDropdownComponent implements OnInit, OnChanges {
      if(this.instituteCountry){
       this.searchText = this.instituteCountry
     }
+
+    if(this.roleName){
+      this.searchText = this.roleName
+    }
   
     this.cdr.detectChanges();
   }
@@ -71,8 +76,17 @@ export class SearchableDropdownComponent implements OnInit, OnChanges {
   }
 
   onSelect(selected: any): void {
+    console.log(selected)
+    console.log(this.searchText)
+    if(selected === this.searchText){
+      console.log("gsdfs")
+      this.searchText = ''
+      console.log(this.searchText)
+      this.cdr.detectChanges()
+    }
     // Update input field to show the name, not the id
     this.searchText = selected[this.displayField];
+    console.log(this.searchText)
     // Emit the selected ID (or the full object if needed)
     this.selectionChange.emit(selected[this.valueField]);
 

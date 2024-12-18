@@ -74,6 +74,8 @@ export class RegisterIntakesComponent {
       this.editMode = true;
     }
 
+    
+
     combineLatest([this.institute$, this.session$, this.program$]).pipe(switchMap(([instituteId, sessionId, programId]) => {
       if (instituteId && this.previousInstituteId !== instituteId) {
         this.previousInstituteId = +instituteId

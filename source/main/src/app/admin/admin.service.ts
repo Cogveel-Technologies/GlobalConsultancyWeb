@@ -40,6 +40,7 @@ export class AdminService {
   sendConsultancyId: BehaviorSubject<number | string> = new BehaviorSubject<number | string>('')
   sendRoleId:BehaviorSubject<number|null> = new BehaviorSubject<number>(null)
   updatePermissions: BehaviorSubject<boolean> = new BehaviorSubject(false)
+  sendPermissionId:BehaviorSubject<any|boolean> = new BehaviorSubject<any|null>(false)
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {
@@ -117,8 +118,7 @@ export class AdminService {
       map(response => response.data.map((user: any) => ({
         id: user.id,
         firstName: user.firstName
-      }))),
-      tap(data => console.log('Filtered Users:', data))
+      })))
     );
   }
 
@@ -222,13 +222,13 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
   // methods for list-consultancy
   // Get a list of consultancies with pagination, sorting, and searching
   getConsultancyList(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean, userId?:number, isAdmin?:boolean }): Observable<PaginatedResponse<Consultancy>> {
-    let url = `${this.apiUrl}/Consultancy?UserId=${params.userId}&IsAdmin=${params.isAdmin}&limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}`;
-    if (params.searchTerm) {
-      url += `&searchText=${params.searchTerm}`;
-    }
-    if (params.isDeleted !== undefined) {
-      url += `&isDeleted=${params.isDeleted}`;
-    }
+    let url = `${this.apiUrl}/Consultancy?UserId=${params.userId}&IsAdmin=${params.isAdmin}&limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}&isDeleted=false`;
+    // if (params.searchTerm) {
+    //   url += `&searchText=${params.searchTerm}`;
+    // }
+    // if (params.isDeleted !== undefined) {
+    //   url += `&isDeleted=${params.isDeleted}`;
+    // }
 
     return this.http.get<PaginatedResponse<Consultancy>>(url).pipe(
       tap(response => console.log('Fetched consultancies:', response)),  // Log the full response
@@ -324,6 +324,7 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
   addDropDownValues(data:any){
     return this.http.post(`${this.apiUrl}/DropDownListValues`,data)
   }
+
   
   
 }

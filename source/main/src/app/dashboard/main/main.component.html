@@ -9,52 +9,56 @@
     <div class="row">
       <div class="col-lg-3 col-sm-6">
         <div class="counter-box text-center">
-          <div class="text font-17 m-b-5">Total Income</div>
-          <h3 class="m-b-10">$758
-            <i class="material-icons col-green">trending_up</i>
+          <div class="text font-17 m-b-5">Total Sub Admins</div>
+          <h3 class="m-b-10">{{totalUsers}}
+            <!-- <i class="material-icons col-green">trending_up</i> -->
           </h3>
           <div class="apex-chart-center">
-            <apx-chart [series]="smallBarChart.series!" [chart]="smallBarChart.chart!"
+            <mat-icon>admin_panel_settings</mat-icon>
+            <!-- <apx-chart [series]="smallBarChart.series!" [chart]="smallBarChart.chart!"
               [plotOptions]="smallBarChart.plotOptions!" [tooltip]="smallBarChart.tooltip!">
-            </apx-chart>
+            </apx-chart> -->
           </div>
         </div>
       </div>
       <div class="col-lg-3 col-sm-6">
         <div class="counter-box text-center">
-          <div class="text font-17 m-b-5">Orders Received</div>
-          <h3 class="m-b-10">1025
-            <i class="material-icons col-red">trending_down</i>
+          <div class="text font-17 m-b-5">Total Consultancies</div>
+          <h3 class="m-b-10">{{totalConsultancies}}
+            <!-- <i class="material-icons col-red">trending_down</i> -->
           </h3>
           <div class="apex-chart-center">
-            <apx-chart [series]="smallAreaChart.series!" [chart]="smallAreaChart.chart!"
+            <mat-icon>business</mat-icon>
+            <!-- <apx-chart [series]="smallAreaChart.series!" [chart]="smallAreaChart.chart!"
               [stroke]="smallAreaChart.stroke!" [yaxis]="smallAreaChart.yaxis!" [fill]="smallAreaChart.fill!"
-              [colors]="smallAreaChart.colors!" [tooltip]="smallAreaChart.tooltip!"></apx-chart>
+              [colors]="smallAreaChart.colors!" [tooltip]="smallAreaChart.tooltip!"></apx-chart> -->
           </div>
         </div>
       </div>
       <div class="col-lg-3 col-sm-6">
         <div class="counter-box text-center">
-          <div class="text font-17 m-b-5">Total Sales</div>
-          <h3 class="m-b-10">956
-            <i class="material-icons col-green">trending_up</i>
+          <div class="text font-17 m-b-5">Total Agents</div>
+          <h3 class="m-b-10">{{totalAgents}}
+            <!-- <i class="material-icons col-green">trending_up</i> -->
           </h3>
           <div class="apex-chart-center">
-            <apx-chart [series]="smallColumnChart.series!" [chart]="smallColumnChart.chart!"
+            <mat-icon>group</mat-icon>
+            <!-- <apx-chart [series]="smallColumnChart.series!" [chart]="smallColumnChart.chart!"
               [plotOptions]="smallColumnChart.plotOptions!" [tooltip]="smallColumnChart.tooltip!">
-            </apx-chart>
+            </apx-chart> -->
           </div>
         </div>
       </div>
       <div class="col-lg-3 col-sm-6">
         <div class="counter-box text-center">
-          <div class="text font-17 m-b-5">Total Active Users</div>
-          <h3 class="m-b-10">214
-            <i class="material-icons col-red">trending_down</i>
+          <div class="text font-17 m-b-5">Total Students</div>
+          <h3 class="m-b-10">{{totalStudents}}
+            <!-- <i class="material-icons col-red">trending_down</i> -->
           </h3>
           <div class="apex-chart-center">
-            <apx-chart [series]="smallLineChart.series!" [chart]="smallLineChart.chart!"
-              [stroke]="smallLineChart.stroke!" [tooltip]="smallLineChart.tooltip!"></apx-chart>
+            <mat-icon>group</mat-icon>
+            <!-- <apx-chart [series]="smallLineChart.series!" [chart]="smallLineChart.chart!"
+              [stroke]="smallLineChart.stroke!" [tooltip]="smallLineChart.tooltip!"></apx-chart> -->
           </div>
         </div>
       </div>

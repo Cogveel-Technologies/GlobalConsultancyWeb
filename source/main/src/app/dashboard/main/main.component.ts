@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AdminService } from 'app/admin/admin.service';
+import { AgentService } from 'app/agent/agent.service';
+import { ConsultancyApi } from 'app/consultancy/consultancy-services/api.service';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
+
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -15,6 +20,7 @@ import {
   ApexTitleSubtitle,
   ApexStates,
 } from 'ng-apexcharts';
+import { map, Subscription } from 'rxjs';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -47,6 +53,18 @@ export class MainComponent implements OnInit {
   public smallColumnChart!: Partial<ChartOptions>;
   public smallLineChart!: Partial<ChartOptions>;
 
+
+  // variables
+  totalConsultancies: number;
+  totalUsers: number;
+  totalAgents: number;
+  totalStudents: number;
+  subscription: Subscription;
+  defaultData: any = this.consultancyService.defaultRenderData()
+  graphDetails: any
+  filteredYears: any[]
+  consultancyData:any
+
   public sampleData = [
     31, 40, 28, 44, 60, 55, 68, 51, 42, 85, 77, 31, 40, 28, 44, 60, 55,
   ];
@@ -58,11 +76,54 @@ export class MainComponent implements OnInit {
       active: 'Dashboard',
     },
   ];
-  constructor() {
+  constructor(private consultancyApiService: ConsultancyApi, private consultancyService: ConsultancyService, private adminService: AdminService, private agentService: AgentService) {
     //constructor
   }
 
+
   ngOnInit() {
+
+    this.consultancyApiService.getAllConsultancies().subscribe(res => {
+      this.totalConsultancies = res.length;
+      console.log(this.totalConsultancies)
+    })
+
+    this.consultancyApiService.getAllAgents(this.defaultData).pipe(map(res => res['data'])).subscribe(res => {
+      this.totalAgents = res.length;
+      console.log("Agents--------", res)
+    })
+
+    this.adminService.getAllUsers().subscribe(res => {
+      this.totalUsers = res.length;
+      console.log(this.totalUsers)
+    })
+
+    this.agentService.getAllStudents().pipe(map(res => res['data'])).subscribe(res => {
+      this.totalStudents = res.length;
+      console.log(this.totalStudents)
+    })
+    //consultancy
+
+    this.agentService.getGraphDetails().pipe(map(res => res['data'])).subscribe(res => {
+      this.graphDetails = res
+      console.log(this.graphDetails)
+      this.consultancyData = {};
+      //get consultancy admission details on the basis of year  
+      for (let i = 0; i < this.graphDetails.length; i++) {
+        const year = this.graphDetails[i].year;
+        if (!Object.keys(map).includes(year)) {
+          const yearBasedAdmissionsByConsultancies = this.graphDetails.filter((el) => {
+            return el.year === year;
+          }).map(el => {
+            return {consultancyName:el.consultancyName, numberOfApplications:el.numberOfApplications}
+          })
+          map[year] = yearBasedAdmissionsByConsultancies;
+        }
+      }
+    })
+
+
+
     this.cardChart1();
     this.cardChart2();
     this.cardChart3();
@@ -70,6 +131,9 @@ export class MainComponent implements OnInit {
     this.chart1();
     this.chart2();
   }
+  //   ngOnDestroy(){
+  //   this.subscription.unsubscribe()
+  // }
   private cardChart1() {
     this.smallBarChart = {
       chart: {
@@ -242,14 +306,14 @@ export class MainComponent implements OnInit {
   private chart1() {
     this.areaChartOptions = {
       series: [
-        {
-          name: 'New Clients',
-          data: [31, 40, 28, 51, 42, 85, 77],
-        },
-        {
-          name: 'Old Clients',
-          data: [11, 32, 45, 32, 34, 52, 41],
-        },
+        // {
+        //   name: 'New Clients',
+        //   data: [31, 40, 28, 51, 42, 85, 77],
+        // },
+        // {
+        //   name: 'Old Clients',
+        //   data: [11, 32, 45, 32, 34, 52, 41],
+        // },
       ],
       chart: {
         height: 350,
@@ -305,19 +369,31 @@ export class MainComponent implements OnInit {
     this.barChartOptions = {
       series: [
         {
-          name: 'Project 1',
+          name: 'Consultancy 1',
           data: [44, 55, 41, 37, 22, 43, 21],
         },
         {
-          name: 'Project 2',
+          name: 'Consultancy 2',
           data: [53, 32, 33, 52, 13, 43, 32],
         },
         {
-          name: 'Project 3',
+          name: 'Consultancy 3',
           data: [12, 17, 11, 9, 15, 11, 20],
         },
         {
-          name: 'Project 4',
+          name: 'Consultancy 4',
+          data: [9, 7, 5, 8, 6, 9, 4],
+        },
+        {
+          name: 'Consultancy10',
+          data: [9, 7, 5, 8, 6, 9, 4],
+        },
+        {
+          name: 'Consultancy10',
+          data: [9, 7, 5, 8, 6, 9, 4],
+        },
+        {
+          name: 'Consultancy10',
           data: [9, 7, 5, 8, 6, 9, 4],
         },
       ],
@@ -338,12 +414,12 @@ export class MainComponent implements OnInit {
         colors: ['#fff'],
       },
       xaxis: {
-        categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
-        labels: {
-          formatter: function (val: string) {
-            return val + 'K';
-          },
-        },
+        categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015],
+        // labels: {
+        //   formatter: function (val: string) {
+        //     return val + 'M';
+        //   },
+        // },
       },
       yaxis: {
         title: {

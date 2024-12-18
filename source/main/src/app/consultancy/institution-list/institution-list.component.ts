@@ -58,6 +58,8 @@ export class InstitutionListComponent {
   instituteCountry: string;
   instituteConsultancy: string;
   instituteEditState: boolean = false;
+  instituteSessionState:boolean = false;
+  instituteProgramState:boolean = false;
 
 
 
@@ -80,10 +82,25 @@ export class InstitutionListComponent {
 
 
   ngOnInit() {
-    // state management for navigating from view or edit page
-    this.consultancyService.instituteEditState.subscribe(res => {
-      this.instituteEditState = res
+
+    // institute session state
+    this.consultancyService.instituteSessionState.subscribe(res => {
+      this.instituteSessionState = res
     })
+
+
+    // institute program state
+    this.consultancyService.instituteProgramState.subscribe(res => {
+      this.instituteProgramState = res
+    })
+
+    if(this.instituteSessionState || this.instituteProgramState){
+      this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
+        console.log("Mmmm")
+        console.log(res)
+        this.pagination$.next(res)
+      })
+    }
 
     // if user navigates back from edit or view page
     if (this.instituteEditState) {
@@ -216,19 +233,21 @@ export class InstitutionListComponent {
   institutePrograms(id: number, instituteName: string, consultancyId: number) {
     this.consultancyService.sendInstituteId.next({ id, instituteName, consultancyId });
     this.router.navigate(['/consultancy/program-list'])
+    this.consultancyService.instituteProgramState.next(true)
+    this.onEditorViewInstitute()
   }
 
   instituteSession(id: number, name: string) {
     this.consultancyService.getSessionsOfInstitute.next({ instituteId: id, instituteName: name })
     this.router.navigate(['/consultancy/session-list'])
+    this.consultancyService.instituteSessionState.next(true)
+    this.onEditorViewInstitute()
   }
 
   onConsultancyChange(event: any) {
     this.pagination$.next({ countryId: this.defaultData.CountryId, consultancyId: event })
   }
 
-  // hahahahhahahahhah
-  
   onEditorViewInstitute() {
     this.consultancyService.editInstituteCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true, countryId: this.defaultData.CountryId })
   }
@@ -253,6 +272,8 @@ export class InstitutionListComponent {
     this.subscriptions.unsubscribe();
     this.institutesFromConsultancy = false;
     this.consultancyService.consultancyInstitutes.next(null)
+    this.consultancyService.instituteSessionState.next(false)
+    this.consultancyService.instituteProgramState.next(false)
   }
 
 }

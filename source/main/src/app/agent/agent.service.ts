@@ -345,6 +345,10 @@ getStudentsList(params: { limit: number, orderBy: string, sortExpression: string
     );
   }
 
+  getAllStudents(){
+    return this.http.get(`${this.apiUrl}/Student/all`)
+  }
+
   deleteStudent(studentId: number): Observable<any> {
     console.log(`Delete student with id ${studentId}`);
     const url = this.buildUrl(`Student/byId?id=${studentId}`); // Correctly format the query parameter
@@ -543,5 +547,9 @@ genericSearch(params: {
       console.error(error); // Log the error for debugging
       return of(result as T); // Return a safe result
     };
+  }
+
+  getGraphDetails(){
+    return this.http.get(`${this.apiUrl}/StudentApplication/ConsultancyId`)
   }
 }

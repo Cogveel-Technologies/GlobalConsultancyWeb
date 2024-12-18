@@ -79,6 +79,15 @@ export class SessionListComponent {
 
 
   ngOnInit() {
+
+    this.consultancyService.intakeSessionState.subscribe(res =>{
+      if(res){
+        this.consultancyService.editSessionCurrentPageAndPageSize.subscribe(res =>{
+          this.pagination$.next({ pageSize: res.pageSize, pageIndex: res.pageIndex })
+        this.search$.next(res.search)
+        })
+      }
+    })
     // get session of particular institute
     this.consultancyService.getSessionsOfInstitute.subscribe(res => {
       if (res) {
@@ -86,6 +95,7 @@ export class SessionListComponent {
         this.institute$.next(res.instituteId)
         this.instituteName = res.instituteName
         this.search$.next(true)
+        this.consultancyService.instituteSessionState.next(true)
       }
     })
 
@@ -214,6 +224,7 @@ export class SessionListComponent {
   }
 
   onIntakes(sessionId: number, instituteName: string, programName: string, sessionName: string, instituteId: number) {
+    this.consultancyService.editSessionCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
     this.consultancyService.getIntakesofSession.next({ sessionId, instituteName, programName, sessionName, instituteId })
     this.router.navigate(["consultancy/intake-list"])
   }
@@ -227,6 +238,7 @@ export class SessionListComponent {
     this.consultancyService.showList.next(false);
     this.consultancyService.getSessionsOfInstitute.next({instituteId:'',instituteName:''})
     this.consultancyService.sessionEditState.next(false)
+    this.consultancyService.intakeSessionState.next(false)
     this.subscription.unsubscribe()
   }
 }
