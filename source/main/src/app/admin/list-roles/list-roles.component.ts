@@ -171,6 +171,11 @@ export class ListRolesComponent implements OnInit {
 
   }
 
+  onPermissions(id:number, roleName:string){
+    this.adminService.sendPermissionId.next({id, roleName})
+    this.router.navigate(['/admin/permissions'])
+  }
+
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex + 1; // pageIndex is 0-based

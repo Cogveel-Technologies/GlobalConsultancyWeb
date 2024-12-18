@@ -21,6 +21,7 @@ export class SearchableDropdownComponent implements OnInit, OnChanges {
   @Input() instituteConsultancyData = '';
   @Input() instituteCountry = ''
   @Input() instituteConsultancy = ''
+  @Input() roleName = ''
 
   @Output() selectionChange = new EventEmitter<any>(); // Emit selected option
 
@@ -53,6 +54,10 @@ export class SearchableDropdownComponent implements OnInit, OnChanges {
     }
      if(this.instituteCountry){
       this.searchText = this.instituteCountry
+    }
+
+    if(this.roleName){
+      this.searchText = this.roleName
     }
   
     this.cdr.detectChanges();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { ChangeDetectorRef } from '@angular/core';
   templateUrl: './permissions.component.html',
   styleUrls: ['./permissions.component.scss']
 })
-export class PermissionsComponent implements OnInit {
+export class PermissionsComponent implements OnInit,OnDestroy {
   breadscrums = [
     { title: 'Permissions', items: ['Superadmin'], active: 'Permissions' },
   ];
@@ -38,6 +38,7 @@ export class PermissionsComponent implements OnInit {
   update$: BehaviorSubject<boolean> = new BehaviorSubject(false)
   roleId$: BehaviorSubject<number|null> = new BehaviorSubject(null)
   roleId:number
+  @Input() roleName:string
 
 
 
@@ -58,11 +59,22 @@ export class PermissionsComponent implements OnInit {
     private consultancyService: ConsultancyService,
     private consultancyApiService: ConsultancyApi,
     private dialog: MatDialog,
-    private cdr:ChangeDetectorRef
+
   ) { }
 
 
   ngOnInit(): void {
+
+    this.adminService.sendPermissionId.subscribe(res => {
+      if(res){
+        console.log(res)
+        this.roleName = res.roleName;
+        this.roleSelected = true;
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, roleId:res.id })
+      }
+    })
+
+
     this.adminService.updatePermissions.subscribe(res => this.update$.next(true))
     this.permissionsForm = new FormGroup({
       modules: new FormArray([]),
@@ -76,10 +88,9 @@ export class PermissionsComponent implements OnInit {
 
     combineLatest([this.pagination$, this.update$]).pipe(
       switchMap(([pageRelated]) => {
+        console.log(this.roleSelected)
         if(this.roleSelected){
           console.log(pageRelated)
-          console.log("PPPPPPPP")
-          this.cdr.detectChanges()
           this.defaultData.roleId = pageRelated.roleId
         }
         this.defaultData.pageSize = pageRelated.pageSize;
@@ -110,6 +121,7 @@ export class PermissionsComponent implements OnInit {
 
 
   }
+
 
 
 
@@ -193,6 +205,13 @@ export class PermissionsComponent implements OnInit {
       })
     }
   }
+
+  ngOnDestroy(){
+    console.log("dklsfjasdlfjkl")
+    this.adminService.sendPermissionId.next(false)
+    this.roleSelected = false
+  }
+
 
 
 }

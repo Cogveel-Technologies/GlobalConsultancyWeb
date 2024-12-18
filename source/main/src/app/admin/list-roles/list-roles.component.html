@@ -92,6 +92,10 @@
                         <!-- <mat-icon>delete</mat-icon> -->
                         <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                       </button>
+                      <button mat-icon-button
+                          matTooltip="Permissions" (click)="onPermissions(role.id, role.roleName)">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
                     </div>
                     <ng-template #editActions>
                       <button mat-icon-button color="primary" (click)="updateRole(role.id)" matTooltip="Update">

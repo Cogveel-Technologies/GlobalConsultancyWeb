@@ -40,6 +40,7 @@ export class AdminService {
   sendConsultancyId: BehaviorSubject<number | string> = new BehaviorSubject<number | string>('')
   sendRoleId:BehaviorSubject<number|null> = new BehaviorSubject<number>(null)
   updatePermissions: BehaviorSubject<boolean> = new BehaviorSubject(false)
+  sendPermissionId:BehaviorSubject<any|boolean> = new BehaviorSubject<any|null>(false)
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {
@@ -323,6 +324,7 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
   addDropDownValues(data:any){
     return this.http.post(`${this.apiUrl}/DropDownListValues`,data)
   }
+
   
   
 }
