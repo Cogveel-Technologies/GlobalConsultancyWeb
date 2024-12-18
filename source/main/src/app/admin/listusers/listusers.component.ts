@@ -35,8 +35,8 @@ export class ListusersComponent implements OnInit,OnDestroy {
   totalPages = 1; // Total number of pages
 
   pageNumber:number
-  deleteOperation:boolean = false
-  editOperation:boolean = false
+  deleteOperation = false
+  editOperation = false
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
