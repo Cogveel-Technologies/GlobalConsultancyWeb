@@ -20,7 +20,7 @@ import {
   ApexTitleSubtitle,
   ApexStates,
 } from 'ng-apexcharts';
-import { map, Subscription } from 'rxjs';
+import { map, Subscription, switchMap, tap } from 'rxjs';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -64,6 +64,8 @@ export class MainComponent implements OnInit {
   graphDetails: any
   filteredYears: any[]
   consultancyData:any
+  agents:any
+  roleName = localStorage.getItem('roleName')
 
   public sampleData = [
     31, 40, 28, 44, 60, 55, 68, 51, 42, 85, 77, 31, 40, 28, 44, 60, 55,
@@ -88,10 +90,21 @@ export class MainComponent implements OnInit {
       console.log(this.totalConsultancies)
     })
 
-    this.consultancyApiService.getAllAgents(this.defaultData).pipe(map(res => res['data'])).subscribe(res => {
-      this.totalAgents = res.length;
-      console.log("Agents--------", res)
-    })
+    this.agents = this.consultancyApiService.getAllAgents(this.defaultData).pipe(
+      tap(res => {
+        console.log(res)
+        this.totalAgents = res['data'].length; // Update totalAgents as a side effect
+        this.defaultData.pageSize = this.totalAgents
+      }),
+      switchMap(()=>{
+        if(this.roleName === 'superadmin'){
+          this.defaultData.IsAdmin = true
+        }
+        return this.consultancyApiService.getAgents(this.defaultData).pipe(map(res => res['data']))
+      })
+    )
+    
+
 
     this.adminService.getAllUsers().subscribe(res => {
       this.totalUsers = res.length;
