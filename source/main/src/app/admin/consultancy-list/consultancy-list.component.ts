@@ -38,6 +38,7 @@ export class ConsultancyListComponent implements OnInit {
   currentPage: number = 1; // Default current page
   totalPages: number = 1; // Total number of pages
   defaultData:ConsultancyDetailsOptions = this.consultancyService.defaultRenderData()
+  pageNumber:BehaviorSubject<null|number> = new BehaviorSubject(null)
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -59,6 +60,14 @@ export class ConsultancyListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.adminService.consultancyInstituteState.subscribe(res =>{
+      if(res){
+        let pageNum;
+        this.pageNumber.subscribe(res=> pageNum = res)
+        console.log(pageNum)
+        this.currentPageSubject.next(pageNum)
+      }
+    })
     // if super admin logs in
     if(this.roleName === 'superadmin'){
       console.log(this.roleName)
@@ -81,6 +90,7 @@ export class ConsultancyListComponent implements OnInit {
       this.searchSubject
     ]).pipe(
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection,userId,search]) => {
+        // this.pageNumber = 
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection, userId });
         return this.adminService.getConsultancyList({
           limit: pageSize,
@@ -166,6 +176,8 @@ export class ConsultancyListComponent implements OnInit {
   }
 
   getInstitutes(countryName:string, consultancyName:string,consultancyId:number){
+    this.adminService.consultancyInstituteState.next(true)
+    this.pageNumber.next(this.currentPage)
     this.consultancyService.consultancyInstitutes.next({countryName,consultancyName,consultancyId})
     this.router.navigate([`/consultancy/institution-list`])
   }

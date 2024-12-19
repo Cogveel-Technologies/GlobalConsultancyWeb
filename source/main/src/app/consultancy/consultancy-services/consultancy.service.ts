@@ -62,4 +62,5 @@ export class ConsultancyService {
   instituteProgramState:BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
   intakeProgramState: BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
   intakeSessionState: BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
+  instituteSessions: BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
 }

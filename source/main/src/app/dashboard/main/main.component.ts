@@ -107,19 +107,20 @@ export class MainComponent implements OnInit {
     this.agentService.getGraphDetails().pipe(map(res => res['data'])).subscribe(res => {
       this.graphDetails = res
       console.log(this.graphDetails)
-      this.consultancyData = {};
+      let map = {};
       //get consultancy admission details on the basis of year  
       for (let i = 0; i < this.graphDetails.length; i++) {
         const year = this.graphDetails[i].year;
         if (!Object.keys(map).includes(year)) {
-          const yearBasedAdmissionsByConsultancies = this.graphDetails.filter((el) => {
+          const yearBasedConsultancies = this.graphDetails.filter((el) => {
             return el.year === year;
           }).map(el => {
             return {consultancyName:el.consultancyName, numberOfApplications:el.numberOfApplications}
           })
-          map[year] = yearBasedAdmissionsByConsultancies;
+          map[year] = yearBasedConsultancies;
         }
       }
+      console.log(map)
     })
 
 

@@ -85,6 +85,7 @@ export class InstitutionListComponent {
 
     // institute session state
     this.consultancyService.instituteSessionState.subscribe(res => {
+      console.log(res)
       this.instituteSessionState = res
     })
 
@@ -95,6 +96,7 @@ export class InstitutionListComponent {
     })
 
     if(this.instituteSessionState || this.instituteProgramState){
+      console.log("enetterererere")
       this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
         console.log("Mmmm")
         console.log(res)
@@ -241,6 +243,7 @@ export class InstitutionListComponent {
     this.consultancyService.getSessionsOfInstitute.next({ instituteId: id, instituteName: name })
     this.router.navigate(['/consultancy/session-list'])
     this.consultancyService.instituteSessionState.next(true)
+    this.consultancyService.instituteSessions.next(true)
     this.onEditorViewInstitute()
   }
 
