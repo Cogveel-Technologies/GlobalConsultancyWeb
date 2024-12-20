@@ -8,8 +8,8 @@
     <!-- Widgets -->
     <div class="row">
       <div class="col-lg-3 col-sm-6">
-        <div class="counter-box text-center">
-          <div class="text font-17 m-b-5">Total Sub Admins</div>
+        <div class="counter-box text-center" (click)="navigateToAdminList()">
+          <div class="text font-17 m-b-5">Total Admins</div>
           <h3 class="m-b-10">{{totalUsers}}
             <!-- <i class="material-icons col-green">trending_up</i> -->
           </h3>
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="col-lg-3 col-sm-6">
-        <div class="counter-box text-center">
+        <div class="counter-box text-center" (click)="navigateToConsultancyList()">
           <div class="text font-17 m-b-5">Total Consultancies</div>
           <h3 class="m-b-10">{{totalConsultancies}}
             <!-- <i class="material-icons col-red">trending_down</i> -->
@@ -36,20 +36,20 @@
         </div>
       </div>
       <div class="col-lg-3 col-sm-6">
-        <div class="counter-box text-center">
+        <div class="counter-box text-center" (click)="navigateToAgentList()">
           <div class="text font-17 m-b-5">Total Agents</div>
           <h3 class="m-b-10">{{totalAgents}}
             <!-- <i class="material-icons col-green">trending_up</i> -->
           </h3>
           <div class="apex-chart-center">
-            <mat-icon>group</mat-icon>
+            <mat-icon>person_pin</mat-icon>
             <!-- <apx-chart [series]="smallColumnChart.series!" [chart]="smallColumnChart.chart!"
               [plotOptions]="smallColumnChart.plotOptions!" [tooltip]="smallColumnChart.tooltip!">
             </apx-chart> -->
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
+      <div class="col-lg-3 col-sm-6" (click)="navigateToStudentList()">
         <div class="counter-box text-center">
           <div class="text font-17 m-b-5">Total Students</div>
           <h3 class="m-b-10">{{totalStudents}}

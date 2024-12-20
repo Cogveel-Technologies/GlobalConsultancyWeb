@@ -29,6 +29,7 @@ export class AdminService {
   private pageSizeSubject = new BehaviorSubject<number>(10);
   editUserState = new BehaviorSubject<boolean|null>(null)
   editorViewUserPageState = new BehaviorSubject<any>(null)
+  // pageNumber:BehaviorSubject<null|number> = new BehaviorSubject(null)
 
   constructor(private http: HttpClient) { }
 
@@ -41,7 +42,8 @@ export class AdminService {
   sendRoleId:BehaviorSubject<number|null> = new BehaviorSubject<number>(null)
   updatePermissions: BehaviorSubject<boolean> = new BehaviorSubject(false)
   sendPermissionId:BehaviorSubject<any|boolean> = new BehaviorSubject<any|null>(false)
-  consultancyInstituteState:BehaviorSubject<any|null> = new BehaviorSubject<any|null>(null)
+  consultancyInstituteState:BehaviorSubject<boolean|null> = new BehaviorSubject<any|null>(null)
+  consultancyPaginationState:BehaviorSubject<null|number> = new BehaviorSubject(null)
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {
@@ -276,6 +278,7 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
     return this.http.put(`${this.apiUrl}/DocumentType/${id}`,data)
   }
 
+ 
 
 
 

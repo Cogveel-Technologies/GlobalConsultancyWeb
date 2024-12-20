@@ -83,6 +83,15 @@ export class InstitutionListComponent {
 
   ngOnInit() {
 
+    //institueEditState
+    this.consultancyService.instituteEditState.subscribe(res => this.instituteEditState = res)
+
+    this.adminService.consultancyPaginationState.subscribe(res =>{
+      if(res){
+        this.adminService.consultancyInstituteState.next(true)
+      }
+    })
+
     // institute session state
     this.consultancyService.instituteSessionState.subscribe(res => {
       console.log(res)
@@ -252,6 +261,7 @@ export class InstitutionListComponent {
   }
 
   onEditorViewInstitute() {
+    console.log("TTT")
     this.consultancyService.editInstituteCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true, countryId: this.defaultData.CountryId })
   }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { AdminService } from 'app/admin/admin.service';
 import { AgentService } from 'app/agent/agent.service';
 import { ConsultancyApi } from 'app/consultancy/consultancy-services/api.service';
@@ -78,8 +79,21 @@ export class MainComponent implements OnInit {
       active: 'Dashboard',
     },
   ];
-  constructor(private consultancyApiService: ConsultancyApi, private consultancyService: ConsultancyService, private adminService: AdminService, private agentService: AgentService) {
+  constructor(private consultancyApiService: ConsultancyApi, private consultancyService: ConsultancyService, private adminService: AdminService, private agentService: AgentService, private router:Router) {
     //constructor
+  }
+
+  navigateToAdminList(){
+    this.router.navigate(['/admin/listusers'])
+  }
+  navigateToConsultancyList(){
+    this.router.navigate(['/admin/consultancy-list'])
+  }
+  navigateToAgentList(){
+    this.router.navigate(['/consultancy/agent-list'])
+  }
+  navigateToStudentList(){
+    this.router.navigate(['/agent/list-students'])
   }
 
 

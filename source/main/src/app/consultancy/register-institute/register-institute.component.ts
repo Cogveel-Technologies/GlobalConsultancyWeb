@@ -86,6 +86,7 @@ export class RegisterInstituteComponent implements OnInit, OnDestroy {
   // navigate to institute list page
   navigateToInstituteList() {
     if (this.editMode) {
+      console.log("lksdjfasjkl")
       this.consultancyService.instituteEditState.next(true)
       this.consultancyService.showList.next(true)
       this.router.navigate(['consultancy', 'institution-list']);
