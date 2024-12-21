@@ -26,6 +26,7 @@ export class ProgramListComponent {
       title: 'Programs',
       items: ['Consultancy'],
       active: 'Programs',
+      activeRoute: this.router.url
     },
   ];
 
@@ -77,6 +78,19 @@ export class ProgramListComponent {
   }
 
   ngOnInit() {
+
+   this.consultancyService.activeRoute.next(this.router.url)
+
+      // if user navigates back (using breadscrum)
+      this.consultancyService.breadscrumState.subscribe(res => {
+        if(res){
+          this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
+            this.pagination$.next(res)
+          })
+        }
+       })
+
+    console.log(this.breadscrums[0].activeRoute)
     this.consultancyService.programEditState.subscribe(res => {
       this.programEditState = res
     })
@@ -286,6 +300,7 @@ export class ProgramListComponent {
     this.consultancyService.sendInstituteId.next(null)
     this.consultancyService.programEditState.next(false)
     this.consultancyService.intakeProgramState.next(false)
+    this.consultancyService.breadscrumState.next(false)
     this.subscription.unsubscribe();
   }
 }

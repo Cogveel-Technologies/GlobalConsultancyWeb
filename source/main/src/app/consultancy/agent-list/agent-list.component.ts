@@ -59,6 +59,7 @@ export class AgentListComponent {
 
 
   ngOnInit() {
+    this.consultancyService.activeRoute.next(this.router.url)
     this.consultancyService.agentEditorViewState.subscribe(res => this.agentEditorViewState = res)
 
     if (this.agentEditorViewState) {

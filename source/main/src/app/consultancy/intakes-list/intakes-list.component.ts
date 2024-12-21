@@ -71,6 +71,8 @@ export class IntakesListComponent {
 
   // get all data
   ngOnInit() {
+    this.consultancyService.activeRoute.next(this.router.url)
+    
     this.sessionListForm = new FormGroup({
       session: new FormControl()
     })

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
@@ -21,15 +21,19 @@ import { AdminService } from 'app/admin/admin.service';
 
 export class InstitutionListComponent {
 
-  breadscrums = [
-    {
-      title: 'Institutes',
-      items: ['Consultancy'],
-      active: 'Institutes',
-    },
-  ];
+  breadscrums: { title: string; items: string[]; active: string; activeRoute: string }[];
+  constructor(private router: Router, public consultancyService: ConsultancyService, private consultancyApiService: ConsultancyApi, private adminService: AdminService,private activeRoute:ActivatedRoute) { 
+    this.breadscrums = [
+      {
+        title: 'Institutes',
+        items: ['Consultancy'],
+        active: 'Institutes',
+        activeRoute: `${this.router.url}`
+      },
+    ];
+  }
 
-  constructor(private router: Router, public consultancyService: ConsultancyService, private consultancyApiService: ConsultancyApi, private adminService: AdminService) { }
+  
   editMode: boolean;
   subscriptions: Subscription = new Subscription();
   universities!: Observable<InstituteData[]> | Observable<[]>;
@@ -60,6 +64,7 @@ export class InstitutionListComponent {
   instituteEditState: boolean = false;
   instituteSessionState:boolean = false;
   instituteProgramState:boolean = false;
+  mainRoute:string
 
 
 
@@ -82,6 +87,18 @@ export class InstitutionListComponent {
 
 
   ngOnInit() {
+   this.mainRoute = this.router.url;
+
+   this.consultancyService.activeRoute.next(this.mainRoute)
+
+   // if user navigates back (using breadscrum)
+   this.consultancyService.breadscrumState.subscribe(res => {
+    if(res){
+      this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
+        this.pagination$.next(res)
+      })
+    }
+   })
 
     //institueEditState
     this.consultancyService.instituteEditState.subscribe(res => this.instituteEditState = res)
@@ -201,8 +218,6 @@ export class InstitutionListComponent {
             this.defaultData.pageSize = +pageRelated.pageSize;
             this.defaultData.sortExpression = sort.direction;
             this.defaultData.OrderBy = sort.field;
-            // institutes of consultancy
-            console.log("heheh")
             return this.getInstitutes(this.defaultData);
           }
         }
@@ -287,6 +302,7 @@ export class InstitutionListComponent {
     this.consultancyService.consultancyInstitutes.next(null)
     this.consultancyService.instituteSessionState.next(false)
     this.consultancyService.instituteProgramState.next(false)
+    this.consultancyService.breadscrumState.next(false)
   }
 
 }

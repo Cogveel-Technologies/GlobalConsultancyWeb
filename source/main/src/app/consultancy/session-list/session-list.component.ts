@@ -80,6 +80,7 @@ export class SessionListComponent {
 
 
   ngOnInit() {
+    this.consultancyService.activeRoute.next(this.router.url)
 
     this.consultancyService.instituteSessions.subscribe(res => {
       this.instituteSessions = res

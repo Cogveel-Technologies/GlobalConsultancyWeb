@@ -63,4 +63,6 @@ export class ConsultancyService {
   intakeProgramState: BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
   intakeSessionState: BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
   instituteSessions: BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
+  activeRoute: BehaviorSubject<string|null> = new BehaviorSubject<string|null>(null)
+  breadscrumState:BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(null)
 }
