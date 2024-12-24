@@ -22,7 +22,7 @@ import { AdminService } from 'app/admin/admin.service';
 export class InstitutionListComponent {
 
   breadscrums: { title: string; items: string[]; active: string; activeRoute: string }[];
-  constructor(private router: Router, public consultancyService: ConsultancyService, private consultancyApiService: ConsultancyApi, private adminService: AdminService,private activeRoute:ActivatedRoute) { 
+  constructor(private router: Router, public consultancyService: ConsultancyService, private consultancyApiService: ConsultancyApi, private adminService: AdminService, private activeRoute: ActivatedRoute) {
     this.breadscrums = [
       {
         title: 'Institutes',
@@ -33,7 +33,7 @@ export class InstitutionListComponent {
     ];
   }
 
-  
+
   editMode: boolean;
   subscriptions: Subscription = new Subscription();
   universities!: Observable<InstituteData[]> | Observable<[]>;
@@ -62,9 +62,10 @@ export class InstitutionListComponent {
   instituteCountry: string;
   instituteConsultancy: string;
   instituteEditState: boolean = false;
-  instituteSessionState:boolean = false;
-  instituteProgramState:boolean = false;
-  mainRoute:string
+  instituteSessionState: boolean = false;
+  instituteProgramState: boolean = false;
+  mainRoute: string
+  deleteId: number
 
 
 
@@ -87,24 +88,33 @@ export class InstitutionListComponent {
 
 
   ngOnInit() {
-   this.mainRoute = this.router.url;
+    this.mainRoute = this.router.url;
 
-   this.consultancyService.activeRoute.next(this.mainRoute)
+    this.consultancyService.activeRoute.next(this.mainRoute)
 
-   // if user navigates back (using breadscrum)
-   this.consultancyService.breadscrumState.subscribe(res => {
-    if(res){
-      this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
-        this.pagination$.next(res)
-      })
-    }
-   })
+    // delete
+    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+        this.subscriptions.add(this.consultancyApiService.deleteInstitute(res).subscribe(() => {
+          this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: this.defaultData.CountryId, search: true })
+        }));
+      }
+    })
+
+    // if user navigates back (using breadscrum)
+    this.consultancyService.breadscrumState.subscribe(res => {
+      if (res) {
+        this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
+          this.pagination$.next(res)
+        })
+      }
+    })
 
     //institueEditState
     this.consultancyService.instituteEditState.subscribe(res => this.instituteEditState = res)
 
-    this.adminService.consultancyPaginationState.subscribe(res =>{
-      if(res){
+    this.adminService.consultancyPaginationState.subscribe(res => {
+      if (res) {
         this.adminService.consultancyInstituteState.next(true)
       }
     })
@@ -121,7 +131,7 @@ export class InstitutionListComponent {
       this.instituteProgramState = res
     })
 
-    if(this.instituteSessionState || this.instituteProgramState){
+    if (this.instituteSessionState || this.instituteProgramState) {
       console.log("enetterererere")
       this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
         console.log("Mmmm")
@@ -231,12 +241,11 @@ export class InstitutionListComponent {
   }
 
   deleteInstitute(id: number) {
-    const con = confirm("Are you sure?")
-    if (con) {
-      this.subscriptions.add(this.consultancyApiService.deleteInstitute(id).subscribe(() => {
-        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: this.defaultData.CountryId, search: true })
-      }));
-    }
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      if (res) {
+        this.consultancyService.deleteId.next(id)
+      }
+    })
   }
 
   // page event

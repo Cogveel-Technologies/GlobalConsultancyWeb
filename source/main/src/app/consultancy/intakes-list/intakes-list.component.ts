@@ -56,6 +56,7 @@ export class IntakesListComponent {
   programName:string;
   sessionName:string;
   intakeEditState:boolean
+  instituteIdFromPrograms:number
 
 
 
@@ -94,6 +95,7 @@ export class IntakesListComponent {
     this.consultancyService.getIntakesOfProgam.subscribe(res => {
       if(res){
         console.log("pppsdfjasdklfjaslfjasklj")
+        this.instituteIdFromPrograms = res.instituteId
         this.intakesFromSession = false;
         this.institute$.next(res.instituteId)
         this.instituteName = res.instituteName;
@@ -146,6 +148,9 @@ export class IntakesListComponent {
         console.log(+this.previousInstituteId)
         if ((instituteId || instituteId === 0) && +this.previousInstituteId !== instituteId) {
           console.log("hello")
+          if(instituteId !== this.instituteIdFromPrograms){
+            this.programName = ''
+          }
           this.programs = [];
           this.sessions = [];
           if (instituteId === 0) {

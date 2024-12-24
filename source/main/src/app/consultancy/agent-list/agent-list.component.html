@@ -132,6 +132,8 @@
               </tbody>
             </table>
 
+            <app-model></app-model>
+
             <!-- Show pagination only if agents data exists -->
             <app-pagination *ngIf="(agents | async)?.length > 0" [pageSize]="defaultData.pageSize"
               (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
