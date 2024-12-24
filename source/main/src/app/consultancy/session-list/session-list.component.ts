@@ -82,6 +82,16 @@ export class SessionListComponent {
   ngOnInit() {
     this.consultancyService.activeRoute.next(this.router.url)
 
+    
+    // delete
+    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+         this.subscription.add(this.consultancyApiService.deleteSession(res).subscribe(() => {
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
+      }));
+      }
+    })
+
     this.consultancyService.instituteSessions.subscribe(res => {
       this.instituteSessions = res
     })
@@ -203,12 +213,12 @@ export class SessionListComponent {
   }
 
   onDeleteSession(id: number) {
-    const con = confirm("Are you sure?")
-    if (con) {
-      this.subscription.add(this.consultancyApiService.deleteSession(id).subscribe(res => {
-        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage })
-      }));
-    }
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(id)
+      }
+    })
   }
 
   onInstituteSelected(event: any) {

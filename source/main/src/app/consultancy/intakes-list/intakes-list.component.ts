@@ -26,9 +26,9 @@ export class IntakesListComponent {
   intakes!: Observable<IntakeData[]>
   sessionSelected: boolean = false;
   sessionListForm: FormGroup;
-  sessions: Observable<{ id: number, sessionName: string }[]>|any;
-  institutes: Observable<SpecificConsultancyRelated[]> |any;
-  programs: Observable<SpecificConsultancyRelated[]>|any;
+  sessions: Observable<{ id: number, sessionName: string }[]> | any;
+  institutes: Observable<SpecificConsultancyRelated[]> | any;
+  programs: Observable<SpecificConsultancyRelated[]> | any;
   program$: BehaviorSubject<string | number> = new BehaviorSubject<string | number>('')
   institute$: BehaviorSubject<string | number> = new BehaviorSubject<string | number>('');
   session$: BehaviorSubject<string | number> = new BehaviorSubject<string | number>('');
@@ -49,14 +49,14 @@ export class IntakesListComponent {
   previousInstituteId: string = '';
   previousProgramId: string = '';
   previousSessionId: number = 0;
-  intakesFromSession: boolean|number = true;
+  intakesFromSession: boolean | number = true;
   isProgramId: boolean = true;
-  roleName:string = localStorage.getItem("roleName");
-  instituteName:string;
-  programName:string;
-  sessionName:string;
-  intakeEditState:boolean
-  instituteIdFromPrograms:number
+  roleName: string = localStorage.getItem("roleName");
+  instituteName: string;
+  programName: string;
+  sessionName: string;
+  intakeEditState: boolean
+  instituteIdFromPrograms: number
 
 
 
@@ -73,7 +73,16 @@ export class IntakesListComponent {
   // get all data
   ngOnInit() {
     this.consultancyService.activeRoute.next(this.router.url)
-    
+
+    // delete
+    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+        this.subscription.add(this.consultancyApiService.deleteIntake(res).subscribe(res => {
+          this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage })
+        }));
+      }
+    })
+
     this.sessionListForm = new FormGroup({
       session: new FormControl()
     })
@@ -83,7 +92,7 @@ export class IntakesListComponent {
       this.intakeEditState = res
     })
 
-    if(this.intakeEditState){
+    if (this.intakeEditState) {
       this.consultancyService.editIntakeCurrentPageAndPageSize.subscribe(res => {
         console.log(res)
         this.pagination$.next({ pageSize: res.pageSize, pageIndex: res.pageIndex })
@@ -93,7 +102,7 @@ export class IntakesListComponent {
 
     // intakes from program list
     this.consultancyService.getIntakesOfProgam.subscribe(res => {
-      if(res){
+      if (res) {
         console.log("pppsdfjasdklfjaslfjasklj")
         this.instituteIdFromPrograms = res.instituteId
         this.intakesFromSession = false;
@@ -119,24 +128,24 @@ export class IntakesListComponent {
       }
     })
 
-    if(this.roleName !== "superadmin"){
-      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res=>{
-        res = [{id:0, name:'All'}, ...res]
+    if (this.roleName !== "superadmin") {
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res => {
+        res = [{ id: 0, name: 'All' }, ...res]
         return res
-      })).subscribe(res=>{
-         this.institutes = res
-        })
-    }else{
+      })).subscribe(res => {
+        this.institutes = res
+      })
+    } else {
       console.log("super adminnnnn")
       this.defaultData.IsAdmin = true;
-      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res=>{
-        res = [{id:0, name:'All'}, ...res]
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res => {
+        res = [{ id: 0, name: 'All' }, ...res]
         return res
-      })).subscribe(res =>{
-         this.institutes = res
-        })
+      })).subscribe(res => {
+        this.institutes = res
+      })
     }
-  
+
 
 
 
@@ -148,7 +157,7 @@ export class IntakesListComponent {
         console.log(+this.previousInstituteId)
         if ((instituteId || instituteId === 0) && +this.previousInstituteId !== instituteId) {
           console.log("hello")
-          if(instituteId !== this.instituteIdFromPrograms){
+          if (instituteId !== this.instituteIdFromPrograms) {
             this.programName = ''
           }
           this.programs = [];
@@ -158,12 +167,12 @@ export class IntakesListComponent {
             this.defaultData.InstituteId = '';
           } else {
             console.log(instituteId, "--------------")
-            this.defaultData.InstituteId = ''+instituteId;
+            this.defaultData.InstituteId = '' + instituteId;
             console.log(this.defaultData)
-            if(!this.intakesFromSession){
+            if (!this.intakesFromSession) {
               console.log(this.intakesFromSession)
-              this.consultancyApiService.getAllPrograms(this.defaultData).subscribe(res=> this.programs =  res);
-            }else{
+              this.consultancyApiService.getAllPrograms(this.defaultData).subscribe(res => this.programs = res);
+            } else {
               console.log("MmMMmMMmmmmMmM")
               this.consultancyApiService.getSpecificSessions(this.defaultData).subscribe(res => this.sessions = res)
             }
@@ -183,7 +192,7 @@ export class IntakesListComponent {
           this.session.setValue('');
           this.isProgramId = true;
           console.log(this.defaultData)
-          this.consultancyApiService.getProgramSessions(this.defaultData).subscribe(res=> {
+          this.consultancyApiService.getProgramSessions(this.defaultData).subscribe(res => {
             console.log(res)
             this.sessions = res
           })
@@ -198,10 +207,10 @@ export class IntakesListComponent {
           console.log(this.defaultData)
         }
         if (search) {
-          if(searchTerm){
+          if (searchTerm) {
             this.defaultData.currentPage = 1;
             this.currentPageIndex = 0;
-          }else{
+          } else {
             this.defaultData.currentPage = pageRelated.pageIndex;
             this.currentPageIndex = pageRelated.pageIndex - 1;
           }
@@ -251,12 +260,15 @@ export class IntakesListComponent {
   }
 
   deleteIntake(id: number) {
-    const con = confirm("Are you sure?")
-    if (con) {
-      this.subscription.add(this.consultancyApiService.deleteIntake(id).subscribe(res => {
-        this.pagination$.next({ pageSize:this.defaultData.pageSize, pageIndex: this.defaultData.currentPage })
-      }));
-    }
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(id)
+      }
+    })
+    // this.subscription.add(this.consultancyApiService.deleteIntake(id).subscribe(res => {
+    //   this.pagination$.next({ pageSize:this.defaultData.pageSize, pageIndex: this.defaultData.currentPage })
+    // }));
   }
 
   onSearch() {
@@ -265,10 +277,10 @@ export class IntakesListComponent {
     this.search$.next(true)
   }
 
-  onEditorViewIntake(){
+  onEditorViewIntake() {
     this.consultancyService.editIntakeCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
   }
-  
+
 
   ngOnDestroy() {
     this.intakesFromSession = true

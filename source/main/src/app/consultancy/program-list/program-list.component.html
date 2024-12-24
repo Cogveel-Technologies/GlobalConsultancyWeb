@@ -146,13 +146,14 @@
                                             </button>
                                         </ng-container>
                                         <ng-container *ngIf="roleName !== 'superadmin'">
-                                            <button mat-icon-button color="warn" (click)="deleteProgram(program.id)"
+                                            <!-- <button mat-icon-button color="warn" (click)="deleteProgram(program.id)"
                                                 matTooltip="Delete"
-                                                *appPermissions="{feature:'Program',action:'canDelete'}">
+                                                *appPermissions="{feature:'Program',action:'canDelete'}"> -->
                                                 <!-- <mat-icon>delete</mat-icon> -->
-                                                <app-feather-icons [icon]="'trash-2'"
+                                                <!-- <app-feather-icons [icon]="'trash-2'"
                                                     [class]="'tbl-fav-delete'"></app-feather-icons>
-                                            </button>
+                                            </button> -->
+                                            <app-model (click)="deleteProgram(program.id)"></app-model>
                                         </ng-container>
                                         <ng-container *ngIf="roleName === 'superadmin'">
                                             <button mat-icon-button color="warn" (click)="deleteProgram(program.id)"

@@ -97,6 +97,7 @@ export class InstitutionListComponent {
       if (res) {
         this.subscriptions.add(this.consultancyApiService.deleteInstitute(res).subscribe(() => {
           this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: this.defaultData.CountryId, search: true })
+          this.consultancyService.sendDeleteIdtoPC.next(null)
         }));
       }
     })

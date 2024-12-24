@@ -115,10 +115,12 @@
                   </ng-container>
 
                   <ng-container *ngIf="roleName !== 'superadmin'">
-                    <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)" matTooltip="Delete" *appPermissions="{feature:'Agent',action:'canDelete'}">
+                    <!-- <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)" matTooltip="Delete" *appPermissions="{feature:'Agent',action:'canDelete'}"> -->
                       <!-- <mat-icon>delete</mat-icon> -->
-                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                    </button>
+                      <!-- <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button> -->
+
+                    <app-model (click)="deleteAgent(agent.id)"></app-model>
                   </ng-container>
 
                   <ng-container *ngIf="roleName === 'superadmin'">
@@ -131,8 +133,6 @@
                 </tr>
               </tbody>
             </table>
-
-            <app-model></app-model>
 
             <!-- Show pagination only if agents data exists -->
             <app-pagination *ngIf="(agents | async)?.length > 0" [pageSize]="defaultData.pageSize"

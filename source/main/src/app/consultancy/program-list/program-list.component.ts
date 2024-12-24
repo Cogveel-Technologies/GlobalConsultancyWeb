@@ -81,6 +81,15 @@ export class ProgramListComponent {
 
    this.consultancyService.activeRoute.next(this.router.url)
 
+    // delete
+    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+         this.subscription.add(this.consultancyApiService.deleteProgram(res).subscribe(() => {
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
+      }));
+      }
+    })
+
       // if user navigates back (using breadscrum)
       this.consultancyService.breadscrumState.subscribe(res => {
         if(res){
@@ -254,12 +263,15 @@ export class ProgramListComponent {
   }
 
   deleteProgram(id: number) {
-    const con = confirm("Are you sure?")
-    if (con) {
-      this.subscription.add(this.consultancyApiService.deleteProgram(id).subscribe(() => {
-        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
-      }));
-    }
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(id)
+      }
+    })
+   
+    
+    
   }
 
   onSearch() {
