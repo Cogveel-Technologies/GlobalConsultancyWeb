@@ -1,10 +1,15 @@
-<!-- Button trigger modal -->
-  <app-feather-icons  data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="onDeletePopup()" [icon]="'trash-2'" [class]="'tbl-fav-delete'"  matTooltip="Delete"></app-feather-icons>
+<button mat-icon-button color="primary" matTooltip="Delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="onDeletePopup()">
+  <!-- <mat-icon>edit</mat-icon> -->
+  <!-- Button trigger modal -->
+  <app-feather-icons
+    [icon]="'trash-2'" [class]="'tbl-fav-delete'">
+  </app-feather-icons>
+</button>
 
 
 <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" #deleteConfirmationModal data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" #deleteConfirmationModal data-bs-keyboard="false"
+  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -16,7 +21,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onClosePopup()">Close</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="onDeleteConfirmation()">Delete</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+          (click)="onDeleteConfirmation()">Delete</button>
       </div>
     </div>
   </div>

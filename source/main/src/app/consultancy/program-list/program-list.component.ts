@@ -59,6 +59,8 @@ export class ProgramListComponent {
   instituteId: number;
   instituteName: string;
   programEditState: boolean = false
+  consultancyPrograms:boolean = false
+  consultancyName:string
 
 
 
@@ -80,6 +82,23 @@ export class ProgramListComponent {
   ngOnInit() {
 
    this.consultancyService.activeRoute.next(this.router.url)
+
+   this.adminService.consultancyProgramPaginationState.subscribe(res =>{
+    if(res){
+       this.adminService.consultancyProgramState.next(true)
+    }
+   })
+   // programs of consultancy
+   if(this.roleName === 'superadmin'){
+    this.adminService.consultancyProgram.subscribe(res =>{
+      if(res){
+        console.log(res)
+        this.consultancyPrograms = true;
+        this.consultancyName = res.consultancyName
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true, consultancyId: res.id })
+      }
+    })
+   }
 
     // delete
     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
@@ -179,7 +198,9 @@ export class ProgramListComponent {
             if (pageRelated.consultancyId && typeof pageRelated.consultancyId === 'number') {
               console.log(pageRelated.consultancyId)
               this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
-              this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res => this.institutes = res)
+              if(!this.consultancyPrograms){
+                this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res => this.institutes = res)
+              }
             } else {
               this.institutes = []
               this.defaultData.ConsultancyId = '';
@@ -313,6 +334,9 @@ export class ProgramListComponent {
     this.consultancyService.programEditState.next(false)
     this.consultancyService.intakeProgramState.next(false)
     this.consultancyService.breadscrumState.next(false)
+    this.adminService.consultancyProgram.next(null)
+    this.adminService.consultancyInstitutePaginationState.next(false)
+    // this.adminService.consultancyPaginationState.next(null)
     this.subscription.unsubscribe();
   }
 }

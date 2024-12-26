@@ -63,6 +63,17 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
   ngOnInit() {
 
     this.adminService.consultancyInstituteState.subscribe(res =>{
+      console.log(res)
+      if(res){
+        this.adminService.consultancyPaginationState.subscribe(res => {
+          this.currentPage = res
+          this.currentPageSubject.next(this.currentPage)
+        })
+      }
+    })
+    
+    this.adminService.consultancyProgramState.subscribe(res =>{
+      console.log(res)
       if(res){
         this.adminService.consultancyPaginationState.subscribe(res => {
           this.currentPage = res
@@ -173,6 +184,13 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
     });
   }
 
+  consultancyPrograms(id:number,consultancyName:string){
+    this.adminService.consultancyPaginationState.next(this.pageNumber)
+    this.adminService.consultancyProgramPaginationState.next(true)
+    this.adminService.consultancyProgram.next({id,consultancyName})
+    this.router.navigate(['/consultancy/program-list'])
+  }
+
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex + 1; // pageIndex is 0-based
@@ -182,7 +200,7 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
 
   getInstitutes(countryName:string, consultancyName:string,consultancyId:number){
     this.adminService.consultancyPaginationState.next(this.pageNumber)
-    // this.adminService.consultancyInstituteState.next(true)
+    this.adminService.consultancyInstitutePaginationState.next(true)
     this.consultancyService.consultancyInstitutes.next({countryName,consultancyName,consultancyId})
     this.router.navigate([`/consultancy/institution-list`])
   }
@@ -203,5 +221,6 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
 
   ngOnDestroy() {
     this.adminService.consultancyInstituteState.next(false)
+    this.adminService.consultancyProgramState.next(false)
   }
 }

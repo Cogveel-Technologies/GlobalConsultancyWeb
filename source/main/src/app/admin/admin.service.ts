@@ -43,7 +43,11 @@ export class AdminService {
   updatePermissions: BehaviorSubject<boolean> = new BehaviorSubject(false)
   sendPermissionId:BehaviorSubject<any|boolean> = new BehaviorSubject<any|null>(false)
   consultancyInstituteState:BehaviorSubject<boolean|null> = new BehaviorSubject<any|null>(null)
+  consultancyProgramState:BehaviorSubject<boolean|null> = new BehaviorSubject<any|null>(null)
   consultancyPaginationState:BehaviorSubject<null|number> = new BehaviorSubject(null)
+  consultancyProgram:BehaviorSubject<null|any> = new BehaviorSubject(null)
+  consultancyInstitutePaginationState = new BehaviorSubject<null|boolean>(false)
+  consultancyProgramPaginationState = new BehaviorSubject<null|boolean>(false)
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {

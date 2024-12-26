@@ -60,7 +60,7 @@ export class InstitutionListComponent {
   filteredCountries: { id: number, countryName: string }[];
   instituteConsultancyInputData: string | null = null;
   instituteCountry: string;
-  instituteConsultancy: string;
+  consultancyName: string;
   instituteEditState: boolean = false;
   instituteSessionState: boolean = false;
   instituteProgramState: boolean = false;
@@ -114,7 +114,7 @@ export class InstitutionListComponent {
     //institueEditState
     this.consultancyService.instituteEditState.subscribe(res => this.instituteEditState = res)
 
-    this.adminService.consultancyPaginationState.subscribe(res => {
+    this.adminService.consultancyInstitutePaginationState.subscribe(res => {
       if (res) {
         this.adminService.consultancyInstituteState.next(true)
       }
@@ -154,7 +154,7 @@ export class InstitutionListComponent {
     this.consultancyService.consultancyInstitutes.subscribe(res => {
       if (res) {
         console.log(res)
-        this.instituteConsultancy = res.consultancyName;
+        this.consultancyName = res.consultancyName;
         this.instituteCountry = res.countryName;
         this.institutesFromConsultancy = true
         this.pagination$.next({ consultancyId: res.consultancyId, search: true, pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: '' })
@@ -312,6 +312,7 @@ export class InstitutionListComponent {
     this.consultancyService.consultancyInstitutes.next(null)
     this.consultancyService.instituteSessionState.next(false)
     this.consultancyService.instituteProgramState.next(false)
+    this.adminService.consultancyProgramPaginationState.next(false)
     this.consultancyService.breadscrumState.next(false)
   }
 
