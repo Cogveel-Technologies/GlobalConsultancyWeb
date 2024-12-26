@@ -17,7 +17,7 @@ import { ConsultancyService } from 'app/consultancy/consultancy-services/consult
   templateUrl: './consultancy-list.component.html',
   styleUrls: ['./consultancy-list.component.scss']
 })
-export class ConsultancyListComponent implements OnInit,OnDestroy {
+export class ConsultancyListComponent implements OnInit, OnDestroy {
   breadscrums = [
     {
       title: 'Consultancy List',
@@ -28,7 +28,7 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
   consultancies$: Observable<Consultancy[]>;
   totalConsultancies: number = 0;
   // users:Observable<[{firstName:string,id:number}]>;
-  users:any
+  users: any
   roleName = localStorage.getItem("roleName")
   userList = new FormControl(0);
   searchControl: FormControl = new FormControl('');
@@ -37,9 +37,9 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
   pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
   currentPage: number = 1; // Default current page
   totalPages: number = 1; // Total number of pages
-  defaultData:ConsultancyDetailsOptions = this.consultancyService.defaultRenderData()
-  pageNumber:number;
-  previousPage:number
+  defaultData: ConsultancyDetailsOptions = this.consultancyService.defaultRenderData()
+  pageNumber: number;
+  previousPage: number
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -47,14 +47,14 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
   private sortFieldSubject = new BehaviorSubject<string>(this.sortField);
   private sortDirectionSubject = new BehaviorSubject<'asc' | 'desc'>(this.sortDirection);
   private searchTermSubject = new BehaviorSubject<string>('');
-  private userSubject:BehaviorSubject<string|number> =new BehaviorSubject<string|number>('');
-  private searchSubject:BehaviorSubject<boolean|string> =new BehaviorSubject<boolean|string>('');
+  private userSubject: BehaviorSubject<string | number> = new BehaviorSubject<string | number>('');
+  private searchSubject: BehaviorSubject<boolean | string> = new BehaviorSubject<boolean | string>('');
 
   constructor(
     private router: Router,
     private adminService: AdminService,
     private snackBar: MatSnackBar,
-    private consultancyService:ConsultancyService
+    private consultancyService: ConsultancyService
   ) {
     this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
     this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize); // Then use it here
@@ -62,18 +62,33 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
 
-    this.adminService.consultancyPageState.subscribe(res =>{
-      if(res){
-        this.adminService.consultancyPaginationState.subscribe(res=>{
+    // delete
+    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+        this.adminService.deleteConsultancy(res).subscribe(res => {
+          if (res) {
+            this.adminService.consultancyPaginationState.subscribe(res => {
+              this.currentPage = res;
+              this.currentPageSubject.next(this.currentPage)
+              this.consultancyService.sendDeleteIdtoPC.next(null)
+            })
+          }
+        })
+      }
+    })
+
+    this.adminService.consultancyPageState.subscribe(res => {
+      if (res) {
+        this.adminService.consultancyPaginationState.subscribe(res => {
           this.currentPage = res
           this.currentPageSubject.next(this.currentPage)
         })
       }
     })
 
-    this.adminService.consultancyInstituteState.subscribe(res =>{
+    this.adminService.consultancyInstituteState.subscribe(res => {
       console.log(res)
-      if(res){
+      if (res) {
         this.adminService.consultancyPaginationState.subscribe(res => {
           console.log(res)
           this.currentPage = res
@@ -81,19 +96,19 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
         })
       }
     })
-    
-    this.adminService.consultancyProgramState.subscribe(res =>{
+
+    this.adminService.consultancyProgramState.subscribe(res => {
       console.log(res)
-      if(res){
+      if (res) {
         this.adminService.consultancyPaginationState.subscribe(res => {
           this.currentPage = res
           this.currentPageSubject.next(this.currentPage)
         })
       }
     })
-    
+
     // if super admin logs in
-    if(this.roleName === 'superadmin'){
+    if (this.roleName === 'superadmin') {
       console.log(this.roleName)
       this.adminService.getAllUsers().subscribe(res => this.users = res)
     }
@@ -113,7 +128,7 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
       this.userSubject,
       this.searchSubject
     ]).pipe(
-      switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection,userId,search]) => {
+      switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection, userId, search]) => {
         console.log(currentPage)
         this.pageNumber = currentPage
         console.log(this.pageNumber)
@@ -124,8 +139,8 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
           sortExpression: sortDirection,
           currentPage: currentPage,
           searchTerm: searchTerm,
-          userId:+userId,
-          isAdmin: this.roleName === 'superadmin' ? true:false
+          userId: +userId,
+          isAdmin: this.roleName === 'superadmin' ? true : false
         });
       }),
       tap(response => {
@@ -133,7 +148,7 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
         this.totalConsultancies = response.pageInfo?.totalRecords || 0;
         this.totalPages = response.pageInfo?.totalPages || 1;
         this.currentPage = response.pageInfo?.currentPage + 1 || 1;
-        
+
         // Check if no data is found, and handle accordingly
         if (this.totalConsultancies === 0) {
           console.log('No consultancies found.');
@@ -141,13 +156,13 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
       }),
       map(response => response.data || [])  // Ensure an empty array is returned if no data
     );
-  
+
     // Trigger initial load
     this.refreshConsultancies();
   }
-  
 
- 
+
+
   refreshConsultancies() {
     // Trigger refresh by updating subjects
     this.searchTermSubject.next(this.searchControl.value || '');  // Ensure empty string is passed
@@ -156,7 +171,7 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
     this.pageSizeSubject.next(this.pageSize);
     this.currentPageSubject.next(this.currentPage);
   }
-  
+
 
   addConsultancy() {
     this.router.navigate(['/admin/consultancy']);
@@ -170,15 +185,22 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
   }
 
   deleteConsultancy(consultancyId: number) {
-    this.adminService.deleteConsultancy(consultancyId).subscribe({
-      next: () => {
-        this.refreshConsultancies();
-        this.snackBar.open('Consultancy deleted successfully', 'Close', { duration: 100 });
-      },
-      error: () => {
-        this.snackBar.open('Error deleting consultancy', 'Close', { duration: 100 });
+    // this.adminService.deleteConsultancy(consultancyId).subscribe({
+    //   next: () => {
+    //     this.refreshConsultancies();
+    //     this.snackBar.open('Consultancy deleted successfully', 'Close', { duration: 100 });
+    //   },
+    //   error: () => {
+    //     this.snackBar.open('Error deleting consultancy', 'Close', { duration: 100 });
+    //   }
+    // });
+    this.adminService.consultancyPaginationState.next(this.pageNumber)
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(consultancyId)
       }
-    });
+    })
   }
 
   editConsultancy(consultancyId: number) {
@@ -187,7 +209,7 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
       queryParams: { id: consultancyId }
     });
   }
-  
+
 
   viewConsultancy(consultancyId: number) {
     this.adminService.consultancyPaginationState.next(this.pageNumber)
@@ -196,10 +218,10 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
     });
   }
 
-  consultancyPrograms(id:number,consultancyName:string){
+  consultancyPrograms(id: number, consultancyName: string) {
     this.adminService.consultancyPaginationState.next(this.pageNumber)
     this.adminService.consultancyProgramPaginationState.next(true)
-    this.adminService.consultancyProgram.next({id,consultancyName})
+    this.adminService.consultancyProgram.next({ id, consultancyName })
     this.router.navigate(['/consultancy/program-list'])
   }
 
@@ -210,10 +232,10 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
     this.currentPageSubject.next(this.currentPage);
   }
 
-  getInstitutes(countryName:string, consultancyName:string,consultancyId:number){
+  getInstitutes(countryName: string, consultancyName: string, consultancyId: number) {
     this.adminService.consultancyPaginationState.next(this.pageNumber)
     this.adminService.consultancyInstitutePaginationState.next(true)
-    this.consultancyService.consultancyInstitutes.next({countryName,consultancyName,consultancyId})
+    this.consultancyService.consultancyInstitutes.next({ countryName, consultancyName, consultancyId })
     this.router.navigate([`/consultancy/institution-list`])
   }
 
@@ -223,11 +245,11 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
     this.refreshConsultancies();
   }
 
-  onUserChange(event:any){
+  onUserChange(event: any) {
     this.userSubject.next(event)
   }
 
-  selectAdmin(event:any){
+  selectAdmin(event: any) {
     this.userSubject.next(event.value)
   }
 

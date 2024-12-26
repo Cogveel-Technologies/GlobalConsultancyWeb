@@ -88,6 +88,11 @@
                         [sortFields]="['phoneNumber']" [sortLabels]="['Phone']" (sortChange)="onSortChange($event)">
                       </app-sorting>
                     </th>
+                    <th>
+                      <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                        [sortFields]="['consultancyName']" [sortLabels]="['Consultancy Name ']" (sortChange)="onSortChange($event)">
+                      </app-sorting>
+                    </th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -100,6 +105,7 @@
                     <td data-label="Province">{{ institute.province }}</td>
                     <td data-label="Email">{{ institute.email }}</td>
                     <td data-label="Phone No">{{ institute.phoneNo }}</td>
+                    <td data-label="Consultancy Name">{{ institute.consultancyName }}</td>
                     <td data-label="Actions">
                       <button mat-icon-button color="warn" matTooltip="Programs"
                       (click)="institutePrograms(institute.id, institute.instituteName, institute.consultancyId)">

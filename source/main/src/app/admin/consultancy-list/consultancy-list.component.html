@@ -85,6 +85,12 @@
                      (sortChange)="onSortChange($event)">
                     </app-sorting>
                   </th>
+                  <th>
+                    <app-sorting [sortField]="sortField" [sortDirection]="sortDirection"
+                     [sortFields]="['AdminName']" [sortLabels]="['Admin Name']"
+                     (sortChange)="onSortChange($event)">
+                    </app-sorting>
+                  </th>
                
                   <th>Actions</th>
                 </tr>
@@ -96,6 +102,8 @@
                   <td data-label="Phone">{{ consultancy.phone1 }}</td>
                   <td data-label="Country">{{ consultancy.country }}</td>
                   <td data-label="State">{{ consultancy.state }}</td>
+                  <td data-label="Admin Name">{{ consultancy.adminName }}</td>
+                
                  
                   <td data-label="Actions">
                     <button mat-icon-button color="success" (click)="getInstitutes(consultancy.country,consultancy.consultancyName, consultancy.id)" matTooltip="Institutes">
@@ -114,10 +122,11 @@
                       <!-- <mat-icon>edit</mat-icon> -->
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>
-                    <button mat-icon-button color="warn" (click)="deleteConsultancy(consultancy.id)" matTooltip="Delete">
+                    <!-- <button mat-icon-button color="warn" (click)="deleteConsultancy(consultancy.id)" matTooltip="Delete"> -->
                       <!-- <mat-icon>delete</mat-icon> -->
-                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                    </button>
+                      <!-- <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button> -->
+                    <app-model (click)="deleteConsultancy(consultancy.id)"></app-model>
                   </td>
                 </tr>
                 <!-- Show a message when there are no consultancies found -->

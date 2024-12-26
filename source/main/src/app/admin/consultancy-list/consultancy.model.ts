@@ -16,5 +16,6 @@ export interface Consultancy {
     fbUrl:string,
     linkedInUrl:string,
     yearEstablished:number,
-    password:string
+    password:string,
+    adminName:string
 }

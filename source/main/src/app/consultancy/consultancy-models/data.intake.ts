@@ -7,5 +7,6 @@ export interface IntakeData{
     year:string,
     instituteName:string,
     programName:string,
-    sessionName:string
+    sessionName:string,
+    consultancyName?:string
 }

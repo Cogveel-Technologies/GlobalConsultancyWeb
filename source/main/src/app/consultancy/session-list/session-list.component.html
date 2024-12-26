@@ -65,6 +65,12 @@
                     (sortChange)="onSortChange($event)">
                   </app-sorting>
                 </th>
+                <th>
+                  <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                    [sortFields]="['consultancyName']" [sortLabels]="['Consultancy Name']"
+                    (sortChange)="onSortChange($event)">
+                  </app-sorting>
+                </th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -79,6 +85,7 @@
               <tr *ngFor="let session of (sessions | async)">
                 <td data-label="Session Name">{{ session.sessionName }}</td>
                 <td data-label="Institute Name">{{ session.instituteName }}</td>
+                <td data-label="Consultancy Name">{{ session.consultancyName }}</td>
                 <td data-label="Actions">
                   <button mat-icon-button color="primary" matTooltip="Intakes"
                     (click)="onIntakes(session.id, session.instituteName, session.programName, session.sessionName, session.instituteId)">
