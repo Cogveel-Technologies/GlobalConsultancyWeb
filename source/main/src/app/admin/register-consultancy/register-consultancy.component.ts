@@ -41,6 +41,14 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.adminService.consultancyPaginationState.subscribe(res =>{
+      if(res){
+        this.adminService.consultancyPageState.next(true)
+      }
+    })
+
+
     this.adminService.isEditMode.subscribe(val=>{
       this.isThroughIcon = val;
       console.log(this.isThroughIcon)
@@ -60,7 +68,7 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
       consultancyName: ['', Validators.required],
       phone1: ['', Validators.required],
       phone2: [''],
-      userName: ['', [Validators.required]],
+      userName: [''],
       email2: ['', [Validators.email]],
       country: ['', Validators.required],
       state: ['', Validators.required],
@@ -73,7 +81,7 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
       fbUrl: [''],
       linkedInUrl: [''],
       yearEstablished: ['', Validators.required],
-      password: ['', Validators.required],
+      password: [''],
     });
 
     const formStatusSub = this.registerConsultancy.statusChanges.subscribe(status => {
@@ -154,6 +162,7 @@ export class RegisterConsultancyComponent implements OnInit, OnDestroy {
       duration: 4000,
     });
   }
+
 
 
   // chosenYearHandler(normalizedYear: Date) {

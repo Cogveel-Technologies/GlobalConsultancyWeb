@@ -48,6 +48,7 @@ export class AdminService {
   consultancyProgram:BehaviorSubject<null|any> = new BehaviorSubject(null)
   consultancyInstitutePaginationState = new BehaviorSubject<null|boolean>(false)
   consultancyProgramPaginationState = new BehaviorSubject<null|boolean>(false)
+  consultancyPageState = new BehaviorSubject<null|boolean>(null)
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {

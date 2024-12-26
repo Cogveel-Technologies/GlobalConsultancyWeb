@@ -15,7 +15,7 @@ export class ResponseInterceptor implements HttpInterceptor {
           const body = res.body;
 
           // Handle success responses
-          if (body?.status && body.status >= 200 && body.status <= 299 && body.status !== 201) {
+          if (body?.status && body.status >= 200 && body.status <= 299 && body.status !== 200) {
             this.toastr.success(body.message || 'Operation successful');
           }
 

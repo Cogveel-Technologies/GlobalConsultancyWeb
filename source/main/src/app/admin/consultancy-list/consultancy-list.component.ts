@@ -62,12 +62,22 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
 
+    this.adminService.consultancyPageState.subscribe(res =>{
+      if(res){
+        this.adminService.consultancyPaginationState.subscribe(res=>{
+          this.currentPage = res
+          this.currentPageSubject.next(this.currentPage)
+        })
+      }
+    })
+
     this.adminService.consultancyInstituteState.subscribe(res =>{
       console.log(res)
       if(res){
         this.adminService.consultancyPaginationState.subscribe(res => {
+          console.log(res)
           this.currentPage = res
-          this.currentPageSubject.next(this.currentPage)
+          this.currentPageSubject.next(res)
         })
       }
     })
@@ -122,7 +132,7 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
         console.log('Refreshed service response:', response);
         this.totalConsultancies = response.pageInfo?.totalRecords || 0;
         this.totalPages = response.pageInfo?.totalPages || 1;
-        this.currentPage = response.pageInfo?.currentPage || 1;
+        this.currentPage = response.pageInfo?.currentPage + 1 || 1;
         
         // Check if no data is found, and handle accordingly
         if (this.totalConsultancies === 0) {
@@ -172,6 +182,7 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
   }
 
   editConsultancy(consultancyId: number) {
+    this.adminService.consultancyPaginationState.next(this.pageNumber)
     this.router.navigate(['/admin/consultancy'], {
       queryParams: { id: consultancyId }
     });
@@ -179,6 +190,7 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
   
 
   viewConsultancy(consultancyId: number) {
+    this.adminService.consultancyPaginationState.next(this.pageNumber)
     this.router.navigate(['/admin/view-consultancy'], {
       queryParams: { id: consultancyId }
     });
@@ -222,5 +234,6 @@ export class ConsultancyListComponent implements OnInit,OnDestroy {
   ngOnDestroy() {
     this.adminService.consultancyInstituteState.next(false)
     this.adminService.consultancyProgramState.next(false)
+    this.adminService.consultancyPageState.next(false)
   }
 }
