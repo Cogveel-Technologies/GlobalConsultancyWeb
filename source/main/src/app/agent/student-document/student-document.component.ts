@@ -41,6 +41,12 @@ export class StudentDocumentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.agentService.studentPaginationState.subscribe(res => {
+      if(res){
+        this.agentService.pagination.next(true)
+      }
+    })
+    
     const routeSubscription = this.route.data.subscribe((data: { student: Student | null }) => {
       this.student = data.student;
       console.log('Resolved student:', this.student);

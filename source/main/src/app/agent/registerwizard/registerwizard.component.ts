@@ -93,7 +93,15 @@ export class RegisterwizardComponent implements OnInit {
    
   }
 
+
   ngOnInit(): void {
+    this.agentService.studentPaginationState.subscribe(res => {
+      if(res){
+        this.agentService.pagination.next(true)
+      }
+    })
+
+
     this.loadUploadedDocument();
     this.selectedRecord = this.agentService.getSelectedRecord();
     this.fetchStudentById(this.selectedId);

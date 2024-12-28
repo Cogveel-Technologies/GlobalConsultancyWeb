@@ -144,6 +144,7 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
         });
       }),
       tap(response => {
+        console.log(response)
         console.log('Refreshed service response:', response);
         this.totalConsultancies = response.pageInfo?.totalRecords || 0;
         this.totalPages = response.pageInfo?.totalPages || 1;
@@ -185,22 +186,16 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
   }
 
   deleteConsultancy(consultancyId: number) {
-    // this.adminService.deleteConsultancy(consultancyId).subscribe({
-    //   next: () => {
-    //     this.refreshConsultancies();
-    //     this.snackBar.open('Consultancy deleted successfully', 'Close', { duration: 100 });
-    //   },
-    //   error: () => {
-    //     this.snackBar.open('Error deleting consultancy', 'Close', { duration: 100 });
-    //   }
-    // });
-    this.adminService.consultancyPaginationState.next(this.pageNumber)
-    this.consultancyService.deletePopUpState.subscribe(res => {
-      if (res) {
-        console.log(res)
-        this.consultancyService.deleteId.next(consultancyId)
+    this.adminService.deleteConsultancy(consultancyId).subscribe({
+      next: () => {
+        this.refreshConsultancies();
+        this.snackBar.open('Consultancy deleted successfully', 'Close', { duration: 100 });
+      },
+      error: () => {
+        this.snackBar.open('Error deleting consultancy', 'Close', { duration: 100 });
       }
-    })
+    });
+   
   }
 
   editConsultancy(consultancyId: number) {
@@ -257,5 +252,6 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
     this.adminService.consultancyInstituteState.next(false)
     this.adminService.consultancyProgramState.next(false)
     this.adminService.consultancyPageState.next(false)
+    
   }
 }

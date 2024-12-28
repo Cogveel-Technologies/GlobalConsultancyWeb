@@ -33,6 +33,7 @@ export class ListstudentsComponent implements OnInit {
   currentPage = 1; // Default current page
   totalPages = 1; // Total number of pages
   pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
+  pageNumber:number
    
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -56,6 +57,8 @@ export class ListstudentsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+
     this.route.queryParams.subscribe(params => {
       const origin = params['origin']; // Fetch the origin parameter
 
@@ -85,21 +88,23 @@ export class ListstudentsComponent implements OnInit {
 
  
     this.showOnlyApplyButton = this.agentService.getShowOnlyApplyButton();
+
+    this.agentService.pagination.subscribe(res =>{
+      if(res){
+        this.agentService.studentPaginationState.subscribe(res =>{
+          console.log("currentPage", res)
+          this.currentPage = res;
+          console.log(this.currentPage)
+          this.currentPageSubject.next(this.currentPage)
+        })
+      }
+    })
     // Combine search, pagination, and sorting
     this.students$ = combineLatest([
       this.searchControl.valueChanges.pipe(
         startWith(''),
         throttleTime(60),
-        distinctUntilChanged(),
-        tap((term) => {
-          console.log('Search term:', term); // Debug log
-          this.currentPage = 1; // Reset current page to 1
-          this.currentPageSubject.next(this.currentPage); // Emit the new current page
-          // this.refreshStudents();
-          // this.searchTermSubject.next(term)
-        }),
-       
-        
+        distinctUntilChanged(),  
       ),
       this.pageSizeSubject,
       this.currentPageSubject,
@@ -107,6 +112,7 @@ export class ListstudentsComponent implements OnInit {
       this.sortDirectionSubject
     ]).pipe(
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
+        this.pageNumber = currentPage
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
         return this.agentService.getStudentsList({
           isAdmin: false,
@@ -182,7 +188,8 @@ export class ListstudentsComponent implements OnInit {
       // this.router.navigate(['/agent/register-student'], {
       //   queryParams: { id: studentId, origin: 'listStudents' } // Pass the origin as 'listStudents'
       // });
-
+      console.log(this.pageNumber)
+      this.agentService.studentPaginationState.next(this.pageNumber)
       this.router.navigate(['/agent/registerwizard'], {
         queryParams: { id: studentId, origin: 'listStudents' } // Pass the origin as 'listStudents'
       });
@@ -191,6 +198,7 @@ export class ListstudentsComponent implements OnInit {
     
 
   viewStudent(studentId: number) {
+    this.agentService.studentPaginationState.next(this.pageNumber)
     this.router.navigate(['/agent/view-student'], {
       queryParams: { id: studentId }
     });
@@ -198,6 +206,7 @@ export class ListstudentsComponent implements OnInit {
   
 
   addStudentDocument(studentId: number) {
+    this.agentService.studentPaginationState.next(this.pageNumber)
      this.router.navigate(['/agent/student-document'],
            {
           queryParams: { id: studentId, origin: 'listStudents' }
@@ -231,6 +240,7 @@ export class ListstudentsComponent implements OnInit {
   ngOnDestroy() {
     // Reset the flag when navigating away from this component
     this.agentService.setShowOnlyApplyButton(false);
+    this.agentService.pagination.next(false)
    
 }
 }
