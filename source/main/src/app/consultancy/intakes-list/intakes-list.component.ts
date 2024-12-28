@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, Observable, of, startWith, Subscription, switchMap, tap, throttleTime } from 'rxjs';
 import { IntakeData } from '../consultancy-models/data.intake';
 import { SpecificConsultancyRelated } from '../consultancy-models/data.specificInstitutes';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -57,17 +57,26 @@ export class IntakesListComponent {
   sessionName: string;
   intakeEditState: boolean
   instituteIdFromPrograms: number
+  instituteIdFromSessions: number
 
 
 
 
 
   getIntakes(params: ConsultancyDetailsOptions) {
-    return this.consultancyApiService.getIntakes(params).pipe
-      (map(res => {
-        this.records = res['pageInfo']['totalRecords'];
-        return res['data']
-      }))
+    return this.consultancyApiService.getIntakes(params).pipe(
+          tap(res => {
+            if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
+              console.log("Condition met: No data and currentPage > 1");
+              this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize: this.defaultData.pageSize});
+            }
+          }),
+          filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)),
+          map(response => {
+            console.log(response)
+            this.records = response['pageInfo']['totalRecords'];
+            return response['data']
+          }))
   }
 
   // get all data
@@ -79,6 +88,7 @@ export class IntakesListComponent {
       if (res) {
         this.subscription.add(this.consultancyApiService.deleteIntake(res).subscribe(res => {
           this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage })
+          this.consultancyService.sendDeleteIdtoPC.next(null)
         }));
       }
     })
@@ -118,7 +128,7 @@ export class IntakesListComponent {
     this.consultancyService.getIntakesofSession.subscribe(res => {
       if (res && res.sessionId) {
         console.log(res)
-        console.log("ksdfksttekjttttttt")
+        this.instituteIdFromSessions = +res.instituteId
         this.intakesFromSession = true
         this.institute$.next(res.instituteId)
         this.instituteName = res.instituteName;
@@ -159,6 +169,9 @@ export class IntakesListComponent {
           console.log("hello")
           if (instituteId !== this.instituteIdFromPrograms) {
             this.programName = ''
+          }
+          if (instituteId !== this.instituteIdFromSessions) {
+            this.sessionName = ''
           }
           this.programs = [];
           this.sessions = [];

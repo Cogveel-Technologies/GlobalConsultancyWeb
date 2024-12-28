@@ -88,6 +88,7 @@ export class SessionListComponent {
       if (res) {
          this.subscription.add(this.consultancyApiService.deleteSession(res).subscribe(() => {
         this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
+        this.consultancyService.sendDeleteIdtoPC.next(null)
       }));
       }
     })

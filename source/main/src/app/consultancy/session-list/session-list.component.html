@@ -61,13 +61,13 @@
                 </th>
                 <th>
                   <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
-                    [sortFields]="['instituteName']" [sortLabels]="['Institute Name']"
+                    [sortFields]="['instituteName']" [sortLabels]="['Institute']"
                     (sortChange)="onSortChange($event)">
                   </app-sorting>
                 </th>
                 <th>
                   <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
-                    [sortFields]="['consultancyName']" [sortLabels]="['Consultancy Name']"
+                    [sortFields]="['consultancyName']" [sortLabels]="['Consultancy']"
                     (sortChange)="onSortChange($event)">
                   </app-sorting>
                 </th>
@@ -83,9 +83,9 @@
 
               <!-- Loop through sessions when data exists -->
               <tr *ngFor="let session of (sessions | async)">
-                <td data-label="Session Name">{{ session.sessionName }}</td>
-                <td data-label="Institute Name">{{ session.instituteName }}</td>
-                <td data-label="Consultancy Name">{{ session.consultancyName }}</td>
+                <td data-label="Session">{{ session.sessionName }}</td>
+                <td data-label="Institute">{{ session.instituteName }}</td>
+                <td data-label="Consultancy">{{ session.consultancyName }}</td>
                 <td data-label="Actions">
                   <button mat-icon-button color="primary" matTooltip="Intakes"
                     (click)="onIntakes(session.id, session.instituteName, session.programName, session.sessionName, session.instituteId)">

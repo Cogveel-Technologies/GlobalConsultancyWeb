@@ -85,12 +85,12 @@
                     </th>
                     <th>
                       <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
-                        [sortFields]="['phoneNumber']" [sortLabels]="['Phone']" (sortChange)="onSortChange($event)">
+                        [sortFields]="['phoneNo']" [sortLabels]="['Phone']" (sortChange)="onSortChange($event)">
                       </app-sorting>
                     </th>
                     <th>
                       <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
-                        [sortFields]="['consultancyName']" [sortLabels]="['Consultancy Name ']" (sortChange)="onSortChange($event)">
+                        [sortFields]="['consultancyName']" [sortLabels]="['Consultancy']" (sortChange)="onSortChange($event)">
                       </app-sorting>
                     </th>
                     <th>Actions</th>
@@ -101,11 +101,11 @@
                 <tbody>
                   <tr *ngIf="institutesList.length > 0; else noData">
                   <tr *ngFor="let institute of institutesList">
-                    <td data-label="Institute Name">{{ institute.instituteName }}</td>
+                    <td data-label="Institute">{{ institute.instituteName }}</td>
                     <td data-label="Province">{{ institute.province }}</td>
                     <td data-label="Email">{{ institute.email }}</td>
                     <td data-label="Phone No">{{ institute.phoneNo }}</td>
-                    <td data-label="Consultancy Name">{{ institute.consultancyName }}</td>
+                    <td data-label="Consultancy">{{ institute.consultancyName }}</td>
                     <td data-label="Actions">
                       <button mat-icon-button color="warn" matTooltip="Programs"
                       (click)="institutePrograms(institute.id, institute.instituteName, institute.consultancyId)">

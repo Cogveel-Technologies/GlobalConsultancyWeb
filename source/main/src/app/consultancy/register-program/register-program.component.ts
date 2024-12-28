@@ -101,6 +101,9 @@ export class RegisterProgramComponent {
       this.editId = +this.route.snapshot.paramMap.get('id');
       this.defaultData.ProgramId = String(this.editId)
       this.editMode = true;
+      const docIds = details.documentIds.split(",").map(id => Number(id))
+      details.documentIds = docIds
+      console.log(docIds)
       this.registerProgram.patchValue(details)
     }
   }
@@ -136,8 +139,10 @@ export class RegisterProgramComponent {
 
   onSubmit() {
     let newDetails = this.registerProgram.value;
+    console.log(newDetails)
     const dataTransform = this.registerProgram.value.documentIds.join(',')
     newDetails.documentIds = dataTransform
+    console.log(newDetails)
     if (this.editMode) {
       this.subscriptions.add(this.consultancyApiService.updateProgram(this.editId, newDetails).subscribe(res => {
         if (res['status'] >= 200 && res['status'] < 300) {
