@@ -8,9 +8,11 @@ import { ConsultancyService } from 'app/consultancy/consultancy-services/consult
 })
 export class ModelComponent {
   constructor(private consultancyService: ConsultancyService) { }
+  message:string;
   deleteId:number;
   ngOnInit(){
     this.consultancyService.deleteId.subscribe(res => this.deleteId = res)
+    this.consultancyService.deleteMessage.subscribe(res => this.message = res)
   }
   onDeletePopup() {
     this.consultancyService.deletePopUpState.next(true)

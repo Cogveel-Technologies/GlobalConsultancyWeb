@@ -68,5 +68,5 @@ export class ConsultancyService {
   deletePopUpState:BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(null)
   deleteId:BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null)
   sendDeleteIdtoPC:BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null)
-  
+  deleteMessage:BehaviorSubject<string|null> = new BehaviorSubject<string|null>(null)
 }

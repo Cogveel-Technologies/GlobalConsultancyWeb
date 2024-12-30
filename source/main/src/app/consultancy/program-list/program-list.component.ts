@@ -289,6 +289,7 @@ export class ProgramListComponent {
       if (res) {
         console.log(res)
         this.consultancyService.deleteId.next(id)
+        this.consultancyService.deleteMessage.next("All the intakes of the program will be deleted. Would you like to proceed with the action?")
       }
     })
 

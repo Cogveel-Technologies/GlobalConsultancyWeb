@@ -244,7 +244,8 @@ export class InstitutionListComponent {
   deleteInstitute(id: number) {
     this.consultancyService.deletePopUpState.subscribe(res => {
       if (res) {
-        this.consultancyService.deleteId.next(id)
+        this.consultancyService.deleteId.next(id);
+        this.consultancyService.deleteMessage.next("All the programs, sessions, and intakes of the institute will be deleted. Would you like to proceed with the action?")
       }
     })
   }
