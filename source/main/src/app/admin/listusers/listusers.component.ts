@@ -37,6 +37,7 @@ export class ListusersComponent implements OnInit,OnDestroy {
   pageNumber:number
   deleteOperation:boolean = false
   editOperation:boolean = false
+  searchText:string
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -85,6 +86,7 @@ export class ListusersComponent implements OnInit,OnDestroy {
     ]).pipe(
       switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
         this.pageNumber = currentPage;
+        this.searchText = searchTerm
         console.log(currentPage)
         console.log('Fetching data with', { searchTerm, pageSize, currentPage, sortField, sortDirection });
         return this.adminService.getUsersList({
@@ -99,6 +101,17 @@ export class ListusersComponent implements OnInit,OnDestroy {
         console.log('Refreshed service response:', response);
         this.totalUsers = response.pageInfo?.totalRecords || 0;
         this.totalPages = response.pageInfo?.totalPages || 1;
+
+        if(this.searchText){
+          this.currentPage = 1;
+          this.currentPageSubject.next(this.currentPage);
+          this.searchText = ''
+        }
+        if(this.currentPage > 0 && (!response.data.length)){
+          // this.currentPage = this.currentPage;
+          console.log("currentPage", this.currentPage)
+          this.currentPageSubject.next(this.currentPage)
+        }
         this.currentPage = response.pageInfo?.currentPage || 1;
          // Check if no data is found, and handle accordingly
          if (this.totalUsers === 0) {
