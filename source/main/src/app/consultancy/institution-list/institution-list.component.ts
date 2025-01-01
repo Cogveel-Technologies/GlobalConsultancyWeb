@@ -73,13 +73,11 @@ export class InstitutionListComponent {
     return this.consultancyApiService.getInstitutes(params).pipe(
       tap(res => {
         if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
-          console.log("Condition met: No data and currentPage > 1");
           this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize: this.defaultData.pageSize, countryId: this.defaultData.CountryId, search: true });
         }
       }),
       filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)),
       map(res => {
-        console.log(res);
         this.records = res['pageInfo']['totalRecords'];
         return res['data'];
       })
@@ -95,24 +93,39 @@ export class InstitutionListComponent {
     // delete
     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
       if (res) {
-        this.subscriptions.add(this.consultancyApiService.deleteInstitute(res).subscribe(() => {
-          this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: this.defaultData.CountryId, search: true })
-          this.consultancyService.sendDeleteIdtoPC.next(null)
+        this.subscriptions.add(this.consultancyApiService.deleteInstitute(res).subscribe({
+          next: () => {
+            this.pagination$.next({ 
+              pageSize: this.defaultData.pageSize, 
+              pageIndex: this.defaultData.currentPage, 
+              countryId: this.defaultData.CountryId, 
+              search: true 
+            });
+            this.consultancyService.sendDeleteIdtoPC.next(null);
+          },
+          error: (error) => {
+            // Handle error appropriately
+            console.error('Failed to delete institute:', error);
+          }
         }));
       }
     })
 
     // if user navigates back (using breadscrum)
-    this.consultancyService.breadscrumState.subscribe(res => {
-      if (res) {
-        this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
-          this.pagination$.next(res)
-        })
-      }
-    })
+    this.subscriptions.add(
+      this.consultancyService.breadscrumState.subscribe(res => {
+        if (res) {
+          this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
+            this.pagination$.next(res)
+          })
+        }
+      })
+    );
 
     //institueEditState
-    this.consultancyService.instituteEditState.subscribe(res => this.instituteEditState = res)
+    this.subscriptions.add(
+      this.consultancyService.instituteEditState.subscribe(res => this.instituteEditState = res)
+    );
 
     this.adminService.consultancyInstitutePaginationState.subscribe(res => {
       if (res) {
@@ -121,22 +134,22 @@ export class InstitutionListComponent {
     })
 
     // institute session state
-    this.consultancyService.instituteSessionState.subscribe(res => {
-      console.log(res)
-      this.instituteSessionState = res
-    })
+    this.subscriptions.add(
+      this.consultancyService.instituteSessionState.subscribe(res => {
+        this.instituteSessionState = res
+      })
+    );
 
 
     // institute program state
-    this.consultancyService.instituteProgramState.subscribe(res => {
-      this.instituteProgramState = res
-    })
+    this.subscriptions.add(
+      this.consultancyService.instituteProgramState.subscribe(res => {
+        this.instituteProgramState = res
+      })
+    );
 
     if (this.instituteSessionState || this.instituteProgramState) {
-      console.log("enetterererere")
       this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
-        console.log("Mmmm")
-        console.log(res)
         this.pagination$.next(res)
       })
     }
@@ -144,27 +157,25 @@ export class InstitutionListComponent {
     // if user navigates back from edit or view page
     if (this.instituteEditState) {
       this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
-        console.log("Mmmm")
-        console.log(res)
         this.pagination$.next(res)
       })
     }
 
     // if showing of institute comes from consultancy list
-    this.consultancyService.consultancyInstitutes.subscribe(res => {
-      if (res) {
-        console.log(res)
-        this.consultancyName = res.consultancyName;
-        this.instituteCountry = res.countryName;
-        this.institutesFromConsultancy = true
-        this.pagination$.next({ consultancyId: res.consultancyId, search: true, pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: '' })
-      }
-    })
+    this.subscriptions.add(
+      this.consultancyService.consultancyInstitutes.subscribe(res => {
+        if (res) {
+          this.consultancyName = res.consultancyName;
+          this.instituteCountry = res.countryName;
+          this.institutesFromConsultancy = true
+          this.pagination$.next({ consultancyId: res.consultancyId, search: true, pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: '' })
+        }
+      })
+    );
 
 
     // fetching all countries for the dropdown and displaying
     this.consultancyApiService.getAllCountries().pipe(map(res => {
-      console.log(res)
       const allOption = [{ id: 'all', countryName: 'All' }, ...res]
       return allOption
     })).subscribe(res => {
@@ -178,10 +189,7 @@ export class InstitutionListComponent {
       distinctUntilChanged(),
       switchMap(([search, pageRelated, sort]) => {
         if (pageRelated) {
-          console.log(pageRelated.countryId)
-          console.log(this.previousCountryId)
           if (+pageRelated.countryId !== +this.previousCountryId) {
-            console.log("ppppp")
             this.defaultData.ConsultancyId = '';
             this.previousCountryId = pageRelated.countryId;
             this.consultancies = of([]);
@@ -191,22 +199,18 @@ export class InstitutionListComponent {
               this.defaultData.CountryId = '';
               if (this.institutesFromConsultancy) {
                 if (this.roleName === 'superadmin') {
-                  console.log("super adminnnnn")
                   this.consultancies = this.adminService.getAllConsultancies(this.defaultData);
                 }
               }
             } else {
               this.instituteConsultancyInputData = ''
               this.defaultData.CountryId = String(pageRelated.countryId);
-              console.log(this.defaultData)
               this.adminService.getAllConsultancies(this.defaultData).subscribe(res => {
                 this.consultancies = res
               })
             }
           }
           if (pageRelated.consultancyId) {
-            console.log("if consultancy block")
-            console.log(pageRelated.consultancyId)
             this.defaultData.CountryId = '';
             this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
           }
@@ -215,16 +219,13 @@ export class InstitutionListComponent {
               this.defaultData.IsAdmin = true
             }
             if (search) {
-              console.log("AAAAAA")
               this.defaultData.currentPage = 1;
               this.currentPageIndex = 0;
             } else {
               this.defaultData.currentPage = +pageRelated.pageIndex;
-              console.log("TTTTTTT")
               this.currentPageIndex = +pageRelated.pageIndex - 1;
             }
 
-            console.log(this.defaultData)
             this.defaultData.searchText = search;
             this.defaultData.pageSize = +pageRelated.pageSize;
             this.defaultData.sortExpression = sort.direction;
@@ -252,7 +253,6 @@ export class InstitutionListComponent {
 
   // page event
   onPageChange(event: PageEvent) {
-    console.log(event)
     this.currentPageIndex = event.pageIndex;
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1, countryId: this.defaultData.CountryId, search: true })
   }
@@ -287,7 +287,6 @@ export class InstitutionListComponent {
   }
 
   onEditorViewInstitute() {
-    console.log("TTT")
     this.consultancyService.editInstituteCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true, countryId: this.defaultData.CountryId })
   }
 

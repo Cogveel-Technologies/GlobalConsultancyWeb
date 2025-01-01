@@ -320,8 +320,8 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
     return this.http.delete(`${this.apiUrl}/Permission/byId?Id=${id}`)
   }
   // get sub-menu
-  getSubmenu(){
-    return this.http.get(`${this.apiUrl}/SubMenu/all`)
+  getSubmenu(id:number){
+    return this.http.get(`${this.apiUrl}/SubMenu/RoleId?RoleId=${id}`)
   }
 
   /////////////////////////////////////// DROPDOWN API'S ////////////////////////////////////////////////
