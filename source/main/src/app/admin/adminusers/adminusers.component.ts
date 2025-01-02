@@ -24,7 +24,7 @@ export class AdminusersComponent implements OnInit, OnDestroy {
   user: any;
   // filteredFirstNameOptions: any;
   filteredFirstNameOptions: any[] = []; // Array for autocomplete options
-  errorMessage: string = '';
+  errorMessage = '';
   genders: string[] = ['Male', 'Female', 'Other'];
   editMode:any
 
@@ -112,7 +112,7 @@ export class AdminusersComponent implements OnInit, OnDestroy {
         address: this.user.address || '',
         gender: this.user.gender || '',
         phoneNumber: this.user.phoneNumber || '',
-        roleId: this.user.roleId || '',
+        roleId: this.user.id|| '',
       });
     }
   }
