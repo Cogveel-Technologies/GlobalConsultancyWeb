@@ -8,7 +8,9 @@
     <div class="card p-4">
       <div class="row g-3">
         <div class="col-md-4">
-          <app-searchable-dropdown [options]="institutes" [displayField]="'name'" (selectionChange)="onInstituteSelected($event)" [sessionInstitue]="instituteName ? instituteName : ''" [placeHolder]="'Institute'"></app-searchable-dropdown>
+          <app-searchable-dropdown [options]="institutes" [displayField]="'name'"
+            (selectionChange)="onInstituteSelected($event)" [sessionInstitue]="instituteName ? instituteName : ''"
+            [placeHolder]="'Institute'"></app-searchable-dropdown>
         </div>
         <!-- <div class="col-md-4">
           <app-searchable-dropdown [options]="programs" [displayField]="'name'" (selectionChange)=" onProgramChange($event)" [sessionInstitue]="programName? programName: ''" [placeHolder]="'Program'"></app-searchable-dropdown>
@@ -32,7 +34,8 @@
             <ul class="tbl-export-btn">
               <li class="tbl-header-btn">
                 <div class="m-l-10" matTooltip="ADD">
-                  <button mat-mini-fab color="primary" (click)="addSession()" *appPermissions="{feature:'Session',action:'canView'}">
+                  <button mat-mini-fab color="primary" (click)="addSession()"
+                    *appPermissions="{feature:'Session',action:'canView'}">
                     <mat-icon class="col-white">add</mat-icon>
                   </button>
                 </div>
@@ -58,7 +61,13 @@
                 </th>
                 <th>
                   <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
-                    [sortFields]="['instituteName']" [sortLabels]="['Institute Name']"
+                    [sortFields]="['instituteName']" [sortLabels]="['Institute']"
+                    (sortChange)="onSortChange($event)">
+                  </app-sorting>
+                </th>
+                <th>
+                  <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                    [sortFields]="['consultancyName']" [sortLabels]="['Consultancy']"
                     (sortChange)="onSortChange($event)">
                   </app-sorting>
                 </th>
@@ -74,44 +83,48 @@
 
               <!-- Loop through sessions when data exists -->
               <tr *ngFor="let session of (sessions | async)">
-                <td data-label="Session Name">{{ session.sessionName }}</td>
-                <td data-label="Institute Name">{{ session.instituteName }}</td>
+                <td data-label="Session">{{ session.sessionName }}</td>
+                <td data-label="Institute">{{ session.instituteName }}</td>
+                <td data-label="Consultancy">{{ session.consultancyName }}</td>
                 <td data-label="Actions">
-                  <ng-container *ngIf="roleName !== 'superadmin'">
-                  <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-session', session.id]"
-                    matTooltip="Edit"  *appPermissions="{feature:'Session',action:'canEdit'}" (click)="onEditorViewSession()">
-                    <!-- <mat-icon>edit</mat-icon> -->
-                    <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-
-                  </button>
-                </ng-container>
-                  <ng-container *ngIf="roleName === 'superadmin'">
-                  <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-session', session.id]"
-                    matTooltip="Edit" (click)="onEditorViewSession()">
-                    <!-- <mat-icon>edit</mat-icon> -->
-                    <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-
-                  </button>
-                </ng-container>
-                
-                <ng-container *ngIf="roleName !== 'superadmin'">
-                  <button mat-icon-button color="warn" (click)="onDeleteSession(session.id)" matTooltip="Delete"  *appPermissions="{feature:'Session',action:'canDelete'}">
-                    <!-- <mat-icon>delete</mat-icon> -->
-                    <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                  </button>
-                  </ng-container>
-
-                <ng-container *ngIf="roleName === 'superadmin'">
-                  <button mat-icon-button color="warn" (click)="onDeleteSession(session.id)" matTooltip="Delete"  >
-                    <!-- <mat-icon>delete</mat-icon> -->
-                    <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                  </button>
-                  </ng-container>
                   <button mat-icon-button color="primary" matTooltip="Intakes"
                     (click)="onIntakes(session.id, session.instituteName, session.programName, session.sessionName, session.instituteId)">
                     <!-- <mat-icon>edit</mat-icon> -->
                     <app-feather-icons [icon]="'users'" [class]="'tbl-fav-edit'"></app-feather-icons>
                   </button>
+                  <ng-container *ngIf="roleName !== 'superadmin'">
+                    <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-session', session.id]"
+                      matTooltip="Edit" *appPermissions="{feature:'Session',action:'canEdit'}"
+                      (click)="onEditorViewSession()">
+                      <!-- <mat-icon>edit</mat-icon> -->
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+
+                    </button>
+                  </ng-container>
+                  <ng-container *ngIf="roleName === 'superadmin'">
+                    <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-session', session.id]"
+                      matTooltip="Edit" (click)="onEditorViewSession()">
+                      <!-- <mat-icon>edit</mat-icon> -->
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
+
+                    </button>
+                  </ng-container>
+
+                  <ng-container *ngIf="roleName !== 'superadmin'">
+                    <!-- <button mat-icon-button color="warn" (click)="onDeleteSession(session.id)" matTooltip="Delete"
+                      *appPermissions="{feature:'Session',action:'canDelete'}"> -->
+                      <!-- <mat-icon>delete</mat-icon> -->
+                      <!-- <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button> -->
+                    <app-model (click)="onDeleteSession(session.id)"></app-model>
+                  </ng-container>
+
+                  <ng-container *ngIf="roleName === 'superadmin'">
+                    <button mat-icon-button color="warn" (click)="onDeleteSession(session.id)" matTooltip="Delete">
+                      <!-- <mat-icon>delete</mat-icon> -->
+                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button>
+                  </ng-container>
                 </td>
               </tr>
             </tbody>

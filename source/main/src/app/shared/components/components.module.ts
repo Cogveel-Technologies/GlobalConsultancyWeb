@@ -7,6 +7,7 @@ import { PaginationComponent } from "./pagination/pagination.component";
 import { SortingComponent } from "./sorting/sorting.component";
 import { SearchComponent } from "./search/search.component";
 import { NoDataFoundComponent } from './no-data-found/no-data-found.component';
+import { ModelComponent } from './model/model.component';
 
 
 
@@ -14,14 +15,15 @@ import { NoDataFoundComponent } from './no-data-found/no-data-found.component';
 @NgModule({
   declarations: [
     FileUploadComponent,
-     BreadcrumbComponent,
-     PaginationComponent, 
-     SortingComponent,
-     CustomSortComponent,
-     SearchComponent,
-     NoDataFoundComponent,
-    ],
+    BreadcrumbComponent,
+    PaginationComponent,
+    SortingComponent,
+    CustomSortComponent,
+    SearchComponent,
+    NoDataFoundComponent,
+    ModelComponent,
+  ],
   imports: [SharedModule],
-  exports: [FileUploadComponent, BreadcrumbComponent,CustomSortComponent, PaginationComponent, SortingComponent, SearchComponent, NoDataFoundComponent],
+  exports: [FileUploadComponent, BreadcrumbComponent, CustomSortComponent, PaginationComponent, SortingComponent, SearchComponent, ModelComponent, NoDataFoundComponent],
 })
-export class ComponentsModule {}
+export class ComponentsModule { }

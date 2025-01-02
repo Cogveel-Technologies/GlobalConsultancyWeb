@@ -81,6 +81,11 @@
                       [sortFields]="['instituteName']" [sortLabels]="['Institute']" (sortChange)="onSortChange($event)">
                     </app-sorting>
                   </th>
+                  <th>
+                    <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                      [sortFields]="['consultancyName']" [sortLabels]="['Consultancy']" (sortChange)="onSortChange($event)">
+                    </app-sorting>
+                  </th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -96,7 +101,8 @@
                   <td data-label="Number of Intakes">{{ intake.noOfIntake }}</td>
                   <td data-label="Session Name">{{ intake.sessionName }}</td>
                   <td data-label="Program Name">{{ intake.programName }}</td>
-                  <td data-label="Program Name">{{ intake.instituteName }}</td>
+                  <td data-label="Institute Name">{{ intake.instituteName }}</td>
+                  <td data-label="Consultancy Name">{{ intake.consultancyName }}</td>
                   <td data-label="Actions">
                     <ng-container *ngIf="roleName !== 'superadmin'">
                     <button mat-icon-button color="primary" [routerLink]="['/consultancy/edit-intake', intake.id]"
@@ -114,10 +120,12 @@
                   </ng-container>
                   
                   <ng-container *ngIf="roleName !== 'superadmin'">
-                    <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)" matTooltip="Delete" *appPermissions="{feature:'Intake',action:'canDelete'}">
+                    <!-- <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)" matTooltip="Delete" *appPermissions="{feature:'Intake',action:'canDelete'}"> -->
                       <!-- <mat-icon>delete</mat-icon> -->
-                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                    </button>
+                      <!-- <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button> -->
+
+                    <app-model (click)="deleteIntake(intake.id)" ></app-model>
                   </ng-container>
                   <ng-container *ngIf="roleName === 'superadmin'">
                     <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)" matTooltip="Delete">

@@ -27,9 +27,12 @@ export class MyDialogComponentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.adminService.sendRoleId.subscribe(res => (this.roleId = res));
+    this.adminService.sendRoleId.subscribe(res => {
+      console.log(res)
+      this.roleId = res
+    });
     this.adminService
-      .getSubmenu()
+      .getSubmenu(this.roleId)
       .pipe(map(res => res['data']))
       .subscribe(res => {
         res.map(el => {

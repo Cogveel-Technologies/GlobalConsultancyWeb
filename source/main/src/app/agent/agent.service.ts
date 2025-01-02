@@ -34,6 +34,8 @@ export class AgentService {
   private selectedRecord: any;
   private showOnlyApplyButton = false;
   private selectedId: any;
+  studentPaginationState = new BehaviorSubject<number|null>(null)
+  pagination=new BehaviorSubject<boolean|null>(false)
 
   //application api
   finalizeApplication(applicationData: any): Observable<any> {

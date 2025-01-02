@@ -1,0 +1,29 @@
+<button mat-icon-button color="primary" matTooltip="Delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="onDeletePopup()">
+  <!-- <mat-icon>edit</mat-icon> -->
+  <!-- Button trigger modal -->
+  <app-feather-icons
+    [icon]="'trash-2'" [class]="'tbl-fav-delete'">
+  </app-feather-icons>
+</button>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" #deleteConfirmationModal data-bs-keyboard="false"
+  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmation</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{message}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onClosePopup()">Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+          (click)="onDeleteConfirmation()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

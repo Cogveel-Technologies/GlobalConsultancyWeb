@@ -35,6 +35,11 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private agentService: AgentService) {}
 
   ngOnInit() {
+    this.agentService.studentPaginationState.subscribe(res => {
+      if(res){
+        this.agentService.pagination.next(true)
+      }
+    })
     // Subscribe to route data
     const routeSubscription = this.route.data.subscribe((data: { student: Student | null }) => {
       this.student = data.student;

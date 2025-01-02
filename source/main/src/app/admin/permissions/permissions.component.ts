@@ -98,6 +98,12 @@ export class PermissionsComponent implements OnInit,OnDestroy {
         console.log(this.defaultData);
         return this.adminService.getPermissions(this.defaultData).pipe(
           tap((res) => {
+            if(this.defaultData.currentPage > 1 && res['data'].length == 0){
+              this.defaultData.currentPage = this.defaultData.currentPage - 1
+              this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, roleId:this.roleId });
+              this.currentPageIndex = this.defaultData.currentPage - 1;
+            }
+
             this.records = res['pageInfo'].totalRecords;
             this.modulesArray.clear(); // Clear the FormArray before adding new data
             res['data'].forEach((role: any) => {
@@ -193,17 +199,18 @@ export class PermissionsComponent implements OnInit,OnDestroy {
   }
 
   onDelete(id:number){
-    const con = confirm("Are you sure?");
-    if(con){
-      this.adminService.deletePermission(id).subscribe(res =>{
-        this.adminService.getPermissions(this.defaultData)
-        const indexToRemove = this.permissionsForm.get('modules')?.value.findIndex((module: any) => module.id === id);
-        if (indexToRemove !== -1) {
-          (this.permissionsForm.get('modules') as FormArray).removeAt(indexToRemove);
-          this.update$.next(true)
-        }
-      })
-    }
+    // this.consultancyService.state
+    console.log(id);
+    // if(con){
+    //   this.adminService.deletePermission(id).subscribe(res =>{
+    //     this.adminService.getPermissions(this.defaultData)
+    //     const indexToRemove = this.permissionsForm.get('modules')?.value.findIndex((module: any) => module.id === id);
+    //     if (indexToRemove !== -1) {
+    //       (this.permissionsForm.get('modules') as FormArray).removeAt(indexToRemove);
+    //       this.update$.next(true)
+    //     }
+    //   })
+    // }
   }
 
   ngOnDestroy(){

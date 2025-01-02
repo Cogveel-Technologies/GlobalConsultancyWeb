@@ -8,8 +8,8 @@
     <!-- Widgets -->
     <div class="row">
       <div class="col-lg-3 col-sm-6">
-        <div class="counter-box text-center">
-          <div class="text font-17 m-b-5">Total Sub Admins</div>
+        <div class="counter-box text-center" (click)="navigateToAdminList()">
+          <div class="text font-17 m-b-5">Total Admins</div>
           <h3 class="m-b-10">{{totalUsers}}
             <!-- <i class="material-icons col-green">trending_up</i> -->
           </h3>
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="col-lg-3 col-sm-6">
-        <div class="counter-box text-center">
+        <div class="counter-box text-center" (click)="navigateToConsultancyList()">
           <div class="text font-17 m-b-5">Total Consultancies</div>
           <h3 class="m-b-10">{{totalConsultancies}}
             <!-- <i class="material-icons col-red">trending_down</i> -->
@@ -36,20 +36,20 @@
         </div>
       </div>
       <div class="col-lg-3 col-sm-6">
-        <div class="counter-box text-center">
+        <div class="counter-box text-center" (click)="navigateToAgentList()">
           <div class="text font-17 m-b-5">Total Agents</div>
           <h3 class="m-b-10">{{totalAgents}}
             <!-- <i class="material-icons col-green">trending_up</i> -->
           </h3>
           <div class="apex-chart-center">
-            <mat-icon>group</mat-icon>
+            <mat-icon>person_pin</mat-icon>
             <!-- <apx-chart [series]="smallColumnChart.series!" [chart]="smallColumnChart.chart!"
               [plotOptions]="smallColumnChart.plotOptions!" [tooltip]="smallColumnChart.tooltip!">
             </apx-chart> -->
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
+      <div class="col-lg-3 col-sm-6" (click)="navigateToStudentList()">
         <div class="counter-box text-center">
           <div class="text font-17 m-b-5">Total Students</div>
           <h3 class="m-b-10">{{totalStudents}}
@@ -98,7 +98,7 @@
       <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
         <div class="card">
           <div class="header">
-            <h2>Project Status</h2>
+            <h2>Consultancy wise Admissions</h2>
             <button mat-icon-button [matMenuTriggerFor]="menu" class="header-dropdown">
               <mat-icon>more_vert</mat-icon>
             </button>
@@ -130,14 +130,16 @@
     </div>
     <div class="row clearfix">
       <!-- Task Info -->
+
       <div class="col-xs-12 col-sm-12 col-md-8 col-lg-12">
         <div class="card">
           <div class="header">
             <h2>Agent Details</h2>
             <button mat-icon-button [matMenuTriggerFor]="menu" class="header-dropdown">
+
               <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
+            </button> -->
+            <!-- <mat-menu #menu="matMenu">
               <button mat-menu-item>
                 <mat-icon>add_circle_outline</mat-icon>
                 <span>Add</span>
@@ -150,135 +152,34 @@
                 <mat-icon>refresh</mat-icon>
                 <span>Refresh</span>
               </button>
-            </mat-menu>
+            </mat-menu> -->
           </div>
           <div class="tableBody">
             <div class="table-responsive">
               <table class="table table-hover dashboard-task-infos">
                 <thead>
                   <tr>
-                    <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Status</th>
-                    <th>Project Name</th>
-                    <th>Action</th>
+                    <th>Consultancy</th>
+                    <th>Phone</th>
+                    <!-- <th>Action</th> -->
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user1.jpg" alt="">
-                    </td>
-                    <td>John Doe</td>
-                    <td>xyz@email.com</td>
-                    <td>
-                      <span class="badge col-green shadow-style">Active</span>
-                    </td>
-                    <td>ERP System</td>
-                    <td>
+                  <tr *ngFor="let agent of (agents|async)">
+                    <td>{{agent.agentFirstName}}</td>
+                    <td>{{agent.agentEmail}}</td>
+                    <td>{{agent.agentCompany}}</td>
+                    <td>{{agent.agentPhone}}</td>
+                    <!-- <td>
                       <button mat-icon-button class="tbl-action-btn">
                         <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                       </button>
                       <button mat-icon-button class="tbl-action-btn">
                         <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                       </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user2.jpg" alt="">
-                    </td>
-                    <td>Sarah Smith</td>
-                    <td>xyz@email.com</td>
-                    <td>
-                      <span class="badge col-red shadow-style">Inactive</span>
-                    </td>
-                    <td>Abc Website</td>
-                    <td>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                      </button>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user3.jpg" alt="">
-                    </td>
-                    <td>Airi Satou</td>
-                    <td>xyz@email.com</td>
-                    <td>
-                      <span class="badge col-green shadow-style">Active</span>
-                    </td>
-                    <td>Android App</td>
-                    <td>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                      </button>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user4.jpg" alt="">
-                    </td>
-                    <td>Angelica Ramos</td>
-                    <td>xyz@email.com</td>
-                    <td>
-                      <span class="badge col-green shadow-style">Active</span>
-                    </td>
-                    <td>Ios App</td>
-                    <td>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                      </button>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user5.jpg" alt="">
-                    </td>
-                    <td>Ashton Cox</td>
-                    <td>xyz@email.com</td>
-                    <td>
-                      <span class="badge col-red shadow-style">Inactive</span>
-                    </td>
-                    <td>Java Website</td>
-                    <td>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                      </button>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="table-img">
-                      <img src="assets/images/user/user6.jpg" alt="">
-                    </td>
-                    <td>Cara Stevens</td>
-                    <td>xyz@email.com</td>
-                    <td>
-                      <span class="badge col-green shadow-style">Active</span>
-                    </td>
-                    <td>Desktop App</td>
-                    <td>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                      </button>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                      </button>
-                    </td>
+                    </td> -->
                   </tr>
                 </tbody>
               </table>
@@ -286,7 +187,9 @@
           </div>
         </div>
       </div>
+
   
+
     </div>
    
    

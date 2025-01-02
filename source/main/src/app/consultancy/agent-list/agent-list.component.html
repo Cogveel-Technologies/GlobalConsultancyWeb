@@ -70,6 +70,11 @@
                       [sortFields]="['agentEmail']" [sortLabels]="['Email']" (sortChange)="onSortChange($event)">
                     </app-sorting>
                   </th>
+                  <th>
+                    <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                      [sortFields]="['consultancyName']" [sortLabels]="['Consultancy Name']" (sortChange)="onSortChange($event)">
+                    </app-sorting>
+                  </th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -86,6 +91,7 @@
                   <td data-label="Phone">{{ agent.agentFirstName }}</td>
                   <td data-label="State">{{ agent.agentPhone }}</td>
                   <td data-label="Registration No">{{ agent.agentEmail }}</td>
+                  <td data-label="Consultancy Name">{{ agent.consultancyName }}</td>
                   <td data-label="Actions">
                     <ng-container *ngIf="roleName !== 'superadmin'">
                     <button mat-icon-button [routerLink]="['/consultancy/agent-details', agent.id]" matTooltip="View" *appPermissions="{feature:'Agent',action:'canView'}" (click)="onEditorViewAgent()">
@@ -115,10 +121,12 @@
                   </ng-container>
 
                   <ng-container *ngIf="roleName !== 'superadmin'">
-                    <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)" matTooltip="Delete" *appPermissions="{feature:'Agent',action:'canDelete'}">
+                    <!-- <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)" matTooltip="Delete" *appPermissions="{feature:'Agent',action:'canDelete'}"> -->
                       <!-- <mat-icon>delete</mat-icon> -->
-                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                    </button>
+                      <!-- <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button> -->
+
+                    <app-model (click)="deleteAgent(agent.id)"></app-model>
                   </ng-container>
 
                   <ng-container *ngIf="roleName === 'superadmin'">

@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="block-header" *ngFor="let breadscrum of breadscrums">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active" [activeRoute]="breadscrum.activeRoute">
       </app-breadcrumb>
     </div>
 
@@ -18,7 +18,7 @@
           <app-searchable-dropdown [options]="consultancies" [displayField]="'consultancyName'"
             (selectionChange)="onConsultancyChange($event)" [placeHolder]="'Consultancy'"
             [instituteConsultancyData]="instituteConsultancyInputData"
-            [instituteConsultancy]="instituteConsultancy"></app-searchable-dropdown>
+            [consultancyName]="consultancyName"></app-searchable-dropdown>
         </div>
         <!-- *ngIf="roleName === 'superadmin'" -->
         <div class="col-md-2">
@@ -85,7 +85,12 @@
                     </th>
                     <th>
                       <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
-                        [sortFields]="['phoneNumber']" [sortLabels]="['Phone']" (sortChange)="onSortChange($event)">
+                        [sortFields]="['phoneNo']" [sortLabels]="['Phone']" (sortChange)="onSortChange($event)">
+                      </app-sorting>
+                    </th>
+                    <th>
+                      <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
+                        [sortFields]="['consultancyName']" [sortLabels]="['Consultancy']" (sortChange)="onSortChange($event)">
                       </app-sorting>
                     </th>
                     <th>Actions</th>
@@ -96,11 +101,23 @@
                 <tbody>
                   <tr *ngIf="institutesList.length > 0; else noData">
                   <tr *ngFor="let institute of institutesList">
-                    <td data-label="Institute Name">{{ institute.instituteName }}</td>
+                    <td data-label="Institute">{{ institute.instituteName }}</td>
                     <td data-label="Province">{{ institute.province }}</td>
                     <td data-label="Email">{{ institute.email }}</td>
                     <td data-label="Phone No">{{ institute.phoneNo }}</td>
+                    <td data-label="Consultancy">{{ institute.consultancyName }}</td>
                     <td data-label="Actions">
+                      <button mat-icon-button color="warn" matTooltip="Programs"
+                      (click)="institutePrograms(institute.id, institute.instituteName, institute.consultancyId)">
+                      <!-- <mat-icon>delete</mat-icon> -->
+                      <app-feather-icons [icon]="'book'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                    </button>
+
+                    <button mat-icon-button color="warn" matTooltip="Sessions"
+                      (click)="instituteSession(institute.id,institute.instituteName)">
+                      <!-- <mat-icon>delete</mat-icon> -->
+                      <app-feather-icons [icon]="'calendar'" [class]="'tbl-fav-edit'"></app-feather-icons>
+                    </button>
                       <ng-container *ngIf="roleName !== 'superadmin'">
                         <button mat-icon-button [routerLink]="['/consultancy/institute-details', institute.id]"
                           matTooltip="View" (click)="onView()" *appPermissions="{feature:'Institute',action:'canView'}"
@@ -131,11 +148,12 @@
                       </ng-container>
 
                       <ng-container *ngIf="roleName !== 'superadmin'">
-                        <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)" matTooltip="Delete"
-                          *appPermissions="{feature:'Institute',action:'canDelete'}">
+                        <!-- <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)" matTooltip="Delete"
+                          *appPermissions="{feature:'Institute',action:'canDelete'}"> -->
                           <!-- <mat-icon>delete</mat-icon> -->
-                          <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                        </button>
+                          <!-- <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                        </button> -->
+                        <app-model (click)="deleteInstitute(institute.id)"></app-model>
                       </ng-container>
                       <ng-container *ngIf="roleName === 'superadmin'">
                         <button mat-icon-button color="warn" (click)="deleteInstitute(institute.id)"
@@ -144,18 +162,6 @@
                           <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                         </button>
                       </ng-container>
-
-                      <button mat-icon-button color="warn" matTooltip="Programs"
-                        (click)="institutePrograms(institute.id, institute.instituteName, institute.consultancyId)">
-                        <!-- <mat-icon>delete</mat-icon> -->
-                        <app-feather-icons [icon]="'book'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                      </button>
-
-                      <button mat-icon-button color="warn" matTooltip="Sessions"
-                        (click)="instituteSession(institute.id,institute.instituteName)">
-                        <!-- <mat-icon>delete</mat-icon> -->
-                        <app-feather-icons [icon]="'calendar'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                      </button>
                     </td>
                   </tr>
                 </tbody>

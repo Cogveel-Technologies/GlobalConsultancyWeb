@@ -26,6 +26,7 @@ export class ProgramListComponent {
       title: 'Programs',
       items: ['Consultancy'],
       active: 'Programs',
+      activeRoute: this.router.url
     },
   ];
 
@@ -58,6 +59,8 @@ export class ProgramListComponent {
   instituteId: number;
   instituteName: string;
   programEditState: boolean = false
+  consultancyPrograms: boolean = false
+  consultancyName: string
 
 
 
@@ -65,37 +68,77 @@ export class ProgramListComponent {
   getPrograms(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getPrograms(params).pipe
       (tap(res => {
-              if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
-                console.log("Condition met: No data and currentPage > 1");
-                this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize:this.defaultData.pageSize, search:true });
-              }
-            }),
-            filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)),map(res => {
-        this.records = res['pageInfo']['totalRecords'];
-        return res['data']
-      }))
+        if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
+          console.log("Condition met: No data and currentPage > 1");
+          this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize: this.defaultData.pageSize, search: true });
+        }
+      }),
+        filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)), map(res => {
+          this.records = res['pageInfo']['totalRecords'];
+          return res['data']
+        }))
   }
 
   ngOnInit() {
-    this.consultancyService.programEditState.subscribe(res => {
-      this.programEditState = res
+
+    this.consultancyService.activeRoute.next(this.router.url)
+
+    this.adminService.consultancyProgramPaginationState.subscribe(res => {
+      if (res) {
+        this.adminService.consultancyProgramState.next(true)
+      }
+    })
+    // programs of consultancy
+    if (this.roleName === 'superadmin') {
+      this.adminService.consultancyProgram.subscribe(res => {
+        if (res) {
+          console.log(res)
+          this.consultancyPrograms = true;
+          this.consultancyName = res.consultancyName
+          this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true, consultancyId: res.id })
+        }
+      })
+    }
+
+    // delete
+    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+        this.subscription.add(this.consultancyApiService.deleteProgram(res).subscribe(() => {
+          this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
+        }));
+        this.consultancyService.sendDeleteIdtoPC.next(null)
+      }
     })
 
-    this.consultancyService.intakeProgramState.subscribe(res =>{
-      if(res){
+    // if user navigates back (using breadscrum)
+    this.consultancyService.breadscrumState.subscribe(res => {
+      if (res) {
         this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
           this.pagination$.next(res)
         })
       }
     })
 
-   if(this.programEditState){
-    this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
-      console.log("Mmmm")
-      console.log(res)
-      this.pagination$.next(res)
+    console.log(this.breadscrums[0].activeRoute)
+    this.consultancyService.programEditState.subscribe(res => {
+      this.programEditState = res
     })
-   }
+
+    this.consultancyService.intakeProgramState.subscribe(res => {
+      if (res) {
+        this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
+          this.pagination$.next(res)
+        })
+      }
+    })
+
+    if (this.programEditState) {
+      this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
+        console.log("Mmmm")
+        console.log(res)
+        this.pagination$.next(res)
+      })
+    }
 
     // if superadmin has logged in
     if (this.roleName === 'superadmin') {
@@ -108,12 +151,12 @@ export class ProgramListComponent {
         this.consultancies = res
       });
     } else {
-      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res=>{
-        res = [{id:0, name:'All'}, ...res]
+      this.consultancyApiService.getSpecificInstitutes(this.defaultData).pipe(map(res => {
+        res = [{ id: 0, name: 'All' }, ...res]
         return res
-      })).subscribe(res=>{
-         this.institutes = res
-        })
+      })).subscribe(res => {
+        this.institutes = res
+      })
     }
     // get all program by default
     this.programs = this.getPrograms(this.defaultData)
@@ -136,8 +179,8 @@ export class ProgramListComponent {
       .pipe(throttleTime(1000, undefined, { leading: true, trailing: true }),
         distinctUntilChanged(),
         switchMap(([searchTerm, pageRelated, sorting]) => {
-          
-          if(pageRelated.instituteId === 0){
+
+          if (pageRelated.instituteId === 0) {
             this.defaultData.ConsultancyId = ''
             this.defaultData.InstituteId = ''
             this.defaultData.ProgramId = ''
@@ -156,7 +199,9 @@ export class ProgramListComponent {
             if (pageRelated.consultancyId && typeof pageRelated.consultancyId === 'number') {
               console.log(pageRelated.consultancyId)
               this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
-              this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res => this.institutes = res)
+              if (!this.consultancyPrograms) {
+                this.consultancyApiService.getSpecificInstitutes(this.defaultData).subscribe(res => this.institutes = res)
+              }
             } else {
               this.institutes = []
               this.defaultData.ConsultancyId = '';
@@ -240,12 +285,16 @@ export class ProgramListComponent {
   }
 
   deleteProgram(id: number) {
-    const con = confirm("Are you sure?")
-    if (con) {
-      this.subscription.add(this.consultancyApiService.deleteProgram(id).subscribe(() => {
-        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
-      }));
-    }
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(id)
+        this.consultancyService.deleteMessage.next("All the intakes of the program will be deleted. Would you like to proceed with the action?")
+      }
+    })
+
+
+
   }
 
   onSearch() {
@@ -268,16 +317,16 @@ export class ProgramListComponent {
   }
 
   onEditProgram() {
-    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true })
+    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
   }
 
-  onViewProgram(){
-    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true })
+  onViewProgram() {
+    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
   }
 
-  getIntakesOfprogram(instituteId:number,instituteName:string,id:number,name:string){
-    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search:true })
-    this.consultancyService.getIntakesOfProgam.next({instituteId,instituteName,programId:id,programName:name})
+  getIntakesOfprogram(instituteId: number, instituteName: string, id: number, name: string) {
+    this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
+    this.consultancyService.getIntakesOfProgam.next({ instituteId, instituteName, programId: id, programName: name })
     this.router.navigate(['/consultancy/intake-list'])
   }
 
@@ -286,6 +335,10 @@ export class ProgramListComponent {
     this.consultancyService.sendInstituteId.next(null)
     this.consultancyService.programEditState.next(false)
     this.consultancyService.intakeProgramState.next(false)
+    this.consultancyService.breadscrumState.next(false)
+    this.adminService.consultancyProgram.next(null)
+    this.adminService.consultancyInstitutePaginationState.next(false)
+    // this.adminService.consultancyPaginationState.next(null)
     this.subscription.unsubscribe();
   }
 }
