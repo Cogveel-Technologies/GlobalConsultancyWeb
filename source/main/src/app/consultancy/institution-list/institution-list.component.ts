@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConsultancyApi } from '../consultancy-services/api.service';
 import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultancy-get-options';
 import { ConsultancyService } from '../consultancy-services/consultancy.service';
@@ -21,15 +21,19 @@ import { AdminService } from 'app/admin/admin.service';
 
 export class InstitutionListComponent {
 
-  breadscrums = [
-    {
-      title: 'Institutes',
-      items: ['Consultancy'],
-      active: 'Institutes',
-    },
-  ];
+  breadscrums: { title: string; items: string[]; active: string; activeRoute: string }[];
+  constructor(private router: Router, public consultancyService: ConsultancyService, private consultancyApiService: ConsultancyApi, private adminService: AdminService, private activeRoute: ActivatedRoute) {
+    this.breadscrums = [
+      {
+        title: 'Institutes',
+        items: ['Consultancy'],
+        active: 'Institutes',
+        activeRoute: `${this.router.url}`
+      },
+    ];
+  }
 
-  constructor(private router: Router, public consultancyService: ConsultancyService, private consultancyApiService: ConsultancyApi, private adminService: AdminService) { }
+
   editMode: boolean;
   subscriptions: Subscription = new Subscription();
   universities!: Observable<InstituteData[]> | Observable<[]>;
@@ -56,10 +60,12 @@ export class InstitutionListComponent {
   filteredCountries: { id: number, countryName: string }[];
   instituteConsultancyInputData: string | null = null;
   instituteCountry: string;
-  instituteConsultancy: string;
+  consultancyName: string;
   instituteEditState: boolean = false;
-  instituteSessionState:boolean = false;
-  instituteProgramState:boolean = false;
+  instituteSessionState: boolean = false;
+  instituteProgramState: boolean = false;
+  mainRoute: string
+  deleteId: number
 
 
 
@@ -67,13 +73,11 @@ export class InstitutionListComponent {
     return this.consultancyApiService.getInstitutes(params).pipe(
       tap(res => {
         if ((!res['data'] || res['data'].length === 0) && params.currentPage > 1) {
-          console.log("Condition met: No data and currentPage > 1");
           this.pagination$.next({ pageIndex: this.defaultData.currentPage - 1, pageSize: this.defaultData.pageSize, countryId: this.defaultData.CountryId, search: true });
         }
       }),
       filter(res => !((!res['data'] || res['data'].length === 0) && params.currentPage > 1)),
       map(res => {
-        console.log(res);
         this.records = res['pageInfo']['totalRecords'];
         return res['data'];
       })
@@ -82,22 +86,70 @@ export class InstitutionListComponent {
 
 
   ngOnInit() {
+    this.mainRoute = this.router.url;
+
+    this.consultancyService.activeRoute.next(this.mainRoute)
+
+    // delete
+    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+        this.subscriptions.add(this.consultancyApiService.deleteInstitute(res).subscribe({
+          next: () => {
+            this.pagination$.next({ 
+              pageSize: this.defaultData.pageSize, 
+              pageIndex: this.defaultData.currentPage, 
+              countryId: this.defaultData.CountryId, 
+              search: true 
+            });
+            this.consultancyService.sendDeleteIdtoPC.next(null);
+          },
+          error: (error) => {
+            // Handle error appropriately
+            console.error('Failed to delete institute:', error);
+          }
+        }));
+      }
+    })
+
+    // if user navigates back (using breadscrum)
+    this.subscriptions.add(
+      this.consultancyService.breadscrumState.subscribe(res => {
+        if (res) {
+          this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
+            this.pagination$.next(res)
+          })
+        }
+      })
+    );
+
+    //institueEditState
+    this.subscriptions.add(
+      this.consultancyService.instituteEditState.subscribe(res => this.instituteEditState = res)
+    );
+
+    this.adminService.consultancyInstitutePaginationState.subscribe(res => {
+      if (res) {
+        this.adminService.consultancyInstituteState.next(true)
+      }
+    })
 
     // institute session state
-    this.consultancyService.instituteSessionState.subscribe(res => {
-      this.instituteSessionState = res
-    })
+    this.subscriptions.add(
+      this.consultancyService.instituteSessionState.subscribe(res => {
+        this.instituteSessionState = res
+      })
+    );
 
 
     // institute program state
-    this.consultancyService.instituteProgramState.subscribe(res => {
-      this.instituteProgramState = res
-    })
+    this.subscriptions.add(
+      this.consultancyService.instituteProgramState.subscribe(res => {
+        this.instituteProgramState = res
+      })
+    );
 
-    if(this.instituteSessionState || this.instituteProgramState){
+    if (this.instituteSessionState || this.instituteProgramState) {
       this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
-        console.log("Mmmm")
-        console.log(res)
         this.pagination$.next(res)
       })
     }
@@ -105,27 +157,25 @@ export class InstitutionListComponent {
     // if user navigates back from edit or view page
     if (this.instituteEditState) {
       this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
-        console.log("Mmmm")
-        console.log(res)
         this.pagination$.next(res)
       })
     }
 
     // if showing of institute comes from consultancy list
-    this.consultancyService.consultancyInstitutes.subscribe(res => {
-      if (res) {
-        console.log(res)
-        this.instituteConsultancy = res.consultancyName;
-        this.instituteCountry = res.countryName;
-        this.institutesFromConsultancy = true
-        this.pagination$.next({ consultancyId: res.consultancyId, search: true, pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: '' })
-      }
-    })
+    this.subscriptions.add(
+      this.consultancyService.consultancyInstitutes.subscribe(res => {
+        if (res) {
+          this.consultancyName = res.consultancyName;
+          this.instituteCountry = res.countryName;
+          this.institutesFromConsultancy = true
+          this.pagination$.next({ consultancyId: res.consultancyId, search: true, pageSize: this.defaultData.pageSize, pageIndex: 1, countryId: '' })
+        }
+      })
+    );
 
 
     // fetching all countries for the dropdown and displaying
     this.consultancyApiService.getAllCountries().pipe(map(res => {
-      console.log(res)
       const allOption = [{ id: 'all', countryName: 'All' }, ...res]
       return allOption
     })).subscribe(res => {
@@ -139,10 +189,7 @@ export class InstitutionListComponent {
       distinctUntilChanged(),
       switchMap(([search, pageRelated, sort]) => {
         if (pageRelated) {
-          console.log(pageRelated.countryId)
-          console.log(this.previousCountryId)
           if (+pageRelated.countryId !== +this.previousCountryId) {
-            console.log("ppppp")
             this.defaultData.ConsultancyId = '';
             this.previousCountryId = pageRelated.countryId;
             this.consultancies = of([]);
@@ -152,22 +199,18 @@ export class InstitutionListComponent {
               this.defaultData.CountryId = '';
               if (this.institutesFromConsultancy) {
                 if (this.roleName === 'superadmin') {
-                  console.log("super adminnnnn")
                   this.consultancies = this.adminService.getAllConsultancies(this.defaultData);
                 }
               }
             } else {
               this.instituteConsultancyInputData = ''
               this.defaultData.CountryId = String(pageRelated.countryId);
-              console.log(this.defaultData)
               this.adminService.getAllConsultancies(this.defaultData).subscribe(res => {
                 this.consultancies = res
               })
             }
           }
           if (pageRelated.consultancyId) {
-            console.log("if consultancy block")
-            console.log(pageRelated.consultancyId)
             this.defaultData.CountryId = '';
             this.defaultData.ConsultancyId = String(pageRelated.consultancyId);
           }
@@ -176,22 +219,17 @@ export class InstitutionListComponent {
               this.defaultData.IsAdmin = true
             }
             if (search) {
-              console.log("AAAAAA")
               this.defaultData.currentPage = 1;
               this.currentPageIndex = 0;
             } else {
               this.defaultData.currentPage = +pageRelated.pageIndex;
-              console.log("TTTTTTT")
               this.currentPageIndex = +pageRelated.pageIndex - 1;
             }
 
-            console.log(this.defaultData)
             this.defaultData.searchText = search;
             this.defaultData.pageSize = +pageRelated.pageSize;
             this.defaultData.sortExpression = sort.direction;
             this.defaultData.OrderBy = sort.field;
-            // institutes of consultancy
-            console.log("heheh")
             return this.getInstitutes(this.defaultData);
           }
         }
@@ -205,17 +243,16 @@ export class InstitutionListComponent {
   }
 
   deleteInstitute(id: number) {
-    const con = confirm("Are you sure?")
-    if (con) {
-      this.subscriptions.add(this.consultancyApiService.deleteInstitute(id).subscribe(() => {
-        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, countryId: this.defaultData.CountryId, search: true })
-      }));
-    }
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      if (res) {
+        this.consultancyService.deleteId.next(id);
+        this.consultancyService.deleteMessage.next("All the programs, sessions, and intakes of the institute will be deleted. Would you like to proceed with the action?")
+      }
+    })
   }
 
   // page event
   onPageChange(event: PageEvent) {
-    console.log(event)
     this.currentPageIndex = event.pageIndex;
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1, countryId: this.defaultData.CountryId, search: true })
   }
@@ -241,6 +278,7 @@ export class InstitutionListComponent {
     this.consultancyService.getSessionsOfInstitute.next({ instituteId: id, instituteName: name })
     this.router.navigate(['/consultancy/session-list'])
     this.consultancyService.instituteSessionState.next(true)
+    this.consultancyService.instituteSessions.next(true)
     this.onEditorViewInstitute()
   }
 
@@ -274,6 +312,8 @@ export class InstitutionListComponent {
     this.consultancyService.consultancyInstitutes.next(null)
     this.consultancyService.instituteSessionState.next(false)
     this.consultancyService.instituteProgramState.next(false)
+    this.adminService.consultancyProgramPaginationState.next(false)
+    this.consultancyService.breadscrumState.next(false)
   }
 
 }

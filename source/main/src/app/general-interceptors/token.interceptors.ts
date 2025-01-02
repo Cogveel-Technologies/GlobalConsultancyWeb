@@ -22,7 +22,7 @@ export class CheckToken implements HttpInterceptor {
     if (!token) {
       console.log("TTTTT")
       localStorage.clear()
-      // this.router.navigate(['/authentication/signin']);
+      this.router.navigate(['/authentication/signin']);
       return throwError(() => new Error('No token found'));
     }
 

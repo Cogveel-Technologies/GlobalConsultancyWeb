@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { AdminService } from 'app/admin/admin.service';
 import { AgentService } from 'app/agent/agent.service';
 import { ConsultancyApi } from 'app/consultancy/consultancy-services/api.service';
@@ -20,7 +21,7 @@ import {
   ApexTitleSubtitle,
   ApexStates,
 } from 'ng-apexcharts';
-import { map, Subscription } from 'rxjs';
+import { map, Subscription, switchMap, tap } from 'rxjs';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -64,6 +65,8 @@ export class MainComponent implements OnInit {
   graphDetails: any
   filteredYears: any[]
   consultancyData:any
+  agents:any
+  roleName = localStorage.getItem('roleName')
 
   public sampleData = [
     31, 40, 28, 44, 60, 55, 68, 51, 42, 85, 77, 31, 40, 28, 44, 60, 55,
@@ -76,8 +79,21 @@ export class MainComponent implements OnInit {
       active: 'Dashboard',
     },
   ];
-  constructor(private consultancyApiService: ConsultancyApi, private consultancyService: ConsultancyService, private adminService: AdminService, private agentService: AgentService) {
+  constructor(private consultancyApiService: ConsultancyApi, private consultancyService: ConsultancyService, private adminService: AdminService, private agentService: AgentService, private router:Router) {
     //constructor
+  }
+
+  navigateToAdminList(){
+    this.router.navigate(['/admin/listusers'])
+  }
+  navigateToConsultancyList(){
+    this.router.navigate(['/admin/consultancy-list'])
+  }
+  navigateToAgentList(){
+    this.router.navigate(['/consultancy/agent-list'])
+  }
+  navigateToStudentList(){
+    this.router.navigate(['/agent/list-students'])
   }
 
 
@@ -88,10 +104,21 @@ export class MainComponent implements OnInit {
       console.log(this.totalConsultancies)
     })
 
-    this.consultancyApiService.getAllAgents(this.defaultData).pipe(map(res => res['data'])).subscribe(res => {
-      this.totalAgents = res.length;
-      console.log("Agents--------", res)
-    })
+    this.agents = this.consultancyApiService.getAllAgents(this.defaultData).pipe(
+      tap(res => {
+        console.log(res)
+        this.totalAgents = res['data'].length; // Update totalAgents as a side effect
+        this.defaultData.pageSize = this.totalAgents
+      }),
+      switchMap(()=>{
+        if(this.roleName === 'superadmin'){
+          this.defaultData.IsAdmin = true
+        }
+        return this.consultancyApiService.getAgents(this.defaultData).pipe(map(res => res['data']))
+      })
+    )
+    
+
 
     this.adminService.getAllUsers().subscribe(res => {
       this.totalUsers = res.length;
@@ -104,41 +131,25 @@ export class MainComponent implements OnInit {
     })
     //consultancy
 
-    this.agentService.getGraphDetails().pipe(
-      map(res => res['data'])
-    ).subscribe(res => {
-      this.graphDetails = res;
-      console.log(this.graphDetails);
-    
-      // Initialize an object to store year-based consultancy details
-      const consultancyData = {};
-    
-      // Loop through the data to create the desired structure
+
+    this.agentService.getGraphDetails().pipe(map(res => res['data'])).subscribe(res => {
+      this.graphDetails = res
+      console.log(this.graphDetails)
+      let map = {};
+      //get consultancy admission details on the basis of year  
       for (let i = 0; i < this.graphDetails.length; i++) {
         const year = this.graphDetails[i].year;
-    
-        // Check if the year is already in the object
-        if (!consultancyData[year]) {
-          // Filter and map the consultancies for the specific year
-          const yearBasedAdmissionsByConsultancies = this.graphDetails
-            .filter(el => el.year === year)
-            .map(el => {
-              return { 
-                name: el.consultancyName, 
-                data: el.numberOfApplications 
-              };
-            });
-    
-          // Assign the filtered data to the year key
-          consultancyData[year] = yearBasedAdmissionsByConsultancies;
+        if (!Object.keys(map).includes(year)) {
+          const yearBasedConsultancies = this.graphDetails.filter((el) => {
+            return el.year === year;
+          }).map(el => {
+            return {consultancyName:el.consultancyName, numberOfApplications:el.numberOfApplications}
+          })
+          map[year] = yearBasedConsultancies;
         }
       }
-    
-      // Assign the final data to a variable for use
-      this.consultancyData = consultancyData;
-      console.log(this.consultancyData);
-    });
-    
+      console.log(map)
+    })
 
 
     this.cardChart1();

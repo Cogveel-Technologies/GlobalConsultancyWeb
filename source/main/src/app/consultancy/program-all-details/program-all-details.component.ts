@@ -48,6 +48,7 @@ export class ProgramAllDetailsComponent {
   }
 
   ngOnInit() {
+    
     // for all details (on view button)
     this.details = this.route.snapshot.data['programDetails']
     this.id = this.route.snapshot.paramMap.get('id') || '';

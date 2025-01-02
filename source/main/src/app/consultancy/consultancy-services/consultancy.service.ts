@@ -62,4 +62,11 @@ export class ConsultancyService {
   instituteProgramState:BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
   intakeProgramState: BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
   intakeSessionState: BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
+  instituteSessions: BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(false)
+  activeRoute: BehaviorSubject<string|null> = new BehaviorSubject<string|null>(null)
+  breadscrumState:BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(null)
+  deletePopUpState:BehaviorSubject<boolean|null> = new BehaviorSubject<boolean|null>(null)
+  deleteId:BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null)
+  sendDeleteIdtoPC:BehaviorSubject<number|null> = new BehaviorSubject<number|null>(null)
+  deleteMessage:BehaviorSubject<string|null> = new BehaviorSubject<string|null>(null)
 }

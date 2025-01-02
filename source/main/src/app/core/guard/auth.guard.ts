@@ -9,21 +9,14 @@ export class AuthGuard {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const roleName = localStorage.getItem("roleName")?.toLowerCase();
-    
-    if (roleName === 'superadmin') {
-      return true;
-    } else {
-      const targetUrl = state.url;
-      const urlSegments = targetUrl.split('/');
-      console.log(urlSegments)
-      
-      if (urlSegments.includes(roleName)) {
-        return true;
-      } else {
-        this.router.navigate(['/authentication/signin']);
-        return false;
-      }
+    const token = localStorage.getItem("token");
+
+    if(token){
+      return true
+    }else{
+      this.router.navigate(['/authentication/signin']);
+      return false
     }
+    
   }
 }

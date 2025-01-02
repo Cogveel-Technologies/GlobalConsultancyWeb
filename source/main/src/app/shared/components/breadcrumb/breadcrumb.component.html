@@ -8,11 +8,11 @@
         <div class="col-8">
             <ul class="breadcrumb-list">
                 <li class="breadcrumb-item bcrumb-1">
-                    <a [routerLink]="'/admin/dashboard/main'">
+                    <a [routerLink]="'/dashboard/main'">
                         <app-feather-icons [icon]="'home'" [class]="'breadcrumb-icon'"></app-feather-icons>
                     </a>
                 </li>
-                <li class="breadcrumb-item" *ngFor="let item of items">{{item}}</li>
+                <li class="breadcrumb-item" *ngFor="let item of items" (click)="navigate()">{{item}}</li>
                 <li class="breadcrumb-item active">{{active_item}}</li>
             </ul>
         </div>

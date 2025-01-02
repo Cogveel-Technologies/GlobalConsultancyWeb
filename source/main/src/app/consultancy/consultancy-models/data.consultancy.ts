@@ -17,4 +17,5 @@ export interface ConsultancyData {
     linkedInUrl:string,
     yearEstablished:number,
     password:string
+    adminName:string
 }

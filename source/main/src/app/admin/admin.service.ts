@@ -29,6 +29,7 @@ export class AdminService {
   private pageSizeSubject = new BehaviorSubject<number>(10);
   editUserState = new BehaviorSubject<boolean|null>(null)
   editorViewUserPageState = new BehaviorSubject<any>(null)
+  // pageNumber:BehaviorSubject<null|number> = new BehaviorSubject(null)
 
   constructor(private http: HttpClient) { }
 
@@ -41,6 +42,13 @@ export class AdminService {
   sendRoleId:BehaviorSubject<number|null> = new BehaviorSubject<number>(null)
   updatePermissions: BehaviorSubject<boolean> = new BehaviorSubject(false)
   sendPermissionId:BehaviorSubject<any|boolean> = new BehaviorSubject<any|null>(false)
+  consultancyInstituteState:BehaviorSubject<boolean|null> = new BehaviorSubject<any|null>(null)
+  consultancyProgramState:BehaviorSubject<boolean|null> = new BehaviorSubject<any|null>(null)
+  consultancyPaginationState:BehaviorSubject<null|number> = new BehaviorSubject(null)
+  consultancyProgram:BehaviorSubject<null|any> = new BehaviorSubject(null)
+  consultancyInstitutePaginationState = new BehaviorSubject<null|boolean>(false)
+  consultancyProgramPaginationState = new BehaviorSubject<null|boolean>(false)
+  consultancyPageState = new BehaviorSubject<null|boolean>(null)
 
   // Submit user data to the server
   submitUserData(userData: User): Observable<any> {
@@ -275,6 +283,7 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
     return this.http.put(`${this.apiUrl}/DocumentType/${id}`,data)
   }
 
+ 
 
 
 
@@ -311,8 +320,8 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
     return this.http.delete(`${this.apiUrl}/Permission/byId?Id=${id}`)
   }
   // get sub-menu
-  getSubmenu(){
-    return this.http.get(`${this.apiUrl}/SubMenu/all`)
+  getSubmenu(id:number){
+    return this.http.get(`${this.apiUrl}/SubMenu/RoleId?RoleId=${id}`)
   }
 
   /////////////////////////////////////// DROPDOWN API'S ////////////////////////////////////////////////

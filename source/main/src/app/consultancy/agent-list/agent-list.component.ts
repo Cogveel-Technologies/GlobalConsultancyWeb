@@ -59,7 +59,17 @@ export class AgentListComponent {
 
 
   ngOnInit() {
+    this.consultancyService.activeRoute.next(this.router.url)
     this.consultancyService.agentEditorViewState.subscribe(res => this.agentEditorViewState = res)
+
+     // delete
+     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+       this.subscription.add(this.consultancyApiService.deleteAgent(res).subscribe(() => {
+      this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
+    }))
+      }
+    })
 
     if (this.agentEditorViewState) {
       this.consultancyService.editAgentCurrentPageAndPageSize.subscribe(res => {
@@ -116,12 +126,12 @@ export class AgentListComponent {
   }
 
   deleteAgent(id: number) {
-    const con = confirm("Are you sure?")
-    if (con) {
-      this.subscription.add(this.consultancyApiService.deleteAgent(id).subscribe(() => {
-        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
-      }))
-    }
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(id)
+      }
+    })
   }
 
 

@@ -1,0 +1,10 @@
+.modal {
+    z-index:  5000; /* Bootstrap default for modals */
+}
+.modal-backdrop {
+    z-index: 5000; /* Ensure backdrop stays beneath the modal */
+}
+
+app-feather-icons{
+    cursor: pointer;
+}

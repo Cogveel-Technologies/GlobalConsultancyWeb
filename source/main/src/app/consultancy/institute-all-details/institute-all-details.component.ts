@@ -26,6 +26,7 @@ export class InstituteAllDetailsComponent {
   defaultData:ConsultancyDetailsOptions;
   instituteId:{id:number,name:string};
     ngOnInit(){
+      
     this.defaultData = this.consultancyService.defaultRenderData()
      // for all details (on view button)
      this.details = this.route.snapshot.data['instituteDetails']

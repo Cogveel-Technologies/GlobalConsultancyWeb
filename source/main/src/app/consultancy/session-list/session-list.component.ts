@@ -54,6 +54,7 @@ export class SessionListComponent {
   programName: string
   sessionEditState: boolean;
   sessionsOfInstitute: boolean = false;
+  instituteSessions: boolean;
 
 
 
@@ -79,25 +80,44 @@ export class SessionListComponent {
 
 
   ngOnInit() {
+    this.consultancyService.activeRoute.next(this.router.url)
 
-    this.consultancyService.intakeSessionState.subscribe(res =>{
-      if(res){
-        this.consultancyService.editSessionCurrentPageAndPageSize.subscribe(res =>{
+    
+    // delete
+    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+         this.subscription.add(this.consultancyApiService.deleteSession(res).subscribe(() => {
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
+        this.consultancyService.sendDeleteIdtoPC.next(null)
+      }));
+      }
+    })
+
+    this.consultancyService.instituteSessions.subscribe(res => {
+      this.instituteSessions = res
+    })
+
+    this.consultancyService.intakeSessionState.subscribe(res => {
+      if (res) {
+        this.consultancyService.editSessionCurrentPageAndPageSize.subscribe(res => {
           this.pagination$.next({ pageSize: res.pageSize, pageIndex: res.pageIndex })
-        this.search$.next(res.search)
+          this.search$.next(res.search)
         })
       }
     })
-    // get session of particular institute
-    this.consultancyService.getSessionsOfInstitute.subscribe(res => {
-      if (res) {
-        this.sessionsOfInstitute = true
-        this.institute$.next(res.instituteId)
-        this.instituteName = res.instituteName
-        this.search$.next(true)
-        this.consultancyService.instituteSessionState.next(true)
-      }
-    })
+
+    if (this.instituteSessions) {
+      // get session of particular institute
+      this.consultancyService.getSessionsOfInstitute.subscribe(res => {
+        if (res) {
+          this.consultancyService.instituteSessionState.next(true)
+          this.sessionsOfInstitute = true
+          this.institute$.next(res.instituteId)
+          this.instituteName = res.instituteName
+          this.search$.next(true)
+        }
+      })
+    }
 
 
     this.consultancyService.sessionEditState.subscribe(res => {
@@ -194,12 +214,12 @@ export class SessionListComponent {
   }
 
   onDeleteSession(id: number) {
-    const con = confirm("Are you sure?")
-    if (con) {
-      this.subscription.add(this.consultancyApiService.deleteSession(id).subscribe(res => {
-        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage })
-      }));
-    }
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(id)
+      }
+    })
   }
 
   onInstituteSelected(event: any) {
@@ -236,9 +256,9 @@ export class SessionListComponent {
 
   ngOnDestroy() {
     this.consultancyService.showList.next(false);
-    this.consultancyService.getSessionsOfInstitute.next({instituteId:'',instituteName:''})
     this.consultancyService.sessionEditState.next(false)
     this.consultancyService.intakeSessionState.next(false)
+    this.consultancyService.instituteSessions.next(false)
     this.subscription.unsubscribe()
   }
 }

@@ -12,5 +12,6 @@ export interface AgentDetails {
     consultancyId: number;
     password: string;
     id:number;
+    consultancyName?:string
   }
   
