@@ -217,7 +217,8 @@ export class SessionListComponent {
     this.consultancyService.deletePopUpState.subscribe(res => {
       if (res) {
         console.log(res)
-        this.consultancyService.deleteId.next(id)
+        this.consultancyService.deleteId.next(id);
+        this.consultancyService.deleteMessage.next("All the intakes of the session will be deleted. Would you like to proceed with the action?")
       }
     })
   }

@@ -23,6 +23,7 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
       title: 'Consultancy List',
       items: ['Admin'],
       active: 'Consultancy List',
+      activeRoute: `${this.router.url}`
     },
   ];
   consultancies$: Observable<Consultancy[]>;
@@ -39,7 +40,8 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
   totalPages: number = 1; // Total number of pages
   defaultData: ConsultancyDetailsOptions = this.consultancyService.defaultRenderData()
   pageNumber: number;
-  previousPage: number
+  previousPage: number;
+  mainRoute: string
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -61,6 +63,10 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.mainRoute = this.router.url;
+
+    this.consultancyService.activeRoute.next(this.mainRoute)
+  
 
     // delete
     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {

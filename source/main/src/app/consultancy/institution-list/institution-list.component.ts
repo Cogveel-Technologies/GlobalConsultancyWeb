@@ -314,6 +314,7 @@ export class InstitutionListComponent {
     this.consultancyService.instituteProgramState.next(false)
     this.adminService.consultancyProgramPaginationState.next(false)
     this.consultancyService.breadscrumState.next(false)
+    this.consultancyService.deleteMessage.next('')
   }
 
 }

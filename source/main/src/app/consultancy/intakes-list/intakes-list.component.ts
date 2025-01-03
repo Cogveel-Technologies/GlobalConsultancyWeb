@@ -277,6 +277,7 @@ export class IntakesListComponent {
       if (res) {
         console.log(res)
         this.consultancyService.deleteId.next(id)
+        this.consultancyService.deleteMessage.next("The intakes will be deleted. Would you like to proceed with the action?")
       }
     })
     // this.subscription.add(this.consultancyApiService.deleteIntake(id).subscribe(res => {

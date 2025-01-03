@@ -21,6 +21,7 @@ export class ConsultancyListComponent implements OnInit {
       title: 'Consultancy List',
       items: ['Consultancy'],
       active: 'Consultancy List',
+      activeRoute: `${this.router.url}`
     },
   ];
 
@@ -38,6 +39,7 @@ export class ConsultancyListComponent implements OnInit {
   search = new FormControl();
   searchText$ = this.search.valueChanges.pipe(startWith(''));
   private subscriptions: Subscription = new Subscription();
+  mainRoute: string
 
 
 
@@ -52,6 +54,10 @@ export class ConsultancyListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.mainRoute = this.router.url;
+    console.log(this.mainRoute)
+
+    this.consultancyService.activeRoute.next(this.mainRoute)
 
     // Retrieve consultancy data
     this.consultancies = this.getConsultancies(this.defaultData);

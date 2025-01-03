@@ -125,13 +125,10 @@
                       <!-- <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                     </button> -->
 
-                    <app-model (click)="deleteIntake(intake.id)" ></app-model>
+                    <app-model (click)="deleteIntake(intake.id)" *appPermissions="{feature:'Intake',action:'canDelete'}"></app-model>
                   </ng-container>
                   <ng-container *ngIf="roleName === 'superadmin'">
-                    <button mat-icon-button color="warn" (click)="deleteIntake(intake.id)" matTooltip="Delete">
-                      <!-- <mat-icon>delete</mat-icon> -->
-                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                    </button>
+                    <app-model (click)="deleteIntake(intake.id)" ></app-model>
                   </ng-container>
                   </td>
                 </tr>

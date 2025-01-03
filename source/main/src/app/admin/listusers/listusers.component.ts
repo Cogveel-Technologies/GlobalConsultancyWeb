@@ -9,6 +9,7 @@ import { User } from './user.model';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class ListusersComponent implements OnInit,OnDestroy {
       title: 'Users',
       items: ['Superadmin'],
       active: 'Users',
+      activeRoute: `${this.router.url}`
     },
   ];
   users$: Observable<User[]>;
@@ -33,11 +35,13 @@ export class ListusersComponent implements OnInit,OnDestroy {
   pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
   currentPage = 1; // Default current page
   totalPages = 1; // Total number of pages
+  mainRoute:string;
 
   pageNumber:number
   deleteOperation:boolean = false
   editOperation:boolean = false
   searchText:string
+
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -49,7 +53,8 @@ export class ListusersComponent implements OnInit,OnDestroy {
   constructor(
     private router: Router,
     private adminService: AdminService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private consultancyService: ConsultancyService
   ) {
     this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
     this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize); // Then use it here
@@ -57,6 +62,8 @@ export class ListusersComponent implements OnInit,OnDestroy {
   
   ngOnInit() {
     console.log(this.editOperation)
+    this.mainRoute = this.router.url;
+    this.consultancyService.activeRoute.next(this.mainRoute)
 
     this.adminService.editUserState.subscribe(res => this.editOperation = res);
 

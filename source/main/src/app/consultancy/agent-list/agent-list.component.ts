@@ -17,14 +17,6 @@ import { AdminService } from 'app/admin/admin.service';
 export class AgentListComponent {
   constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router: Router, private adminService: AdminService) { }
 
-  breadscrums = [
-    {
-      title: 'Agents',
-      items: ['Consultancy'],
-      active: 'Agents',
-    },
-  ];
-
 
   getAgents(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getAgents(params).pipe
@@ -55,6 +47,15 @@ export class AgentListComponent {
   consultancyControl = new FormControl('all');
   consultancies: Observable<[{ id: number, consultancyName: string }]> | any;
   agentEditorViewState: boolean;
+
+  
+  breadscrums = [
+    {
+      title: 'Agents',
+      items: this.roleName === 'superadmin' ? ['Agent']:['Consultancy'],
+      active: 'Agents',
+    },
+  ];
 
 
 
@@ -130,6 +131,7 @@ export class AgentListComponent {
       if (res) {
         console.log(res)
         this.consultancyService.deleteId.next(id)
+        this.consultancyService.deleteMessage.next("The Agent will be deleted. Would you like to proceed with the action?")
       }
     })
   }

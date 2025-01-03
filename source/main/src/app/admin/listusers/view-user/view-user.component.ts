@@ -9,11 +9,12 @@ import { AdminService } from 'app/admin/admin.service';
   styleUrls: ['./view-user.component.scss'],
 })
 export class ViewUserComponent implements OnInit {
+  roleName: string = 'superadmin'
   breadscrums = [
     {
       title: 'Profile',
-      items: ['Extra'],
-      active: 'Profile',
+      items: ['SuperAdmin', 'Users'],
+      active: 'User Details',
     },
   ];
   user: User | null = null;

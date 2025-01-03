@@ -64,9 +64,14 @@ export class MainComponent implements OnInit {
   defaultData: any = this.consultancyService.defaultRenderData()
   graphDetails: any
   filteredYears: any[]
-  consultancyData:any
-  agents:any
+  consultancyData: any
+  agents: any
   roleName = localStorage.getItem('roleName')
+  totalInstitutes: number
+  totalPrograms: number
+  totalSessions: number
+  totalIntakes: number
+  
 
   public sampleData = [
     31, 40, 28, 44, 60, 55, 68, 51, 42, 85, 77, 31, 40, 28, 44, 60, 55,
@@ -75,60 +80,114 @@ export class MainComponent implements OnInit {
   breadscrums = [
     {
       title: 'Dashboard',
-      items: ['Home'],
       active: 'Dashboard',
     },
   ];
-  constructor(private consultancyApiService: ConsultancyApi, private consultancyService: ConsultancyService, private adminService: AdminService, private agentService: AgentService, private router:Router) {
+  constructor(private consultancyApiService: ConsultancyApi, private consultancyService: ConsultancyService, private adminService: AdminService, private agentService: AgentService, private router: Router) {
     //constructor
   }
 
-  navigateToAdminList(){
+  navigateToAdminList() {
     this.router.navigate(['/admin/listusers'])
   }
-  navigateToConsultancyList(){
+  navigateToConsultancyList() {
     this.router.navigate(['/admin/consultancy-list'])
   }
-  navigateToAgentList(){
+  navigateToAgentList() {
     this.router.navigate(['/consultancy/agent-list'])
   }
-  navigateToStudentList(){
+  navigateToStudentList() {
     this.router.navigate(['/agent/list-students'])
   }
+  navigateToInstituteList() {
+    this.router.navigate(['/consultancy/institution-list'])
+  }
+  navigateToProgramList() {
+    this.router.navigate(['/consultancy/program-list'])
+  }
+  navigateToSessionList() {
+    this.router.navigate(['/consultancy/session-list'])
+  }
+  navigateToIntakeList() {
+    this.router.navigate(['/consultancy/intake-list'])
+  }
+
+
 
 
   ngOnInit() {
-
-    this.consultancyApiService.getAllConsultancies().subscribe(res => {
-      this.totalConsultancies = res.length;
-      console.log(this.totalConsultancies)
-    })
-
-    this.agents = this.consultancyApiService.getAllAgents(this.defaultData).pipe(
-      tap(res => {
-        console.log(res)
-        this.totalAgents = res['data'].length; // Update totalAgents as a side effect
-        this.defaultData.pageSize = this.totalAgents
-      }),
-      switchMap(()=>{
-        if(this.roleName === 'superadmin'){
-          this.defaultData.IsAdmin = true
-        }
-        return this.consultancyApiService.getAgents(this.defaultData).pipe(map(res => res['data']))
+    // dashboard api's for superadmin
+    if (this.roleName === 'superadmin') {
+      this.consultancyApiService.getAllConsultancies().subscribe(res => {
+        this.totalConsultancies = res.length;
+        console.log(this.totalConsultancies)
       })
-    )
-    
+
+      this.agents = this.consultancyApiService.getAllAgents(this.defaultData).pipe(
+        tap(res => {
+          console.log(res)
+          this.totalAgents = res['data'].length; // Update totalAgents as a side effect
+          this.defaultData.pageSize = this.totalAgents
+        }),
+        switchMap(() => {
+          if (this.roleName === 'superadmin') {
+            this.defaultData.IsAdmin = true
+          }
+          return this.consultancyApiService.getAgents(this.defaultData).pipe(map(res => res['data']))
+        })
+      )
 
 
-    this.adminService.getAllUsers().subscribe(res => {
-      this.totalUsers = res.length;
-      console.log(this.totalUsers)
-    })
 
-    this.agentService.getAllStudents().pipe(map(res => res['data'])).subscribe(res => {
-      this.totalStudents = res.length;
-      console.log(this.totalStudents)
-    })
+      this.adminService.getAllUsers().subscribe(res => {
+        this.totalUsers = res.length;
+        console.log(this.totalUsers)
+      })
+
+      this.agentService.getAllStudents().pipe(map(res => res['data'])).subscribe(res => {
+        this.totalStudents = res.length;
+        console.log(this.totalStudents)
+      })
+    }
+
+    //dashboard api's for consultancy
+    if (this.roleName === 'Consultancy') {
+      this.agents = this.consultancyApiService.getAllAgents(this.defaultData).pipe(
+        tap(res => {
+          console.log(res)
+          this.totalAgents = res['data'].length; // Update totalAgents as a side effect
+          this.defaultData.pageSize = this.totalAgents
+        }),
+        switchMap(() => {
+          if (this.roleName === 'superadmin') {
+            this.defaultData.IsAdmin = true
+          }
+          return this.consultancyApiService.getAgents(this.defaultData).pipe(map(res => res['data']))
+        })
+      )
+
+      this.consultancyApiService.getInstitutes(this.defaultData).pipe(map(res => res['pageInfo'].totalRecords)).subscribe(res => {
+        console.log(res)
+        this.totalInstitutes = res;
+      })
+
+      this.consultancyApiService.getPrograms(this.defaultData).pipe(map(res => res['pageInfo'].totalRecords)).subscribe(res => {
+        this.totalPrograms = res;
+      })
+
+      this.consultancyApiService.getSession(this.defaultData).pipe(map(res => res['pageInfo'].totalRecords)).subscribe(res => {
+        this.totalSessions = res;
+      })
+
+      this.consultancyApiService.getIntakes(this.defaultData).pipe(map(res => res['pageInfo'].totalRecords)).subscribe(res => {
+        this.totalIntakes = res;
+      })
+
+      this.consultancyApiService.getAgents(this.defaultData).pipe(map(res => res['pageInfo'].totalRecords)).subscribe(res => {
+        this.totalAgents = res;
+      })
+    }
+
     //consultancy
 
     this.agentService.getGraphDetails().pipe(map(res => res['data'])).subscribe(res => {
@@ -142,7 +201,7 @@ export class MainComponent implements OnInit {
           const yearBasedConsultancies = this.graphDetails.filter((el) => {
             return el.year === year;
           }).map(el => {
-            return {consultancyName:el.consultancyName, numberOfApplications:el.numberOfApplications}
+            return { consultancyName: el.consultancyName, numberOfApplications: el.numberOfApplications }
           })
           map[year] = yearBasedConsultancies;
         }

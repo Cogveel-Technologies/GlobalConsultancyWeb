@@ -17,7 +17,7 @@ export class AdminusersComponent implements OnInit, OnDestroy {
   breadscrums = [
     {
       title: 'Add Users',
-      items: ['List Users'],
+      items: ['SuperAdmin','List Users'],
       active: 'Add Users',
     },
   ];
@@ -89,6 +89,7 @@ export class AdminusersComponent implements OnInit, OnDestroy {
   }
 
   fetchUserById(userId: string) {
+    this.editMode = true;
     const fetchUserSub = this.adminService.getUserById(+userId).subscribe(
       user => {
         this.user = user;

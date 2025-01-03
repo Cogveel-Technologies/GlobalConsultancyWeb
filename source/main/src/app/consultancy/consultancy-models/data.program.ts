@@ -22,4 +22,5 @@ export interface ProgramData {
     sessionName:string,
     sessionId:number,
     isPublic:boolean,  
+    consultancyName:string
 }
