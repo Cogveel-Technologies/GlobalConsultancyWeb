@@ -168,6 +168,10 @@ export class ListstudentsComponent implements OnInit {
   addStudent() {
     this.router.navigate(['/agent/register-student']);
   }
+  
+ 
+
+
 
   refreshPage() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;

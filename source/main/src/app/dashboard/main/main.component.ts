@@ -190,6 +190,7 @@ export class MainComponent implements OnInit {
 
     //consultancy
 
+
     this.agentService.getGraphDetails().pipe(map(res => res['data'])).subscribe(res => {
       this.graphDetails = res
       console.log(this.graphDetails)
@@ -208,7 +209,6 @@ export class MainComponent implements OnInit {
       }
       console.log(map)
     })
-
 
 
     this.cardChart1();
@@ -453,90 +453,110 @@ export class MainComponent implements OnInit {
     };
   }
   private chart2() {
-    this.barChartOptions = {
-      series: [
-        {
-          name: 'Consultancy 1',
-          data: [44, 55, 41, 37, 22, 43, 21],
+    this.agentService.getGraphDetails().pipe(
+      map(res => res['data'])
+    ).subscribe(graphDetails => {
+      const consultancyData = {};
+  
+      // Process API response to group data by year
+      graphDetails.forEach(item => {
+        const year = item.year;
+        if (!consultancyData[year]) {
+          consultancyData[year] = [];
+        }
+        consultancyData[year].push({
+          name: item.consultancyName,
+          data: item.numberOfApplications,
+        });
+      });
+  
+      // Extract years (categories) for x-axis
+      const categories = Object.keys(consultancyData).map(year => parseInt(year, 10)).sort((a, b) => a - b);
+  
+      // Create series data
+      const series = [];
+      for (const year of categories) {
+        consultancyData[year].forEach(consultancy => {
+          const existingSeries = series.find(s => s.name === consultancy.name);
+          if (existingSeries) {
+            // If consultancy already exists in series, append data
+            existingSeries.data.push(consultancy.data);
+          } else {
+            // If not, create a new series with placeholder data for missing years
+            // const placeholderData = new Array(categories.indexOf(parseInt(year, 10))).fill(0);
+            const placeholderData = new Array(categories.indexOf(year)).fill(0);
+
+            series.push({
+              name: consultancy.name,
+              data: [...placeholderData, consultancy.data],
+            });
+          }
+        });
+      }
+  
+      // Normalize series data to align with x-axis categories
+      series.forEach(s => {
+        if (s.data.length < categories.length) {
+          const missingCount = categories.length - s.data.length;
+          s.data.push(...new Array(missingCount).fill(0));
+        }
+      });
+  
+      // Update bar chart options
+      this.barChartOptions = {
+        series: series,
+        chart: {
+          type: 'bar',
+          height: 350,
+          stacked: true,
+          foreColor: '#9aa0ac',
         },
-        {
-          name: 'Consultancy 2',
-          data: [53, 32, 33, 52, 13, 43, 32],
-        },
-        {
-          name: 'Consultancy 3',
-          data: [12, 17, 11, 9, 15, 11, 20],
-        },
-        {
-          name: 'Consultancy 4',
-          data: [9, 7, 5, 8, 6, 9, 4],
-        },
-        {
-          name: 'Consultancy10',
-          data: [9, 7, 5, 8, 6, 9, 4],
-        },
-        {
-          name: 'Consultancy10',
-          data: [9, 7, 5, 8, 6, 9, 4],
-        },
-        {
-          name: 'Consultancy10',
-          data: [9, 7, 5, 8, 6, 9, 4],
-        },
-      ],
-      chart: {
-        type: 'bar',
-        height: 350,
-        stacked: true,
-        foreColor: '#9aa0ac',
-      },
-      colors: ['#5048e5', '#f43f5e', '#3c6494', '#a5a5a5'],
-      plotOptions: {
-        bar: {
-          horizontal: true,
-        },
-      },
-      stroke: {
-        width: 1,
-        colors: ['#fff'],
-      },
-      xaxis: {
-        categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015],
-        // labels: {
-        //   formatter: function (val: string) {
-        //     return val + 'M';
-        //   },
-        // },
-      },
-      yaxis: {
-        title: {
-          text: undefined,
-        },
-      },
-      grid: {
-        show: true,
-        borderColor: '#9aa0ac',
-        strokeDashArray: 1,
-      },
-      tooltip: {
-        theme: 'dark',
-        marker: {
-          show: true,
-        },
-        y: {
-          formatter: function (val: number) {
-            return val + 'K';
+        colors: ['#5048e5', '#f43f5e', '#3c6494', '#a5a5a5'],
+        plotOptions: {
+          bar: {
+            horizontal: true,
           },
         },
-      },
-      fill: {
-        opacity: 1,
-      },
-      legend: {
-        position: 'top',
-        horizontalAlign: 'left',
-        offsetX: 40,
-      },
-    };
+        stroke: {
+          width: 1,
+          colors: ['#fff'],
+        },
+        xaxis: {
+          categories: categories, // Dynamic categories
+        },
+        yaxis: {
+          title: {
+            text: undefined,
+          },
+        },
+        grid: {
+          show: true,
+          borderColor: '#9aa0ac',
+          strokeDashArray: 1,
+        },
+        tooltip: {
+          theme: 'dark',
+          marker: {
+            show: true,
+          },
+          y: {
+            formatter: function (val: number) {
+              return val + 'K';
+            },
+          },
+        },
+        fill: {
+          opacity: 1,
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left',
+          offsetX: 40,
+        },
+      };
+  
+      console.log('Dynamic Bar Chart Options:', this.barChartOptions);
+    });
   }
+  
 }

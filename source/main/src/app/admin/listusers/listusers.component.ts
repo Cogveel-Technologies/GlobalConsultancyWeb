@@ -38,6 +38,7 @@ export class ListusersComponent implements OnInit,OnDestroy {
   mainRoute:string;
 
   pageNumber:number
+
   deleteOperation:boolean = false
   editOperation:boolean = false
   searchText:string
