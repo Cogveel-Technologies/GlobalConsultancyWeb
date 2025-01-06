@@ -10,6 +10,7 @@ import { ConsultancyService } from '../consultancy-services/consultancy.service'
 import { PageEvent } from '@angular/material/paginator';
 import { distinctUntilChanged } from 'rxjs';
 import { AdminService } from 'app/admin/admin.service';
+import { T } from '@angular/cdk/keycodes';
 
 
 
@@ -167,6 +168,7 @@ export class ProgramListComponent {
         this.consultancyService.instituteProgramState.next(true)
         this.ProgramFromInstitute = res.id;
         this.instituteName = res.instituteName;
+        this.consultancyName = res.consultancyName;
         this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, instituteId: res.id, search: true, consultancyId: res.consultancyId })
       }
     }))

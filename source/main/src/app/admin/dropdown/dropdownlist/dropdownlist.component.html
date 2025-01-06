@@ -1,0 +1,90 @@
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+            </app-breadcrumb>
+
+            <div class="card p-4">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <app-searchable-dropdown [options]="dropDownValues" [displayField]="'name'" [placeHolder]="'Select Category'"
+                            (selectionChange)="onDropDownSelected($event)"></app-searchable-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="materialTableHeader">
+                            <div class="left">
+                                <ul class="header-buttons-left ms-0">
+                                    <app-search></app-search>
+                                </ul>
+                            </div>
+                            <div class="right">
+                                <ul class="tbl-export-btn">
+                                    <li class="tbl-header-btn">
+                                        <div class="m-l-10" matTooltip="ADD">
+                                            <button mat-mini-fab color="primary" (click)="onAddDropdown()">
+                                                <mat-icon class="col-white">add</mat-icon>
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <strong *ngIf="!dropDownSelected">No Dropdown Value Selected</strong>
+            </div>
+
+            <div class="row clearfix" *ngIf="dropDownSelected">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="body table-responsive">
+                            <table class="table table-hover table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <app-sorting [sortField]="defaultData.OrderBy"
+                                                [sortDirection]="defaultData.sortExpression"
+                                                [sortFields]="['programName']" [sortLabels]="['Name']">
+                                            </app-sorting>
+                                        </th>
+
+                                        <th>
+                                            <app-sorting [sortField]="defaultData.OrderBy"
+                                                [sortDirection]="defaultData.sortExpression"
+                                                [sortFields]="['programName']" [sortLabels]="['Actions']">
+                                            </app-sorting>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tr *ngFor="let item of (dropDownList$ | async)">
+                                    <td data-label="value">{{item.dropDownValue}}</td>
+                                    <td>
+                                        <button mat-icon-button color="primary" matTooltip="Edit">
+                                            <!-- <mat-icon>edit</mat-icon> -->
+                                            <app-feather-icons [icon]="'edit'"
+                                                [class]="'tbl-fav-edit'"></app-feather-icons>
+
+                                        </button>
+                                        <app-model></app-model>
+                                    </td>
+                                </tr>
+                            </table>
+                            <app-pagination [pageSize]="defaultData.pageSize"
+                                (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
+                            </app-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

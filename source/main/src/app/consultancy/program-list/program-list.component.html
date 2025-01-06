@@ -77,7 +77,7 @@
                                     <th>
                                         <app-sorting [sortField]="defaultData.OrderBy"
                                             [sortDirection]="defaultData.sortExpression"
-                                            [sortFields]="['instituteName']" [sortLabels]="['Institute']"
+                                            [sortFields]="['levelOfEducation']" [sortLabels]="['Level of Education']"
                                             (sortChange)="onSortChange($event)">
                                         </app-sorting>
                                     </th>
@@ -85,12 +85,6 @@
                                         <app-sorting [sortField]="defaultData.OrderBy"
                                             [sortDirection]="defaultData.sortExpression" [sortFields]="['status']"
                                             [sortLabels]="['Status']" (sortChange)="onSortChange($event)">
-                                        </app-sorting>
-                                    </th>
-                                    <th>
-                                        <app-sorting [sortField]="defaultData.OrderBy"
-                                            [sortDirection]="defaultData.sortExpression" [sortFields]="['consultancyName']"
-                                            [sortLabels]="['Consultancy']" (sortChange)="onSortChange($event)">
                                         </app-sorting>
                                     </th>
                                     <th>Actions</th>
@@ -103,9 +97,8 @@
                                 <tr *ngFor="let program of (programs | async)">
                                     <td data-label="Program Name">{{ program.programName }}</td>
                                     <td data-label="Duration">{{ program.duration }}</td>
-                                    <td data-label="Level of Education">{{ program.instituteName }}</td>
+                                    <td data-label="Level of Education">{{ program.levelOfEducation }}</td>
                                     <td data-label="Status">{{ program.status }}</td>
-                                    <td data-label="Consultancy">{{ program.consultancyName }}</td>
                                     <td data-label="Actions">
                                         <button mat-icon-button color="primary" matTooltip="Intakes"
                                         (click)="getIntakesOfprogram(program.instituteId,program.instituteName,program.id,program.programName)">
@@ -160,10 +153,15 @@
                                                 <!-- <app-feather-icons [icon]="'trash-2'"
                                                     [class]="'tbl-fav-delete'"></app-feather-icons>
                                             </button> -->
-                                            <app-model (click)="deleteProgram(program.id)" *appPermissions="{feature:'Program',action:'canDelete'}" ></app-model>
+                                            <app-model (click)="deleteProgram(program.id)"></app-model>
                                         </ng-container>
                                         <ng-container *ngIf="roleName === 'superadmin'">
-                                            <app-model (click)="deleteProgram(program.id)"></app-model>
+                                            <button mat-icon-button color="warn" (click)="deleteProgram(program.id)"
+                                                matTooltip="Delete">
+                                                <!-- <mat-icon>delete</mat-icon> -->
+                                                <app-feather-icons [icon]="'trash-2'"
+                                                    [class]="'tbl-fav-delete'"></app-feather-icons>
+                                            </button>
                                         </ng-container>
                                     </td>
                                 </tr>
