@@ -4,6 +4,7 @@ import { AdminService } from '../admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 
 @Component({
   selector: 'app-document-type',
@@ -28,10 +29,27 @@ export class DocumentTypeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
-    private snackBar: MatSnackBar  // Inject MatSnackBar
+    private snackBar: MatSnackBar, // Inject MatSnackBar
+    private  consultancyService: ConsultancyService
   ) {}
 
   ngOnInit() {
+     //delete
+     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+        this.adminService.deleteDocument(res).subscribe({
+      next: () => {
+        // this.deleteOperation = true
+        this.loadDocuments();
+        // this.snackBar.open('Role deleted successfully', 'Close', { duration: 3000 });
+        this.consultancyService.sendDeleteIdtoPC.next(null);
+      },
+      error: () => {
+        this.snackBar.open('Error deleting role', 'Close', { duration: 3000 });
+      }
+    });
+      }
+    })
     this.initDocumentForm();
     this.loadDocuments();  // Load documents on initialization
   }
@@ -119,22 +137,33 @@ export class DocumentTypeComponent implements OnInit {
     this.editingDocumentType = '';  // Reset the editing document type
   }
   
+  // deleteDocument(documentId: number) {
+  //   this.adminService.deleteDocument(documentId).subscribe(
+  //     (response) => {
+  //       console.log('Document deleted successfully', response);
+  //       this.loadDocuments();  // Reload documents after successful delete
+  //       this.snackBar.open('Document deleted successfully!', 'Close', {
+  //         duration: 3000,
+  //         horizontalPosition: 'center',
+  //         verticalPosition: 'bottom',
+  //         panelClass: ['snackbar-success']
+  //       });
+  //     },
+  //     (error) => {
+  //       console.error('Document deletion failed', error);
+  //     }
+  //   );
+  // }
   deleteDocument(documentId: number) {
-    this.adminService.deleteDocument(documentId).subscribe(
-      (response) => {
-        console.log('Document deleted successfully', response);
-        this.loadDocuments();  // Reload documents after successful delete
-        this.snackBar.open('Document deleted successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-          panelClass: ['snackbar-success']
-        });
-      },
-      (error) => {
-        console.error('Document deletion failed', error);
+   
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      console.log(res)
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(documentId);
+        this.consultancyService.deleteMessage.next("Are you sure you want to delete this Document Type?")
       }
-    );
+    })
   }
 }
 

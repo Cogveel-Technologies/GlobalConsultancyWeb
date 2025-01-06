@@ -97,17 +97,15 @@
                   <td data-label="Email">{{ user.email }}</td>
                   <td data-label="Gender">{{ user.gender }}</td>
                   <td data-label="Actions">
+                    <button mat-icon-button color="success" (click)="viewUser(user.id)" matTooltip="View">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
                     <button mat-icon-button color="primary" (click)="editUser(user.id)" matTooltip="Edit">
                       <!-- <mat-icon>edit</mat-icon> -->
                         <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>
-                    <button mat-icon-button color="warn" (click)="deleteUser(user.id)" matTooltip="Delete">
-                      <!-- <mat-icon>delete</mat-icon> -->
-                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                    </button>
-                    <button mat-icon-button color="success" (click)="viewUser(user.id)" matTooltip="View">
-                      <mat-icon>visibility</mat-icon>
-                    </button>
+                    <app-model (click)="deleteUser(user.id)"></app-model>
+                   
                   </td>
                 </tr>
                  <!-- Show a message when there are no users found -->

@@ -83,19 +83,23 @@
 
                   <td data-label="Actions">
                     <div *ngIf="editingRoleId !== role.id; else editActions">
+                      <button mat-icon-button
+                          matTooltip="Permissions" (click)="onPermissions(role.id, role.roleName)">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
                       <button mat-icon-button color="primary" (click)="editRole(role.id, role.roleName)"
                         matTooltip="Edit">
                         <!-- <mat-icon>edit</mat-icon> -->
                         <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                       </button>
-                      <button mat-icon-button color="warn" (click)="deleteRole(role.id)" matTooltip="Delete">
+                      <!-- <button mat-icon-button color="warn" (click)="deleteRole(role.id)"
+                       
+                      matTooltip="Delete"> -->
+                      <app-model (click)="deleteRole(role.id)"></app-model>
                         <!-- <mat-icon>delete</mat-icon> -->
-                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                      </button>
-                      <button mat-icon-button
-                          matTooltip="Permissions" (click)="onPermissions(role.id, role.roleName)">
-                          <mat-icon>visibility</mat-icon>
-                        </button>
+                        <!-- <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                      </button> -->
+                      
                     </div>
                     <ng-template #editActions>
                       <button mat-icon-button color="primary" (click)="updateRole(role.id)" matTooltip="Update">

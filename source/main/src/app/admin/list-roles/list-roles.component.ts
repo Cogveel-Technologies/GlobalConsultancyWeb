@@ -8,6 +8,8 @@ import { Role } from './role.model';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
+
 
 @Component({
   selector: 'app-list-roles',
@@ -53,13 +55,30 @@ export class ListRolesComponent implements OnInit {
   constructor(
     private router: Router,
     private adminService: AdminService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private  consultancyService: ConsultancyService
   ) {
     this.pageSize = PAGE_SIZE_OPTIONS[0];
     this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
   }
 
   ngOnInit() {
+    //delete
+    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+        this.adminService.deleteRole(res).subscribe({
+      next: () => {
+        this.deleteOperation = true
+        this.refreshRoles();
+        // this.snackBar.open('Role deleted successfully', 'Close', { duration: 3000 });
+        this.consultancyService.sendDeleteIdtoPC.next(null);
+      },
+      error: () => {
+        this.snackBar.open('Error deleting role', 'Close', { duration: 3000 });
+      }
+    });
+      }
+    })
     // Combine search, pagination, and sorting
     this.roles$ = combineLatest([
       this.searchControl.valueChanges.pipe(
@@ -141,18 +160,19 @@ export class ListRolesComponent implements OnInit {
   }
 
   deleteRole(roleId: number) {
-    this.adminService.deleteRole(roleId).subscribe({
-      next: () => {
-        this.deleteOperation = true
-        this.refreshRoles();
-        // this.snackBar.open('Role deleted successfully', 'Close', { duration: 3000 });
-      },
-      error: () => {
-        this.snackBar.open('Error deleting role', 'Close', { duration: 3000 });
+   
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      console.log(res)
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(roleId);
+        this.consultancyService.deleteMessage.next("Are you sure you want to delete this role?")
       }
-    });
+    })
   }
+  
 
+ 
   // Inline editing methods
   editRole(roleId: number, roleName: string) {
     this.editOperation = true

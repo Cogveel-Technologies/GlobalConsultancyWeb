@@ -90,11 +90,12 @@
                     </app-sorting>
                   </th>
                   <th>
+                    
                     <app-sorting
                       [sortField]="sortField"
                       [sortDirection]="sortDirection"
-                      [sortFields]="['createdDate']"
-                      [sortLabels]="['Created Date']"
+                      [sortFields]="['status']"
+                      [sortLabels]="['Status']"
                       (sortChange)="onSortChange($event)">
                     </app-sorting>
                   </th>
@@ -118,16 +119,29 @@
                   <td data-label="Program Name">{{ application.programName }}</td>
                   <!-- <td data-label="Intake">{{ application.intake }}</td> -->
                   <td data-label="Institute Name">{{ application.instituteName }}</td>
-                  <td data-label="Created Date">{{ application.createdDate | date: 'short' }}</td>
+                  <!-- <td data-label="Created Date">{{ application.createdDate | date: 'short' }}</td> -->
+                  <td data-label="Status">
+                    <div 
+                      class="labels" 
+                      [ngClass]="{
+                        'status-deleted': application.status === 'Rejected',
+                        'status-active': application.status === 'Completed',
+                        'status-pending': application.status === 'Pending',
+                        'status-in-progress': application.status === 'In Progress'
+                      }"
+                    >
+                      {{ application.status }}
+                    </div>
+                  </td>
+                  
                   <td data-label="Logged By">{{ application.loggedBy }}</td>
                   <td data-label="Actions">
                     <ng-container *ngIf="!showOnlyApplyButton">
-                      <button mat-icon-button color="warn" (click)="deleteApplication(application.applicationId)" matTooltip="Delete">
-                        <app-feather-icons [icon]="'trash-2'" class="tbl-fav-delete"></app-feather-icons>
-                      </button>
                       <button mat-icon-button color="success" (click)="viewApplication(application.id)" matTooltip="View">
                         <mat-icon>visibility</mat-icon>
                       </button>
+                      <app-model (click)="deleteApplication(application.id)"></app-model>
+                     
                     </ng-container>
                   </td>
                 </tr>
