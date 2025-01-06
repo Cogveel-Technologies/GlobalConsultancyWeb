@@ -105,18 +105,20 @@
 
                     <!-- (click)="applyStudent(student.id) -->
                     <ng-container *ngIf="!showOnlyApplyButton">
-                      <button mat-icon-button color="primary" (click)="editStudent(student.id)" matTooltip="Edit">
-                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
-                      </button>
-                      <button mat-icon-button color="warn" (click)="deleteStudent(student.id)" matTooltip="Delete">
-                        <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                     
+                      <button mat-icon-button color="success" (click)="addStudentDocument(student.id)" matTooltip="Add Docs">
+                        <mat-icon>add</mat-icon>
                       </button>
                       <button mat-icon-button color="success" (click)="viewStudent(student.id)" matTooltip="View">
                         <mat-icon>visibility</mat-icon>
                       </button>
-                      <button mat-icon-button color="success" (click)="addStudentDocument(student.id)" matTooltip="Add Docs">
-                        <mat-icon>add</mat-icon>
+                      <button mat-icon-button color="primary" (click)="editStudent(student.id)" matTooltip="Edit">
+                        <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                       </button>
+                     
+                      <app-model (click)="deleteStudent(student.id)"></app-model>
+                    
+                     
                       <!-- <button mat-icon-button color="success" (click)="applyStudentSearch()" matTooltip="Apply">
                         <mat-icon>touch_app</mat-icon>
                       </button> -->

@@ -9,6 +9,7 @@ import { User } from './user.model';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 
 
 @Component({
@@ -51,13 +52,30 @@ export class ListusersComponent implements OnInit,OnDestroy {
   constructor(
     private router: Router,
     private adminService: AdminService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+     private  consultancyService: ConsultancyService
   ) {
     this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
     this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize); // Then use it here
   }
   
   ngOnInit() {
+    //delete
+    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+        this.adminService.deleteUser(res).subscribe({
+      next: () => {
+        this.deleteOperation = true
+        this.refreshUsers();
+        // this.snackBar.open('Role deleted successfully', 'Close', { duration: 3000 });
+        this.consultancyService.sendDeleteIdtoPC.next(null);
+      },
+      error: () => {
+        this.snackBar.open('Error deleting role', 'Close', { duration: 3000 });
+      }
+    });
+      }
+    })
     console.log(this.editOperation)
 
     this.adminService.editUserState.subscribe(res => this.editOperation = res);
@@ -153,18 +171,20 @@ export class ListusersComponent implements OnInit,OnDestroy {
     });
   }
 
+ 
+  
   deleteUser(userId: number) {
-    this.adminService.deleteUser(userId).subscribe({
-      next: () => {
-        this.deleteOperation = true
-        this.refreshUsers();
-        this.snackBar.open('User deleted successfully', 'Close', { duration: 100 });
-      },
-      error: () => {
-        this.snackBar.open('Error deleting user', 'Close', { duration: 100 });
+   
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      console.log(res)
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(userId);
+        this.consultancyService.deleteMessage.next("Are you sure you want to delete this user?")
       }
-    });
+    })
   }
+  
 
   encryptData(data: any): string {
     const key = CryptoJS.enc.Utf8.parse('1234567890123456');
