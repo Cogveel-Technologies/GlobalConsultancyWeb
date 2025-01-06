@@ -15,5 +15,6 @@ export interface ConsultancyDetailsOptions{
     UserId?:string,
     IsDeleted?:boolean,
     IsAdmin?:boolean|string,
-    roleId?:number|string
+    roleId?:number|string,
+    dropDownListName?:number|string
 }

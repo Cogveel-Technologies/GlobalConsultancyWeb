@@ -12,7 +12,7 @@ export class ConsultancyAllDetailsComponent {
   breadscrums = [
     {
       title: 'Consultancy List',
-      items: ['Consultancy List'],
+      items: ['Consultancy','Consultancy List'],
       active: 'Consultancy Details',
     },
   ];

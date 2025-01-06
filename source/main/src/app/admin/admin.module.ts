@@ -29,6 +29,8 @@ import { ViewConsultancyComponent } from './consultancy-list/view-consultancy/vi
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { PermissionsComponent } from './permissions/permissions.component';
 import { MyDialogComponentComponent } from './my-dialog-component/my-dialog-component.component';
+import { DropdownlistComponent } from './dropdown/dropdownlist/dropdownlist.component';
+import { AddDropdownValuesComponent } from './dropdown/add-dropdown-values/add-dropdown-values.component';
 
 
 @NgModule({
@@ -48,6 +50,8 @@ import { MyDialogComponentComponent } from './my-dialog-component/my-dialog-comp
     DropdownComponent,
     PermissionsComponent,
     MyDialogComponentComponent,
+    DropdownlistComponent,
+    AddDropdownValuesComponent,
 
   ],
   imports: [

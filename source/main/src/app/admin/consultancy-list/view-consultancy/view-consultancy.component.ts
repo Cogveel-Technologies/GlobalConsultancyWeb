@@ -12,7 +12,7 @@ export class ViewConsultancyComponent implements OnInit {
   breadscrums = [
     {
       title: 'Consultancy Details',
-      items: ['Consultancy List'],
+      items: ['Consultancy','Consultancy List'],
       active: 'Consultancy Details',
     },
   ];

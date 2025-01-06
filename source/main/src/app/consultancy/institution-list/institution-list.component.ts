@@ -267,8 +267,8 @@ export class InstitutionListComponent {
     this.consultancyService.countrySelected.next(+this.countryId)
   }
 
-  institutePrograms(id: number, instituteName: string, consultancyId: number) {
-    this.consultancyService.sendInstituteId.next({ id, instituteName, consultancyId });
+  institutePrograms(id: number, instituteName: string, consultancyId: number, consultancyName: string) {
+    this.consultancyService.sendInstituteId.next({ id, instituteName, consultancyId, consultancyName });
     this.router.navigate(['/consultancy/program-list'])
     this.consultancyService.instituteProgramState.next(true)
     this.onEditorViewInstitute()
@@ -314,6 +314,7 @@ export class InstitutionListComponent {
     this.consultancyService.instituteProgramState.next(false)
     this.adminService.consultancyProgramPaginationState.next(false)
     this.consultancyService.breadscrumState.next(false)
+    this.consultancyService.deleteMessage.next('')
   }
 
 }

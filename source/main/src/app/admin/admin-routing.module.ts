@@ -18,6 +18,7 @@ import { ViewConsultancyComponent } from './consultancy-list/view-consultancy/vi
 import { AuthGuard } from '@core/guard/auth.guard';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { PermissionsComponent } from './permissions/permissions.component';
+import { AddDropdownValuesComponent } from './dropdown/add-dropdown-values/add-dropdown-values.component';
 const routes: Routes = [
   {
     path: '',
@@ -104,6 +105,10 @@ const routes: Routes = [
         path: 'dropdown',
         component: DropdownComponent,
         // canActivate: [AuthGuard]   // Apply AuthGuard
+      },
+      {
+        path:'add-dropdown-values',
+        component:AddDropdownValuesComponent
       },
       {
         path:'permissions',

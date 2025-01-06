@@ -23,6 +23,7 @@ export class ListusersComponent implements OnInit,OnDestroy {
       title: 'Users',
       items: ['Superadmin'],
       active: 'Users',
+      activeRoute: `${this.router.url}`
     },
   ];
   users$: Observable<User[]>;
@@ -34,6 +35,7 @@ export class ListusersComponent implements OnInit,OnDestroy {
   pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
   currentPage = 1; // Default current page
   totalPages = 1; // Total number of pages
+  mainRoute:string;
 
   pageNumber:number
 
@@ -53,7 +55,8 @@ export class ListusersComponent implements OnInit,OnDestroy {
     private router: Router,
     private adminService: AdminService,
     private snackBar: MatSnackBar,
-     private  consultancyService: ConsultancyService
+
+    private consultancyService: ConsultancyService
   ) {
     this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
     this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize); // Then use it here
@@ -77,6 +80,8 @@ export class ListusersComponent implements OnInit,OnDestroy {
       }
     })
     console.log(this.editOperation)
+    this.mainRoute = this.router.url;
+    this.consultancyService.activeRoute.next(this.mainRoute)
 
     this.adminService.editUserState.subscribe(res => this.editOperation = res);
 

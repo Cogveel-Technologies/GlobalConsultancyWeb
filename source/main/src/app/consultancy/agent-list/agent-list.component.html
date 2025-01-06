@@ -126,14 +126,11 @@
                       <!-- <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
                     </button> -->
 
-                    <app-model (click)="deleteAgent(agent.id)"></app-model>
+                    <app-model (click)="deleteAgent(agent.id)" *appPermissions="{feature:'Agent',action:'canDelete'}"></app-model>
                   </ng-container>
 
                   <ng-container *ngIf="roleName === 'superadmin'">
-                    <button mat-icon-button color="warn" (click)="deleteAgent(agent.id)" matTooltip="Delete" >
-                      <!-- <mat-icon>delete</mat-icon> -->
-                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                    </button>
+                    <app-model (click)="deleteAgent(agent.id)"></app-model>
                   </ng-container>
                   </td>
                 </tr>

@@ -334,8 +334,13 @@ getAllRoles(): Observable<{ id: number; roleName: string }[]> {
     return this.http.post(`${this.apiUrl}/DropDownListValues`,data)
   }
 
-  
-  
+  getDropdownValues(params:ConsultancyDetailsOptions){
+    return this.http.get(`${this.apiUrl}/DropDown?DropDownListName=${params.dropDownListName}&limit=${params.pageSize}&OrderBy=${params.OrderBy}&sortExpression=${params.sortExpression}&searchText=${params.searchText}&CurrentPage=${params.currentPage}&isDeleted=${params.IsDeleted}`)
+  }
+
+  getAllDropDownCategories(){
+    return this.http.get(`${this.apiUrl}/DropDownList/all`)
+  }
 }
 
 
