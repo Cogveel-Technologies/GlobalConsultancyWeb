@@ -28,3 +28,35 @@
     }
   }
   
+
+  .labels
+  {
+    color: #fff;
+    text-align: center;
+    padding: 5px 7px;
+    border-radius: 3px;
+  }
+
+ /* For deleted status */
+.status-deleted {
+  background: rgb(254,222,222);
+  color: rgb(211,45,65);
+}
+
+/* For active status */
+.status-active {
+  background: rgb(217,241,224);
+  color: rgb(81,174,100);
+}
+
+/* For pending status */
+.status-pending {
+  background: rgb(255,231,184);
+  color: rgb(245,167,0);
+}
+
+/* For in-progress status */
+.status-in-progress {
+  background: #e2e7f8;
+  color:  #668bf0;
+}

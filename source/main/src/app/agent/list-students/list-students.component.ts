@@ -11,6 +11,7 @@ import { PageEvent } from '@angular/material/paginator';
 
 // import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 @Component({
   selector: 'app-list-students',
   templateUrl: './list-students.component.html',
@@ -50,7 +51,8 @@ export class ListstudentsComponent implements OnInit {
     private router: Router,
     private agentService: AgentService,
     private route: ActivatedRoute, 
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private  consultancyService: ConsultancyService
   ) {
     this.pageSize = PAGE_SIZE_OPTIONS[0]; // Initialize here
     this.pageSizeSubject = new BehaviorSubject<number>(this.pageSize); // Then use it here
@@ -58,8 +60,24 @@ export class ListstudentsComponent implements OnInit {
   }
 
   ngOnInit() {
+     //delete
+     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+        this.agentService.deleteStudent(res).subscribe({
+      next: () => {
+        // this.deleteOperation = true
+        this.refreshStudents();
+        // this.snackBar.open('Role deleted successfully', 'Close', { duration: 3000 });
+        this.consultancyService.sendDeleteIdtoPC.next(null);
+      },
+      error: () => {
+        this.snackBar.open('Error deleting role', 'Close', { duration: 3000 });
+      }
+    });
+      }
+    })
 
-
+// breadcrum
     this.route.queryParams.subscribe(params => {
       const origin = params['origin']; // Fetch the origin parameter
 
@@ -180,17 +198,20 @@ export class ListstudentsComponent implements OnInit {
     });
   }
 
+
+
   deleteStudent(studentId: number) {
-    this.agentService.deleteStudent(studentId).subscribe({
-      next: () => {
-        this.refreshStudents();
-        this.snackBar.open('Student deleted successfully', 'Close', { duration: 100 });
-      },
-      error: () => {
-        this.snackBar.open('Error deleting student', 'Close', { duration: 100 });
+   
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      console.log(res)
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(studentId);
+        this.consultancyService.deleteMessage.next("Are you sure you want to delete this Student?")
       }
-    });
+    })
   }
+  
 
   encryptData(data: any): string {
     const key = CryptoJS.enc.Utf8.parse('1234567890123456');

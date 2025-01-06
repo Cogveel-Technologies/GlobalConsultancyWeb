@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges,OnDestroy } from '@angular/core';
 import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 
 @Component({
@@ -18,11 +18,14 @@ export class ModelComponent {
     this.consultancyService.deletePopUpState.next(true)
   }
   onClosePopup() {
+    console.log("pppp")
     this.consultancyService.deletePopUpState.next(false)
   }
   onDeleteConfirmation() {
     this.consultancyService.deletePopUpState.next(false)
     this.consultancyService.sendDeleteIdtoPC.next(this.deleteId)
   }
-
+  ngOnDestroy(){
+    this.consultancyService.deletePopUpState.next(false)
+  }
 }

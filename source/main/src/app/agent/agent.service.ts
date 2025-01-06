@@ -118,8 +118,7 @@ export class AgentService {
   }
   
 
-
-
+  
 
   // test rralted apis
    
@@ -554,4 +553,5 @@ genericSearch(params: {
   getGraphDetails(){
     return this.http.get(`${this.apiUrl}/StudentApplication/ConsultancyId`)
   }
+  
 }

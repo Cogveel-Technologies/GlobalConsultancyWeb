@@ -12,4 +12,5 @@ export interface ApplicationModel {
   instituteName: string; // Added field
   programName: string;  // Added field
   loggedBy: number;     // Added field
+  status: string;
 }

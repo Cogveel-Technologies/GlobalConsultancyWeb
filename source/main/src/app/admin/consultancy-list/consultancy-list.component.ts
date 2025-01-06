@@ -68,20 +68,22 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
     this.consultancyService.activeRoute.next(this.mainRoute)
   
 
-    // delete
-    this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
-      if (res) {
-        this.adminService.deleteConsultancy(res).subscribe(res => {
-          if (res) {
-            this.adminService.consultancyPaginationState.subscribe(res => {
-              this.currentPage = res;
-              this.currentPageSubject.next(this.currentPage)
-              this.consultancyService.sendDeleteIdtoPC.next(null)
-            })
-          }
-        })
-      }
-    })
+      //delete
+      this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+        if (res) {
+          this.adminService.deleteConsultancy(res).subscribe({
+        next: () => {
+          // this.deleteOperation = true
+          this.refreshConsultancies();
+          // this.snackBar.open('Role deleted successfully', 'Close', { duration: 3000 });
+          this.consultancyService.sendDeleteIdtoPC.next(null);
+        },
+        error: () => {
+          this.snackBar.open('Error deleting role', 'Close', { duration: 3000 });
+        }
+      });
+        }
+      })
 
     this.adminService.consultancyPageState.subscribe(res => {
       if (res) {
@@ -191,18 +193,31 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteConsultancy(consultancyId: number) {
-    this.adminService.deleteConsultancy(consultancyId).subscribe({
-      next: () => {
-        this.refreshConsultancies();
-        this.snackBar.open('Consultancy deleted successfully', 'Close', { duration: 100 });
-      },
-      error: () => {
-        this.snackBar.open('Error deleting consultancy', 'Close', { duration: 100 });
-      }
-    });
+  // deleteConsultancy(consultancyId: number) {
+  //   this.adminService.deleteConsultancy(consultancyId).subscribe({
+  //     next: () => {
+  //       this.refreshConsultancies();
+  //       this.snackBar.open('Consultancy deleted successfully', 'Close', { duration: 100 });
+  //     },
+  //     error: () => {
+  //       this.snackBar.open('Error deleting consultancy', 'Close', { duration: 100 });
+  //     }
+  //   });
    
+  // }
+
+  deleteConsultancy(consultancyId: number) {
+   
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      console.log(res)
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(consultancyId);
+        this.consultancyService.deleteMessage.next("Are you sure you want to delete this Consultancy?")
+      }
+    })
   }
+  
 
   editConsultancy(consultancyId: number) {
     this.adminService.consultancyPaginationState.next(this.pageNumber)
@@ -253,6 +268,8 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
   selectAdmin(event: any) {
     this.userSubject.next(event.value)
   }
+
+
 
   ngOnDestroy() {
     this.adminService.consultancyInstituteState.next(false)

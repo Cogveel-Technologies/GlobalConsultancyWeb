@@ -122,10 +122,7 @@
                       <!-- <mat-icon>edit</mat-icon> -->
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'"></app-feather-icons>
                     </button>
-                    <button mat-icon-button color="warn" (click)="deleteConsultancy(consultancy.id)" matTooltip="Delete">
-                      <!-- <mat-icon>delete</mat-icon> -->
-                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
-                    </button>
+                    <app-model (click)="deleteConsultancy(consultancy.id)"></app-model>
                   </td>
                 </tr>
                 <!-- Show a message when there are no consultancies found -->

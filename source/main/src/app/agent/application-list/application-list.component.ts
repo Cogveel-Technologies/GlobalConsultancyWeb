@@ -9,6 +9,7 @@ import { ApplicationModel } from '../models/applicationModel';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 
 @Component({
   selector: 'app-application-list',
@@ -45,10 +46,27 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     private router: Router,
     private agentService: AgentService,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+     private  consultancyService: ConsultancyService
   ) {}
 
   ngOnInit() {
+     //delete
+     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+      if (res) {
+        this.agentService.deleteApplication(res).subscribe({
+      next: () => {
+        // this.deleteOperation = true
+        this.refreshApplications();
+        // this.snackBar.open('Role deleted successfully', 'Close', { duration: 3000 });
+        this.consultancyService.sendDeleteIdtoPC.next(null);
+      },
+      error: () => {
+        this.snackBar.open('Error deleting role', 'Close', { duration: 3000 });
+      }
+    });
+      }
+    })
     // Combine search, pagination, and sorting
     this.applications$ = combineLatest([
       this.searchControl.valueChanges.pipe(
@@ -107,17 +125,19 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.searchTermSubject.next(this.searchControl.value || '');
   }
   
+  
   deleteApplication(applicationId: number) {
-    this.agentService.deleteApplication(applicationId).subscribe({
-      next: () => {
-        this.refreshApplications();
-        this.snackBar.open('Application deleted successfully', 'Close', { duration: 3000 });
-      },
-      error: () => {
-        this.snackBar.open('Error deleting application', 'Close', { duration: 3000 });
-      },
-    });
+   
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      console.log(res)
+      if (res) {
+        console.log(res)
+        this.consultancyService.deleteId.next(applicationId);
+        this.consultancyService.deleteMessage.next("Are you sure you want to delete this Application?")
+      }
+    })
   }
+  
 
   editApplication(applicationId: number) {
     this.router.navigate(['/agent/edit-application'], {
