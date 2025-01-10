@@ -5,6 +5,7 @@ import { map, startWith } from 'rxjs/operators';
 import { AgentService } from '../agent.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 
 @Component({
   selector: 'app-admission',
@@ -17,6 +18,7 @@ export class AdmissionComponent implements OnInit {
       title: 'Student Admission',
       items: ['Agent'],
       active: 'Search',
+       activeRoute: `${this.router.url}`
     },
   ];
   searchForm: FormGroup;
@@ -27,7 +29,7 @@ export class AdmissionComponent implements OnInit {
   currentPage = 1;
   pageSizeOptions: number[] = [5, 10, 15, 20];
   itemsPerPage: number = this.pageSizeOptions[0];
-
+  mainRoute: string
   // Form controls for autocomplete inputs
   programCtrl = new FormControl();
   sessionCtrl = new FormControl();
@@ -59,7 +61,8 @@ export class AdmissionComponent implements OnInit {
   programCategoryOptions = [];
   filteredProgramCategoryOptions: Observable<any[]>;
 
-  constructor(private fb: FormBuilder, private adminService: AgentService,  private router: Router) {
+  constructor(private fb: FormBuilder, private adminService: AgentService,  private router: Router,
+     private  consultancyService: ConsultancyService) {
     this.searchForm = this.fb.group({
       programId: this.programCtrl,
       sessionId: this.sessionCtrl,
@@ -68,10 +71,17 @@ export class AdmissionComponent implements OnInit {
       instituteId: this.instituteCtrl,
       courseTypeId: this.courseTypeCtrl,
       programCategoryId: this.programCategoryCtrl,
+       
     });
   }
 
   ngOnInit() {
+    // for breadcrum route
+    this.mainRoute = this.router.url;
+    
+
+    this.consultancyService.activeRoute.next(this.mainRoute)
+
     this.fetchIntakeYears();
     this.fetchCountries();
     this.fetchProgramCategories();
