@@ -70,9 +70,21 @@ export class PermissionsComponent implements OnInit,OnDestroy {
         console.log(res)
         this.roleName = res.roleName;
         this.roleSelected = true;
-        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, roleId:res.id })
+        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, roleId:res })
       }
     })
+
+
+      // delete
+      this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+        if (res) {
+          this.subscription.add(this.adminService.deletePermission(res).subscribe(() => {
+            this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, roleId: 
+              +this.defaultData.roleId })
+          }));
+          this.consultancyService.sendDeleteIdtoPC.next(null)
+        }
+      })
 
 
     this.adminService.updatePermissions.subscribe(res => this.update$.next(true))
@@ -199,18 +211,15 @@ export class PermissionsComponent implements OnInit,OnDestroy {
   }
 
   onDelete(id:number){
-    // this.consultancyService.state
-    console.log(id);
-    // if(con){
-    //   this.adminService.deletePermission(id).subscribe(res =>{
-    //     this.adminService.getPermissions(this.defaultData)
-    //     const indexToRemove = this.permissionsForm.get('modules')?.value.findIndex((module: any) => module.id === id);
-    //     if (indexToRemove !== -1) {
-    //       (this.permissionsForm.get('modules') as FormArray).removeAt(indexToRemove);
-    //       this.update$.next(true)
-    //     }
-    //   })
-    // }
+    this.consultancyService.deletePopUpState.subscribe(res => {
+      if (res) {
+        console.log(id)
+        this.consultancyService.deleteId.next(id)
+        this.consultancyService.deleteMessage.next("The Permission will be deleted. Would you like to proceed with the action?")
+      }
+    })
+
+
   }
 
   ngOnDestroy(){
