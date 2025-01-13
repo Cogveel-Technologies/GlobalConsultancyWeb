@@ -17,11 +17,15 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MyApplicationsComponent } from './my-applications/my-applications.component';
+import { ViewApplicationComponent } from './view-application/view-application.component';
 
 
 @NgModule({
   declarations: [
-    StudentProfileComponent
+    StudentProfileComponent,
+    MyApplicationsComponent,
+    ViewApplicationComponent
   ],
   imports: [
     CommonModule,

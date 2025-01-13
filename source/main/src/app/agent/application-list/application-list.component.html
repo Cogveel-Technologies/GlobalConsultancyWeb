@@ -1,12 +1,10 @@
 <section class="content">
   <div class="container-fluid">
-    <div class="block-header">
+
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
       <!-- breadcrumb -->
-      <app-breadcrumb 
-        title="Application List" 
-        [items]="['Home', 'Applications']" 
-        active_item="List">
-      </app-breadcrumb>
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items"
+        [active_item]="breadscrum.active"></app-breadcrumb>
     </div>
 
     <div class="row">
@@ -16,8 +14,12 @@
             <div class="left">
               <ul class="header-buttons-left ms-0">
                 <li class="tbl-search-box">
-                  <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                  <input placeholder="Search" type="text" [formControl]="searchControl" class="browser-default search-field" aria-label="Search box">
+                  <label for="search-input"><i
+                      class="material-icons search-icon">search</i></label>
+                  <input placeholder="Search" type="text"
+                    [formControl]="searchControl"
+                    class="browser-default search-field"
+                    aria-label="Search box">
                 </li>
               </ul>
             </div>
@@ -25,7 +27,8 @@
               <ul class="tbl-export-btn">
                 <li class="tbl-header-btn">
                   <div class="m-l-10" matTooltip="ADD">
-                    <button mat-mini-fab color="primary" (click)="addApplication()">
+                    <button mat-mini-fab color="primary"
+                      (click)="addApplication()">
                       <mat-icon class="col-white">add</mat-icon>
                     </button>
                   </div>
@@ -90,7 +93,7 @@
                     </app-sorting>
                   </th>
                   <th>
-                    
+
                     <app-sorting
                       [sortField]="sortField"
                       [sortDirection]="sortDirection"
@@ -100,13 +103,14 @@
                     </app-sorting>
                   </th>
                   <th>
-                    <app-sorting
+                    <!-- <app-sorting
                       [sortField]="sortField"
                       [sortDirection]="sortDirection"
                       [sortFields]="['loggedBy']"
                       [sortLabels]="['Logged By']"
                       (sortChange)="onSortChange($event)">
-                    </app-sorting>
+                    </app-sorting> -->
+                    Update Status
                   </th>
                   <th>Actions</th>
                 </tr>
@@ -117,9 +121,7 @@
                   <td data-label="Application ID">{{ application.id }}</td>
                   <td data-label="Student Name">{{ application.studentName }}</td>
                   <td data-label="Program Name">{{ application.programName }}</td>
-                  <!-- <td data-label="Intake">{{ application.intake }}</td> -->
                   <td data-label="Institute Name">{{ application.instituteName }}</td>
-                  <!-- <td data-label="Created Date">{{ application.createdDate | date: 'short' }}</td> -->
                   <td data-label="Status">
                     <div 
                       class="labels" 
@@ -127,21 +129,34 @@
                         'status-deleted': application.status === 'Rejected',
                         'status-active': application.status === 'Completed',
                         'status-pending': application.status === 'Pending',
-                        'status-in-progress': application.status === 'In Progress'
+                        'status-in-progress': application.status === 'In Progress',
+                        
+                        'status-Cancelled': application.status === 'Cancelled'
                       }"
                     >
                       {{ application.status }}
                     </div>
                   </td>
+                  <td data-label="Update Status">
+                    <div class="styled-dropdown">
+                      <select 
+                        class="form-select form-select-md shadow border-1" 
+                        [disabled]="application.status === 'Rejected' || application.status === 'Completed'"
+                        (change)="onStatusChange($event, application.id)">
+                        <option value="" disabled selected>Update</option>
+                        <option *ngFor="let option of filterStatusOptions(application.status)" [value]="option">
+                          {{ option }}
+                        </option>
+                      </select>
+                    </div>
+                  </td>
                   
-                  <td data-label="Logged By">{{ application.loggedBy }}</td>
                   <td data-label="Actions">
                     <ng-container *ngIf="!showOnlyApplyButton">
                       <button mat-icon-button color="success" (click)="viewApplication(application.id)" matTooltip="View">
                         <mat-icon>visibility</mat-icon>
                       </button>
                       <app-model (click)="deleteApplication(application.id)"></app-model>
-                     
                     </ng-container>
                   </td>
                 </tr>
@@ -149,6 +164,8 @@
                   <td colspan="12" class="text-center">No Applications found.</td>
                 </tr>
               </tbody>
+              
+
             </table>
 
             <app-pagination

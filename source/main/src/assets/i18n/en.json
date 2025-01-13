@@ -89,7 +89,8 @@
     "STUDENT": {
       "TEXT": "Student",
       "LIST": {
-        "STUDENT_PROFILE": "Student Profile"
+        "STUDENT_PROFILE": "Student Profile",
+        "MY_APPLICATION": "My Applications"
        
       }
     },

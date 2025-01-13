@@ -12,6 +12,7 @@ import { AdmissionComponent } from './admission/admission.component';
 import { ApplicationsComponent } from './applications/applications.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { RegisterwizardComponent } from './registerwizard/registerwizard.component';
+import { ViewAnyappComponent } from './application-list/view-anyapp/view-anyapp.component';
 
 
 
@@ -63,6 +64,11 @@ const routes: Routes = [
       {
         path: 'student-application',
         component: StudentApplicationComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'viewany-application',
+        component: ViewAnyappComponent,
         canActivate: [AuthGuard]
       },
       {

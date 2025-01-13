@@ -19,6 +19,7 @@ export class AdmissionComponent implements OnInit {
       items: ['Agent'],
       active: 'Search',
       activeRoute: `${this.router.url}`
+
     },
   ];
   searchForm: FormGroup;
@@ -30,7 +31,7 @@ export class AdmissionComponent implements OnInit {
   currentPage = 1;
   pageSizeOptions: number[] = [5, 10, 15, 20];
   itemsPerPage: number = this.pageSizeOptions[0];
-
+  mainRoute: string
   // Form controls for autocomplete inputs
   programCtrl = new FormControl();
   sessionCtrl = new FormControl();
@@ -62,7 +63,10 @@ export class AdmissionComponent implements OnInit {
   programCategoryOptions = [];
   filteredProgramCategoryOptions: Observable<any[]>;
 
+
   constructor(private fb: FormBuilder, private adminService: AgentService,  private router: Router, private consultancyService: ConsultancyService) {
+ {
+
     this.searchForm = this.fb.group({
       programId: this.programCtrl,
       sessionId: this.sessionCtrl,
@@ -71,15 +75,18 @@ export class AdmissionComponent implements OnInit {
       instituteId: this.instituteCtrl,
       courseTypeId: this.courseTypeCtrl,
       programCategoryId: this.programCategoryCtrl,
+       
     });
   }
 
   ngOnInit() {
 
+
     this.mainRoute = this.router.url;
     console.log(this.mainRoute)
 
     this.consultancyService.activeRoute.next(this.mainRoute)
+
     this.fetchIntakeYears();
     this.fetchCountries();
     this.fetchProgramCategories();

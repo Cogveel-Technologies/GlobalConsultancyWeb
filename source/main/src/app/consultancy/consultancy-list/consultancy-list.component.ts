@@ -55,7 +55,7 @@ export class ConsultancyListComponent implements OnInit {
 
   ngOnInit() {
     this.mainRoute = this.router.url;
-    console.log(this.mainRoute)
+    
 
     this.consultancyService.activeRoute.next(this.mainRoute)
 
