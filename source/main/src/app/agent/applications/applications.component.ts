@@ -131,14 +131,13 @@ export class ApplicationsComponent implements OnInit {
       gradingAverage: [],
     });
     this.testForm = this.fb.group({
-      testName: [],
-      testType: [],
-      subject: [],
-      testDate: [],
-      testDuration: [],
-      score: [],
+      testName: ['', Validators.required],
+      testType: ['', Validators.required],
+      subject: ['', Validators.required],
+      testDate: ['', Validators.required],
+      testDuration: ['', [Validators.required, Validators.min(1)]],
+      score: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
     });
-
     this.loadDocumentTypes();
   }
 

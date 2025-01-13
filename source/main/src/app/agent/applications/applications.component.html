@@ -104,6 +104,10 @@
                     <div class="card">
                       <div class="header mb-3">
                         <h2>Uploaded Documents</h2>
+                        <button mat-raised-button color="primary"
+                        (click)="onAddEducation()">
+                        Add
+                      </button>
                       </div>
 
                       <!-- Uploaded Document Table -->
@@ -241,6 +245,10 @@
 
               <!-- personal info -->
               <mat-step [stepControl]="HFormGroup2!">
+
+
+
+                
                 <form [formGroup]="HFormGroup2!">
                   <ng-template matStepLabel>Personal Info</ng-template>
 

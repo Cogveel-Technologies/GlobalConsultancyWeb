@@ -8,6 +8,7 @@ import { StudentDocument } from 'app/agent/models/studentDocument.model';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { of } from 'rxjs';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 
 @Component({
   selector: 'app-student-profile',
@@ -35,7 +36,7 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
   selectedId: number | null = null;
   studentData: Student | null = null;
   countries: any[] = [];
-
+  mainRoute: string
   student: Student | null = null;
   breadscrums = [
     {
@@ -52,9 +53,15 @@ export class StudentProfileComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, 
               private agentService: AgentService,
               private router: Router,
+              private  consultancyService: ConsultancyService,
               private fb: FormBuilder) {  }
 
   ngOnInit() {
+      // For breadcrumb route
+      this.mainRoute = this.router.url;
+  
+      this.consultancyService.activeRoute.next(this.mainRoute);
+      
     const studentId = localStorage.getItem('id');
     if (studentId) {
       const studentSubscription = this.agentService.getStudentById(+studentId).subscribe(
