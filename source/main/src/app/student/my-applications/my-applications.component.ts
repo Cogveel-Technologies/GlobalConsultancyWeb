@@ -25,7 +25,7 @@ export class MyApplicationsComponent implements OnInit, OnDestroy {
     {
       title: 'Applications List',
       items: ['Student'],
-      active: 'Applications',
+      active: 'My Applications',
       activeRoute: `${this.router.url}`
     },
   ];
@@ -57,12 +57,15 @@ export class MyApplicationsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+
+      // For breadcrumb route
+      this.mainRoute = this.router.url;
+  
+      this.consultancyService.activeRoute.next(this.mainRoute);
+      
     const studentId = localStorage.getItem('id'); // Retrieve the student ID from local storage
   
-    // For breadcrumb route
-    this.mainRoute = this.router.url;
   
-    this.consultancyService.activeRoute.next(this.mainRoute);
   
     // Delete subscription
     this.consultancyService.sendDeleteIdtoPC.subscribe((res) => {
