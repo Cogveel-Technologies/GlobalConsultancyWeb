@@ -30,6 +30,7 @@ export class DropdownlistComponent {
   currentPageIndex:number;
   records:number;
   pagination$: BehaviorSubject<{ pageSize?: number, pageIndex?: number }> = new BehaviorSubject<{ pageSize?: number, pageIndex?: number }>({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage });
+  isData:boolean = false;
 
   ngOnInit(){
    this.adminService.getAllDropDownCategories().pipe(
@@ -61,7 +62,10 @@ export class DropdownlistComponent {
 
         console.log(this.defaultData)
         return this.adminService.getDropdownValues(this.defaultData).pipe(
-          map((res:any)=>res.data)
+          map((res:any)=>{
+            this.isData = true;
+            return res.data
+          })
         )
       })
     )

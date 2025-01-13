@@ -18,11 +18,13 @@ export class AdmissionComponent implements OnInit {
       title: 'Student Admission',
       items: ['Agent'],
       active: 'Search',
-       activeRoute: `${this.router.url}`
+      activeRoute: `${this.router.url}`
+
     },
   ];
   searchForm: FormGroup;
   data: any[] = [];  // Array to hold the search results
+  mainRoute:string;
 
   // Pagination variables
   totalItems = 0;
@@ -61,8 +63,10 @@ export class AdmissionComponent implements OnInit {
   programCategoryOptions = [];
   filteredProgramCategoryOptions: Observable<any[]>;
 
-  constructor(private fb: FormBuilder, private adminService: AgentService,  private router: Router,
-     private  consultancyService: ConsultancyService) {
+
+  constructor(private fb: FormBuilder, private adminService: AgentService,  private router: Router, private consultancyService: ConsultancyService) {
+ {
+
     this.searchForm = this.fb.group({
       programId: this.programCtrl,
       sessionId: this.sessionCtrl,
@@ -76,9 +80,10 @@ export class AdmissionComponent implements OnInit {
   }
 
   ngOnInit() {
-    // for breadcrum route
+
+
     this.mainRoute = this.router.url;
-    
+    console.log(this.mainRoute)
 
     this.consultancyService.activeRoute.next(this.mainRoute)
 
