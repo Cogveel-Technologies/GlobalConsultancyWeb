@@ -16,11 +16,13 @@
             </p>
             <p class="info-item">
               <strong>Program Name:</strong>
-              <span class="ms-1 fw-normal">{{selectedRecord?.programName}}</span>
+              <span
+                class="ms-1 fw-normal">{{selectedRecord?.programName}}</span>
             </p>
             <p class="info-item">
               <strong>Session:</strong>
-              <span class="ms-1 fw-normal">{{selectedRecord?.sessionName}}</span>
+              <span
+                class="ms-1 fw-normal">{{selectedRecord?.sessionName}}</span>
             </p>
           </div>
 
@@ -64,7 +66,8 @@
                     <div class="program-summary">
                       <div class="program-title">
                         <h3>{{selectedRecord?.programName}}</h3>
-                        <span class="duration-badge">{{selectedRecord?.duration}}</span>
+                        <span
+                          class="duration-badge">{{selectedRecord?.duration}}</span>
                       </div>
                       <div class="program-details">
                         <div>
@@ -93,7 +96,7 @@
               </mat-step>
 
               <!-- documents -->
-              <mat-step [stepControl]="documentForm!">
+              <mat-step [stepControl]="documentForm">
                 <!-- Display uploaded documents -->
                 <div class="row mt-4"
                   *ngIf="uploadedDocument$ | async as response">
@@ -104,27 +107,22 @@
                       </div>
 
                       <!-- Uploaded Document Table -->
-                      <table class="table table-hover table-responsive">
+                      <table class="table table-hover table-responsive"
+                        *ngIf="response.data && response.data.length > 0; else noDocuments">
                         <thead class="thead-light">
                           <tr>
-
                             <th>Document Type</th>
                             <th>Remarks</th>
-                            <!-- <th>Uploaded By</th> -->
                             <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr
                             *ngFor="let document of response.data; let i = index">
-
-                            <td data-label="Document Type">{{
-                              getDocumentTypeName(document.documentTypeId)
-                              }}</td>
-
-                            <!-- {{ type.documentType }} -->
+                            <td data-label="Document Type">
+                              {{ getDocumentTypeName(document.documentTypeId) }}
+                            </td>
                             <td data-label="Remarks">{{ document.remarks }}</td>
-                            <!-- <td data-label="Uploaded By">{{ document.uploadedBy }}</td> -->
                             <td data-label="Actions">
                               <button mat-icon-button color="primary"
                                 (click)="viewDocument(document.file)">
@@ -132,7 +130,6 @@
                               </button>
                               <button mat-icon-button color="warn"
                                 (click)="deleteDocument(document.id)">
-                                <!-- <mat-icon>delete</mat-icon> -->
                                 <app-feather-icons [icon]="'trash-2'"
                                   [class]="'tbl-fav-delete'"></app-feather-icons>
                               </button>
@@ -140,49 +137,49 @@
                           </tr>
                         </tbody>
                       </table>
+
+                      <!-- No Documents Message -->
+                      <ng-template #noDocuments>
+                        <div class="text-center mt-3">
+                          <p class="text-muted">No document records found.</p>
+                        </div>
+                      </ng-template>
                     </div>
                   </div>
                 </div>
-                <form [formGroup]="documentForm!"
+
+                <!-- Form for Document Upload -->
+                <form [formGroup]="documentForm"
                   (ngSubmit)="onDocumentFormSubmit()">
                   <ng-template matStepLabel>Documents</ng-template>
                   <div class="program-info-container">
                     <h2>Document Upload</h2>
 
                     <div class="program-info">
-                      <!-- <form class="m-4" [formGroup]="documentForm" (ngSubmit)="onDocumentFormSubmit()"> -->
                       <div class="row">
-
                         <!-- Student Name Field -->
-                        <div
-                          class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+                        <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                           <mat-form-field class="example-full-width">
                             <mat-label>Student Name</mat-label>
-                            <input matInput formControlName="studentName"
-                              readonly>
-                            <mat-icon
-                              class="material-icons-two-tone color-icon p-3"
-                              matSuffix>person</mat-icon>
+                            <input matInput formControlName="studentName" readonly>
+                            <mat-icon matSuffix>person</mat-icon>
                           </mat-form-field>
-                        </div>
+                        </div> -->
 
                         <!-- Student Phone Number Field -->
-                        <div
-                          class="col-xl-12 col-lg-4 col-md-12 col-sm-12 mb-3">
+                        <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
                           <mat-form-field class="example-full-width">
                             <mat-label>Student Phone Number</mat-label>
-                            <input matInput formControlName="contactNo"
-                              readonly>
-                            <mat-icon
-                              class="material-icons-two-tone color-icon p-3"
-                              matSuffix>phone</mat-icon>
+                            <input matInput formControlName="contactNo" readonly>
+                            <mat-icon matSuffix>phone</mat-icon>
                           </mat-form-field>
                         </div>
-
+               -->
                         <!-- Document Type Dropdown -->
                         <div
                           class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                          <mat-form-field class="example-full-width">
+                          <mat-form-field class="example-full-width"
+                            appearance="fill">
                             <mat-label>Document Type</mat-label>
                             <mat-select formControlName="documentType" required>
                               <mat-option *ngFor="let type of documentTypes"
@@ -190,67 +187,62 @@
                                 {{ type.documentType }}
                               </mat-option>
                             </mat-select>
-                            <mat-icon
-                              class="material-icons-two-tone color-icon p-3"
-                              matSuffix>description</mat-icon>
+                            <mat-error
+                              *ngIf="documentForm.get('documentType')?.hasError('required')">
+                              Document type is required
+                            </mat-error>
+                            <mat-icon matSuffix>description</mat-icon>
                           </mat-form-field>
                         </div>
-                        
 
                         <!-- File Upload Component -->
                         <div
                           class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-
                           <label>Upload</label>
                           <app-file-upload
                             formControlName="file"></app-file-upload>
+                          <div
+                            *ngIf="documentForm.get('file')?.invalid && (documentForm.get('file')?.touched || documentForm.get('file')?.dirty)"
+                            class="text-danger">
+                            File is required
+                          </div>
                         </div>
 
+                        <!-- Remarks Textarea -->
+                        <div
+                          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Remarks</mat-label>
+                            <textarea matInput formControlName="remarks"
+                              required></textarea>
+                            <mat-error
+                              *ngIf="documentForm.get('remarks')?.hasError('required')">
+                              Remarks are required
+                            </mat-error>
+                            <mat-icon matSuffix>note</mat-icon>
+                          </mat-form-field>
+                        </div>
                       </div>
 
-                      <!-- Remarks Textarea -->
-
-                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                        <mat-form-field class="example-full-width">
-                          <mat-label>Remarks</mat-label>
-                          <textarea matInput formControlName="remarks"
-                            required></textarea>
-                          <mat-icon
-                            class="material-icons-two-tone color-icon p-3"
-                            matSuffix>note</mat-icon>
-                        </mat-form-field>
-                      </div>
-
-                      <!-- Submit and Cancel Buttons -->
-
+                      <!-- Submit and Navigation Buttons -->
                       <div class="button-container">
-                        <button class="btn-space"
-                          [disabled]="!documentForm.valid" mat-raised-button
-                          color="primary">
+                        <!-- <button class="btn-space" [disabled]="!documentForm.valid" mat-raised-button color="primary">
                           {{ isEditMode ? 'Update' : 'Submit' }}
-                        </button>
-
-                        <!-- <button type="button" mat-raised-button color="warn" (click)="onCancel()">Back</button> -->
+                        </button> -->
+                        <button mat-raised-button matStepperPrevious
+                          color="warn" class="msr-2">Back</button>
+                        <button mat-raised-button matStepperNext color="primary"
+                          [disabled]="!documentForm.valid">Next</button>
                       </div>
-
-                      <!-- </form> -->
-                    </div>
-                    <div class="button-container">
-                      <button mat-raised-button matStepperPrevious color="warn"
-                        class="msr-2">Back</button>
-                      <button mat-raised-button matStepperNext
-                        color="primary">Next</button>
                     </div>
                   </div>
-
                 </form>
-
               </mat-step>
+
               <!-- personal info -->
               <mat-step [stepControl]="HFormGroup2!">
                 <form [formGroup]="HFormGroup2!">
                   <ng-template matStepLabel>Personal Info</ng-template>
-                  
 
                   <div class="program-info-container">
                     <h2>Personal Information</h2>
@@ -270,7 +262,12 @@
                           }}</p>
                         <mat-form-field *ngIf="iseditingmode" appearance="fill"
                           class="full-width">
-                          <input matInput formControlName="studentName" />
+                          <input matInput formControlName="studentName"
+                            placeholder="Enter student name" required />
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('studentName')?.hasError('required')">
+                            Student name is required.
+                          </mat-error>
                         </mat-form-field>
                       </div>
 
@@ -281,34 +278,24 @@
                           'yyyy-MM-dd' }}</p>
                         <mat-form-field *ngIf="iseditingmode" appearance="fill"
                           class="full-width">
-                          <input matInput type="date" formControlName="dob" />
-                        </mat-form-field>
-                      </div>
-
-                      <!-- Citizenship Field -->
-                      <div class="info-field">
-                        <label>Citizenship</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.citizenship
-                          }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
-                          class="full-width">
-                          <mat-select formControlName="citizenship">
-                            <mat-option *ngFor="let country of countries"
-                              [value]="country.countryName">
-                              {{ country.countryName }}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </div>
-
-                      <!-- Language Field -->
-                      <div class="info-field">
-                        <label>Language</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.language
-                          }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
-                          class="full-width">
-                          <input matInput formControlName="language" />
+                          <mat-label>Date of Birth</mat-label>
+                          <input
+                            matInput
+                            [matDatepicker]="dobPicker"
+                            formControlName="dob"
+                            [max]="today"
+                            required />
+                          <mat-datepicker-toggle matSuffix
+                            [for]="dobPicker"></mat-datepicker-toggle>
+                          <mat-datepicker #dobPicker></mat-datepicker>
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('dob')?.hasError('required')">
+                            Date of birth is required.
+                          </mat-error>
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('dob')?.hasError('matDatepickerMax')">
+                            Date of birth cannot be a future date.
+                          </mat-error>
                         </mat-form-field>
                       </div>
 
@@ -319,8 +306,60 @@
                           | date: 'yyyy-MM-dd' }}</p>
                         <mat-form-field *ngIf="iseditingmode" appearance="fill"
                           class="full-width">
-                          <input matInput type="date"
-                            formControlName="passportExpiry" />
+                          <mat-label>Passport Expiry</mat-label>
+                          <input
+                            matInput
+                            [matDatepicker]="expiryPicker"
+                            formControlName="passportExpiry"
+                            [min]="today"
+                            required />
+                          <mat-datepicker-toggle matSuffix
+                            [for]="expiryPicker"></mat-datepicker-toggle>
+                          <mat-datepicker #expiryPicker></mat-datepicker>
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('passportExpiry')?.hasError('required')">
+                            Passport expiry date is required.
+                          </mat-error>
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('passportExpiry')?.hasError('matDatepickerMin')">
+                            Passport expiry date must be in the future.
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+
+                      <!-- Citizenship Field -->
+                      <div class="info-field">
+                        <label>Citizenship</label>
+                        <p *ngIf="!iseditingmode">{{ studentData?.citizenship
+                          }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
+                          <mat-select formControlName="citizenship" required>
+                            <mat-option *ngFor="let country of countries"
+                              [value]="country.countryName">
+                              {{ country.countryName }}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('citizenship')?.hasError('required')">
+                            Citizenship is required.
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+
+                      <!-- Language Field -->
+                      <div class="info-field">
+                        <label>Language</label>
+                        <p *ngIf="!iseditingmode">{{ studentData?.language
+                          }}</p>
+                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
+                          class="full-width">
+                          <input matInput formControlName="language"
+                            placeholder="Enter language" required />
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('language')?.hasError('required')">
+                            Language is required.
+                          </mat-error>
                         </mat-form-field>
                       </div>
 
@@ -332,7 +371,16 @@
                         <mat-form-field *ngIf="iseditingmode" appearance="fill"
                           class="full-width">
                           <input matInput type="email"
-                            formControlName="emailAddress" />
+                            formControlName="emailAddress"
+                            placeholder="Enter email address" required email />
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('emailAddress')?.hasError('required')">
+                            Email address is required.
+                          </mat-error>
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('emailAddress')?.hasError('email')">
+                            Please enter a valid email address.
+                          </mat-error>
                         </mat-form-field>
                       </div>
 
@@ -343,7 +391,17 @@
                           }}</p>
                         <mat-form-field *ngIf="iseditingmode" appearance="fill"
                           class="full-width">
-                          <input matInput formControlName="contactNo" />
+                          <input matInput formControlName="contactNo"
+                            placeholder="Enter contact number" required
+                            pattern="^[0-9]+$" />
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('contactNo')?.hasError('required')">
+                            Contact number is required.
+                          </mat-error>
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('contactNo')?.hasError('pattern')">
+                            Please enter a valid contact number.
+                          </mat-error>
                         </mat-form-field>
                       </div>
 
@@ -354,8 +412,12 @@
                           studentData?.residentialAddress }}</p>
                         <mat-form-field *ngIf="iseditingmode" appearance="fill"
                           class="full-width">
-                          <input matInput
-                            formControlName="residentialAddress" />
+                          <input matInput formControlName="residentialAddress"
+                            placeholder="Enter residential address" required />
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('residentialAddress')?.hasError('required')">
+                            Residential address is required.
+                          </mat-error>
                         </mat-form-field>
                       </div>
 
@@ -366,7 +428,12 @@
                           }}</p>
                         <mat-form-field *ngIf="iseditingmode" appearance="fill"
                           class="full-width">
-                          <input matInput formControlName="mailingAddress" />
+                          <input matInput formControlName="mailingAddress"
+                            placeholder="Enter mailing address" required />
+                          <mat-error
+                            *ngIf="HFormGroup2?.get('mailingAddress')?.hasError('required')">
+                            Mailing address is required.
+                          </mat-error>
                         </mat-form-field>
                       </div>
                     </div>
@@ -375,8 +442,8 @@
                     <div class="button-container">
                       <button mat-raised-button matStepperPrevious color="warn"
                         class="msr-2">Back</button>
-                      <button mat-raised-button matStepperNext
-                        color="primary">Next</button>
+                      <button mat-raised-button matStepperNext color="primary"
+                        [disabled]="HFormGroup2.invalid">Next</button>
                     </div>
                   </div>
                 </form>
@@ -437,8 +504,7 @@
               <!-- education -->
               <mat-step>
                 <!-- Display Education Grid -->
-                <div class="row"
-                  *ngIf="educationEntries$ | async as response">
+                <div class="row" *ngIf="educationEntries$ | async as response">
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
                       <div
@@ -450,49 +516,66 @@
                         </button>
                       </div>
 
-                      <!-- Education Grid Table -->
-                      <!-- Education Grid Table -->
-                      <table class="table table-hover table-responsive">
-                        <thead class="thead-light">
-                          <tr>
-                            <th>Country</th>
-                            <th>Highest Level of Education</th>
-                            <th>Grading Scheme</th>
-                            <th>Grade Average</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <!-- Use async pipe to subscribe to educationEntries$ and access inner array -->
-                          <tr
-                            *ngFor="let education of (educationEntries$ | async)[0]; let i = index">
-                            <td data-label="Country of Education">{{
-                              education.countryOfEducation }}</td>
-                            <td data-label="Higher Level of Education">{{
-                              education.higherLevelOfEducation
-                              }}</td>
-                            <td data-label="Grading Scheme">{{
-                              education.gradingScheme }}</td>
-                            <td data-label="Grading Average">{{
-                              education.gradingAverage }}</td>
-                            <td data-label="Actions">
+                      <!-- Conditional rendering for education data -->
+                      <div
+                        *ngIf="response[0]?.length > 0; else noEducationRecords">
+                        <!-- Education Grid Table -->
+                        <table class="table table-hover table-responsive">
+                          <thead class="thead-light">
+                            <tr>
+                              <th>Country</th>
+                              <th>Highest Level of Education</th>
+                              <th>Grading Scheme</th>
+                              <th>Grade Average</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr
+                              *ngFor="let education of response[0]; let i = index">
+                              <td data-label="Country of Education">
+                                {{ education.countryOfEducation }}
+                              </td>
+                              <td data-label="Higher Level of Education">
+                                {{ education.higherLevelOfEducation }}
+                              </td>
+                              <td data-label="Grading Scheme">
+                                {{ education.gradingScheme }}
+                              </td>
+                              <td data-label="Grading Average">
+                                {{ education.gradingAverage }}
+                              </td>
+                              <td data-label="Actions">
+                                <button
+                                  mat-icon-button
+                                  color="primary"
+                                  (click)="updateEducation(education.id)">
+                                  <mat-icon>
+                                    <app-feather-icons [icon]="'edit'"
+                                      [class]="'tbl-fav-edit'"></app-feather-icons>
+                                  </mat-icon>
+                                </button>
+                                <button
+                                  mat-icon-button
+                                  color="warn"
+                                  (click)="deleteEducation(education.id)">
+                                  <mat-icon>
+                                    <app-feather-icons [icon]="'trash-2'"
+                                      [class]="'tbl-fav-delete'"></app-feather-icons>
+                                  </mat-icon>
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
 
-                              <button mat-icon-button color="primary"
-                                (click)="updateEducation(education.id)">
-                                <mat-icon>
-                                  <app-feather-icons [icon]="'edit'"
-                                    [class]="'tbl-fav-edit'"></app-feather-icons></mat-icon>
-                              </button>
-                              <button mat-icon-button color="warn"
-                                (click)="deleteEducation(education.id)">
-                                <app-feather-icons [icon]="'trash-2'"
-                                  [class]="'tbl-fav-delete'"></app-feather-icons>
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-
+                      <!-- No Records Found Template -->
+                      <ng-template #noEducationRecords>
+                        <div class="text-center mt-4">
+                          <p>No education records found.</p>
+                        </div>
+                      </ng-template>
                     </div>
                   </div>
                 </div>
@@ -520,22 +603,6 @@
                               <mat-icon matSuffix>public</mat-icon>
                             </mat-form-field>
                           </div>
-
-                          <!-- Citizenship Field -->
-                          <!-- <div class="info-field">
-                        <label>Citizenship</label>
-                        <p *ngIf="!iseditingmode">{{ studentData?.citizenship
-                          }}</p>
-                        <mat-form-field *ngIf="iseditingmode" appearance="fill"
-                          class="full-width">
-                          <mat-select formControlName="citizenship">
-                            <mat-option *ngFor="let country of countries"
-                              [value]="country.countryName">
-                              {{ country.countryName }}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </div> -->
 
                           <!-- Highest Level of Education -->
                           <div
@@ -573,7 +640,7 @@
                           </div>
                         </div>
 
-                        <p class="text-muted">*10th and 12* Grade details are
+                        <p class="text-muted">*10th and 12th Grade details are
                           mandatory</p>
 
                         <div class="button-container">
@@ -582,182 +649,180 @@
                             Back
                           </button>
                           <button mat-raised-button matStepperNext
-                            color="primary"
-                            type="submit">
+                            color="primary" type="submit">
                             {{ isEdittingMode ? 'Update' : 'Next' }}
                           </button>
-
                         </div>
                       </form>
-
                     </div>
                   </div>
                 </div>
               </mat-step>
+
               <!-- test -->
               <mat-step>
                 <div class="row mt-4"
                   *ngIf="testByStudentId$ | async as response">
-
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
                       <div
                         class="header mb-3 d-flex align-items-center justify-content-between">
                         <h2>Test Details</h2>
                         <button mat-raised-button color="primary"
-                          (click)="onAddEducation()">
-                          Add
-                        </button>
+                          (click)="onAddEducation()">Add</button>
                       </div>
-                      <!-- (click)="onAddTest()" -->
-                      <!-- Test Grid Table -->
-                      <table class="table table-hover table-responsive">
-                        <thead class="thead-light">
-                          <tr>
-                            <th>Test Name</th>
-                            <th>Test Type</th>
-                            <th> Subject</th>
-                            <th>Test Date</th>
-                            <th>Duration</th>
-                            <th>Score</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <!-- Use async pipe to subscribe to tests$ and access inner array -->
-                          <tr *ngFor="let test of response; let i = index">
-                            <!-- *ngFor="let test of tests; let i = index" -->
-                            <td data-label="Test Name">{{ test.testName }}</td>
-                            <td data-label="Test Type">{{ test.testType }}</td>
-                            <td data-label="Subject">{{ test.subject }}</td>
-                            <td data-label="Test Date">{{ test.testDate }}</td>
-                            <td data-label="Duration">{{ test.testDuration
-                              }}</td>
-                            <td data-label="Score">{{ test.score }}</td>
-                            <td data-label="Actions">
-                              <button
-                              mat-icon-button
-                              color="primary"
-                              (click)="updateTest(test.id)">
-                              <mat-icon>
-                                <app-feather-icons
-                                  [icon]="'edit'"
-                                  [class]="'tbl-fav-edit'"></app-feather-icons>
-                              </mat-icon>
-                            </button>
-                              <button
-                                mat-icon-button
-                                color="warn"
-                                (click)="deleteTest(test.id)">
-                                <mat-icon>
-                                  <app-feather-icons
-                                    [icon]="'trash-2'"
-                                    [class]="'tbl-fav-delete'"></app-feather-icons>
-                                </mat-icon>
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+
+                      <!-- Conditional rendering based on data length -->
+                      <div *ngIf="response.length > 0; else noRecords">
+                        <!-- Test Grid Table -->
+                        <table class="table table-hover table-responsive">
+                          <thead class="thead-light">
+                            <tr>
+                              <th>Test Name</th>
+                              <th>Test Type</th>
+                              <th>Subject</th>
+                              <th>Test Date</th>
+                              <th>Duration</th>
+                              <th>Score</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let test of response; let i = index">
+                              <td data-label="Test Name">{{ test.testName
+                                }}</td>
+                              <td data-label="Test Type">{{ test.testType
+                                }}</td>
+                              <td data-label="Subject">{{ test.subject }}</td>
+                              <td data-label="Test Date">{{ test.testDate
+                                }}</td>
+                              <td data-label="Duration">{{ test.testDuration
+                                }}</td>
+                              <td data-label="Score">{{ test.score }}</td>
+                              <td data-label="Actions">
+                                <button mat-icon-button color="primary"
+                                  (click)="updateTest(test.id)">
+                                  <mat-icon>
+                                    <app-feather-icons [icon]="'edit'"
+                                      [class]="'tbl-fav-edit'"></app-feather-icons>
+                                  </mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn"
+                                  (click)="deleteTest(test.id)">
+                                  <mat-icon>
+                                    <app-feather-icons [icon]="'trash-2'"
+                                      [class]="'tbl-fav-delete'"></app-feather-icons>
+                                  </mat-icon>
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <!-- No Records Found Template -->
+                      <ng-template #noRecords>
+                        <div class="text-center mt-4">
+                          <p>No records found.</p>
+                        </div>
+                      </ng-template>
                     </div>
                   </div>
                 </div>
 
                 <ng-template matStepLabel>Test</ng-template>
                 <div class="program-info-container">
-                
+
                   <!-- class="header" -->
                   <h2><strong>Add Test</strong></h2>
-                  
-                
-                <div class="program-info">
-                  <div class="body">
-                <form [formGroup]="testForm" (ngSubmit)="onTestSubmit()">
-                  
-                    
-                      <div class="row">
-                        <div
-                          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                          <mat-form-field class="example-full-width"
-                            appearance="fill">
-                            <mat-label>Test Name</mat-label>
-                            <input matInput formControlName="testName">
-                            <mat-icon matSuffix>assignment</mat-icon>
-                          </mat-form-field>
+
+                  <div class="program-info">
+                    <div class="body">
+                      <form [formGroup]="testForm" (ngSubmit)="onTestSubmit()">
+
+                        <div class="row">
+                          <div
+                            class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width"
+                              appearance="fill">
+                              <mat-label>Test Name</mat-label>
+                              <input matInput formControlName="testName">
+                              <mat-icon matSuffix>assignment</mat-icon>
+                            </mat-form-field>
+                          </div>
+
+                          <div
+                            class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width"
+                              appearance="fill">
+                              <mat-label>Test Type</mat-label>
+                              <input matInput formControlName="testType">
+                              <mat-icon matSuffix>category</mat-icon>
+                            </mat-form-field>
+                          </div>
+
+                          <div
+                            class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width"
+                              appearance="fill">
+                              <mat-label>Subject</mat-label>
+                              <input matInput formControlName="subject">
+                              <mat-icon matSuffix>subject</mat-icon>
+                            </mat-form-field>
+                          </div>
+
+                          <div
+                            class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width"
+                              appearance="fill">
+                              <mat-label>Test Date</mat-label>
+                              <input matInput type="date"
+                                formControlName="testDate">
+                              <mat-icon matSuffix>event</mat-icon>
+                            </mat-form-field>
+                          </div>
+
+                          <div
+                            class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width"
+                              appearance="fill">
+                              <mat-label>Test Duration (in minutes)</mat-label>
+                              <input matInput type="number"
+                                formControlName="testDuration">
+                              <mat-icon matSuffix>timer</mat-icon>
+                            </mat-form-field>
+                          </div>
+
+                          <div
+                            class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <mat-form-field class="example-full-width"
+                              appearance="fill">
+                              <mat-label>Score</mat-label>
+                              <input matInput type="number"
+                                formControlName="score">
+                              <mat-icon matSuffix>grade</mat-icon>
+                            </mat-form-field>
+                          </div>
+
                         </div>
 
-                        <div
-                          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                          <mat-form-field class="example-full-width"
-                            appearance="fill">
-                            <mat-label>Test Type</mat-label>
-                            <input matInput formControlName="testType">
-                            <mat-icon matSuffix>category</mat-icon>
-                          </mat-form-field>
-                        </div>
-
-                        <div
-                          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                          <mat-form-field class="example-full-width"
-                            appearance="fill">
-                            <mat-label>Subject</mat-label>
-                            <input matInput formControlName="subject">
-                            <mat-icon matSuffix>subject</mat-icon>
-                          </mat-form-field>
-                        </div>
-
-                        <div
-                          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                          <mat-form-field class="example-full-width"
-                            appearance="fill">
-                            <mat-label>Test Date</mat-label>
-                            <input matInput type="date"
-                              formControlName="testDate">
-                            <mat-icon matSuffix>event</mat-icon>
-                          </mat-form-field>
-                        </div>
-
-                        <div
-                          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                          <mat-form-field class="example-full-width"
-                            appearance="fill">
-                            <mat-label>Test Duration (in minutes)</mat-label>
-                            <input matInput type="number"
-                              formControlName="testDuration">
-                            <mat-icon matSuffix>timer</mat-icon>
-                          </mat-form-field>
-                        </div>
-
-                        <div
-                          class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                          <mat-form-field class="example-full-width"
-                            appearance="fill">
-                            <mat-label>Score</mat-label>
-                            <input matInput type="number"
-                              formControlName="score">
-                            <mat-icon matSuffix>grade</mat-icon>
-                          </mat-form-field>
-                        </div>
-
-                      
-                    </div>
-                  
-                  <div class="button-container">
-                    <button mat-raised-button matStepperPrevious
-                      color="warn" class="me-2" type="button">
-                      Back
-                    </button>
-                    <button mat-raised-button color="primary" class="me-2"
-                      type="submit" matStepperNext>{{ isEditsMode ? 'Update' : 'Next' }}</button>
-                    <!-- <button mat-raised-button color="warn" type="button"
+                        <div class="button-container">
+                          <button mat-raised-button matStepperPrevious
+                            color="warn" class="me-2" type="button">
+                            Back
+                          </button>
+                          <button mat-raised-button color="primary" class="me-2"
+                            type="submit" matStepperNext>{{ isEditsMode ?
+                            'Update' : 'Next' }}</button>
+                          <!-- <button mat-raised-button color="warn" type="button"
                       (click)="onTestReset()">Reset</button> -->
-                      
+
+                        </div>
+                      </form>
+                    </div>
                   </div>
-                </form>
                 </div>
-                </div>
-                </div>
-                
+
               </mat-step>
 
               <mat-step>
@@ -765,11 +830,12 @@
                 <p>Your application has been processed successfully.</p>
                 <p>Click **Apply** to finalize your application.</p>
                 <div>
-                  <button mat-raised-button matStepperPrevious color="warn" class="msr-2">Back</button>
-                  <button mat-raised-button color="primary" (click)="openConfirmationDialog()">Apply</button>
+                  <button mat-raised-button matStepperPrevious color="warn"
+                    class="msr-2">Back</button>
+                  <button mat-raised-button color="primary"
+                    (click)="openConfirmationDialog()">Apply</button>
                 </div>
               </mat-step>
-              
 
             </mat-horizontal-stepper>
           </div>

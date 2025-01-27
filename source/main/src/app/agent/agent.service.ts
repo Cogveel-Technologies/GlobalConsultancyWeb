@@ -53,46 +53,47 @@ export class AgentService {
   }
   
   
-  // getApplications(params: { 
-  //   limit: number; 
-  //   orderBy: string; 
-  //   sortExpression: string; 
-  //   currentPage: number; 
-  //   searchText?: string; // Updated to match the `getStudentsList` API
-  //   isDeleted?: boolean; 
-  //   isAdmin: boolean; // Explicitly included as in `getStudentsList`
-  // }): Observable<PaginatedResponse<ApplicationModel>> {
-  //   // Construct the base URL with consistent parameter naming
-  //   let url = `${this.apiUrl}/StudentApplication?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}&isAdmin=${params.isAdmin}`;
-    
-  //   // Append optional parameters if provided
-  //   if (params.searchText) {
-  //     url += `&searchText=${params.searchText}`;
-  //   }
-  //   if (params.isDeleted !== undefined) {
-  //     url += `&isDeleted=${params.isDeleted}`;
-  //   }
   
-  //   return this.http.get<PaginatedResponse<ApplicationModel>>(url).pipe(
-  //     // Debugging: Log the constructed URL and response
-  //     tap(() => console.log('API URL:', url)),
-  //     tap(response => console.log('Fetched applications:', response)),
-  //     catchError(this.handleError<PaginatedResponse<ApplicationModel>>('getApplications', {
-  //       data: [],
-  //       pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
-  //       status: 0,
-  //       message: ''
-  //     }))
-  //   );
-  // }
    // Get a list of students with pagination, sorting, and searching
-   getApplications(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean, isAdmin: boolean }): Observable<PaginatedResponse<ApplicationModel>> {
+//    getApplications(params: { limit: number, orderBy: string, sortExpression: string, currentPage: number, searchTerm?: string, isDeleted?: boolean, isAdmin: boolean }): Observable<PaginatedResponse<ApplicationModel>> {
+//   let url = `${this.apiUrl}/StudentApplication?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}&isAdmin=${params.isAdmin}`;
+//   if (params.searchTerm) {
+//       url += `&searchText=${params.searchTerm}`;
+//   }
+//   if (params.isDeleted !== undefined) {
+//       url += `&isDeleted=${params.isDeleted}`;
+//   }
+
+//   return this.http.get<PaginatedResponse<ApplicationModel>>(url).pipe(
+//       tap(response => console.log('Fetched Applications:', response)),  // Log the full response
+//       catchError(this.handleError<PaginatedResponse<ApplicationModel>>('getApplications', {
+//           data: [], 
+//           pageInfo: { currentPage: 1, totalPages: 1, totalRecords: 0 },
+//           status: 0, 
+//           message: '' 
+//       }))
+//   );
+// }
+getApplications(params: { 
+  limit: number; 
+  orderBy: string; 
+  sortExpression: string; 
+  currentPage: number; 
+  searchTerm?: string; 
+  isDeleted?: boolean; 
+  isAdmin: boolean; 
+  studentId?: string; // Add studentId as an optional parameter
+}): Observable<PaginatedResponse<ApplicationModel>> {
   let url = `${this.apiUrl}/StudentApplication?limit=${params.limit}&orderBy=${params.orderBy}&sortExpression=${params.sortExpression}&currentPage=${params.currentPage}&isAdmin=${params.isAdmin}`;
+  
   if (params.searchTerm) {
       url += `&searchText=${params.searchTerm}`;
   }
   if (params.isDeleted !== undefined) {
       url += `&isDeleted=${params.isDeleted}`;
+  }
+  if (params.studentId) {
+      url += `&studentId=${params.studentId}`; // Append studentId if provided
   }
 
   return this.http.get<PaginatedResponse<ApplicationModel>>(url).pipe(
@@ -116,9 +117,34 @@ export class AgentService {
       })
     );
   }
-  
+  // get application by application id
+  getApplicationById(applicationId: number): Observable<any> {
+    // Use the correct URL structure based on the API
+    const url = `${this.apiUrl}/StudentApplication/Id?Id=${applicationId}`;
+    
+    return this.http.get<any>(url).pipe(
+      tap(response => console.log('Fetched Application Details:', response)), // Log for debugging
+      // catchError(this.handleError<any>('getApplicationById')) // Error handling
+    );
+  }
+//  
 
   
+
+updateApplicationStatus(applicationId: number, status: { status: string }): Observable<any> {
+  const apiUrl = `${this.apiUrl}/StudentApplication/${applicationId}`;  // Match casing from Swagger
+  return this.http.patch<any>(apiUrl, status).pipe(
+    tap((response) => {
+      console.log('Update status API response:', response);
+    }),
+    catchError((error) => {
+      console.error('Error updating status entry:', error);
+      return throwError(() => error);
+    })
+  );
+}
+
+
 
   // test rralted apis
    

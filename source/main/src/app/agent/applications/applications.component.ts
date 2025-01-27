@@ -15,6 +15,7 @@ import { StudentDocument } from '../models/studentDocument.model';
 import { of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 
 
 @Component({
@@ -45,6 +46,7 @@ export class ApplicationsComponent implements OnInit {
       title: 'Student Application',
       items: ['Search'],
       active: 'Application',
+       activeRoute: `${this.router.url}`
     },
   ];
 
@@ -58,6 +60,9 @@ export class ApplicationsComponent implements OnInit {
   studentData: Student | null = null;
   countries: any[] = [];
   iseditingmode = false;
+  mainRoute: string
+  today = new Date().toISOString().split('T')[0];
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -65,6 +70,7 @@ export class ApplicationsComponent implements OnInit {
     private agentService: AgentService,
     private router: Router,
     private dialog: MatDialog,
+      private  consultancyService: ConsultancyService
   ) {
    
     // Retrieve the selected ID in the constructor
@@ -77,6 +83,11 @@ export class ApplicationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+     // for breadcrum route
+     this.mainRoute = this.router.url;
+    
+
+     this.consultancyService.activeRoute.next(this.mainRoute)
     this.loadUploadedDocument();
     this.selectedRecord = this.agentService.getSelectedRecord();
     this.fetchStudentById(this.selectedId);
@@ -297,6 +308,7 @@ export class ApplicationsComponent implements OnInit {
         this.agentService.updateStudentDocument(this.documentToEditId, formData).subscribe(
           response => {
             console.log('Update Success', response);
+            this.documentForm.reset();
           },
           error => {
             console.log('Update Error', error);
@@ -310,6 +322,7 @@ export class ApplicationsComponent implements OnInit {
           response => {
             console.log('Submit Success', response);
             // window.location.reload();
+            
             this.loadUploadedDocument();  // Reload the document after a successful upload
           },
           error => {
@@ -652,7 +665,7 @@ applyApplication(): void {
   this.agentService.finalizeApplication(applicationData).subscribe({
     next: (response) => {
       console.log('Application finalized successfully:', response);
-      alert('Your application has been successfully processed.');
+      // alert('Your application has been successfully processed.');
       this.router.navigate(['/agent/application-list']);
     },
     error: (error) => {

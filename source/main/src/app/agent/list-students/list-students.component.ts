@@ -23,6 +23,7 @@ export class ListstudentsComponent implements OnInit {
       title: 'Students List',
       items: ['Agent'],
       active: 'Students',
+      activeRoute: `${this.router.url}`
     },
   ];
   students$: Observable<Student[]>;
@@ -46,7 +47,7 @@ export class ListstudentsComponent implements OnInit {
 
   // setting flag for hiding buttons
   showOnlyApplyButton = false;
-
+  mainRoute: string
   constructor(
     private router: Router,
     private agentService: AgentService,
@@ -60,6 +61,11 @@ export class ListstudentsComponent implements OnInit {
   }
 
   ngOnInit() {
+    // for breadcrum route
+    this.mainRoute = this.router.url;
+    
+
+    this.consultancyService.activeRoute.next(this.mainRoute)
      //delete
      this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
       if (res) {
@@ -82,22 +88,25 @@ export class ListstudentsComponent implements OnInit {
       const origin = params['origin']; // Fetch the origin parameter
 
       if (origin === 'admission') {
-
+        // this.consultancyService.activeRoute.next(this.mainRoute)
         this.breadscrums = [
           {
             title: 'Students List',
             items: ['Search'],
             active: 'Students',
+             activeRoute: `${this.router.url}`
           },
         ];
+        
       }
       else if (origin === 'application') {
-      
+        // this.consultancyService.activeRoute.next(this.mainRoute)
         this.breadscrums = [
           {
             title: 'Students List',
             items: ['Applications'],
             active: 'Students',
+             activeRoute: `${this.router.url}`
           },
         ];
         this.agentService.setShowOnlyApplyButton(true);

@@ -1,32 +1,36 @@
+
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { switchMap, tap, map, throttleTime, distinctUntilChanged, startWith } from 'rxjs/operators';
 import * as CryptoJS from 'crypto-js';
-import { AgentService } from '../agent.service';
-import { ApplicationModel } from '../models/applicationModel';
+
+import { AgentService } from 'app/agent/agent.service';
+
+import { ApplicationModel } from 'app/agent/models/applicationModel';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '@shared/components/pagination/pagination.component';
 import { ConsultancyService } from 'app/consultancy/consultancy-services/consultancy.service';
 
 @Component({
-  selector: 'app-application-list',
-  templateUrl: './application-list.component.html',
-  styleUrls: ['./application-list.component.scss'],
+  selector: 'app-my-applications',
+  templateUrl: './my-applications.component.html',
+  styleUrls: ['./my-applications.component.scss']
 })
-export class ApplicationListComponent implements OnInit, OnDestroy {
+export class MyApplicationsComponent implements OnInit, OnDestroy {
   breadscrums = [
     {
       title: 'Applications List',
-      items: ['Agent'],
+      items: ['Student'],
       active: 'Applications',
       activeRoute: `${this.router.url}`
     },
   ];
   
-  statusOptions = ['Accepted', 'In Progress', 'Completed', 'Cancelled', 'Pending'];
+
   applications$: Observable<ApplicationModel[]>; // Use ApplicationModel
   totalApplications = 0;
   showOnlyApplyButton = false;
@@ -53,27 +57,28 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-     // for breadcrum route
-     this.mainRoute = this.router.url;
-    
-
-     this.consultancyService.activeRoute.next(this.mainRoute)
-     //delete
-     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
+    const studentId = localStorage.getItem('id'); // Retrieve the student ID from local storage
+  
+    // For breadcrumb route
+    this.mainRoute = this.router.url;
+  
+    this.consultancyService.activeRoute.next(this.mainRoute);
+  
+    // Delete subscription
+    this.consultancyService.sendDeleteIdtoPC.subscribe((res) => {
       if (res) {
         this.agentService.deleteApplication(res).subscribe({
-      next: () => {
-        // this.deleteOperation = true
-        this.refreshApplications();
-        // this.snackBar.open('Role deleted successfully', 'Close', { duration: 3000 });
-        this.consultancyService.sendDeleteIdtoPC.next(null);
-      },
-      error: () => {
-        this.snackBar.open('Error deleting role', 'Close', { duration: 3000 });
+          next: () => {
+            this.refreshApplications();
+            this.consultancyService.sendDeleteIdtoPC.next(null);
+          },
+          error: () => {
+            this.snackBar.open('Error deleting role', 'Close', { duration: 3000 });
+          },
+        });
       }
     });
-      }
-    })
+  
     // Combine search, pagination, and sorting
     this.applications$ = combineLatest([
       this.searchControl.valueChanges.pipe(
@@ -90,32 +95,35 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       this.currentPageSubject.asObservable(),
       this.sortFieldSubject.asObservable(),
       this.sortDirectionSubject.asObservable(),
-    ]).pipe(
-      switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
-        console.log('Fetching applications with:', {
-          searchTerm,
-          pageSize,
-          currentPage,
-          sortField,
-          sortDirection,
-        }); // Debug log
-        return this.agentService.getApplications({
-          limit: pageSize,
-          orderBy: sortField,
-          sortExpression: sortDirection,
-          currentPage: currentPage,
-          searchTerm: searchTerm,
-          isDeleted: false,
-          isAdmin: false,
-        });
-      }),
-      tap((response) => {
-        this.totalApplications = response.pageInfo?.totalRecords || 0;
-        this.totalPages = response.pageInfo?.totalPages || 1;
-        this.currentPage = response.pageInfo?.currentPage || 1;
-      }),
-      map((response) => response.data as ApplicationModel[])
-    );
+    ])
+      .pipe(
+        switchMap(([searchTerm, pageSize, currentPage, sortField, sortDirection]) => {
+          console.log('Fetching applications with:', {
+            studentId,
+            searchTerm,
+            pageSize,
+            currentPage,
+            sortField,
+            sortDirection,
+          }); // Debug log
+          return this.agentService.getApplications({
+            studentId,
+            limit: pageSize,
+            orderBy: sortField,
+            sortExpression: sortDirection,
+            currentPage: currentPage,
+            searchTerm: searchTerm,
+            isDeleted: false,
+            isAdmin: false,
+          });
+        }),
+        tap((response) => {
+          this.totalApplications = response.pageInfo?.totalRecords || 0;
+          this.totalPages = response.pageInfo?.totalPages || 1;
+          this.currentPage = response.pageInfo?.currentPage || 1;
+        }),
+        map((response) => response.data as ApplicationModel[])
+      );
   
     // Trigger initial refresh
     this.refreshApplications();
@@ -153,7 +161,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   viewApplication(applicationId: number) {
-    this.router.navigate(['/agent/viewany-application'], {
+    this.router.navigate(['/student/view-application'], {
+      
       queryParams: { id: applicationId },
     });
   }
@@ -187,63 +196,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       this.router.navigate(['/agent/admission'])
       console.log('Add Application button clicked');
     }
-    // 
-     // Method to filter the dropdown options based on current status
-     onStatusChange(event: Event, applicationId: number): void {
-      const selectElement = event.target as HTMLSelectElement;
-      const selectedValue = selectElement.value;
     
-      if (selectedValue) {
-        console.log(`Updating application ${applicationId} to status: ${selectedValue}`);
-        this.updateStatus(applicationId, selectedValue);
-      }
-    }
-    
-    updateStatus(applicationId: number, newStatus: string): void {
-      // Call the service method with the correct status object format
-      this.agentService.updateApplicationStatus(applicationId, { status: newStatus }).subscribe({
-        next: (response) => {
-          console.log(`Status of application ${applicationId} updated to: ${newStatus}`, response);
-          // Optionally refresh the applications list after updating
-          this.refreshApplications();
-        },
-        error: (error) => {
-          console.error('Failed to update status:', error);
-        },
-      });
-    }
-    
-  
-    filterStatusOptions(currentStatus: string): string[] {
-      const allStatusOptions = ['Pending', 'Accepted', 'In Progress', 'Completed', 'Cancelled','Rejected'];
-      
-      let filteredOptions: string[];
-    
-      // Filtering logic based on currentStatus
-      switch (currentStatus) {
-        case 'Pending':
-          filteredOptions = allStatusOptions.filter(option => option !== 'Pending');
-          break;
-        case 'Accepted':
-          filteredOptions = allStatusOptions.filter(option => option !== 'Pending' && option !== 'Accepted');
-          break;
-        case 'In Progress':
-          filteredOptions = allStatusOptions.filter(option => option !== 'Accepted' && option !== 'Pending' && option !== 'In Progress' && option !== 'Cancelled');
-          break;
-        case 'Completed':
-          case 'Rejected':
-        case 'Cancelled':
-          filteredOptions = []; // Exclude all options
-          break;
-        default:
-          filteredOptions = allStatusOptions;
-          break;
-      }
-    
-      return filteredOptions;
-    }
-  
-  
   ngOnDestroy() {
     this.pageSizeSubject.complete();
     this.currentPageSubject.complete();
