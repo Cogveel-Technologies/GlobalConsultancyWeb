@@ -172,7 +172,7 @@
             </table>
 
             <!-- Show pagination only if institutesList data exists -->
-            <app-pagination *ngIf="(universities | async)?.length > 0" [pageSize]="defaultData.pageSize"
+            <app-pagination *ngIf="isInstitutes" [pageSize]="defaultData.pageSize"
               (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
             </app-pagination>
           </div>

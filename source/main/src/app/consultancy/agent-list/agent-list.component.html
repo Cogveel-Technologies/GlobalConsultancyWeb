@@ -48,7 +48,7 @@
           <div class="body table-responsive">
             <table class="table table-hover table-responsive">
               <!-- Conditionally display table header if there are agents -->
-              <thead *ngIf="(agents | async)?.length > 0">
+              <thead *ngIf="isAgents">
                 <tr>
                   <th>
                     <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
@@ -81,7 +81,7 @@
 
               <!-- Handle no data case -->
               <tbody>
-                <tr *ngIf="(agents | async)?.length === 0">
+                <tr *ngIf="!isAgents">
                   <td colspan="5" class="text-center">No Data Found</td>
                 </tr>
 
@@ -138,7 +138,7 @@
             </table>
 
             <!-- Show pagination only if agents data exists -->
-            <app-pagination *ngIf="(agents | async)?.length > 0" [pageSize]="defaultData.pageSize"
+            <app-pagination *ngIf="isAgents" [pageSize]="defaultData.pageSize"
               (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
             </app-pagination>
           </div>

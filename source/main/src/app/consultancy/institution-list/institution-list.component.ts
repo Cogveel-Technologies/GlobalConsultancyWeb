@@ -66,6 +66,7 @@ export class InstitutionListComponent {
   instituteProgramState: boolean = false;
   mainRoute: string
   deleteId: number
+  isInstitutes:boolean;
 
 
 
@@ -102,10 +103,6 @@ export class InstitutionListComponent {
               search: true 
             });
             this.consultancyService.sendDeleteIdtoPC.next(null);
-          },
-          error: (error) => {
-            // Handle error appropriately
-            console.error('Failed to delete institute:', error);
           }
         }));
       }
@@ -230,7 +227,13 @@ export class InstitutionListComponent {
             this.defaultData.pageSize = +pageRelated.pageSize;
             this.defaultData.sortExpression = sort.direction;
             this.defaultData.OrderBy = sort.field;
-            return this.getInstitutes(this.defaultData);
+            return this.getInstitutes(this.defaultData).pipe(tap(res =>{
+              if(res.length){
+                this.isInstitutes = true
+              }else{
+                this.isInstitutes = false
+              }
+            }));
           }
         }
         return of();

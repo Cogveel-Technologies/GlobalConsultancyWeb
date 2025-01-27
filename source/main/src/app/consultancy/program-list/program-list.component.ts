@@ -10,7 +10,6 @@ import { ConsultancyService } from '../consultancy-services/consultancy.service'
 import { PageEvent } from '@angular/material/paginator';
 import { distinctUntilChanged } from 'rxjs';
 import { AdminService } from 'app/admin/admin.service';
-import { T } from '@angular/cdk/keycodes';
 
 
 
@@ -62,6 +61,7 @@ export class ProgramListComponent {
   programEditState: boolean = false
   consultancyPrograms: boolean = false
   consultancyName: string
+  isPrograms:boolean
 
 
 
@@ -237,7 +237,13 @@ export class ProgramListComponent {
             this.defaultData.sortExpression = sorting.direction;
             this.defaultData.OrderBy = sorting.field;
             console.log(this.defaultData)
-            return this.getPrograms(this.defaultData)
+            return this.getPrograms(this.defaultData).pipe(tap(res=>{
+              if(res.length){
+                this.isPrograms = true
+              }else{
+                this.isPrograms = false
+              }
+            }))
           }
           return of()
         }))

@@ -60,7 +60,7 @@
                 <div class="card">
                     <div class="body table-responsive">
                         <table class="table table-hover table-responsive">
-                            <thead *ngIf="(programs | async)?.length > 0">
+                            <thead *ngIf="isPrograms">
                                 <tr>
                                     <th>
                                         <app-sorting [sortField]="defaultData.OrderBy"
@@ -91,7 +91,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngIf="(programs | async)?.length === 0">
+                                <tr *ngIf="!isPrograms">
                                     <td colspan="5" class="text-center">No Data Found</td>
                                 </tr>
                                 <tr *ngFor="let program of (programs | async)">
@@ -167,7 +167,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <app-pagination *ngIf="(programs | async)?.length > 0" [pageSize]="defaultData.pageSize"
+                        <app-pagination *ngIf="isPrograms" [pageSize]="defaultData.pageSize"
                             (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
                         </app-pagination>
                     </div>

@@ -52,7 +52,7 @@
       <div class="card">
         <div class="body table-responsive">
           <table class="table table-hover table-responsive">
-            <thead *ngIf="(sessions | async)?.length > 0">
+            <thead *ngIf="isSessions">
               <tr>
                 <th>
                   <app-sorting [sortField]="defaultData.OrderBy" [sortDirection]="defaultData.sortExpression"
@@ -77,7 +77,7 @@
 
             <tbody>
               <!-- Display No Data Found if there are no institutes or programs -->
-              <tr *ngIf="(sessions | async)?.length === 0">
+              <tr *ngIf="!isSessions">
                 <td colspan="2" class="text-center">No Data Found</td>
               </tr>
 
@@ -128,7 +128,7 @@
           </table>
 
           <!-- Conditionally show pagination -->
-          <app-pagination *ngIf="(sessions | async)?.length > 0" [pageSize]="defaultData.pageSize"
+          <app-pagination *ngIf="isSessions" [pageSize]="defaultData.pageSize"
             (pageChange)="onPageChange($event)" [length]="records" [pageIndex]="currentPageIndex">
           </app-pagination>
         </div>

@@ -55,6 +55,7 @@ export class SessionListComponent {
   sessionEditState: boolean;
   sessionsOfInstitute: boolean = false;
   instituteSessions: boolean;
+  isSessions: boolean;
 
 
 
@@ -82,14 +83,14 @@ export class SessionListComponent {
   ngOnInit() {
     this.consultancyService.activeRoute.next(this.router.url)
 
-    
+
     // delete
     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
       if (res) {
-         this.subscription.add(this.consultancyApiService.deleteSession(res).subscribe(() => {
-        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
-        this.consultancyService.sendDeleteIdtoPC.next(null)
-      }));
+        this.subscription.add(this.consultancyApiService.deleteSession(res).subscribe(() => {
+          this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
+          this.consultancyService.sendDeleteIdtoPC.next(null)
+        }));
       }
     })
 
@@ -165,13 +166,10 @@ export class SessionListComponent {
         console.log(instituteId);
         console.log(this.previousInstituteId)
         if ((instituteId || instituteId === 0) && this.previousInstituteId !== instituteId) {
-          console.log("TTTTTTTTTTTTTHHHHHHHHHH")
-          console.log(instituteId)
           this.previousInstituteId = instituteId
           if (instituteId) {
             this.defaultData.InstituteId = String(instituteId)
           } else {
-            console.log("PPPPPPP")
             this.defaultData.InstituteId = '';
             this.defaultData.ProgramId = '';
             this.programs = []
@@ -195,7 +193,13 @@ export class SessionListComponent {
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field;
           console.log(this.defaultData)
-          return this.getSessions(this.defaultData)
+          return this.getSessions(this.defaultData).pipe(tap(res => {
+            if (res.length) {
+              this.isSessions = true
+            } else {
+              this.isSessions = false
+            }
+          }))
         } else {
           return of()
         }

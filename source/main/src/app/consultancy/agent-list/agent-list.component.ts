@@ -47,6 +47,7 @@ export class AgentListComponent {
   consultancyControl = new FormControl('all');
   consultancies: Observable<[{ id: number, consultancyName: string }]> | any;
   agentEditorViewState: boolean;
+  isAgents:boolean
 
   
   breadscrums = [
@@ -120,7 +121,14 @@ export class AgentListComponent {
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field
           console.log(this.defaultData)
-          return this.getAgents(this.defaultData)
+          return this.getAgents(this.defaultData).pipe(tap(res=> {
+            console.log(this.isAgents)
+            if(res.length){
+              this.isAgents = true
+            }else{
+              this.isAgents  = false
+            }
+          }))
         }
         return of()
       }))
