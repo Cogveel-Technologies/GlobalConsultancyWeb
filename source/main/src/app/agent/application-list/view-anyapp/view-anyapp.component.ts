@@ -13,14 +13,27 @@ import { ConsultancyService } from 'app/consultancy/consultancy-services/consult
   styleUrls: ['./view-anyapp.component.scss']
 })
 export class ViewAnyappComponent implements OnInit {
+  // breadscrums = [
+  //   {
+  //     title: 'Applications List',
+  //     items: ['Agent'],
+  //     active: 'Applications',
+  //     activeRoute: `${this.router.url}`
+  //   },
+  // ];
   breadscrums = [
     {
-      title: 'Applications List',
-      items: ['Agent'],
-      active: 'Applications',
-      activeRoute: `${this.router.url}`
+      title: 'Application List',
+      items: [
+        { label: 'Agent', route: 'agent' },
+        { label: 'Application List', route: 'agent/application-list' },
+        
+      ],
+      active: 'View Application',
     },
+   
   ];
+  
   
   applicationId!: number;
   applicationDetails: any;
@@ -64,5 +77,8 @@ export class ViewAnyappComponent implements OnInit {
   }
   deleteApplication(){
     
+  }
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 }

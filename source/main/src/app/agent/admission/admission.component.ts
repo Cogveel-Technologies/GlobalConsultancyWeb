@@ -69,6 +69,7 @@ export class AdmissionComponent implements OnInit {
 
     this.searchForm = this.fb.group({
       programId: this.programCtrl,
+      
       sessionId: this.sessionCtrl,
       intakeYear: this.intakeYearCtrl,
       countryId: this.countryCtrl,

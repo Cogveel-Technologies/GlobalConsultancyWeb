@@ -109,7 +109,7 @@
                   </td>
                 </tr>
                  <!-- Show a message when there are no users found -->
-                 <tr *ngIf="(users$ | async)?.length === 0">
+                 <tr *ngIf="!isUsers">
                   <td colspan="7" class="text-center">No Users found.</td>
                 </tr>
               </tbody>

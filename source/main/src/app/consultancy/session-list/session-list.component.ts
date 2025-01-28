@@ -9,7 +9,7 @@ import { ConsultancyDetailsOptions } from '../consultancy-models/data.consultanc
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { AdminService } from 'app/admin/admin.service';
-
+ 
 @Component({
   selector: 'app-session-list',
   templateUrl: './session-list.component.html',
@@ -55,12 +55,13 @@ export class SessionListComponent {
   sessionEditState: boolean;
   sessionsOfInstitute: boolean = false;
   instituteSessions: boolean;
-
-
-
-
-
-
+  isSessions: boolean;
+ 
+ 
+ 
+ 
+ 
+ 
   // get sessions
   getSessions(data: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getSession(data).pipe(
@@ -77,26 +78,26 @@ export class SessionListComponent {
         return response['data']
       }))
   }
-
-
+ 
+ 
   ngOnInit() {
     this.consultancyService.activeRoute.next(this.router.url)
-
-    
+ 
+ 
     // delete
     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
       if (res) {
-         this.subscription.add(this.consultancyApiService.deleteSession(res).subscribe(() => {
-        this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
-        this.consultancyService.sendDeleteIdtoPC.next(null)
-      }));
+        this.subscription.add(this.consultancyApiService.deleteSession(res).subscribe(() => {
+          this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, search: true })
+          this.consultancyService.sendDeleteIdtoPC.next(null)
+        }));
       }
     })
-
+ 
     this.consultancyService.instituteSessions.subscribe(res => {
       this.instituteSessions = res
     })
-
+ 
     this.consultancyService.intakeSessionState.subscribe(res => {
       if (res) {
         this.consultancyService.editSessionCurrentPageAndPageSize.subscribe(res => {
@@ -105,7 +106,7 @@ export class SessionListComponent {
         })
       }
     })
-
+ 
     if (this.instituteSessions) {
       // get session of particular institute
       this.consultancyService.getSessionsOfInstitute.subscribe(res => {
@@ -118,14 +119,14 @@ export class SessionListComponent {
         }
       })
     }
-
-
+ 
+ 
     this.consultancyService.sessionEditState.subscribe(res => {
       console.log(res)
       this.sessionEditState = res
     })
-
-
+ 
+ 
     if (this.sessionEditState) {
       this.consultancyService.editSessionCurrentPageAndPageSize.subscribe(res => {
         console.log(res)
@@ -146,8 +147,8 @@ export class SessionListComponent {
         return res
       })).subscribe(res => this.institutes = res)
     }
-
-
+ 
+ 
     // get institutes
     if (!this.sessionsOfInstitute) {
       console.log("entered")
@@ -156,8 +157,8 @@ export class SessionListComponent {
       this.institute$.next(0)
       this.search$.next(true)
     }
-
-
+ 
+ 
     this.sessions = combineLatest([this.institute$, this.program$, this.searchTerm$, this.pagination$, this.sorting$, this.search$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(),
@@ -165,23 +166,20 @@ export class SessionListComponent {
         console.log(instituteId);
         console.log(this.previousInstituteId)
         if ((instituteId || instituteId === 0) && this.previousInstituteId !== instituteId) {
-          console.log("TTTTTTTTTTTTTHHHHHHHHHH")
-          console.log(instituteId)
           this.previousInstituteId = instituteId
           if (instituteId) {
             this.defaultData.InstituteId = String(instituteId)
           } else {
-            console.log("PPPPPPP")
             this.defaultData.InstituteId = '';
             this.defaultData.ProgramId = '';
             this.programs = []
           }
           console.log(this.defaultData)
         }
-
+ 
         if (search) {
           console.log(this.defaultData)
-
+ 
           if (searchTerm) {
             this.defaultData.currentPage = 1;
             this.currentPageIndex = 0;
@@ -189,30 +187,36 @@ export class SessionListComponent {
             this.defaultData.currentPage = pageRelated.pageIndex;
             this.currentPageIndex = pageRelated.pageIndex - 1;
           }
-
+ 
           this.defaultData.searchText = searchTerm;
           this.defaultData.pageSize = pageRelated.pageSize;
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field;
           console.log(this.defaultData)
-          return this.getSessions(this.defaultData)
+          return this.getSessions(this.defaultData).pipe(tap(res => {
+            if (res.length) {
+              this.isSessions = true
+            } else {
+              this.isSessions = false
+            }
+          }))
         } else {
           return of()
         }
       }))
   }
-
+ 
   onProgramChange(event: any) {
     this.search$.next(false);
     this.program$.next(event)
   }
-
+ 
   onSearch() {
     this.currentPageIndex = 0;
     this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1 })
     this.search$.next(true)
   }
-
+ 
   onDeleteSession(id: number) {
     this.consultancyService.deletePopUpState.subscribe(res => {
       if (res) {
@@ -222,39 +226,39 @@ export class SessionListComponent {
       }
     })
   }
-
+ 
   onInstituteSelected(event: any) {
     this.instituteId = event
     this.search$.next(false);
     this.institute$.next(event)
   }
-
+ 
   // page event
   onPageChange(event: PageEvent) {
     this.currentPageIndex = event.pageIndex
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1 })
   }
-
+ 
   // sort event
   onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
     this.sorting$.next({ field: field, direction: direction })
   }
-
+ 
   addSession() {
     this.router.navigate(["consultancy/register-session"])
   }
-
+ 
   onIntakes(sessionId: number, instituteName: string, programName: string, sessionName: string, instituteId: number) {
     this.consultancyService.editSessionCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
     this.consultancyService.getIntakesofSession.next({ sessionId, instituteName, programName, sessionName, instituteId })
     this.router.navigate(["consultancy/intake-list"])
   }
-
-
+ 
+ 
   onEditorViewSession() {
     this.consultancyService.editSessionCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
   }
-
+ 
   ngOnDestroy() {
     this.consultancyService.showList.next(false);
     this.consultancyService.sessionEditState.next(false)
@@ -263,3 +267,4 @@ export class SessionListComponent {
     this.subscription.unsubscribe()
   }
 }
+ 

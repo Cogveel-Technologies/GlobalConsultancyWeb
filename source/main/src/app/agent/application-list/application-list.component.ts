@@ -19,7 +19,7 @@ import { ConsultancyService } from 'app/consultancy/consultancy-services/consult
 export class ApplicationListComponent implements OnInit, OnDestroy {
   breadscrums = [
     {
-      title: 'Applications List',
+      title: 'Application List',
       items: ['Agent'],
       active: 'Applications',
       activeRoute: `${this.router.url}`
@@ -37,6 +37,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   totalPages = 1; // Total number of pages
   pageSize: number = PAGE_SIZE_OPTIONS[0]; // Initialize with default value
   mainRoute: string
+  roleName = localStorage.getItem("roleName")
+  isApplications: boolean;
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
   private currentPageSubject = new BehaviorSubject<number>(this.currentPage);
@@ -114,8 +116,19 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         this.totalPages = response.pageInfo?.totalPages || 1;
         this.currentPage = response.pageInfo?.currentPage || 1;
       }),
-      map((response) => response.data as ApplicationModel[])
-    );
+      map((response) => response.data as ApplicationModel[]),tap(res=>
+        {
+          console.log(res);
+          if(res.length){
+            this.isApplications = true;
+          }
+          else{
+            this.isApplications = false;
+          }
+        }
+        )
+      );
+    
   
     // Trigger initial refresh
     this.refreshApplications();

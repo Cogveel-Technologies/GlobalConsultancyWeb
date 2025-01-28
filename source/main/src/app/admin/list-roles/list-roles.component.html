@@ -112,7 +112,7 @@
                   </td>
                 </tr>
                 <!-- Show a message when there are no roles found -->
-                <tr *ngIf="(roles$ | async)?.length === 0">
+                <tr *ngIf="!isRoles">
                   <td colspan="7" class="text-center">No Roles found.</td>
                 </tr>
               </tbody>

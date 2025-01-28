@@ -8,7 +8,7 @@ import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { AdminService } from 'app/admin/admin.service';
-
+ 
 @Component({
   selector: 'app-agent-list',
   templateUrl: './agent-list.component.html',
@@ -16,8 +16,8 @@ import { AdminService } from 'app/admin/admin.service';
 })
 export class AgentListComponent {
   constructor(private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private router: Router, private adminService: AdminService) { }
-
-
+ 
+ 
   getAgents(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getAgents(params).pipe
       (tap(res => {
@@ -47,8 +47,9 @@ export class AgentListComponent {
   consultancyControl = new FormControl('all');
   consultancies: Observable<[{ id: number, consultancyName: string }]> | any;
   agentEditorViewState: boolean;
-
-  
+  isAgents:boolean
+ 
+ 
   breadscrums = [
     {
       title: 'Agents',
@@ -56,13 +57,13 @@ export class AgentListComponent {
       active: 'Agents',
     },
   ];
-
-
-
+ 
+ 
+ 
   ngOnInit() {
     this.consultancyService.activeRoute.next(this.router.url)
     this.consultancyService.agentEditorViewState.subscribe(res => this.agentEditorViewState = res)
-
+ 
      // delete
      this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
       if (res) {
@@ -71,7 +72,7 @@ export class AgentListComponent {
     }))
       }
     })
-
+ 
     if (this.agentEditorViewState) {
       this.consultancyService.editAgentCurrentPageAndPageSize.subscribe(res => {
         console.log("HHHHHHH YYYYYYYYY")
@@ -80,7 +81,7 @@ export class AgentListComponent {
         // this.search$.next(res.search)
       })
     }
-
+ 
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true
       this.adminService.getAllConsultancies(this.defaultData).pipe(map(res => {
@@ -96,7 +97,7 @@ export class AgentListComponent {
       this.agents = this.getAgents(this.defaultData)
       console.log("HHHHHHHHH")
     }
-
+ 
     this.agents = combineLatest([this.searchTerm$, this.pagination$, this.sorting$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(), switchMap(([search, pageRelated, sort]) => {
@@ -120,12 +121,19 @@ export class AgentListComponent {
           this.defaultData.sortExpression = sort.direction;
           this.defaultData.OrderBy = sort.field
           console.log(this.defaultData)
-          return this.getAgents(this.defaultData)
+          return this.getAgents(this.defaultData).pipe(tap(res=> {
+            console.log(this.isAgents)
+            if(res.length){
+              this.isAgents = true
+            }else{
+              this.isAgents  = false
+            }
+          }))
         }
         return of()
       }))
   }
-
+ 
   deleteAgent(id: number) {
     this.consultancyService.deletePopUpState.subscribe(res => {
       if (res) {
@@ -135,39 +143,40 @@ export class AgentListComponent {
       }
     })
   }
-
-
+ 
+ 
   // page event
   onPageChange(event: PageEvent) {
     this.currentPageIndex = event.pageIndex;
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1, search: true })
   }
-
+ 
   // sort event
   onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
     this.sorting$.next({ field: field, direction: direction })
   }
-
+ 
   addAgent() {
     this.router.navigate(["consultancy/register-agent"])
   }
-
+ 
   onConsultancyChange(event: any) {
     this.pagination$.next({ consultancyId: event })
   }
-
+ 
   onSearch() {
     this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true })
   }
-
+ 
   onEditorViewAgent() {
     this.consultancyService.editAgentCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
   }
-
+ 
   ngOnDestroy() {
     this.consultancyService.agentEditorViewState.next(false)
     this.subscription.unsubscribe()
   }
-
-
+ 
+ 
 }
+ 

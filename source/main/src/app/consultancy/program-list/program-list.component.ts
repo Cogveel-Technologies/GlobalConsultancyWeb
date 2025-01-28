@@ -10,18 +10,17 @@ import { ConsultancyService } from '../consultancy-services/consultancy.service'
 import { PageEvent } from '@angular/material/paginator';
 import { distinctUntilChanged } from 'rxjs';
 import { AdminService } from 'app/admin/admin.service';
-import { T } from '@angular/cdk/keycodes';
-
-
-
-
+ 
+ 
+ 
+ 
 @Component({
   selector: 'app-program-list',
   templateUrl: './program-list.component.html',
   styleUrls: ['./program-list.component.scss']
 })
 export class ProgramListComponent {
-
+ 
   breadscrums = [
     {
       title: 'Programs',
@@ -30,7 +29,7 @@ export class ProgramListComponent {
       activeRoute: this.router.url
     },
   ];
-
+ 
   constructor(private router: Router, private consultancyApiService: ConsultancyApi, public consultancyService: ConsultancyService, private adminService: AdminService) { }
   editMode: boolean;
   programs!: Observable<ProgramData[]>;
@@ -62,10 +61,11 @@ export class ProgramListComponent {
   programEditState: boolean = false
   consultancyPrograms: boolean = false
   consultancyName: string
-
-
-
-
+  isPrograms:boolean
+ 
+ 
+ 
+ 
   getPrograms(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getPrograms(params).pipe
       (tap(res => {
@@ -79,11 +79,11 @@ export class ProgramListComponent {
           return res['data']
         }))
   }
-
+ 
   ngOnInit() {
-
+ 
     this.consultancyService.activeRoute.next(this.router.url)
-
+ 
     this.adminService.consultancyProgramPaginationState.subscribe(res => {
       if (res) {
         this.adminService.consultancyProgramState.next(true)
@@ -100,7 +100,7 @@ export class ProgramListComponent {
         }
       })
     }
-
+ 
     // delete
     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
       if (res) {
@@ -110,7 +110,7 @@ export class ProgramListComponent {
         this.consultancyService.sendDeleteIdtoPC.next(null)
       }
     })
-
+ 
     // if user navigates back (using breadscrum)
     this.consultancyService.breadscrumState.subscribe(res => {
       if (res) {
@@ -119,12 +119,12 @@ export class ProgramListComponent {
         })
       }
     })
-
+ 
     console.log(this.breadscrums[0].activeRoute)
     this.consultancyService.programEditState.subscribe(res => {
       this.programEditState = res
     })
-
+ 
     this.consultancyService.intakeProgramState.subscribe(res => {
       if (res) {
         this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
@@ -132,7 +132,7 @@ export class ProgramListComponent {
         })
       }
     })
-
+ 
     if (this.programEditState) {
       this.consultancyService.editProgramCurrentPageAndPageSize.subscribe(res => {
         console.log("Mmmm")
@@ -140,7 +140,7 @@ export class ProgramListComponent {
         this.pagination$.next(res)
       })
     }
-
+ 
     // if superadmin has logged in
     if (this.roleName === 'superadmin') {
       this.defaultData.IsAdmin = true;
@@ -161,7 +161,7 @@ export class ProgramListComponent {
     }
     // get all program by default
     this.programs = this.getPrograms(this.defaultData)
-
+ 
     // show program from institute details
     this.subscription.add(this.consultancyService.sendInstituteId.subscribe(res => {
       if (res) {
@@ -172,23 +172,23 @@ export class ProgramListComponent {
         this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, instituteId: res.id, search: true, consultancyId: res.consultancyId })
       }
     }))
-
+ 
     this.subscription.add(this.consultancyService.showList.subscribe(state => {
       this.selectedOptions = state;
     }));
-
+ 
     this.programs = combineLatest([this.searchTerm$, this.pagination$, this.sorting$])
       .pipe(throttleTime(1000, undefined, { leading: true, trailing: true }),
         distinctUntilChanged(),
         switchMap(([searchTerm, pageRelated, sorting]) => {
-
+ 
           if (pageRelated.instituteId === 0) {
             this.defaultData.ConsultancyId = ''
             this.defaultData.InstituteId = ''
             this.defaultData.ProgramId = ''
             this.defaultData.SessionId = ''
           }
-
+ 
           if (String(pageRelated.consultancyId) !== String(this.previousConsultancyState) && this.roleName === 'superadmin') {
             this.defaultData.InstituteId = ''
             this.previousConsultancyState = pageRelated.consultancyId;
@@ -209,7 +209,7 @@ export class ProgramListComponent {
               this.defaultData.ConsultancyId = '';
             }
           }
-
+ 
           if (pageRelated.instituteId && String(pageRelated.instituteId) && String(this.previousInstituteState) !== String(pageRelated.instituteId)) {
             if (this.ProgramFromInstitute) {
               console.log(pageRelated.instituteId)
@@ -222,7 +222,7 @@ export class ProgramListComponent {
               this.defaultData.InstituteId = ''
             }
           }
-
+ 
           if (pageRelated.search) {
             console.log(pageRelated)
             if (searchTerm) {
@@ -237,11 +237,17 @@ export class ProgramListComponent {
             this.defaultData.sortExpression = sorting.direction;
             this.defaultData.OrderBy = sorting.field;
             console.log(this.defaultData)
-            return this.getPrograms(this.defaultData)
+            return this.getPrograms(this.defaultData).pipe(tap(res=>{
+              if(res.length){
+                this.isPrograms = true
+              }else{
+                this.isPrograms = false
+              }
+            }))
           }
           return of()
         }))
-
+ 
     // if we click on view or edit pencil, and then navigate back
     // if (this.selectedOptions) {
     //   console.log("hello")
@@ -259,21 +265,21 @@ export class ProgramListComponent {
     //   this.programs = this.getPrograms(this.defaultData)
     // }
   }
-
+ 
   onInstituteChange(event: any) {
     this.currentPageIndex = 0;
     this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, instituteId: event.value, consultancyId: this.defaultData.ConsultancyId })
   }
-
+ 
   isPublic(event: any) {
     console.log(event)
     // this.search$.next(event.value)
   }
-
+ 
   addProgram() {
     this.router.navigate(['consultancy/register-program'])
   }
-
+ 
   // page event
   onPageChange(event: PageEvent) {
     this.currentPageIndex = event.pageIndex;
@@ -285,7 +291,7 @@ export class ProgramListComponent {
     this.sorting$.next({ field: field, direction: direction })
     // this.search$.next(true)
   }
-
+ 
   deleteProgram(id: number) {
     this.consultancyService.deletePopUpState.subscribe(res => {
       if (res) {
@@ -294,44 +300,44 @@ export class ProgramListComponent {
         this.consultancyService.deleteMessage.next("All the intakes of the program will be deleted. Would you like to proceed with the action?")
       }
     })
-
-
-
+ 
+ 
+ 
   }
-
+ 
   onSearch() {
     this.currentPageIndex = 0;
     this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true, consultancyId: this.defaultData.ConsultancyId, instituteId: +this.instituteId })
   }
-
+ 
   onSession(programName: string, instituteName: string, programId: number, instituteId: number) {
     // this.consultancyService.sendProgramId.next({ programName, instituteName, programId, instituteId })
     this.router.navigate(['consultancy/session-list'])
   }
-
+ 
   onConsultancyChange(event: any) {
     console.log(event)
     this.pagination$.next({ consultancyId: event })
   }
-
+ 
   instituteSelected(event: any) {
     this.instituteId = event
   }
-
+ 
   onEditProgram() {
     this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
   }
-
+ 
   onViewProgram() {
     this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
   }
-
+ 
   getIntakesOfprogram(instituteId: number, instituteName: string, id: number, name: string) {
     this.consultancyService.editProgramCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true })
     this.consultancyService.getIntakesOfProgam.next({ instituteId, instituteName, programId: id, programName: name })
     this.router.navigate(['/consultancy/intake-list'])
   }
-
+ 
   ngOnDestroy() {
     this.institute$.next('');
     this.consultancyService.sendInstituteId.next(null)
@@ -344,3 +350,4 @@ export class ProgramListComponent {
     this.subscription.unsubscribe();
   }
 }
+ 

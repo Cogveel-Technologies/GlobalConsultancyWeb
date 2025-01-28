@@ -4,7 +4,7 @@
       <!-- breadcrumb -->
       <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active"></app-breadcrumb>
     </div>
-
+ 
     <div class="card p-4">
       <div class="row g-3 permissions-container">
         <div class="col-md-4">
@@ -17,11 +17,11 @@
         </div>
       </div>
     </div>
-
+ 
     <div class="NoRoleMsg">
       <strong *ngIf="!roleSelected">No Role Selected</strong>
     </div>
-
+ 
     <form [formGroup]="permissionsForm" *ngIf="roleSelected">
       <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -81,7 +81,7 @@
                   </tr>
                 </tbody>
               </table>
-
+ 
               <!-- Pagination Component -->
                 <!-- Show pagination only if institutesList data exists -->
             <app-pagination  [pageSize]="defaultData.pageSize"

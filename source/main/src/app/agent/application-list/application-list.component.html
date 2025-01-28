@@ -27,10 +27,18 @@
               <ul class="tbl-export-btn">
                 <li class="tbl-header-btn">
                   <div class="m-l-10" matTooltip="ADD">
-                    <button mat-mini-fab color="primary"
-                      (click)="addApplication()">
+                    <!-- <button mat-mini-fab color="primary"
+                      (click)="addApplication()"  *appPermissions="{feature:'Agent',action:'canAdd'}">
                       <mat-icon class="col-white">add</mat-icon>
                     </button>
+                    <button mat-mini-fab color="primary"
+                      (click)="addApplication()"  *ngIf="roleName === 'superadmin'">
+                      <mat-icon class="col-white">add</mat-icon>
+                    </button> -->
+                    <button mat-mini-fab color="primary"
+                    (click)="addApplication()"  *ngIf="roleName === 'superadmin'">
+                    <mat-icon class="col-white">add</mat-icon>
+                  </button>
                   </div>
                 </li>
               </ul>
@@ -160,7 +168,7 @@
                     </ng-container>
                   </td>
                 </tr>
-                <tr *ngIf="(applications$ | async)?.length === 0">
+                <tr *ngIf="!isApplications">
                   <td colspan="12" class="text-center">No Applications found.</td>
                 </tr>
               </tbody>

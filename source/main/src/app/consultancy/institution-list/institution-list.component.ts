@@ -1,3 +1,4 @@
+
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConsultancyApi } from '../consultancy-services/api.service';
@@ -9,18 +10,18 @@ import { InstituteData } from '../consultancy-models/data.institute';
 import { FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { AdminService } from 'app/admin/admin.service';
-
-
-
-
+ 
+ 
+ 
+ 
 @Component({
   selector: 'app-institution-list',
   templateUrl: './institution-list.component.html',
   styleUrls: ['./institution-list.component.scss'],
 })
-
+ 
 export class InstitutionListComponent {
-
+ 
   breadscrums: { title: string; items: string[]; active: string; activeRoute: string }[];
   constructor(private router: Router, public consultancyService: ConsultancyService, private consultancyApiService: ConsultancyApi, private adminService: AdminService, private activeRoute: ActivatedRoute) {
     this.breadscrums = [
@@ -32,8 +33,8 @@ export class InstitutionListComponent {
       },
     ];
   }
-
-
+ 
+ 
   editMode: boolean;
   subscriptions: Subscription = new Subscription();
   universities!: Observable<InstituteData[]> | Observable<[]>;
@@ -66,9 +67,10 @@ export class InstitutionListComponent {
   instituteProgramState: boolean = false;
   mainRoute: string
   deleteId: number
-
-
-
+  isInstitutes:boolean;
+ 
+ 
+ 
   getInstitutes(params: ConsultancyDetailsOptions) {
     return this.consultancyApiService.getInstitutes(params).pipe(
       tap(res => {
@@ -83,34 +85,30 @@ export class InstitutionListComponent {
       })
     );
   }
-
-
+ 
+ 
   ngOnInit() {
     this.mainRoute = this.router.url;
-
+ 
     this.consultancyService.activeRoute.next(this.mainRoute)
-
+ 
     // delete
     this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
       if (res) {
         this.subscriptions.add(this.consultancyApiService.deleteInstitute(res).subscribe({
           next: () => {
-            this.pagination$.next({ 
-              pageSize: this.defaultData.pageSize, 
-              pageIndex: this.defaultData.currentPage, 
-              countryId: this.defaultData.CountryId, 
-              search: true 
+            this.pagination$.next({
+              pageSize: this.defaultData.pageSize,
+              pageIndex: this.defaultData.currentPage,
+              countryId: this.defaultData.CountryId,
+              search: true
             });
             this.consultancyService.sendDeleteIdtoPC.next(null);
-          },
-          error: (error) => {
-            // Handle error appropriately
-            console.error('Failed to delete institute:', error);
           }
         }));
       }
     })
-
+ 
     // if user navigates back (using breadscrum)
     this.subscriptions.add(
       this.consultancyService.breadscrumState.subscribe(res => {
@@ -121,46 +119,46 @@ export class InstitutionListComponent {
         }
       })
     );
-
+ 
     //institueEditState
     this.subscriptions.add(
       this.consultancyService.instituteEditState.subscribe(res => this.instituteEditState = res)
     );
-
+ 
     this.adminService.consultancyInstitutePaginationState.subscribe(res => {
       if (res) {
         this.adminService.consultancyInstituteState.next(true)
       }
     })
-
+ 
     // institute session state
     this.subscriptions.add(
       this.consultancyService.instituteSessionState.subscribe(res => {
         this.instituteSessionState = res
       })
     );
-
-
+ 
+ 
     // institute program state
     this.subscriptions.add(
       this.consultancyService.instituteProgramState.subscribe(res => {
         this.instituteProgramState = res
       })
     );
-
+ 
     if (this.instituteSessionState || this.instituteProgramState) {
       this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
         this.pagination$.next(res)
       })
     }
-
+ 
     // if user navigates back from edit or view page
     if (this.instituteEditState) {
       this.consultancyService.editInstituteCurrentPageAndPageSize.subscribe(res => {
         this.pagination$.next(res)
       })
     }
-
+ 
     // if showing of institute comes from consultancy list
     this.subscriptions.add(
       this.consultancyService.consultancyInstitutes.subscribe(res => {
@@ -172,8 +170,8 @@ export class InstitutionListComponent {
         }
       })
     );
-
-
+ 
+ 
     // fetching all countries for the dropdown and displaying
     this.consultancyApiService.getAllCountries().pipe(map(res => {
       const allOption = [{ id: 'all', countryName: 'All' }, ...res]
@@ -181,9 +179,9 @@ export class InstitutionListComponent {
     })).subscribe(res => {
       this.countries = res
     })
-
+ 
     // Implementing filter on the basis of country
-
+ 
     this.universities = combineLatest([this.searchTerm$, this.pagination$, this.sorting$]).pipe(
       throttleTime(1000, undefined, { leading: true, trailing: true }),
       distinctUntilChanged(),
@@ -225,23 +223,29 @@ export class InstitutionListComponent {
               this.defaultData.currentPage = +pageRelated.pageIndex;
               this.currentPageIndex = +pageRelated.pageIndex - 1;
             }
-
+ 
             this.defaultData.searchText = search;
             this.defaultData.pageSize = +pageRelated.pageSize;
             this.defaultData.sortExpression = sort.direction;
             this.defaultData.OrderBy = sort.field;
-            return this.getInstitutes(this.defaultData);
+            return this.getInstitutes(this.defaultData).pipe(tap(res =>{
+              if(res.length){
+                this.isInstitutes = true
+              }else{
+                this.isInstitutes = false
+              }
+            }));
           }
         }
         return of();
       })
     )
   }
-
+ 
   addInstitute() {
     this.router.navigate(['/consultancy/register-institute'])
   }
-
+ 
   deleteInstitute(id: number) {
     this.consultancyService.deletePopUpState.subscribe(res => {
       if (res) {
@@ -250,30 +254,30 @@ export class InstitutionListComponent {
       }
     })
   }
-
+ 
   // page event
   onPageChange(event: PageEvent) {
     this.currentPageIndex = event.pageIndex;
     this.pagination$.next({ pageSize: event.pageSize, pageIndex: event.pageIndex + 1, countryId: this.defaultData.CountryId, search: true })
   }
-
-
+ 
+ 
   // sort event
   onSortChange({ field, direction }: { field: string, direction: 'asc' | 'desc' | string }) {
     this.sorting$.next({ field: field, direction: direction })
   }
-
+ 
   onView() {
     this.consultancyService.countrySelected.next(+this.countryId)
   }
-
+ 
   institutePrograms(id: number, instituteName: string, consultancyId: number, consultancyName: string) {
     this.consultancyService.sendInstituteId.next({ id, instituteName, consultancyId, consultancyName });
     this.router.navigate(['/consultancy/program-list'])
     this.consultancyService.instituteProgramState.next(true)
     this.onEditorViewInstitute()
   }
-
+ 
   instituteSession(id: number, name: string) {
     this.consultancyService.getSessionsOfInstitute.next({ instituteId: id, instituteName: name })
     this.router.navigate(['/consultancy/session-list'])
@@ -281,27 +285,27 @@ export class InstitutionListComponent {
     this.consultancyService.instituteSessions.next(true)
     this.onEditorViewInstitute()
   }
-
+ 
   onConsultancyChange(event: any) {
     this.pagination$.next({ countryId: this.defaultData.CountryId, consultancyId: event })
   }
-
+ 
   onEditorViewInstitute() {
     this.consultancyService.editInstituteCurrentPageAndPageSize.next({ pageIndex: this.defaultData.currentPage, pageSize: this.defaultData.pageSize, search: true, countryId: this.defaultData.CountryId })
   }
-
+ 
   onSearch() {
     this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, search: true, countryId: this.countryId })
   }
-
+ 
   countrySelected(event: any) {
     this.countryId = event
     if (this.roleName === 'superadmin') {
       this.pagination$.next({ countryId: this.countryId })
     }
   }
-
-
+ 
+ 
   ngOnDestroy() {
     this.consultancyService.instituteEditState.next(false)
     this.consultancyService.showList.next(false);
@@ -316,5 +320,5 @@ export class InstitutionListComponent {
     this.consultancyService.breadscrumState.next(false)
     this.consultancyService.deleteMessage.next('')
   }
-
+ 
 }
