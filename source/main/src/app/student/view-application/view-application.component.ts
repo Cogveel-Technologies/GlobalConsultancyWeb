@@ -12,15 +12,26 @@ import { ConsultancyService } from 'app/consultancy/consultancy-services/consult
   styleUrls: ['./view-application.component.scss']
 })
 export class ViewApplicationComponent implements OnInit {
+  // breadscrums = [
+  //   {
+  //     title: 'Application List',
+  //     items: ['Student', 'My Applications'],
+  //     active: 'View Application',
+  //     activeRoute: `${this.router.url}`
+      
+  //   },
+  // ];
   breadscrums = [
     {
       title: 'Application List',
-      items: ['Student', 'My Applications'],
+      items: [
+        { label: 'Student', route: 'student' },
+        { label: 'My Applications', route: 'student/my-applications' },
+      ],
       active: 'View Application',
-      activeRoute: `${this.router.url}`
-      
     },
   ];
+  
  
   applicationId!: number;
   applicationDetails: any;
@@ -65,4 +76,8 @@ export class ViewApplicationComponent implements OnInit {
   deleteApplication(){
     
   }
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+  
 }

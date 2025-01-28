@@ -42,7 +42,7 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
   pageNumber: number;
   previousPage: number;
   mainRoute: string
-
+  isConsultancies: boolean;
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
   private currentPageSubject = new BehaviorSubject<number>(this.currentPage);
@@ -153,6 +153,8 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
       }),
       tap(response => {
         console.log(response)
+        
+       
         console.log('Refreshed service response:', response);
         this.totalConsultancies = response.pageInfo?.totalRecords || 0;
         this.totalPages = response.pageInfo?.totalPages || 1;
@@ -162,8 +164,19 @@ export class ConsultancyListComponent implements OnInit, OnDestroy {
         if (this.totalConsultancies === 0) {
           console.log('No consultancies found.');
         }
+
       }),
-      map(response => response.data || [])  // Ensure an empty array is returned if no data
+      map(response => response.data || []),tap(res=>
+      {
+        console.log(res);
+        if(res.length){
+          this.isConsultancies = true;
+        }
+        else{
+          this.isConsultancies = false;
+        }
+      }
+      )
     );
 
     // Trigger initial load

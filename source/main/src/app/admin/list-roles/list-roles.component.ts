@@ -42,7 +42,7 @@ export class ListRolesComponent implements OnInit {
   deleteOperation:boolean = false
   editOperation:boolean = false
   searchText:string;
-
+  isRoles: boolean;
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -128,7 +128,17 @@ export class ListRolesComponent implements OnInit {
         }
 
       }),
-      map(response => response.data)
+      map(response => response.data),tap(res=>
+        {
+          console.log(res);
+          if(res.length){
+            this.isRoles = true;
+          }
+          else{
+            this.isRoles = false;
+          }
+        }
+      )
     );
 
     // Trigger initial load

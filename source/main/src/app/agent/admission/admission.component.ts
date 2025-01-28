@@ -65,6 +65,7 @@ export class AdmissionComponent implements OnInit {
      private  consultancyService: ConsultancyService) {
     this.searchForm = this.fb.group({
       programId: this.programCtrl,
+      
       sessionId: this.sessionCtrl,
       intakeYear: this.intakeYearCtrl,
       countryId: this.countryCtrl,

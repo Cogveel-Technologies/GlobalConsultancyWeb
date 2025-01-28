@@ -42,7 +42,7 @@ export class ListusersComponent implements OnInit,OnDestroy {
   deleteOperation:boolean = false
   editOperation:boolean = false
   searchText:string
-
+   isUsers: boolean;
 
   // BehaviorSubjects to manage the state
   private pageSizeSubject = new BehaviorSubject<number>(this.pageSize);
@@ -143,7 +143,17 @@ export class ListusersComponent implements OnInit,OnDestroy {
           console.log('No Users found.');
         }
       }),
-      map(response => response.data)
+      map(response => response.data),tap(res=>
+        {
+          console.log(res);
+          if(res.length){
+            this.isUsers = true;
+          }
+          else{
+            this.isUsers = false;
+          }
+        }
+        )
     );
 
     // Trigger initial load
