@@ -73,20 +73,20 @@ export class PermissionsComponent implements OnInit,OnDestroy {
         this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: 1, roleId:res })
       }
     })
- 
- 
+
       // delete
       this.consultancyService.sendDeleteIdtoPC.subscribe(res => {
         if (res) {
           this.subscription.add(this.adminService.deletePermission(res).subscribe(() => {
+
             this.pagination$.next({ pageSize: this.defaultData.pageSize, pageIndex: this.defaultData.currentPage, roleId:
+
               +this.defaultData.roleId })
           }));
           this.consultancyService.sendDeleteIdtoPC.next(null)
         }
       })
- 
- 
+
     this.adminService.updatePermissions.subscribe(res => this.update$.next(true))
     this.permissionsForm = new FormGroup({
       modules: new FormArray([]),
@@ -218,8 +218,7 @@ export class PermissionsComponent implements OnInit,OnDestroy {
         this.consultancyService.deleteMessage.next("The Permission will be deleted. Would you like to proceed with the action?")
       }
     })
- 
- 
+
   }
  
   ngOnDestroy(){
